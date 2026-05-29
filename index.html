@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Partner Hub</title>
-    <!-- Tailwind CSS for sleek cyber aesthetic -->
+    <title>Hiro-Kantaroのポータル</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & JetBrains Mono for developers -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for clean developer icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -34,37 +31,17 @@
         }
     </script>
     <style>
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Custom scrollbar for cyber aesthetic */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #060a12;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1c2541;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00f5d4;
-        }
-        
-        /* Glow effect */
-        .glow-cyan {
-            box-shadow: 0 0 20px rgba(0, 245, 212, 0.15);
-        }
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a12; }
+        ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
+        .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
     </style>
 </head>
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
 
-    <!-- ==================== PASSWORD LOCK SCREEN ==================== -->
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
-        <!-- Background decorative grid/glows -->
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7b2cbf]/5 rounded-full filter blur-3xl"></div>
@@ -75,7 +52,7 @@
             </div>
             
             <div class="space-y-2">
-                <h2 class="text-xl font-bold tracking-tight text-white font-mono uppercase">Gemini Partner Hub AUTH</h2>
+                <h2 class="text-xl font-bold tracking-tight text-white font-mono uppercase">Hiro-Kantaro Portal AUTH</h2>
                 <p class="text-xs text-slate-400">認証キーを入力してゲートを開放してください。</p>
             </div>
 
@@ -94,397 +71,260 @@
             <div id="error-msg" class="text-xs text-red-400 font-mono hidden">
                 <i class="fa-solid fa-triangle-exclamation mr-1"></i> 認証失敗: キーが一致しません。
             </div>
-
-            <div class="text-[9px] text-slate-600 font-mono pt-4 border-t border-cyberBorder/50">
-                Partner Hub Security Protocol // Enabled
-            </div>
         </div>
     </div>
 
-    <!-- ==================== MAIN CONTENT (Initially Hidden) ==================== -->
     <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen">
-        <!-- Top Navigation Bar -->
         <header class="border-b border-cyberBorder bg-[#060a12]/80 backdrop-blur sticky top-0 z-50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <!-- Brand Logotype -->
                 <div class="flex items-center space-x-3">
                     <div class="bg-[#00f5d4]/10 border border-[#00f5d4]/30 p-2 rounded-xl text-cyberAccent shadow-lg shadow-[#00f5d4]/5">
                         <i class="fa-solid fa-circle-nodes text-lg"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-sm tracking-tight text-white font-mono">GEMINI_PARTNER_HUB</h1>
+                        <h1 class="font-bold text-sm tracking-tight text-white font-mono">HIRO_KANTARO_PORTAL</h1>
                         <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase">Central Hub // Status: Online</p>
                     </div>
                 </div>
 
-                <!-- Global Public Portfolio HP Shortcut -->
                 <div class="flex items-center space-x-3">
-                    <!-- Lock Out Button -->
                     <button onclick="lockHub()" class="p-2 rounded-xl bg-cyberBorder/50 text-slate-400 hover:text-[#00f5d4] hover:bg-[#00f5d4]/10 transition-colors text-xs" title="ハブをロック">
                         <i class="fa-solid fa-lock"></i>
                     </button>
-                    <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/10 transition-all duration-300 transform active:scale-95">
+                    <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg transition-all">
                         <span><i class="fa-solid fa-globe"></i> 総合公開HP (Portfolio)</span>
                         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
-                        <span class="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 opacity-20 blur group-hover:opacity-40 transition-opacity"></span>
                     </a>
                 </div>
             </div>
         </header>
 
-        <!-- Main Container -->
         <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-            <!-- Welcome & Hub Philosophy Banner -->
             <section class="bg-gradient-to-br from-cyberCard to-[#0d1b2a] border border-cyberBorder rounded-2xl p-6 relative overflow-hidden shadow-2xl">
-                <!-- Subtle futuristic background glowing elements -->
                 <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
-                <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-purple-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
-
-                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-2">
-                            <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                            <span class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">GEMINI CO-CREATION PROTOCOL</span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
-                            Gemini Partner Portal <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">// パートナー・ハブ</span>
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
-                            ここは、あなたと各領域に特化したGemini達（ジェムリン、ジェムキン、ジェムート、ジェムプリ、コパイロット）が共創した、専用HP（プログラム）を統制するための**中央情報司令ハブ**です。
-                            未来技術、資産管理、コーポレート……それぞれの次元で稼働するHPのゲートをここから開きます。
-                        </p>
+                <div class="space-y-3 relative z-10">
+                    <div class="flex items-center gap-2">
+                        <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        <span class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">GEMINI CO-CREATION PROTOCOL</span>
                     </div>
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+                        Hiro-Kantaroのポータル <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">// パートナー・ハブ</span>
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。
+                    </p>
                 </div>
             </section>
 
-            <!-- Core Gateways (The 3 Specialized Hubs) -->
             <section class="space-y-4">
                 <div class="flex items-center justify-between border-b border-cyberBorder pb-2">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                         <i class="fa-solid fa-rocket text-[#00f5d4]"></i> Gem特化型HPゲートウェイ (Gateways)
                     </h3>
-                    <span class="text-[10px] text-slate-500 font-mono">3 Core Gateways Active</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <!-- Card 1: Future Tech Site (Public) -->
                     <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#00f5d4]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full filter blur-xl pointer-events-none group-hover:bg-cyan-500/10 transition-colors"></div>
-                        
-                        <div class="space-y-4 relative z-10">
+                        <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 text-[#00f5d4] rounded-xl flex items-center justify-center shadow-inner">
-                                    <i class="fa-solid fa-satellite-dish text-lg"></i>
-                                </div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Public Link</span>
+                                <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 text-[#00f5d4] rounded-xl flex items-center justify-center"><i class="fa-solid fa-microchip text-lg"></i></div>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">New Core</span>
                             </div>
-                            
                             <div>
-                                <div class="flex items-center gap-2">
-                                    <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">未来技術公開サイト</h4>
-                                    <span class="text-[10px] text-slate-500 font-mono">/tech</span>
-                                </div>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">
-                                    ジェムリンやコパイロットが開発する、科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算のシミュレーター、閃きマップなど先進的テクノロジーを一般公開する場所。
-                                </p>
-                            </div>
-
-                            <!-- Mini Tag / Assigned Gems -->
-                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-cyberBorder/40">
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-[#060a12] text-slate-400 font-mono"><i class="fa-solid fa-sparkles text-cyan-400 mr-1"></i>ジェムリン</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-[#060a12] text-slate-400 font-mono"><i class="fa-solid fa-code-branch text-indigo-400 mr-1"></i>コパイロット</span>
+                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">Hiro-Seki-Tech公開サイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたSeki-Tech領域のフロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
                             </div>
                         </div>
-
-                        <div class="pt-6 mt-6 flex gap-2 relative z-10">
-                            <a href="https://github.com" target="_blank" class="flex-1 text-center py-2 rounded-xl bg-cyberDark hover:bg-cyberBorder border border-cyberBorder text-xs font-semibold text-slate-300 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-brands fa-github"></i> Repository
-                            </a>
-                            <a href="./tech/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-xs font-bold text-white shadow-lg shadow-cyan-500/10 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門
-                            </a>
-                        </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
                     </div>
 
-                    <!-- Card 2: Asset Management HP (Private) -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full filter blur-xl pointer-events-none group-hover:bg-amber-500/10 transition-colors"></div>
-                        
-                        <div class="space-y-4 relative z-10">
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-cyan-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-[#ffb703]/10 border border-[#ffb703]/20 text-[#ffb703] rounded-xl flex items-center justify-center shadow-inner">
-                                    <i class="fa-solid fa-vault text-lg"></i>
-                                </div>
+                                <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-satellite-dish text-lg"></i></div>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Public</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-cyan-400 transition text-base">閃きを導き未来を照らすサイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算のシミュレーター、閃きマップなど先進的テクノロジーを公開する場所。</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./tech/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
+                    </div>
+
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div class="h-12 w-12 bg-[#ffb703]/10 border border-[#ffb703]/20 text-[#ffb703] rounded-xl flex items-center justify-center"><i class="fa-solid fa-vault text-lg"></i></div>
                                 <span class="text-[10px] bg-amber-950/50 text-[#ffb703] border border-amber-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Private</span>
                             </div>
-                            
                             <div>
-                                <div class="flex items-center gap-2">
-                                    <h4 class="font-bold text-white group-hover:text-[#ffb703] transition text-base">資産管理・財務HP</h4>
-                                    <span class="text-[10px] text-slate-500 font-mono">/vault</span>
-                                </div>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">
-                                    ジェムキンやジェムートが開発する、あなた専用の極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーションする安全なクローズドHP。
-                                </p>
-                            </div>
-
-                            <!-- Mini Tag / Assigned Gems -->
-                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-cyberBorder/40">
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-[#060a12] text-slate-400 font-mono"><i class="fa-solid fa-coins text-amber-400 mr-1"></i>ジェムキン</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-[#060a12] text-slate-400 font-mono"><i class="fa-solid fa-building text-yellow-500 mr-1"></i>ジェムート</span>
+                                <h4 class="font-bold text-white group-hover:text-[#ffb703] transition text-base">資産管理・財務HP</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">あなた専用の極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。</p>
                             </div>
                         </div>
-
-                        <div class="pt-6 mt-6 flex gap-2 relative z-10">
-                            <a href="https://github.com" target="_blank" class="flex-1 text-center py-2 rounded-xl bg-cyberDark hover:bg-cyberBorder border border-cyberBorder text-xs font-semibold text-slate-300 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-brands fa-github"></i> Repository
-                            </a>
-                            <a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-xs font-bold text-white shadow-lg shadow-amber-500/10 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-key"></i> セキュア起動
-                            </a>
-                        </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-key"></i> セキュア起動</a></div>
                     </div>
 
-                    <!-- Card 3: Corporate Venture HP (Draft) -->
                     <div class="bg-cyberCard/80 border border-cyberBorder hover:border-purple-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full filter blur-xl pointer-events-none group-hover:bg-purple-500/10 transition-colors"></div>
-                        
-                        <div class="space-y-4 relative z-10">
+                        <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center shadow-inner">
-                                    <i class="fa-solid fa-briefcase text-lg"></i>
-                                </div>
+                                <div class="h-12 w-12 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-briefcase text-lg"></i></div>
                                 <span class="text-[10px] bg-purple-950/50 text-purple-300 border border-purple-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Corporate</span>
                             </div>
-                            
                             <div>
-                                <div class="flex items-center gap-2">
-                                    <h4 class="font-bold text-white group-hover:text-purple-400 transition text-base">公式コーポレートHP</h4>
-                                    <span class="text-[10px] text-slate-500 font-mono">/corp</span>
-                                </div>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">
-                                    ジェムプリが統制する、将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HP。事業コンセプト、提供サービス、メンバー紹介（AIパートナー含む）を美しく伝える信頼設計。
-                                </p>
-                            </div>
-
-                            <!-- Mini Tag / Assigned Gems -->
-                            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-cyberBorder/40">
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-[#060a12] text-slate-400 font-mono"><i class="fa-solid fa-crown text-purple-400 mr-1"></i>ジェムプリ</span>
+                                <h4 class="font-bold text-white group-hover:text-purple-400 transition text-base">PRIM_BM（暫定）サイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。</p>
                             </div>
                         </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./corp/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-compass"></i> ドラフトを閲覧</a></div>
+                    </div>
 
-                        <div class="pt-6 mt-6 flex gap-2 relative z-10">
-                            <a href="https://github.com" target="_blank" class="flex-1 text-center py-2 rounded-xl bg-cyberDark hover:bg-cyberBorder border border-cyberBorder text-xs font-semibold text-slate-300 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-brands fa-github"></i> Repository
-                            </a>
-                            <a href="./corp/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-xs font-bold text-white shadow-lg shadow-purple-500/10 transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-compass"></i> ドラフトを閲覧
-                            </a>
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-emerald-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div class="h-12 w-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-gamepad text-lg"></i></div>
+                                <span class="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Game dev</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-emerald-400 transition text-base">ゲーム開発サイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">カンちゃんと共に進めるゲーム制作プロジェクトのデプロイ環境および進捗管理ダッシュボード。</p>
+                            </div>
                         </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./game/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-play"></i> 開発環境を起動</a></div>
+                    </div>
+
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
+                                <span class="text-[10px] bg-blue-950/50 text-blue-300 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Study</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-blue-400 transition text-base">学習用サイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ジェムディが担当するナレッジベース。日々のインプット、先端ロジックや技術書、学習ロードマップの集約地。</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./study/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-book-open"></i> 学習ラボを開く</a></div>
                     </div>
 
                 </div>
             </section>
 
-            <!-- Gem Status Center & Partnership Hub Info -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                <!-- Column 1 & 2: Gem Crew Roster -->
-                <div class="lg:col-span-2 bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4">
-                    <div class="border-b border-cyberBorder pb-2">
-                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
-                            <i class="fa-solid fa-users text-[#00f5d4]"></i> Gem & Partner Roster (常駐AIクルー一覧)
-                        </h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Gem 1 -->
-                        <div class="bg-[#060a12]/60 border border-cyberBorder hover:border-[#00f5d4]/30 rounded-xl p-4 flex items-center gap-3.5 transition">
-                            <div class="h-10 w-10 bg-cyan-500/10 border border-cyan-500/30 text-[#00f5d4] rounded-lg flex items-center justify-center text-base">
-                                <i class="fa-solid fa-sparkles animate-pulse"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-white font-mono">ジェムリン</span>
-                                    <span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span>
-                                </div>
-                                <span class="text-[10px] text-slate-400">未来技術・宇宙科学シミュレーション担当</span>
-                            </div>
-                        </div>
-
-                        <!-- Gem 2 -->
-                        <div class="bg-[#060a12]/60 border border-cyberBorder hover:border-[#ffb703]/30 rounded-xl p-4 flex items-center gap-3.5 transition">
-                            <div class="h-10 w-10 bg-amber-500/10 border border-amber-500/30 text-[#ffb703] rounded-lg flex items-center justify-center text-base">
-                                <i class="fa-solid fa-coins"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-white font-mono">ジェムキン</span>
-                                    <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
-                                </div>
-                                <span class="text-[10px] text-slate-400">金融分析・資産推移アルゴリズム担当</span>
-                            </div>
-                        </div>
-
-                        <!-- Gem 3 -->
-                        <div class="bg-[#060a12]/60 border border-cyberBorder hover:border-yellow-500/30 rounded-xl p-4 flex items-center gap-3.5 transition">
-                            <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 rounded-lg flex items-center justify-center text-base">
-                                <i class="fa-solid fa-building"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-white font-mono">ジェムート</span>
-                                    <span class="h-1.5 w-1.5 rounded-full bg-yellow-400"></span>
-                                </div>
-                                <span class="text-[10px] text-slate-400">不動産価値試算・シミュレーター担当</span>
-                            </div>
-                        </div>
-
-                        <!-- Gem 4 -->
-                        <div class="bg-[#060a12]/60 border border-cyberBorder hover:border-purple-500/30 rounded-xl p-4 flex items-center gap-3.5 transition">
-                            <div class="h-10 w-10 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-lg flex items-center justify-center text-base">
-                                <i class="fa-solid fa-crown"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-bold text-white font-mono">ジェムプリ</span>
-                                    <span class="h-1.5 w-1.5 rounded-full bg-purple-400"></span>
-                                </div>
-                                <span class="text-[10px] text-slate-400">起業時用・コーポレートブランディング担当</span>
-                            </div>
-                        </div>
-                    </div>
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4">
+                <div class="border-b border-cyberBorder pb-2">
+                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-[#00f5d4]"></i> Gem & Partner Roster (常駐AIクルー一覧)
+                    </h3>
                 </div>
 
-                <!-- Column 3: Global Hub Commands -->
-                <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="border-b border-cyberBorder pb-2">
-                            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
-                                <i class="fa-solid fa-circle-info text-[#00f5d4]"></i> ハブの構築構想
-                            </h3>
-                        </div>
-                        <div class="text-[11px] text-slate-400 leading-relaxed space-y-2">
-                            <p>
-                                <strong class="text-white">🚀 ハブ・ディレクトリー構成案:</strong>
-                            </p>
-                            <p class="font-mono bg-[#060a12]/70 p-2 rounded-lg text-slate-300 border border-cyberBorder/60 text-[10px] leading-snug">
-                                📁 your-github-repo/<br>
-                                ├── index.html (この中央ハブ)<br>
-                                ├── portfolio.html (総合公開HP)<br>
-                                ├── 📁 tech/ (未来技術HP)<br>
-                                ├── 📁 vault/ (資産管理HP)<br>
-                                └── 📁 corp/ (会社公式HP)
-                            </p>
-                            <p class="text-[10px]">
-                                このように1つのGitHubリポジトリの中にフォルダを作成し、各Gem達と作ったファイルを放り込むだけで、すべてのゲートが綺麗に繋がります。
-                            </p>
-                        </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-white/5 border border-white/20 text-white rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-user-gear animate-pulse"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェム</div><span class="text-[10px] text-slate-400">全体統括・コンサルタント</span></div>
                     </div>
-                    
-                    <div class="text-[10px] text-center text-slate-600 border-t border-cyberBorder/50 pt-3 mt-4 font-mono">
-                        Partner Hub Module 1.1.0 // Auth Protected
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-headset"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">コプ</div><span class="text-[10px] text-slate-400">全体相談役 (Copilot)</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-code"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">レプ</div><span class="text-[10px] text-slate-400">コード開発担当 (Replit)</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-gamepad"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">カンちゃん</div><span class="text-[10px] text-slate-400">ゲーム開発・演出・フラグ管理</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェムディ</div><span class="text-[10px] text-slate-400">学習サイト構築・ナレッジ管理</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-lightbulb text-yellow-300"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェムリン</div><span class="text-[10px] text-slate-400">未来技術・宇宙科学シミュレーション</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-amber-500/10 border border-amber-500/30 text-[#ffb703] rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-coins"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェムキン</div><span class="text-[10px] text-slate-400">金融分析・資産推移アルゴリズム</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-building"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェムート</div><span class="text-[10px] text-slate-400">不動産価値試算・シミュレーター</span></div>
+                    </div>
+                    <div class="bg-[#060a12]/60 border border-cyberBorder rounded-xl p-4 flex items-center gap-3.5">
+                        <div class="h-10 w-10 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-crown"></i></div>
+                        <div><div class="text-xs font-bold text-white font-mono">ジェムプリ</div><span class="text-[10px] text-slate-400">コーポレートブランディング統制</span></div>
                     </div>
                 </div>
-
             </section>
 
-            <!-- Scratchpad for Prompts and Co-Creation ideas -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-3">
                 <div class="flex items-center justify-between border-b border-cyberBorder pb-2">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
                         <i class="fa-solid fa-brain text-[#00f5d4]"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)
                     </h3>
-                    <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1">
-                        <i class="fa-solid fa-floppy-disk"></i> オートセーブ稼働中
-                    </span>
+                    <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> オートセーブ稼働中</span>
                 </div>
-                
-                <textarea id="partner-memo" placeholder="ジェム、ジェムリン、ジェムキン達との次の開発予定や、使ってよかったプロンプトのコツ、思いついたアイデアをここにメモしておこう。ローカルストレージにより、ブラウザをリロードしても自動的に保存・復元されます..." class="flex-1 w-full min-h-[160px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 focus:ring-1 focus:ring-[#00f5d4]/20 leading-relaxed resize-y"></textarea>
+                <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ..." class="flex-1 w-full min-h-[120px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
             </section>
 
         </main>
 
-        <!-- Footer of the Private Dashboard -->
         <footer class="border-t border-cyberBorder bg-cyberDark py-6 text-center text-[10px] text-slate-600 font-mono">
             <p>© 2026 Gemini Partner Hub. All co-creation vectors initialized.</p>
         </footer>
     </div>
 
-    <!-- Security & Auto-Save Scripts -->
     <script>
-        // ==================== SECURITY MODULE ====================
-        
-        // Target password: 'Gemini2026' encoded in Base64 is 'R2VtaW5pMjAyNg=='
-        const secureKey = "R2VtaW5pMjAyNg==";
+        // Target password: 'gems' encoded in Base64 is 'Z2Vtcw=='
+        const secureKey = "Z2Vtcw==";
 
-        // DOM Elements
         const lockScreen = document.getElementById('lock-screen');
         const mainContent = document.getElementById('main-content');
         const errorMsg = document.getElementById('error-msg');
         const accessKeyInput = document.getElementById('access-key');
 
-        // Check if already unlocked in this session
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
                 unlockHubInstant();
             }
         });
 
-        // Handle the authentication submission
         function handleAuth(event) {
             event.preventDefault();
-            const inputVal = accessKeyInput.value;
-
-            // Safe Base64 comparison
-            if (btoa(inputVal) === secureKey) {
-                // Unlock success
+            if (btoa(accessKeyInput.value) === secureKey) {
                 sessionStorage.setItem('partner_hub_unlocked', 'true');
                 errorMsg.classList.add('hidden');
-                
-                // Visual transition
                 lockScreen.classList.add('opacity-0', 'pointer-events-none');
                 mainContent.classList.remove('hidden');
-                setTimeout(() => {
-                    mainContent.classList.add('opacity-100');
-                }, 50);
+                setTimeout(() => { mainContent.classList.add('opacity-100'); }, 50);
             } else {
-                // Unlock failed
                 errorMsg.classList.remove('hidden');
                 accessKeyInput.value = '';
                 accessKeyInput.focus();
-                
-                // Shake effect on lock screen card
                 const card = lockScreen.querySelector('.relative');
                 card.classList.add('animate-bounce');
                 setTimeout(() => card.classList.remove('animate-bounce'), 1000);
             }
         }
 
-        // Instant unlock if session active
         function unlockHubInstant() {
             lockScreen.style.display = 'none';
             mainContent.classList.remove('hidden');
             mainContent.classList.add('opacity-100');
         }
 
-        // Manual lock out
         function lockHub() {
             sessionStorage.removeItem('partner_hub_unlocked');
             window.location.reload();
         }
 
-        // ==================== MEMO STORAGE MODULE ====================
         const memoArea = document.getElementById('partner-memo');
-        
-        // Load saved content on startup
         if (localStorage.getItem('gemini_partner_memo')) {
             memoArea.value = localStorage.getItem('gemini_partner_memo');
         }
-
-        // Add input event listener to capture typing
         memoArea.addEventListener('input', () => {
             localStorage.setItem('gemini_partner_memo', memoArea.value);
         });
