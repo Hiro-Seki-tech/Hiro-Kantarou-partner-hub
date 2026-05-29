@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
     <title>Hiro-Kantaroのポータル</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,8 +45,8 @@
 
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7b2cbf]/5 rounded-full filter blur-3xl"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7b2cbf]/5 rounded-full filter blur-3xl pointer-events-none"></div>
 
         <div class="relative w-full max-w-md bg-cyberCard border border-cyberBorder p-8 rounded-2xl shadow-2xl text-center space-y-6">
             <div class="inline-flex p-4 rounded-full bg-[#00f5d4]/10 border border-[#00f5d4]/20 text-[#00f5d4] animate-pulse">
@@ -106,7 +108,7 @@
                 <div class="space-y-3 relative z-10">
                     <div class="flex items-center gap-2">
                         <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                        <span class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">GEMINI CO-CREATION PROTOCOL</span>
+                        <span class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">Hiro's AI CO-CREATION PROTOCOL</span>
                     </div>
                     <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
                         Hiro-Kantaroのポータル <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">// パートナー・ハブ</span>
@@ -134,7 +136,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">Hiro-Seki-Tech公開サイト</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたSeki-Tech領域のフロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたSeki-Tech領域 childhoodフロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
                             </div>
                         </div>
                         <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
@@ -260,14 +262,34 @@
                 </div>
             </section>
 
-            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-3">
-                <div class="flex items-center justify-between border-b border-cyberBorder pb-2">
-                    <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
-                        <i class="fa-solid fa-brain text-[#00f5d4]"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)
-                    </h3>
-                    <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> オートセーブ稼働中</span>
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyberBorder pb-3">
+                    <div class="flex items-center gap-1.5">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
+                            <i class="fa-solid fa-brain text-[#00f5d4]"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)
+                        </h3>
+                        <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1" title="自動保存中"><span class="h-1.5 w-1.5 rounded-full bg-[#00f5d4] animate-pulse"></span></span>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-[10px] font-mono bg-cyan-950/40 border border-cyan-800/60 rounded-lg text-cyan-400 hover:bg-cyan-400 hover:text-black transition flex items-center gap-1">
+                            <i class="fa-solid fa-satellite"></i> 衛星シミュレータ
+                        </a>
+                        <a href="#" class="px-2.5 py-1 text-[10px] font-mono bg-purple-950/40 border border-purple-800/60 rounded-lg text-purple-400 hover:bg-purple-400 hover:text-black transition flex items-center gap-1 opacity-60 hover:opacity-100" title="URL未設定">
+                            <i class="fa-solid fa-atom"></i> 量子技術
+                        </a>
+                        <a href="#" class="px-2.5 py-1 text-[10px] font-mono bg-emerald-950/40 border border-emerald-800/60 rounded-lg text-emerald-400 hover:bg-emerald-400 hover:text-black transition flex items-center gap-1 opacity-60 hover:opacity-100" title="URL未設定">
+                            <i class="fa-solid fa-user-astronaut"></i> キャラエディット
+                        </a>
+                        <a href="#" class="px-2.5 py-1 text-[10px] font-mono bg-blue-950/40 border border-blue-800/60 rounded-lg text-blue-400 hover:bg-blue-400 hover:text-black transition flex items-center gap-1 opacity-60 hover:opacity-100" title="URL未設定">
+                            <i class="fa-solid fa-chalkboard-user"></i> スーパー先生(自分)
+                        </a>
+                        <a href="#" class="px-2.5 py-1 text-[10px] font-mono bg-orange-950/40 border border-orange-800/60 rounded-lg text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1 opacity-60 hover:opacity-100" title="URL未設定">
+                            <i class="fa-solid fa-child"></i> スーパー先生(子供)
+                        </a>
+                    </div>
                 </div>
-                <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ..." class="flex-1 w-full min-h-[120px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
+                <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ...（ここに書いた内容は自動でブラウザに保存されます）" class="flex-1 w-full min-h-[140px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
             </section>
 
         </main>
