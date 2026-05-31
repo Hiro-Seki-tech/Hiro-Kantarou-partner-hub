@@ -43,6 +43,7 @@
 </head>
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
 
+    <!-- ロック画面 -->
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -76,6 +77,7 @@
         </div>
     </div>
 
+    <!-- メインコンテンツ -->
     <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen">
         <header class="border-b border-cyberBorder bg-[#060a12]/80 backdrop-blur sticky top-0 z-50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -128,7 +130,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <!-- [1] Hiro-Techファミリーサイト (新規追加) -->
+                    <!-- [1] Hiro-Techファミリーサイト (リンク更新) -->
                     <div class="bg-cyberCard/80 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
@@ -140,9 +142,14 @@
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./family/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-people-roof"></i> ファミリーハブ開門</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="https://hiro-seki-tech.github.io/Family_portal/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-people-roof"></i> ファミリーハブ開門
+                            </a>
+                        </div>
                     </div>
 
+                    <!-- Hiro-Tech公開サイト -->
                     <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#00f5d4]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
@@ -157,6 +164,7 @@
                         <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
                     </div>
 
+                    <!-- 閃きを導き未来を照らすサイト -->
                     <div class="bg-cyberCard/80 border border-cyberBorder hover:border-cyan-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
@@ -180,7 +188,7 @@
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-[#ffb703] transition text-base">資産管理・財務HP</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">あなた専用 of 極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。</p>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">あなた専用 of 極極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。</p>
                             </div>
                         </div>
                         <div class="pt-6 mt-6 flex gap-2"><a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-key"></i> セキュア起動</a></div>
@@ -319,12 +327,12 @@
                             <i class="fa-solid fa-satellite"></i> 衛星シミュレータ2026
                         </a>
 
-                        <!-- [2] マイ資産管理シミュレーション (新規追加・アクティブリンク) -->
+                        <!-- [2] マイ資産管理シミュレーション -->
                         <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-[10px] font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-lg text-yellow-400 hover:bg-[#ffb703] hover:text-black transition flex items-center gap-1 shadow-lg shadow-yellow-500/5">
                             <i class="fa-solid fa-chart-line"></i> マイ資産管理シミュレーション
                         </a>
 
-                        <!-- [2] ダイ・ウィズ・ゼロ (新規追加・アクティブリンク) -->
+                        <!-- [2] ダイ・ウィズ・ゼロ -->
                         <a href="https://hiro-seki-tech.github.io/Die-zero/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-[10px] font-mono bg-rose-950/40 border border-rose-800/60 rounded-lg text-rose-400 hover:bg-rose-400 hover:text-black transition flex items-center gap-1 shadow-lg shadow-rose-500/5">
                             <i class="fa-solid fa-hourglass-half"></i> ダイ・ウィズ・ゼロ
                         </a>
@@ -362,7 +370,7 @@
     </div>
 
     <script>
-        // Target password: 'gems' encoded in Base64 is 'Z2Vtcw=='
+        // 目標パスワード: Base64でエンコードされた 'gems' は 'Z2Vtcw=='
         const secureKey = "Z2Vtcw==";
 
         const lockScreen = document.getElementById('lock-screen');
