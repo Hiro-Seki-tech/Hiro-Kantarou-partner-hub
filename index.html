@@ -39,6 +39,23 @@
         ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
         .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
+
+        /* Rainbow Shifting Gradient Keyframes for PRIP Board */
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .text-rainbow {
+            background: linear-gradient(
+                to right, 
+                #ff2a85, #ff7300, #ffb703, #00f5d4, #3b82f6, #9d4edd, #ff2a85
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 8s linear infinite;
+        }
     </style>
 </head>
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
@@ -130,38 +147,48 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <!-- Hiro-Techファミリーサイト -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <!-- [1] PLIP暫定サイト (Position 1 with Rainbow Lightbulb Core Burst) -->
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-pink-500/10 border border-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-house-chimney-user text-lg"></i></div>
-                                <span class="text-[10px] bg-pink-950/50 text-pink-300 border border-pink-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Family</span>
+                                <!-- Layered Core Burst (Rainbow Lightbulb & Yellow Spark) -->
+                                <div class="relative h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center">
+                                    <i class="fa-solid fa-lightbulb text-lg text-rainbow"></i>
+                                    <i class="fa-solid fa-bolt text-xs text-yellow-300 absolute top-2 right-2 animate-pulse"></i>
+                                </div>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Corporate</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white group-hover:text-pink-400 transition text-base">Hiro-Techファミリーサイト</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。</p>
+                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">
+                                    PLIP暫定サイト
+                                </h4>
+                                <div class="text-[13px] font-semibold mt-1.5 flex flex-wrap gap-x-0.5 items-center leading-tight">
+                                    <span class="text-[#00f5d4]">P</span><span class="text-slate-100">roduce</span> 
+                                    <span class="text-amber-400 font-semibold mx-1">your</span> 
+                                    <span class="text-[#00f5d4]">L</span><span class="text-slate-100">ife</span> 
+                                    <span class="text-slate-100 mx-1">with</span> 
+                                    <span class="text-[#00f5d4]">I</span><span class="text-slate-100">ntellectual</span> 
+                                    <span class="text-[#00f5d4] ml-1">P</span><span class="text-slate-100">roperty</span> 
+                                </div>
+                                <p class="text-slate-400 text-xs mt-2.5 leading-relaxed">将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Family_portal/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-people-roof"></i> ファミリーハブ開門
-                            </a>
-                        </div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./corp/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-compass"></i> ドラフトを閲覧</a></div>
                     </div>
 
-                    <!-- Hiro-Tech公開サイト（仮） -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#00f5d4]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <!-- [2] Hiro-Tech公開サイト（仮）(Royal Blue Accent) -->
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 text-[#00f5d4] rounded-xl flex items-center justify-center"><i class="fa-solid fa-microchip text-lg"></i></div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">New Core</span>
+                                <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-microchip text-lg"></i></div>
+                                <span class="text-[10px] bg-blue-950/50 text-blue-400 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">New Core</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">Hiro-Tech公開サイト（仮）</h4>
+                                <h4 class="font-bold text-white group-hover:text-blue-400 transition text-base">Hiro-Tech公開サイト（仮）</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
+                        <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
                     </div>
 
                     <!-- 閃きを導き未来を照らすサイト -->
@@ -194,30 +221,23 @@
                         <div class="pt-6 mt-6 flex gap-2"><a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-key"></i> セキュア起動</a></div>
                     </div>
 
-                    <!-- [1] PLIP暫定サイト: 改行 ＆ 小さめのフォントでの色分け配置 -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <!-- Hiro-Techファミリーサイト -->
+                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-city text-lg"></i></div>
-                                <span class="text-[10px] bg-blue-950/50 text-blue-300 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Corporate</span>
+                                <div class="h-12 w-12 bg-pink-500/10 border border-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-house-chimney-user text-lg"></i></div>
+                                <span class="text-[10px] bg-pink-950/50 text-pink-300 border border-pink-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Family</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white group-hover:text-blue-400 transition text-base">
-                                    PLIP暫定サイト
-                                </h4>
-                                <!-- PLIPより小さく、下の説明文（text-xs）より大きい中間のサイズ（text-[13px]）で描画 -->
-                                <div class="text-[13px] font-semibold mt-1.5 flex flex-wrap gap-x-0.5 items-center leading-tight">
-                                    <span class="text-[#00f5d4]">P</span><span class="text-slate-100">roduce</span> 
-                                    <span class="text-amber-400 font-semibold mx-1">your</span> 
-                                    <span class="text-[#00f5d4]">L</span><span class="text-slate-100">ife</span> 
-                                    <span class="text-slate-100 mx-1">with</span> 
-                                    <span class="text-[#00f5d4]">I</span><span class="text-slate-100">ntellectual</span> 
-                                    <span class="text-[#00f5d4] ml-1">P</span><span class="text-slate-100">roperty</span> 
-                                </div>
-                                <p class="text-slate-400 text-xs mt-2.5 leading-relaxed">将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。</p>
+                                <h4 class="font-bold text-white group-hover:text-pink-400 transition text-base">Hiro-Techファミリーサイト</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./corp/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-compass"></i> ドラフトを閲覧</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="https://hiro-seki-tech.github.io/Family_portal/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-people-roof"></i> ファミリーハブ開門
+                            </a>
+                        </div>
                     </div>
 
                     <!-- 学習用サイト -->
@@ -240,7 +260,7 @@
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-slate-500/10 border border-slate-500/20 text-slate-300 rounded-xl flex items-center justify-center"><i class="fa-solid fa-gamepad text-lg"></i></div>
-                                <span class="text-[10px] bg-slate-900/50 text-slate-300 border border-slate-700/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Collection 管理</span>
+                                <span class="text-[10px] bg-slate-900/50 text-slate-300 border border-[#1c2541] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Collection 管理</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-slate-300 transition text-base">カンたろうのページ</h4>
@@ -253,19 +273,20 @@
                 </div>
             </section>
 
-            <!-- [2] PRIPのマネジメント エリア 新設・改行・高精度色分けフォントサイズ設計 -->
+            <!-- [2] PRIPのマネジメントボード エリア (with Rainbow Lightbulb Core Burst) -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
                 <div class="border-b border-cyberBorder pb-3">
                     <div class="flex items-start gap-2.5">
-                        <div class="p-2 bg-[#00f5d4]/10 rounded-xl text-cyberAccent mt-0.5">
-                            <i class="fa-solid fa-folder-open text-base"></i>
+                        <!-- Layered Core Burst Icon with Rainbow Lightbulb Core -->
+                        <div class="relative p-2 bg-pink-500/10 border border-pink-500/20 rounded-xl mt-0.5 h-10 w-10 flex items-center justify-center">
+                            <i class="fa-solid fa-lightbulb text-base text-rainbow"></i>
+                            <i class="fa-solid fa-bolt text-[10px] text-yellow-300 absolute top-1 right-1 animate-pulse"></i>
                         </div>
                         <div>
-                            <!-- [2] 各サイトのタイトルと同じ大きさ(text-base)で「PRIP」と書いて改行 -->
-                            <h3 class="text-base font-extrabold text-white tracking-wide font-mono uppercase">
-                                PRIPのマネジメント
+                            <!-- PRIPのマネジメントボード with beautiful shifting rainbow color! -->
+                            <h3 class="text-base font-extrabold tracking-wide font-mono uppercase text-rainbow">
+                                PRIPのマネジメントボード
                             </h3>
-                            <!-- PLIPより少しだけ小さなフォント（text-[13px]）で表記 -->
                             <div class="text-[13px] font-semibold text-slate-300 mt-1 flex flex-wrap gap-x-0.5 items-center">
                                 <span class="text-[#00f5d4]">P</span><span class="text-slate-300">roduce</span>
                                 <span class="text-pink-400 font-bold mx-1">my</span>
@@ -278,7 +299,7 @@
                     </div>
                 </div>
 
-                <!-- [3] ジェムピック特製のセンスあふれる高精度カテゴリー分け ＆ 「ダイ・ウィズ・ゼロ」削除 -->
+                <!-- [3] カテゴリー分け ＆ 「ダイ・ウィズ・ゼロ」削除 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     
                     <!-- CATEGORY A: 資産管理 -->
