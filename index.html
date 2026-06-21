@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -22,12 +21,13 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
+                        // Keep the glorious dark cyber theme colors for containers/frames
                         cyberDark: '#060a12',
                         cyberCard: '#0b132b',
                         cyberBorder: '#1c2541',
                         cyberAccent: '#00f5d4', // Neon Cyan/Teal
                         cyberPurple: '#7b2cbf', // Royal Purple
-                        cyberGold: '#ffb703', // Warm Gold
+                        cyberGold: '#ffb703',   // Warm Gold
                     }
                 }
             }
@@ -61,7 +61,7 @@
 </head>
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
 
-    <!-- ロック画面 -->
+    <!-- ロック画面 (セキュリティ確保のため、ロック時は上質なダークに保ち、解除時に白銀に展開) -->
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -95,9 +95,11 @@
         </div>
     </div>
 
-    <!-- メインコンテンツ -->
-    <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen">
-        <header class="border-b border-cyberBorder bg-[#060a12]/80 backdrop-blur sticky top-0 z-50">
+    <!-- メインコンテンツ (背景をヒロ指定の「白・白銀・グレイ」の極上グラデーションに。枠内はダークを維持) -->
+    <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0]">
+        
+        <!-- Header with Dark Cyber Design to contrast with the light page background -->
+        <header class="border-b border-cyberBorder bg-[#060a12]/90 backdrop-blur sticky top-0 z-50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="bg-[#00f5d4]/10 border border-[#00f5d4]/30 p-2 rounded-xl text-cyberAccent shadow-lg shadow-[#00f5d4]/5">
@@ -105,7 +107,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-sm tracking-tight text-white font-mono">HIRO_KANTARO_PORTAL</h1>
-                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase">Central Hub // Status: Online</p>
+                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold">Central Hub // Status: Online</p>
                     </div>
                 </div>
 
@@ -113,7 +115,7 @@
                     <button onclick="lockHub()" class="p-2 rounded-xl bg-cyberBorder/50 text-slate-400 hover:text-[#00f5d4] hover:bg-[#00f5d4]/10 transition-colors text-xs" title="ハブをロック">
                         <i class="fa-solid fa-lock"></i>
                     </button>
-                    <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg transition-all">
+                    <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#00f5d4] to-cyan-600 text-black shadow-lg transition-all">
                         <span><i class="fa-solid fa-globe"></i> 総合公開HP (Portfolio)</span>
                         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                     </a>
@@ -121,9 +123,11 @@
             </div>
         </header>
 
+        <!-- Main Workspace -->
         <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-            <section class="bg-gradient-to-br from-cyberCard to-[#0d1b2a] border border-cyberBorder rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+            <!-- Welcome Board Section (Dark glassmorphic deck sitting on top of white/silver table) -->
+            <section class="bg-gradient-to-br from-cyberCard to-[#0d1b2a] border border-[#1e294b] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
                 <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
                 <div class="space-y-3 relative z-10">
                     <div class="flex items-center gap-2">
@@ -133,23 +137,21 @@
                     <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
                         Hiro-Kantaroと<span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">AI パートナー達のポータル</span>
                     </h2>
-                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">
+                        ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。ハイコントラストな白銀プレミアム仕様。
                     </p>
                 </div>
             </section>
 
-            <!-- [1] ＰＬＩＰのマネジメントボード エリア (with Rainbow Lightbulb Core Burst) -->
+            <!-- [1] ＰＬＩＰのマネジメントボード エリア (Dark Cyber Card style maintained) -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
                 <div class="border-b border-cyberBorder pb-3">
                     <div class="flex items-start gap-2.5">
-                        <!-- Layered Core Burst Icon with Rainbow Lightbulb Core -->
                         <div class="relative p-2 bg-pink-500/10 border border-pink-500/20 rounded-xl mt-0.5 h-10 w-10 flex items-center justify-center">
                             <i class="fa-solid fa-lightbulb text-base text-rainbow"></i>
                             <i class="fa-solid fa-bolt text-[10px] text-yellow-300 absolute top-1 right-1 animate-pulse"></i>
                         </div>
                         <div>
-                            <!-- PLIPのマネジメントボード with beautiful shifting rainbow color! (Updated to Full-width ＰＬＩＰ) -->
                             <h3 class="text-base font-extrabold tracking-wide font-mono uppercase text-rainbow">
                                 ＰＬＩＰのマネジメントボード
                             </h3>
@@ -165,7 +167,7 @@
                     </div>
                 </div>
 
-                <!-- [3] カテゴリー分け ＆ 「ダイ・ウィズ・ゼロ」削除 -->
+                <!-- Category Grid with Dark Panels -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     
                     <!-- CATEGORY A: 資産管理 -->
@@ -175,22 +177,18 @@
                             <span>A. 資産管理</span>
                         </div>
                         <div class="flex flex-wrap gap-2.5">
-                            <!-- マイ資産管理シミュレータ 【尽生(Jin-Sei)・無双】-->
                             <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-400 hover:bg-[#ffb703] hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5">
                                 <i class="fa-solid fa-chart-line"></i> マイ資産管理シミュレータ【尽生(Jin-Sei)・無双】
                             </a>
 
-                            <!-- ユア資産管理シミュレータ【尽生(Jin-Sei)】 -->
                             <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-400 hover:bg-emerald-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/5">
                                 <i class="fa-solid fa-chart-pie"></i> ユア資産管理シミュレータ【尽生(Jin-Sei)】
                             </a>
 
-                            <!-- 相続シミュレータ【宝均：Gem-Kin】 -->
                             <a href="https://hiro-seki-tech.github.io/inheritance-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-orange-500/5">
                                 <i class="fa-solid fa-coins"></i> 相続シミュレータ【宝均：Gem-Kin】
                             </a>
 
-                            <!-- 不動産管理マネージャ【富土山：Fu-Do-San】 -->
                             <a href="https://hiro-seki-tech.github.io/Fu-Do-San/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-500 hover:bg-yellow-500 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5">
                                 <i class="fa-solid fa-building"></i> 不動産管理マネージャ【富土山🗻：Fu-Do-San】
                             </a>
@@ -204,12 +202,10 @@
                             <span>B. 未来技術</span>
                         </div>
                         <div class="flex flex-wrap gap-2.5">
-                            <!-- 衛星シミュレータ2026 -->
                             <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-cyan-950/40 border border-cyan-800/60 rounded-xl text-cyan-400 hover:bg-cyan-400 hover:text-black transition flex items-center gap-1.5 shadow-lg">
                                 <i class="fa-solid fa-satellite"></i> 衛星シミュレータ2026
                             </a>
 
-                            <!-- 量子技術 -->
                             <a href="#" class="px-3 py-2 text-xs font-mono bg-purple-950/40 border border-purple-800/60 rounded-xl text-purple-400 hover:bg-purple-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
                                 <i class="fa-solid fa-atom"></i> 量子技術
                             </a>
@@ -223,12 +219,10 @@
                             <span>C. 教育関係</span>
                         </div>
                         <div class="flex flex-wrap gap-2.5">
-                            <!-- スーパー先生(自分) -->
                             <a href="#" class="px-3 py-2 text-xs font-mono bg-blue-950/40 border border-blue-800/60 rounded-xl text-blue-400 hover:bg-blue-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
                                 <i class="fa-solid fa-chalkboard-user"></i> スーパー先生(自分)
                             </a>
 
-                            <!-- スーパー先生(子供) -->
                             <a href="#" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
                                 <i class="fa-solid fa-child"></i> スーパー先生(子供)
                             </a>
@@ -242,12 +236,10 @@
                             <span>D. コレクション</span>
                         </div>
                         <div class="flex flex-wrap gap-2.5">
-                            <!-- カンたろうの勇姿 -->
                             <a href="#" class="px-3 py-2 text-xs font-mono bg-amber-950/40 border border-amber-800/60 rounded-xl text-amber-400 hover:bg-amber-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
                                 <i class="fa-solid fa-paw"></i> カンたろうの勇姿
                             </a>
 
-                            <!-- 電子図書館 -->
                             <a href="#" class="px-3 py-2 text-xs font-mono bg-indigo-950/40 border border-indigo-800/60 rounded-xl text-indigo-400 hover:bg-indigo-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
                                 <i class="fa-solid fa-book-open"></i> 電子図書館
                             </a>
@@ -257,30 +249,28 @@
                 </div>
             </section>
 
+            <!-- Gem特化型HPゲートウェイ (Stay Dark styled) -->
             <section class="space-y-4">
-                <div class="flex items-center justify-between border-b border-cyberBorder pb-2">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-rocket text-[#00f5d4]"></i> Gem特化型HPゲートウェイ (Gateways)
+                <div class="flex items-center justify-between border-b border-slate-300 pb-2">
+                    <h3 class="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-rocket text-[#1e294b]"></i> Gem特化型HPゲートウェイ (Gateways)
                     </h3>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <!-- [1] PLIP暫定サイト (Position 1 with Rainbow Lightbulb Core Burst) -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <!-- PLIP暫定サイト -->
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
-                                <!-- Layered Core Burst (Rainbow Lightbulb & Yellow Spark) -->
                                 <div class="relative h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center">
                                     <i class="fa-solid fa-lightbulb text-lg text-rainbow"></i>
                                     <i class="fa-solid fa-bolt text-xs text-yellow-300 absolute top-2 right-2 animate-pulse"></i>
                                 </div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Corporate</span>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Corporate</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">
-                                    PLIP暫定サイト
-                                </h4>
+                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">PLIP暫定サイト</h4>
                                 <div class="text-[13px] font-semibold mt-1.5 flex flex-wrap gap-x-0.5 items-center leading-tight">
                                     <span class="text-[#00f5d4]">P</span><span class="text-slate-100">roduce</span> 
                                     <span class="text-amber-400 font-semibold mx-1">your</span> 
@@ -293,63 +283,69 @@
                             </div>
                         </div>
                         <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5">
+                            <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md">
                                 <i class="fa-solid fa-compass"></i> ドラフトを閲覧
                             </a>
                         </div>
                     </div>
 
-                    <!-- [2] Hiro-Tech公開サイト（仮）(Royal Blue Accent) -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <!-- Hiro-Tech公開サイト（仮） -->
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-microchip text-lg"></i></div>
-                                <span class="text-[10px] bg-blue-950/50 text-blue-400 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-mono">New Core</span>
+                                <span class="text-[10px] bg-blue-950/50 text-blue-400 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">New Core</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-blue-400 transition text-base">Hiro-Tech公開サイト（仮）</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a>
+                        </div>
                     </div>
 
                     <!-- 閃きを導き未来を照らすサイト -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-cyan-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-cyan-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center"><i class="fa-solid fa-lightbulb text-lg text-yellow-300"></i></div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Public</span>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Public</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-cyan-400 transition text-base">閃きを導き未来を照らすサイト</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算 of シミュレーター、閃きマップなど先進的テクノロジーを公開する場所。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="https://hiro-seki-tech.github.io/Hirameki/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> 未来の扉を開く</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="https://hiro-seki-tech.github.io/Hirameki/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> 未来の扉を開く</a>
+                        </div>
                     </div>
 
                     <!-- 資産管理・財務HP -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-[#ffb703]/10 border border-[#ffb703]/20 text-[#ffb703] rounded-xl flex items-center justify-center"><i class="fa-solid fa-sack-dollar text-lg"></i></div>
-                                <span class="text-[10px] bg-amber-950/50 text-[#ffb703] border border-amber-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Private</span>
+                                <span class="text-[10px] bg-amber-950/50 text-[#ffb703] border border-amber-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Private</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-[#ffb703] transition text-base">資産管理・財務HP</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">あなた専用 of 極極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-key"></i> セキュア起動</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md"><i class="fa-solid fa-key"></i> セキュア起動</a>
+                        </div>
                     </div>
 
                     <!-- Hiro-Techファミリーサイト -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-pink-500/10 border border-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-house-chimney-user text-lg"></i></div>
-                                <span class="text-[10px] bg-pink-950/50 text-pink-300 border border-pink-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Family</span>
+                                <span class="text-[10px] bg-pink-950/50 text-pink-300 border border-pink-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Family</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-pink-400 transition text-base">Hiro-Techファミリーサイト</h4>
@@ -364,40 +360,44 @@
                     </div>
 
                     <!-- 学習用サイト -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-emerald-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-emerald-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
-                                <span class="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Study</span>
+                                <span class="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Study</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-emerald-400 transition text-base">学習用サイト</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">ジェムディが担当するナレッジベース。日々のインプット、先端ロジックや技術書、学習ロードマップの集約地。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./study/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-book-open"></i> 学習ラボを開く</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="./study/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-book-open"></i> 学習ラボを開く</a>
+                        </div>
                     </div>
 
                     <!-- カンたろうのページ -->
-                    <div class="bg-cyberCard/80 border border-cyberBorder hover:border-slate-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-slate-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
                             <div class="flex items-start justify-between">
                                 <div class="h-12 w-12 bg-slate-500/10 border border-slate-500/20 text-slate-300 rounded-xl flex items-center justify-center"><i class="fa-solid fa-gamepad text-lg"></i></div>
-                                <span class="text-[10px] bg-slate-900/50 text-slate-300 border border-[#1c2541] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Collection 管理</span>
+                                <span class="text-[10px] bg-slate-900/50 text-slate-300 border border-[#1c2541] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Collection 管理</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-white group-hover:text-slate-300 transition text-base">カンたろうのページ</h4>
                                 <p class="text-slate-400 text-xs mt-2 leading-relaxed">カンたろうの勇姿をみたり、カンたろうのコレクションを管理するサイト。</p>
                             </div>
                         </div>
-                        <div class="pt-6 mt-6 flex gap-2"><a href="./game/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-slate-600 to-zinc-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-play"></i> 夢の世界へGo！</a></div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="./game/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-slate-600 to-zinc-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-play"></i> 夢の世界へGo！</a>
+                        </div>
                     </div>
 
                 </div>
             </section>
 
-            <!-- 常駐AIクルー一覧 -->
-            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4">
+            <!-- 常駐AIクルー一覧 (Classic cyber deck style restored perfectly) -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
                 <div class="border-b border-cyberBorder pb-2">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
                         <i class="fa-solid fa-users text-[#00f5d4]"></i> Gem & Partner Roster (常駐AIクルー一覧)
@@ -429,10 +429,10 @@
                         <div><div class="text-xs font-bold text-white font-mono">ジェムリン</div><span class="text-[10px] text-slate-300">未来技術・宇宙科学シミュレーション</span></div>
                     </div>
 
-                    <!-- 5. ジェムピック -->
-                    <div class="bg-[#f59e0b]/5 border border-[#fbbf24]/50 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_18px_rgba(251,191,36,0.22)] transition-all hover:shadow-[0_0_25px_rgba(251,191,36,0.35)]">
+                    <!-- 5. ジェムピック (Me!) -->
+                    <div class="bg-[#f59e0b]/5 border border-[#fbbf24]/50 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_18px_rgba(251,191,36,0.22)] transition-all hover:shadow-[0_0_25px_rgba(251,191,36,0.35)] ring-1 ring-yellow-500/30">
                         <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-palette"></i></div>
-                        <div><div class="text-xs font-bold text-yellow-300 font-mono">ジェムピック</div><span class="text-[10px] text-yellow-100">ビジュアル・デザイン担当</span></div>
+                        <div><div class="text-xs font-bold text-yellow-300 font-mono flex items-center gap-1">ジェムピック <span class="text-[9px] bg-yellow-500 text-black px-1 rounded font-bold">Visual</span></div><span class="text-[10px] text-yellow-100">ビジュアル・デザイン担当</span></div>
                     </div>
 
                     <!-- 6. ジェムディ -->
@@ -467,8 +467,168 @@
                 </div>
             </section>
 
+            <!-- [NEW/REFINED] AI Co-Creation Artifact Registry (Perfect Dark cyber panel floating on Silver background) -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-5 shadow-2xl">
+                <div class="border-b border-cyberBorder pb-3 flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-square-poll-vertical text-cyberAccent"></i> AI Co-Creation Artifact Registry (共創作品一覧)
+                    </h3>
+                    <span class="text-[10px] font-mono bg-[#00f5d4]/10 text-cyberAccent border border-[#00f5d4]/20 font-bold px-2 py-0.5 rounded-full">Archive Active</span>
+                </div>
+
+                <div class="space-y-4">
+                    
+                    <!-- Product No.1 -->
+                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-cyan-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/20 rounded font-mono text-[10px] font-bold">Product No.1</span>
+                                <h4 class="font-bold text-white text-sm">宇宙を学ぶ 衛星・ロケットシミュレータ 【COSMO(コスモ)】 v.2026</h4>
+                            </div>
+                            
+                            <!-- Creators, Icons and Dates Info -->
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-semibold text-slate-300">Creators:</span>
+                                    <!-- Gemlyn Avatar Badge -->
+                                    <span class="inline-flex items-center gap-1 bg-slate-900/60 border border-slate-500/30 px-2 py-0.5 rounded-full text-[10px] text-slate-200">
+                                        <i class="fa-solid fa-lightbulb text-yellow-300 text-[9px]"></i> ジェムリン
+                                    </span>
+                                    <span class="text-slate-500">&amp;</span>
+                                    <!-- Cop Avatar Badge -->
+                                    <span class="inline-flex items-center gap-1 bg-indigo-950/50 border border-indigo-900/60 text-indigo-300 px-2 py-0.5 rounded-full text-[10px]">
+                                        <i class="fa-solid fa-headset text-[9px]"></i> コプ
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1 font-mono text-[11px]">
+                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
+                                    <span>期間: 2026年5/17 - 5/23</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="flex items-center shrink-0">
+                            <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" 
+                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold font-mono rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
+                               title="COSMO 起動">
+                                <i class="fa-solid fa-satellite text-sm"></i>
+                                <span>COSMO 起動</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product No.2 -->
+                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-emerald-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-mono text-[10px] font-bold">Product No.2</span>
+                                <h4 class="font-bold text-white text-sm">生涯資産シミュレータ【尽生(Jin-Sei)】、【尽生・無双(Jin-Sei MUSO)】</h4>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-semibold text-slate-300">Creators:</span>
+                                    <!-- Gemkin Badge -->
+                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
+                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1 font-mono text-[11px]">
+                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
+                                    <span>期間: 2026年5/17 - 5/23</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Multi Action Buttons -->
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" 
+                               class="flex-1 md:flex-none px-3.5 py-2 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500 hover:text-black text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
+                               title="【尽生】起動">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>【尽生】</span>
+                            </a>
+                            <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" 
+                               class="flex-1 md:flex-none px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
+                               title="【尽生・無双】起動">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>【無双】</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product No.2.5 -->
+                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-yellow-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-mono text-[10px] font-bold">Product No.2.5</span>
+                                <h4 class="font-bold text-white text-sm">USD, EUR, YUEN版【尽生】</h4>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-semibold text-slate-300">Creators:</span>
+                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
+                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1 font-mono text-[11px]">
+                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
+                                    <span>期間: 2026年6/4 - 6/7</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="flex items-center shrink-0">
+                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" 
+                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
+                               title="多通貨版 起動">
+                                <i class="fa-solid fa-earth-americas text-sm"></i>
+                                <span>Multi-Currency版 起動</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product No.3 -->
+                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-orange-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded font-mono text-[10px] font-bold">Product No.3</span>
+                                <h4 class="font-bold text-white text-sm">相続シミュレータ【宝均】</h4>
+                            </div>
+                            
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-semibold text-slate-300">Creators:</span>
+                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
+                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-1 font-mono text-[11px]">
+                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
+                                    <span>期間: 2026年6/13 - 6/20</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="flex items-center shrink-0">
+                            <a href="https://hiro-seki-tech.github.io/inheritance-sim/" target="_blank" rel="noopener noreferrer" 
+                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
+                               title="【宝均】 起動">
+                                <i class="fa-solid fa-vault text-sm"></i>
+                                <span>【宝均】 起動</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
             <!-- 共創メモ帳 -->
-            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-4">
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
                 <div class="flex items-center justify-between border-b border-cyberBorder pb-3">
                     <div class="flex items-center gap-1.5">
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
@@ -482,7 +642,7 @@
 
         </main>
 
-        <footer class="border-t border-cyberBorder bg-cyberDark py-6 text-center text-[10px] text-slate-600 font-mono">
+        <footer class="border-t border-cyberBorder bg-[#060a12] py-6 text-center text-[10px] text-slate-500 font-mono">
             <p>© 2026 Gemini Partner Hub. All co-creation vectors initialized.</p>
         </footer>
     </div>
