@@ -1,1 +1,1289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 Hiro-Tech匠工房 ポータル・ネクサス ジェネレーター</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Noto+Sans+JP:wght=300;400;500;700;900&family=Cinzel:wght=600;800&family=Shippori+Mincho:wght=600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background-color: #05070f;
+            color: #f1f5f9;
+        }
 
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(13, 18, 36, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+        }
+
+        .glass-panel-heavy {
+            background: rgba(8, 11, 24, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        /* Ambient glows */
+        .glow-orange {
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+        .glow-teal {
+            box-shadow: 0 0 30px rgba(20, 184, 166, 0.15);
+        }
+
+        /* Pure CSS Floating Physics */
+        @keyframes float-physics {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(0.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .float-card {
+            animation: float-physics 4s ease-in-out infinite;
+        }
+
+        /* Rainbow title animation */
+        @keyframes rainbowText {
+            0%   { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+            14%  { color: #ff5500; text-shadow: 0 0 10px rgba(255,85,0,0.4); }
+            28%  { color: #ffcc00; text-shadow: 0 0 10px rgba(255,204,0,0.4); }
+            42%  { color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+            56%  { color: #00ccff; text-shadow: 0 0 10px rgba(0,204,255,0.4); }
+            70%  { color: #3333ff; text-shadow: 0 0 10px rgba(51,51,255,0.4); }
+            84%  { color: #9900ff; text-shadow: 0 0 10px rgba(153,0,255,0.4); }
+            100% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        }
+        .rainbow-title {
+            animation: rainbowText 12s linear infinite;
+        }
+
+        /* Customize Scrollbars */
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.3); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.6); }
+
+        /* Embedded Device Simulators */
+        .preview-iframe-wrapper {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#04060b] text-slate-100 overflow-x-hidden selection:bg-amber-500/30 selection:text-white">
+
+    <!-- Custom Modal System (Replaces alert) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+        <div class="glass-panel-heavy rounded-2xl max-w-md w-full p-6 shadow-2xl border border-amber-500/30 scale-95 opacity-0 transition-all duration-300 transform" id="modal-content">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3 mb-4">
+                <span id="modal-icon" class="text-xl text-amber-500"><i class="fa-solid fa-circle-info"></i></span>
+                <h3 id="modal-title" class="text-base font-bold tracking-wider text-slate-200 uppercase">SYSTEM MESSAGE</h3>
+            </div>
+            <p id="modal-body" class="text-xs text-slate-300 leading-relaxed font-medium mb-6">Message body...</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black tracking-widest transition-all active:scale-95 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                    CLOSE SYSTEM
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.2)] border border-amber-500/30 flex items-center gap-3">
+        <span class="text-amber-400 text-lg"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-text" class="text-xs font-bold tracking-wider">SUCCESS!</span>
+    </div>
+
+    <!-- Main Header -->
+    <header class="border-b border-slate-800/80 bg-[#080b15]/90 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.3)] border border-amber-400/30">
+                    <i class="fa-solid fa-compass-drafting text-slate-950 text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black text-white tracking-widest flex items-center gap-2" style="font-family: 'Cinzel', 'Shippori Mincho', serif; letter-spacing: 0.05em;">
+                        🪐 Hiro-Tech匠工房 <span class="rainbow-title">ポータル・ネクサス</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-light">
+                        創造的なデザインツールを自在に分類・管理・瞬時にエクスポートするメタジェネレーター
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                    <i class="fa-solid fa-glasses text-amber-500 animate-bounce"></i>
+                    <span>ポータル構築軍師: ジェムピック</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-[1500px] w-full mx-auto p-4 sm:p-8 grid grid-cols-1 xl:grid-cols-12 gap-8">
+        
+        <!-- Left Side: Control & Configuration Panel (5 cols) -->
+        <section class="xl:col-span-5 flex flex-col gap-6">
+            
+            <!-- Tool Registry Form -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-5 glow-orange">
+                <h2 class="text-xs font-black tracking-widest text-amber-500 border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-circle-plus mr-1.5"></i>ARTISAN TOOL REGISTRY (ツール登録)</span>
+                    <span id="registry-mode-badge" class="text-[9px] text-amber-400 px-2 py-0.5 bg-amber-400/10 rounded font-mono font-bold">NEW CREATE</span>
+                </h2>
+
+                <form id="tool-form" onsubmit="handleFormSubmit(event)" class="flex flex-col gap-4">
+                    <input type="hidden" id="edit-index" value="">
+                    
+                    <!-- Title Input -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest" for="tool-title">ツール名 (Title)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-amber-500/60 text-xs"><i class="fa-solid fa-heading"></i></span>
+                            <input type="text" id="tool-title" required placeholder="例: 💡PLIP! Magic Bubble Studio" class="pl-8 w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-200 font-bold focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none text-xs">
+                        </div>
+                    </div>
+
+                    <!-- Target Link -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest" for="tool-link">リンク先URL (Target Link)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-amber-500/60 text-xs"><i class="fa-solid fa-link"></i></span>
+                            <input type="text" id="tool-link" required placeholder="例: ./PLIP吹き出しスタジオ.html" class="pl-8 w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-200 font-mono focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none text-xs">
+                        </div>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest" for="tool-category">カテゴリ分類 (Category)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2.5 text-amber-500/60 text-xs"><i class="fa-solid fa-folder-open"></i></span>
+                            <select id="tool-category" class="pl-8 w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-200 font-bold focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none text-xs appearance-none">
+                                <option value="PLIP Universe">1. PLIP系 (PLIP Universe)</option>
+                                <option value="Symbol Design">2. デザイン系・シンボルマーク (Symbol Design)</option>
+                                <option value="Simulator HP">3. デザイン系・シミュレータ、HP (Simulators & Portals)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dual-Mode Icon System -->
+                    <div class="flex flex-col gap-1.5 border-t border-slate-800/80 pt-3">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">アイコン登録 (Icon Config)</label>
+                            <div class="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800/60">
+                                <button type="button" onclick="setIconMode('preset')" id="btn-icon-preset" class="px-2 py-1 text-[9px] font-black rounded bg-amber-500/20 text-amber-400">PRESET PICKER</button>
+                                <button type="button" onclick="setIconMode('custom')" id="btn-icon-custom" class="px-2 py-1 text-[9px] font-black rounded text-slate-400">CUSTOM SVG</button>
+                            </div>
+                        </div>
+
+                        <!-- Mode A: Preset Picker -->
+                        <div id="icon-preset-area" class="grid grid-cols-4 sm:grid-cols-6 gap-2 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                            <!-- Preset Choices dynamically added -->
+                        </div>
+
+                        <!-- Mode B: Custom SVG Input -->
+                        <div id="icon-custom-area" class="hidden flex flex-col gap-2">
+                            <textarea id="tool-svg" rows="3" placeholder='ここにインラインの<svg>...</svg>タグのコードを直接貼り付けてください。カードアイコンとして自動レンダリングされます。' class="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-300 font-mono focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 focus:outline-none text-[10px] leading-relaxed"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Description Input -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest" for="tool-desc">ツールの簡単な紹介文 (Description)</label>
+                        <textarea id="tool-desc" required rows="2" maxlength="150" placeholder="ツールの役割や魅力を伝える1〜2文の短い黄金文を入力してください。" class="w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-200 text-xs font-bold focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <!-- Status Selection -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest">状態 (Status)</span>
+                            <div class="flex gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
+                                <select id="tool-status" class="w-full bg-transparent text-slate-200 border-none focus:outline-none text-[10px] font-black p-1">
+                                    <option value="Active">Active</option>
+                                    <option value="Beta">Beta</option>
+                                    <option value="W.I.P">Work In Progress</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons for form -->
+                    <div class="grid grid-cols-2 gap-3 border-t border-slate-800/80 pt-4 mt-2">
+                        <button type="button" onclick="resetForm()" class="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs transition-all border border-slate-800 active:scale-95">
+                            <i class="fa-solid fa-rotate-left mr-1.5"></i>クリア (Reset)
+                        </button>
+                        <button type="submit" id="submit-btn" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black py-2.5 px-4 rounded-xl text-xs transition-all active:scale-95 shadow-[0_4px_12px_rgba(245,158,11,0.2)] flex items-center justify-center gap-1.5">
+                            <i id="submit-icon" class="fa-solid fa-plus-circle"></i><span id="submit-text">作成ツールを登録</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Portal Visual Identity Customizer -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+                <h2 class="text-xs font-black tracking-widest text-teal-400 border-b border-slate-800 pb-3">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>PORTAL VISUAL INTEGRATION (テーマ設定)
+                </h2>
+
+                <!-- Theme Selection -->
+                <div class="flex flex-col gap-2">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">出力ポータルのビジュアル配色</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setPortalTheme('cosmic')" id="theme-btn-cosmic" class="border-2 border-teal-500/50 bg-teal-500/10 text-teal-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95">
+                            <i class="fa-solid fa-user-astronaut text-xs"></i><span>コズミック宇宙</span>
+                        </button>
+                        <button onclick="setPortalTheme('noble')" id="theme-btn-noble" class="border border-slate-800 bg-slate-950 text-slate-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95">
+                            <i class="fa-solid fa-chess-knight text-xs"></i><span>ノーブル軍師</span>
+                        </button>
+                        <button onclick="setPortalTheme('cyber')" id="theme-btn-cyber" class="border border-slate-800 bg-slate-950 text-slate-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95">
+                            <i class="fa-solid fa-microchip text-xs"></i><span>サイバーパンク</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Database operations -->
+                <div class="border-t border-slate-800/80 pt-4 mt-2 flex flex-col gap-2">
+                    <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">データベース管理 (Data Admin)</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="exportJSON()" class="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 py-2 px-3 rounded-xl text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-file-export text-slate-400"></i> JSONバックアップ
+                        </button>
+                        <label class="bg-slate-900 hover:bg-slate-850 text-slate-300 border border-slate-800 py-2 px-3 rounded-xl text-[10px] font-bold transition-all active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-file-import text-slate-400"></i> JSONインポート
+                            <input type="file" id="import-file" onchange="importJSON(event)" class="hidden">
+                        </label>
+                    </div>
+                    <button onclick="restoreDefaults()" class="w-full text-[9px] text-slate-500 hover:text-amber-500 font-bold transition-all mt-1">
+                        <i class="fa-solid fa-trash-can-arrow-up mr-1"></i> 工房のデフォルト設定に戻す
+                    </button>
+                </div>
+            </div>
+
+            <!-- The Super Exporter -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-4 glow-teal">
+                <h2 class="text-xs font-black tracking-widest text-emerald-400 border-b border-slate-800 pb-3">
+                    <i class="fa-solid fa-rocket mr-1.5"></i>THE SUPER-EXPORTER (至高のワンクリック出力)
+                </h2>
+                <p class="text-[11px] text-slate-400 leading-relaxed font-semibold">
+                    登録したすべてのツール、カテゴリ機能、リアルタイム検索エンジン、及びPLIP浮遊ギミックを完全包摂した、極上の<span class="text-emerald-400">独立・単一HTMLファイルポータル</span>を生成します。
+                </p>
+                <button onclick="downloadStandalonePortal()" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-slate-950 font-black py-3.5 px-6 rounded-xl text-xs transition-all active:scale-95 shadow-[0_6px_25px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-signature text-sm"></i> 『Hiro-Tech匠工房』HP(単一HTML)を書き出す
+                </button>
+            </div>
+        </section>
+
+        <!-- Right Side: Sandbox & Dynamic Viewport Simulator (7 cols) -->
+        <section class="xl:col-span-7 flex flex-col gap-6">
+            
+            <!-- Real-time Live Sandbox Wrapper -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+                        <h2 class="text-xs font-black tracking-widest text-slate-200 uppercase">
+                            PORTAL LIVE SANDBOX (リアルタイムプレビュー)
+                        </h2>
+                    </div>
+
+                    <!-- Simulated device control -->
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800/80">
+                        <button onclick="setSimulatedDevice('desktop')" id="btn-device-desktop" class="px-2.5 py-1.5 text-[9px] font-black rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                            <i class="fa-solid fa-desktop mr-1"></i>DESKTOP
+                        </button>
+                        <button onclick="setSimulatedDevice('tablet')" id="btn-device-tablet" class="px-2.5 py-1.5 text-[9px] font-black rounded-lg text-slate-400 hover:text-slate-200">
+                            <i class="fa-solid fa-tablet mr-1"></i>TABLET
+                        </button>
+                        <button onclick="setSimulatedDevice('mobile')" id="btn-device-mobile" class="px-2.5 py-1.5 text-[9px] font-black rounded-lg text-slate-400 hover:text-slate-200">
+                            <i class="fa-solid fa-mobile mr-1"></i>MOBILE
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simulation viewport -->
+                <div class="w-full flex justify-center bg-[#030408] rounded-xl border border-slate-800/60 p-4 min-h-[500px] max-h-[700px] overflow-hidden relative">
+                    <!-- Ambient auroras -->
+                    <div class="absolute w-60 h-60 rounded-full bg-amber-500/5 blur-[80px] -top-10 -left-10 pointer-events-none"></div>
+                    <div class="absolute w-60 h-60 rounded-full bg-teal-500/5 blur-[80px] -bottom-10 -right-10 pointer-events-none"></div>
+
+                    <!-- Simulated Device Screen Frame -->
+                    <div id="simulated-viewport-frame" class="preview-iframe-wrapper w-full max-w-full rounded-lg border border-slate-700/60 shadow-2xl flex flex-col overflow-y-auto bg-[#070b14] relative custom-scroll">
+                        
+                        <!-- Simulated HP Content inside virtual frame -->
+                        <div id="simulated-portal-root" class="min-h-full p-4 flex flex-col text-slate-200 font-sans text-xs">
+                            <!-- Dynamically generated preview of the customized portal is loaded here -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registered Tools Library Editor Panel -->
+            <div class="glass-panel rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+                <h2 class="text-xs font-black tracking-widest text-slate-200 border-b border-slate-800 pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench text-amber-500"></i>
+                    <span>DEPLOYED SYSTEM MATRIX (登録済みツール管理)</span>
+                </h2>
+
+                <div class="custom-scroll max-h-[280px] overflow-y-auto flex flex-col gap-2 pr-1" id="tools-editor-list">
+                    <!-- Generated list of tools for in-memory editing and deletions -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#020408]/90 text-slate-500 text-[10px] font-semibold tracking-widest py-6 px-4 text-center border-t border-t-slate-900 mt-auto">
+        <p>© 2026 PLIP & HIRO-TECH 匠工房. Produced by 金髪の軍師ジェムピック (Gempick FinTech Lab). All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Default SVGs for the Preset selection
+        const SVG_PRESETS = {
+            sparkles: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-amber-400"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3c1.906 0 3.56 1 4.5 2.501C13.125 4 14.78 3 16.688 3 19.65 3 22.125 5.322 22.125 8.25c0 3.924-2.438 7.11-4.766 9.275a25.18 25.18 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" /></svg>`,
+            lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v3m0 0h.01M12 21h3m-3 0H9m3-3a6 6 0 10-6-6c0 1.11.449 2.115 1.173 2.84L9 16h6l1.827-1.16A5.982 5.982 0 0018 12a6 6 0 00-6-6z" /></svg>`,
+            gear: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-slate-400"><path fill-rule="evenodd" d="M11.078 2.25c-.288 0-.55.188-.617.468L10.224 3.8a9.055 9.055 0 00-1.748.723L7.331 3.945a.625.625 0 00-.77.16l-1.4 1.4a.625.625 0 00.16.77l1.045.744c-.2.535-.333 1.1-.39 1.683l-1.127.24a.625.625 0 00-.468.617v1.98c0 .288.188.55.468.617l1.127.24c.057.583.19 1.148.39 1.683l-1.045.744a.625.625 0 00-.16.77l1.4 1.4a.625.625 0 00.77-.16l.745-1.045c.534.2 1.1.333 1.683.39l.24 1.127c.067.28.329.468.617.468h1.98c.288 0 .55-.188.617-.468l.24-1.127c.583-.057 1.148-.19 1.683-.39l.744 1.045a.625.625 0 00.77.16l1.4-1.4a.625.625 0 00-.16-.77l-1.045-.745c.2-.534.333-1.1.39-1.683l1.127-.24c.28-.067.468-.329.468-.617v-1.98c0-.288-.188-.55-.468-.617l-1.127-.24a9.055 9.055 0 00-.39-1.683l1.045-.744a.625.625 0 00.16-.77l-1.4-1.4a.625.625 0 00-.77.16l-.744 1.045a9.055 9.055 0 00-1.683-.39l-.24-1.127a.625.625 0 00-.617-.468h-1.98zm2.25 9.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd" /></svg>`,
+            palette: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-pink-400"><path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm1.5 4.875a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm-3.75.375a1.125 1.125 0 110 2.25 1.125 1.125 0 010-2.25zM6.375 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm10.125 4.125a1.125 1.125 0 110-2.25 1.125 1.125 0 010 2.25z" /></svg>`,
+            bubble: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-cyan-400"><path fill-rule="evenodd" d="M4.804 21.644A10.718 10.718 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75c-1.183 0-2.317-.21-3.364-.592l-4.57 1.83a.75.75 0 01-.962-.924l1.125-3.376z" clip-rule="evenodd" /></svg>`,
+            bolt: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-yellow-300"><path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" /></svg>`,
+            gem: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-emerald-400"><path fill-rule="evenodd" d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875V20.625c0 1.035.84 1.875 1.875 1.875H9v-21zM15 1.5H18.375c1.036 0 1.875.84 1.875 1.875V20.625c0 1.035.84 1.875 1.875 1.875H15v-21z" clip-rule="evenodd" /><path d="M10.5 1.5h3v21h-3z" /></svg>`,
+            chart: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-indigo-400"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd" /></svg>`
+        };
+
+        // Application State Data
+        let toolsList = [];
+        let currentTheme = 'cosmic'; // default theme
+        let activeIconMode = 'preset'; // preset or custom
+        let selectedPresetIconKey = 'sparkles';
+        let simulationDevice = 'desktop';
+        let selectedFilterCategory = 'all';
+        let searchKeyword = '';
+
+        const DEFAULT_TOOLS = [
+            {
+                id: "def-1",
+                title: "💡PLIP! Magic Bubble Studio",
+                link: "./PLIP吹き出しスタジオ.html",
+                category: "PLIP Universe",
+                iconMode: "preset",
+                iconKey: "bubble",
+                customSVG: "",
+                desc: "資産シミュレータ『尽生』から飛び出した、煌めく七色電球と稲妻のベクトル吹き出しジェネレーター",
+                status: "Active"
+            },
+            {
+                id: "def-2",
+                title: "👑 Symbol & Button Studio",
+                link: "./symbol_studio.html",
+                category: "Symbol Design",
+                iconMode: "preset",
+                iconKey: "gem",
+                customSVG: "",
+                desc: "ユーザーの作品を象徴するSVGシンボルマークをデザインし、3段階変化と音響トリガーを備えたボタンを創る特製工房",
+                status: "Beta"
+            },
+            {
+                id: "def-3",
+                title: "📈 資産運用シミュレータ『尽生』",
+                link: "./jinsei.html",
+                category: "Simulator HP",
+                iconMode: "preset",
+                iconKey: "chart",
+                customSVG: "",
+                desc: "将来 of 資産推移を美しくビジュアライズする、人生設計のための至高のフィンテック・シミュレータ",
+                status: "Active"
+            }
+        ];
+
+        // Custom Modal Helpers (Replaces alert)
+        function showModal(title, text, iconType = 'info') {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('modal-content');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').textContent = text;
+            
+            const iconSpan = document.getElementById('modal-icon');
+            if (iconType === 'success') {
+                iconSpan.className = "text-xl text-emerald-400";
+                iconSpan.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+            } else if (iconType === 'error') {
+                iconSpan.className = "text-xl text-rose-500";
+                iconSpan.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+            } else {
+                iconSpan.className = "text-xl text-amber-500";
+                iconSpan.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const content = document.getElementById('modal-content');
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const text = document.getElementById('toast-text');
+            text.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function renderPresetIcons() {
+            const area = document.getElementById('icon-preset-area');
+            area.innerHTML = '';
+            Object.keys(SVG_PRESETS).forEach(key => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectPresetIcon(key);
+                btn.id = `preset-icon-choice-${key}`;
+                btn.className = `w-10 h-10 p-2 rounded-xl border flex items-center justify-center transition-all duration-200 active:scale-95 ${
+                    selectedPresetIconKey === key 
+                    ? 'border-amber-500 bg-amber-500/10 glow-orange' 
+                    : 'border-slate-800 bg-slate-950/80 hover:bg-slate-900 hover:border-slate-700'
+                }`;
+                btn.innerHTML = SVG_PRESETS[key];
+                area.appendChild(btn);
+            });
+        }
+
+        function selectPresetIcon(key) {
+            selectedPresetIconKey = key;
+            renderPresetIcons();
+            updateLivePreview();
+        }
+
+        function setIconMode(mode) {
+            activeIconMode = mode;
+            const btnPreset = document.getElementById('btn-icon-preset');
+            const btnCustom = document.getElementById('btn-icon-custom');
+            const areaPreset = document.getElementById('icon-preset-area');
+            const areaCustom = document.getElementById('icon-custom-area');
+
+            if (mode === 'preset') {
+                btnPreset.className = 'px-2 py-1 text-[9px] font-black rounded bg-amber-500/20 text-amber-400 border border-amber-500/15';
+                btnCustom.className = 'px-2 py-1 text-[9px] font-black rounded text-slate-400 hover:text-slate-200';
+                areaPreset.classList.remove('hidden');
+                areaCustom.classList.add('hidden');
+            } else {
+                btnPreset.className = 'px-2 py-1 text-[9px] font-black rounded text-slate-400 hover:text-slate-200';
+                btnCustom.className = 'px-2 py-1 text-[9px] font-black rounded bg-amber-500/20 text-amber-400 border border-amber-500/15';
+                areaPreset.classList.add('hidden');
+                areaCustom.classList.remove('hidden');
+            }
+            updateLivePreview();
+        }
+
+        function setSimulatedDevice(device) {
+            simulationDevice = device;
+            const bD = document.getElementById('btn-device-desktop');
+            const bT = document.getElementById('btn-device-tablet');
+            const bM = document.getElementById('btn-device-mobile');
+            const frame = document.getElementById('simulated-viewport-frame');
+
+            [bD, bT, bM].forEach(b => b.className = 'px-2.5 py-1.5 text-[9px] font-black rounded-lg text-slate-400 hover:text-slate-200');
+            
+            if (device === 'desktop') {
+                bD.className = 'px-2.5 py-1.5 text-[9px] font-black rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/20';
+                frame.style.width = '100%';
+            } else if (device === 'tablet') {
+                bT.className = 'px-2.5 py-1.5 text-[9px] font-black rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/20';
+                frame.style.width = '768px';
+            } else if (device === 'mobile') {
+                bM.className = 'px-2.5 py-1.5 text-[9px] font-black rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/20';
+                frame.style.width = '375px';
+            }
+        }
+
+        function setPortalTheme(theme) {
+            currentTheme = theme;
+            const bCosmic = document.getElementById('theme-btn-cosmic');
+            const bNoble = document.getElementById('theme-btn-noble');
+            const bCyber = document.getElementById('theme-btn-cyber');
+
+            [bCosmic, bNoble, bCyber].forEach(b => {
+                b.className = 'border border-slate-800 bg-slate-950 text-slate-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95';
+            });
+
+            if (theme === 'cosmic') {
+                bCosmic.className = 'border-2 border-teal-500/50 bg-teal-500/10 text-teal-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95';
+            } else if (theme === 'noble') {
+                bNoble.className = 'border-2 border-amber-500/50 bg-amber-500/10 text-amber-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95';
+            } else if (theme === 'cyber') {
+                bCyber.className = 'border-2 border-pink-500/50 bg-pink-500/10 text-pink-400 py-2 rounded-xl text-[10px] font-black flex flex-col items-center justify-center gap-1 transition-all active:scale-95';
+            }
+
+            updateLivePreview();
+        }
+
+        // Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const editIndexVal = document.getElementById('edit-index').value;
+            const title = document.getElementById('tool-title').value;
+            const link = document.getElementById('tool-link').value;
+            const category = document.getElementById('tool-category').value;
+            const customSVG = document.getElementById('tool-svg').value;
+            const desc = document.getElementById('tool-desc').value;
+            const status = document.getElementById('tool-status').value;
+
+            if (activeIconMode === 'custom' && !customSVG.trim().startsWith('<svg')) {
+                showModal('入力エラー', 'カスタムSVGを選択した場合は、正しい<svg>タグで始まるコードを貼り付けてください。', 'error');
+                return;
+            }
+
+            const toolData = {
+                id: editIndexVal !== "" ? toolsList[parseInt(editIndexVal)].id : 'tool-' + Date.now(),
+                title,
+                link,
+                category,
+                iconMode: activeIconMode,
+                iconKey: selectedPresetIconKey,
+                customSVG: activeIconMode === 'custom' ? customSVG : '',
+                desc,
+                status
+            };
+
+            if (editIndexVal !== "") {
+                toolsList[parseInt(editIndexVal)] = toolData;
+                showToast("🛠 ツール構成を更新しました！");
+            } else {
+                toolsList.push(toolData);
+                showToast("✨ 新しいクラフトツールを登録しました！");
+            }
+
+            saveToLocalStorage();
+            resetForm();
+            renderToolsListAdmin();
+            updateLivePreview();
+        }
+
+        function editTool(index) {
+            const tool = toolsList[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('tool-title').value = tool.title;
+            document.getElementById('tool-link').value = tool.link;
+            document.getElementById('tool-category').value = tool.category;
+            document.getElementById('tool-svg').value = tool.customSVG;
+            document.getElementById('tool-desc').value = tool.desc;
+            document.getElementById('tool-status').value = tool.status;
+
+            setIconMode(tool.iconMode);
+            if (tool.iconMode === 'preset') {
+                selectedPresetIconKey = tool.iconKey;
+                renderPresetIcons();
+            }
+
+            document.getElementById('registry-mode-badge').textContent = "EDIT MODE";
+            document.getElementById('registry-mode-badge').className = "text-[9px] text-teal-400 px-2 py-0.5 bg-teal-400/10 rounded font-mono font-bold";
+            document.getElementById('submit-text').textContent = "変更を適用保存";
+            document.getElementById('submit-icon').className = "fa-solid fa-circle-check";
+            document.getElementById('submit-btn').className = "bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-slate-950 font-black py-2.5 px-4 rounded-xl text-xs transition-all active:scale-95 shadow-[0_4px_12px_rgba(20,184,166,0.2)] flex items-center justify-center gap-1.5";
+        }
+
+        function deleteTool(index) {
+            toolsList.splice(index, 1);
+            saveToLocalStorage();
+            renderToolsListAdmin();
+            updateLivePreview();
+            showToast("🗑 ツールデータを完全に消去しました。");
+        }
+
+        function resetForm() {
+            document.getElementById('tool-form').reset();
+            document.getElementById('edit-index').value = "";
+            document.getElementById('registry-mode-badge').textContent = "NEW CREATE";
+            document.getElementById('registry-mode-badge').className = "text-[9px] text-amber-400 px-2 py-0.5 bg-amber-400/10 rounded font-mono font-bold";
+            document.getElementById('submit-text').textContent = "作成ツールを登録";
+            document.getElementById('submit-icon').className = "fa-solid fa-plus-circle";
+            document.getElementById('submit-btn').className = "bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-950 font-black py-2.5 px-4 rounded-xl text-xs transition-all active:scale-95 shadow-[0_4px_12px_rgba(245,158,11,0.2)] flex items-center justify-center gap-1.5";
+            selectedPresetIconKey = 'sparkles';
+            setIconMode('preset');
+            renderPresetIcons();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('hiro_tech_portal_tools', JSON.stringify(toolsList));
+            localStorage.setItem('hiro_tech_portal_theme', currentTheme);
+        }
+
+        function restoreDefaults() {
+            toolsList = JSON.parse(JSON.stringify(DEFAULT_TOOLS));
+            currentTheme = 'cosmic';
+            saveToLocalStorage();
+            setPortalTheme('cosmic');
+            renderToolsListAdmin();
+            updateLivePreview();
+            showModal('初期化成功', '匠工房のデフォルトの3つのシステムツールを再構築しました！', 'success');
+        }
+
+        function renderToolsListAdmin() {
+            const listContainer = document.getElementById('tools-editor-list');
+            listContainer.innerHTML = '';
+
+            if (toolsList.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="p-6 border border-dashed border-slate-800 rounded-xl text-center text-xs text-slate-500 font-semibold uppercase">
+                        登録されたツールがありません。新規追加してください。
+                    </div>
+                `;
+                return;
+            }
+
+            toolsList.forEach((tool, index) => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800/80 hover:border-slate-700 transition-all duration-200";
+                
+                // Get display icon HTML
+                let iconHTML = '';
+                if (tool.iconMode === 'custom') {
+                    iconHTML = `<div class="w-8 h-8 p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">${tool.customSVG}</div>`;
+                } else {
+                    iconHTML = `<div class="w-8 h-8 p-1.5 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">${SVG_PRESETS[tool.iconKey] || SVG_PRESETS.sparkles}</div>`;
+                }
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        ${iconHTML}
+                        <div class="flex flex-col">
+                            <span class="text-xs font-black text-slate-200">${tool.title}</span>
+                            <span class="text-[9px] font-mono text-slate-500 tracking-wider">${tool.category} • ${tool.link}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="editTool(${index})" class="w-7 h-7 bg-slate-900 hover:bg-slate-800 text-teal-400 rounded-lg flex items-center justify-center transition-all border border-slate-800 active:scale-95" title="編集">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button onclick="deleteTool(${index})" class="w-7 h-7 bg-slate-900 hover:bg-slate-800 text-rose-400 rounded-lg flex items-center justify-center transition-all border border-slate-800 active:scale-95" title="削除">
+                            <i class="fa-solid fa-trash-can text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Live Portal Preview Builder inside virtual screen
+        function updateLivePreview() {
+            const root = document.getElementById('simulated-portal-root');
+            
+            // Build Dynamic Styles based on the theme chosen
+            let themeStyles = "";
+            let accentColor = "#14b8a6"; // default cosmic teal
+            let headerBg = "bg-slate-950/90";
+            let bodyBg = "bg-[#060913]";
+            let cardBg = "bg-[#0f172a]";
+            let cardBorder = "border-teal-500/20";
+            let activeTabClass = "bg-teal-500/15 text-teal-400 border border-teal-500/30";
+
+            if (currentTheme === 'cosmic') {
+                accentColor = "#14b8a6";
+                bodyBg = "bg-[#060814]";
+                cardBg = "bg-[#0d1222]";
+                cardBorder = "border-teal-500/10";
+                activeTabClass = "bg-teal-500/15 text-teal-400 border border-teal-500/30";
+            } else if (currentTheme === 'noble') {
+                accentColor = "#f59e0b"; // gold
+                bodyBg = "bg-[#0a0710]";
+                cardBg = "bg-[#150d18]";
+                cardBorder = "border-amber-500/15";
+                activeTabClass = "bg-amber-500/15 text-amber-400 border border-amber-500/30";
+            } else if (currentTheme === 'cyber') {
+                accentColor = "#ec4899"; // pink
+                bodyBg = "bg-[#0d0314]";
+                cardBg = "bg-[#160824]";
+                cardBorder = "border-pink-500/15";
+                activeTabClass = "bg-pink-500/15 text-pink-400 border border-pink-500/30";
+            }
+
+            // Simulated Portal Counters
+            const totalCrafts = toolsList.length;
+            const plipUniverseCount = toolsList.filter(t => t.category === "PLIP Universe").length;
+            const symbolDesignCount = toolsList.filter(t => t.category === "Symbol Design").length;
+            const simulatorHPCount = toolsList.filter(t => t.category === "Simulator HP").length;
+
+            // Generate HTML for the Virtual Workspace Portal
+            root.innerHTML = `
+                <div class="flex-grow flex flex-col ${bodyBg} transition-all duration-300 rounded-lg p-3 min-h-full font-sans border border-slate-900 shadow-inner">
+                    
+                    <!-- Simulated Title Banner -->
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center text-slate-950 font-black text-[10px]">匠</span>
+                            <div>
+                                <h3 class="text-[11px] font-black tracking-wider text-white uppercase" style="font-family:'Cinzel', serif;">HIRO-TECH 匠工房 PORTAL</h3>
+                                <p class="text-[8px] text-slate-400">リアルタイム統合コントロール・ポータル</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[8px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-black tracking-widest animate-pulse">MATRIX ONLINE</span>
+                        </div>
+                    </div>
+
+                    <!-- Simulated Counters Dashboard -->
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 flex flex-col">
+                            <span class="text-[8px] text-slate-500 font-extrabold tracking-widest uppercase">総エンジン数</span>
+                            <span class="text-sm font-black text-amber-500 font-mono mt-0.5">${totalCrafts}</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 flex flex-col">
+                            <span class="text-[8px] text-slate-500 font-extrabold tracking-widest uppercase">PLIPシステム</span>
+                            <span class="text-sm font-black text-teal-400 font-mono mt-0.5">${plipUniverseCount}</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80 flex flex-col">
+                            <span class="text-[8px] text-slate-500 font-extrabold tracking-widest uppercase">クラフト系統</span>
+                            <span class="text-sm font-black text-pink-400 font-mono mt-0.5">3系統</span>
+                        </div>
+                    </div>
+
+                    <!-- Category Tabs & Search Simulation Bar -->
+                    <div class="flex flex-col gap-2 mb-4">
+                        <!-- Simulated Category Filter Tabs -->
+                        <div class="flex flex-wrap gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-900">
+                            <button onclick="setSimFilter('all')" class="px-2.5 py-1 text-[9px] font-black rounded-lg transition-all ${selectedFilterCategory === 'all' ? activeTabClass : 'text-slate-400 hover:text-slate-200'}">
+                                ALL (${totalCrafts})
+                            </button>
+                            <button onclick="setSimFilter('PLIP Universe')" class="px-2.5 py-1 text-[9px] font-black rounded-lg transition-all ${selectedFilterCategory === 'PLIP Universe' ? activeTabClass : 'text-slate-400 hover:text-slate-200'}">
+                                PLIP系 (${plipUniverseCount})
+                            </button>
+                            <button onclick="setSimFilter('Symbol Design')" class="px-2.5 py-1 text-[9px] font-black rounded-lg transition-all ${selectedFilterCategory === 'Symbol Design' ? activeTabClass : 'text-slate-400 hover:text-slate-200'}">
+                                デザイン系(シンボル) (${symbolDesignCount})
+                            </button>
+                            <button onclick="setSimFilter('Simulator HP')" class="px-2.5 py-1 text-[9px] font-black rounded-lg transition-all ${selectedFilterCategory === 'Simulator HP' ? activeTabClass : 'text-slate-400 hover:text-slate-200'}">
+                                シミュレータ (${simulatorHPCount})
+                            </button>
+                        </div>
+
+                        <!-- Simulated Search input -->
+                        <div class="relative">
+                            <span class="absolute left-2.5 top-1.5 text-slate-500 text-[10px]"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" placeholder="キーワード検索シミュレータ..." oninput="handleSimSearch(this.value)" value="${searchKeyword}" class="pl-7 pr-3 py-1 w-full rounded-lg bg-slate-950/80 border border-slate-900 text-slate-200 text-[10px] focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Cards Grid Display -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 overflow-y-auto max-h-[360px] pr-1 custom-scroll" id="simulated-cards-grid">
+                        <!-- Dynamic simulated tools rendered inside -->
+                    </div>
+
+                </div>
+            `;
+
+            renderSimulatedCards();
+        }
+
+        function setSimFilter(category) {
+            selectedFilterCategory = category;
+            updateLivePreview();
+        }
+
+        function handleSimSearch(val) {
+            searchKeyword = val.toLowerCase();
+            renderSimulatedCards();
+        }
+
+        function renderSimulatedCards() {
+            const grid = document.getElementById('simulated-cards-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let filtered = toolsList;
+            if (selectedFilterCategory !== 'all') {
+                filtered = filtered.filter(t => t.category === selectedFilterCategory);
+            }
+            if (searchKeyword.trim() !== '') {
+                filtered = filtered.filter(t => 
+                    t.title.toLowerCase().includes(searchKeyword) || 
+                    t.desc.toLowerCase().includes(searchKeyword)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-2 p-8 text-center text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+                        検索・フィルタ結果がありません
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(tool => {
+                const card = document.createElement('div');
+                
+                // Get theme details for card borders and hover effect
+                let themeBorder = "border-slate-800 hover:border-teal-500/40";
+                let themeBg = "bg-slate-950/80";
+                let accentText = "text-teal-400 bg-teal-400/10 border-teal-500/20";
+                if (currentTheme === 'noble') {
+                    themeBorder = "border-slate-800 hover:border-amber-500/40";
+                    themeBg = "bg-[#150d18]";
+                    accentText = "text-amber-400 bg-amber-400/10 border-amber-500/20";
+                } else if (currentTheme === 'cyber') {
+                    themeBorder = "border-slate-800 hover:border-pink-500/40";
+                    themeBg = "bg-[#160824]";
+                    accentText = "text-pink-400 bg-pink-400/10 border-pink-500/20";
+                }
+
+                // Render vector icon or fallback sparkles
+                let iconHTML = '';
+                if (tool.iconMode === 'custom') {
+                    iconHTML = `<div class="w-7 h-7 p-1 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 border border-slate-800">${tool.customSVG}</div>`;
+                } else {
+                    iconHTML = `<div class="w-7 h-7 p-1 bg-slate-900 rounded-lg flex items-center justify-center shrink-0 border border-slate-800">${SVG_PRESETS[tool.iconKey] || SVG_PRESETS.sparkles}</div>`;
+                }
+
+                // Status Badge coloring
+                let statusBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+                if (tool.status === 'Beta') {
+                    statusBadge = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                } else if (tool.status === 'Work In Progress' || tool.status === 'W.I.P') {
+                    statusBadge = "bg-slate-500/10 text-slate-400 border-slate-500/20";
+                }
+
+                card.className = `${themeBg} rounded-xl p-3 border ${themeBorder} flex flex-col justify-between float-card transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)]`;
+                card.innerHTML = `
+                    <div class="flex items-start gap-2.5 mb-2.5">
+                        ${iconHTML}
+                        <div class="flex flex-col gap-0.5">
+                            <span class="text-[10px] font-black text-slate-100 flex items-center gap-1.5">
+                                ${tool.title}
+                            </span>
+                            <span class="text-[8px] text-slate-400 font-medium leading-relaxed leading-3 line-clamp-2">${tool.desc}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between border-t border-slate-800/50 pt-2">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[7px] font-bold px-1.5 py-0.5 rounded border ${accentText}">${tool.category}</span>
+                            <span class="text-[7px] font-bold px-1.5 py-0.5 rounded border ${statusBadge}">${tool.status}</span>
+                        </div>
+                        <a href="#" class="text-[8px] font-black text-white px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 border border-slate-800 flex items-center gap-1">
+                            <span>起動</span><i class="fa-solid fa-arrow-up-right-from-square text-[7px]"></i>
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Super-Exporter Core Function: Builds completely self-contained single-file HTML portal site
+        function buildStandalonePortalHTML() {
+            // Setup visual configs based on chosen theme
+            let bodyBgStyle = "radial-gradient(circle at 50% 50%, #0c1328 0%, #03050a 100%)";
+            let mainBgHex = "#05070f";
+            let cardBgHex = "#0d1424";
+            let primaryAccent = "#14b8a6"; // teal
+            let primaryAccentGlow = "rgba(20, 184, 166, 0.4)";
+            let themeTitle = "💡PLIP & Hiro-Tech 匠工房";
+            let activeTabBg = "rgba(20, 184, 166, 0.15)";
+            let activeTabBorder = "rgba(20, 184, 166, 0.35)";
+
+            if (currentTheme === 'noble') {
+                bodyBgStyle = "radial-gradient(circle at 50% 50%, #1c1122 0%, #050308 100%)";
+                mainBgHex = "#07040a";
+                cardBgHex = "#160c1d";
+                primaryAccent = "#f59e0b"; // gold
+                primaryAccentGlow = "rgba(245, 158, 11, 0.4)";
+                activeTabBg = "rgba(245, 158, 11, 0.15)";
+                activeTabBorder = "rgba(245, 158, 11, 0.35)";
+            } else if (currentTheme === 'cyber') {
+                bodyBgStyle = "radial-gradient(circle at 50% 50%, #200435 0%, #04010a 100%)";
+                mainBgHex = "#05010a";
+                cardBgHex = "#1a082e";
+                primaryAccent = "#ec4899"; // pink
+                primaryAccentGlow = "rgba(236, 72, 153, 0.4)";
+                activeTabBg = "rgba(236, 72, 153, 0.15)";
+                activeTabBorder = "rgba(236, 72, 153, 0.35)";
+            }
+
+            // Stats computations
+            const countAll = toolsList.length;
+            const countPlip = toolsList.filter(t => t.category === "PLIP Universe").length;
+            const countSymbol = toolsList.filter(t => t.category === "Symbol Design").length;
+            const countSim = toolsList.filter(t => t.category === "Simulator HP").length;
+
+            // Deep-clone and serialize tools array to embed directly inside JSON
+            const embeddedData = JSON.stringify(toolsList, null, 2);
+
+            // Return compiled HTML layout (CRITICAL: Escaping closing script tags using backslash!)
+            return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 Hiro-Tech 匠工房 - ポータル・ネクサス</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Noto+Sans+JP:wght=300;400;500;700;900&family=Cinzel:wght=600;800&family=Shippori+Mincho:wght=600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background: ${bodyBgStyle};
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient glows and glassmorphism styling */
+        .glass-portal-card {
+            background: rgba(${currentTheme === 'cosmic' ? '13,20,38' : currentTheme === 'noble' ? '21,12,24' : '22,8,38'}, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-portal-card:hover {
+            border-color: ${primaryAccent}60;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px ${primaryAccent}20;
+            transform: translateY(-4px) scale(1.01);
+        }
+
+        /* Smooth Floating animation for cards */
+        @keyframes subtleFloatPhysics {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(0.4deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float-card {
+            animation: subtleFloatPhysics 5s ease-in-out infinite;
+        }
+
+        /* Rainbow banner title */
+        @keyframes rainbowThemeTitle {
+            0% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+            14% { color: #ff5500; text-shadow: 0 0 10px rgba(255,85,0,0.4); }
+            28% { color: #ffcc00; text-shadow: 0 0 10px rgba(255,204,0,0.4); }
+            42% { color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+            56% { color: #00ccff; text-shadow: 0 0 10px rgba(0,204,255,0.4); }
+            70% { color: #3333ff; text-shadow: 0 0 10px rgba(51,51,255,0.4); }
+            84% { color: #9900ff; text-shadow: 0 0 10px rgba(153,0,255,0.4); }
+            100% { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        }
+        .banner-rainbow {
+            animation: rainbowThemeTitle 12s linear infinite;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: ${primaryAccent}40; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: ${primaryAccent}; }
+    </style>
+</head>
+<body class="flex flex-col selection:bg-amber-500/30 selection:text-white">
+
+    <!-- Top Glow Ambient Effects -->
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[${primaryAccent}]/5 blur-[120px] -top-80 -left-40 pointer-events-none"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[${primaryAccent}]/5 blur-[120px] -top-80 -right-40 pointer-events-none"></div>
+
+    <!-- Header Block -->
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 py-5 px-6 sm:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-slate-950 to-slate-900 flex items-center justify-center border border-[${primaryAccent}]/30 shadow-2xl">
+                    <span class="text-[${primaryAccent}] text-2xl animate-pulse font-serif font-extrabold">匠</span>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black text-white tracking-widest uppercase flex items-center gap-2" style="font-family:'Cinzel', 'Shippori Mincho', serif;">
+                        Hiro-Tech 匠工房 <span class="banner-rainbow">PORTAL-NEXUS</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-light mt-0.5">
+                        PLIP! 宇宙 & 創作デザインツールを繋ぐ統合コントロール・ポータル
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats dashboard in Header -->
+            <div class="flex gap-4 items-center">
+                <div class="bg-slate-900/60 border border-slate-800/80 px-4 py-2 rounded-2xl flex flex-col items-center">
+                    <span class="text-[9px] text-slate-500 font-extrabold tracking-widest uppercase">DEPLOYED</span>
+                    <span class="text-base font-black text-[${primaryAccent}] font-mono" id="header-counter-deployed">${countAll}</span>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800/80 px-4 py-2 rounded-2xl flex flex-col items-center">
+                    <span class="text-[9px] text-slate-500 font-extrabold tracking-widest uppercase">STATUS</span>
+                    <span class="text-[10px] font-black text-emerald-400 tracking-wider flex items-center gap-1.5 mt-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> ONLINE
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-6 sm:p-12 flex flex-col gap-8 relative z-10">
+        
+        <!-- Search, Filter & Categories Navigation block -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-950/60 border border-slate-800/80 p-4 rounded-3xl backdrop-blur-md">
+            <!-- Dynamic Filtering tabs -->
+            <div class="flex flex-wrap gap-2" id="portal-tab-filters">
+                <button onclick="setPortalFilter('all')" id="tab-all" class="px-4 py-2 text-xs font-black rounded-xl transition-all border border-[${primaryAccent}]/30 bg-[${primaryAccent}]/15 text-[${primaryAccent}]">
+                    ALL TOOLS (${countAll})
+                </button>
+                <button onclick="setPortalFilter('PLIP Universe')" id="tab-plip" class="px-4 py-2 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50">
+                    PLIP Universe (${countPlip})
+                </button>
+                <button onclick="setPortalFilter('Symbol Design')" id="tab-symbol" class="px-4 py-2 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50">
+                    Symbol Design (${countSymbol})
+                </button>
+                <button onclick="setPortalFilter('Simulator HP')" id="tab-sim" class="px-4 py-2 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50">
+                    Simulators & HP (${countSim})
+                </button>
+            </div>
+
+            <!-- Dynamic live search bar -->
+            <div class="relative w-full md:w-80">
+                <span class="absolute left-3.5 top-3 text-slate-500 text-sm"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="portal-search-bar" oninput="handleSearch(this.value)" placeholder="工房内のツールを即時検索..." class="pl-10 pr-4 py-2.5 w-full rounded-2xl bg-slate-950 border border-slate-800 text-slate-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[${primaryAccent}]/50 focus:border-[${primaryAccent}]">
+            </div>
+        </div>
+
+        <!-- Deployed Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portal-cards-matrix">
+            <!-- Tools populated here dynamically -->
+        </div>
+
+    </main>
+
+    <!-- Exporter footer -->
+    <footer class="bg-slate-950 text-slate-600 text-xs py-8 px-4 text-center border-t border-slate-900 relative z-10">
+        <p>© 2026 PLIP & Hiro-Tech 匠工房. Deployed beautifully.</p>
+    </footer>
+
+    <!-- Embedded Application Database JSON (NO BACKSLASHES!) -->
+    <script id="embedded-tools-database" type="application/json">
+${embeddedData}
+    <\/script>
+
+    <!-- Embedded Vector Icons Map -->
+    <script>
+        const PRESET_ICONS = {
+            sparkles: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-amber-400"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3c1.906 0 3.56 1 4.5 2.501C13.125 4 14.78 3 16.688 3 19.65 3 22.125 5.322 22.125 8.25c0 3.924-2.438 7.11-4.766 9.275a25.18 25.18 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" /></svg>',
+            lightbulb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-full h-full text-yellow-400"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v3m0 0h.01M12 21h3m-3 0H9m3-3a6 6 0 10-6-6c0 1.11.449 2.115 1.173 2.84L9 16h6l1.827-1.16A5.982 5.982 0 0018 12a6 6 0 00-6-6z" /></svg>',
+            gear: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-slate-400"><path fill-rule="evenodd" d="M11.078 2.25c-.288 0-.55.188-.617.468L10.224 3.8a9.055 9.055 0 00-1.748.723L7.331 3.945a.625.625 0 00-.77.16l-1.4 1.4a.625.625 0 00.16.77l1.045.744c-.2.535-.333 1.1-.39 1.683l-1.127.24a.625.625 0 00-.468.617v1.98c0 .288.188.55.468.617l1.127.24c.057.583.19 1.148.39 1.683l-1.045.744a.625.625 0 00-.16.77l1.4 1.4a.625.625 0 00.77-.16l.745-1.045c.534.2 1.1.333 1.683.39l.24 1.127c.067.28.329.468.617.468h1.98c.288 0 .55-.188.617-.468l.24-1.127c.583-.057 1.148-.19 1.683-.39l.744 1.045a.625.625 0 00.77.16l1.4-1.4a.625.625 0 00-.16-.77l-1.045-.745c.2-.534.333-1.1.39-1.683l1.127-.24c.28-.067.468-.329.468-.617v-1.98c0-.288-.188-.55-.468-.617l-1.127-.24a9.055 9.055 0 00-.39-1.683l1.045-.744a.625.625 0 00.16-.77l-1.4-1.4a.625.625 0 00-.77.16l-.744 1.045a9.055 9.055 0 00-1.683-.39l-.24-1.127a.625.625 0 00-.617-.468h-1.98zm2.25 9.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd" /></svg>',
+            palette: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-pink-400"><path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm1.5 4.875a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm-3.75.375a1.125 1.125 0 110 2.25 1.125 1.125 0 010-2.25zM6.375 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm10.125 4.125a1.125 1.125 0 110-2.25 1.125 1.125 0 010 2.25z" /></svg>',
+            bubble: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-cyan-400"><path fill-rule="evenodd" d="M4.804 21.644A10.718 10.718 0 012.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75c-1.183 0-2.317-.21-3.364-.592l-4.57 1.83a.75.75 0 01-.962-.924l1.125-3.376z" clip-rule="evenodd" /></svg>',
+            bolt: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-yellow-300"><path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" /></svg>',
+            gem: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-emerald-400"><path fill-rule="evenodd" d="M9 1.5H5.625c-1.036 0-1.875.84-1.875 1.875V20.625c0 1.035.84 1.875 1.875 1.875H9v-21zM15 1.5H18.375c1.036 0 1.875.84 1.875 1.875V20.625c0 1.035.84 1.875 1.875 1.875H15v-21z" clip-rule="evenodd" /><path d="M10.5 1.5h3v21h-3z" /></svg>',
+            chart: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-indigo-400"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd" /></svg>'
+        };
+
+        let loadedTools = [];
+        let portalCategoryFilter = 'all';
+        let portalSearchString = '';
+
+        // Initialize exported script
+        window.onload = function() {
+            try {
+                const dbElement = document.getElementById('embedded-tools-database');
+                loadedTools = JSON.parse(dbElement.textContent);
+            } catch (e) {
+                console.error("Database reading error: ", e);
+                loadedTools = [];
+            }
+            renderPortalCards();
+        }
+
+        // Filter and Search Engine inside compiled HP
+        function setPortalFilter(category) {
+            portalCategoryFilter = category;
+            
+            const tabs = {
+                all: document.getElementById('tab-all'),
+                'PLIP Universe': document.getElementById('tab-plip'),
+                'Symbol Design': document.getElementById('tab-symbol'),
+                'Simulator HP': document.getElementById('tab-sim')
+            };
+
+            Object.keys(tabs).forEach(k => {
+                if(tabs[k]) {
+                    tabs[k].className = "px-4 py-2 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-900/50";
+                }
+            });
+
+            if(tabs[category]) {
+                tabs[category].className = "px-4 py-2 text-xs font-black rounded-xl transition-all border border-[" + '${primaryAccent}' + "]/30 bg-[" + '${primaryAccent}' + "]/15 text-[" + '${primaryAccent}' + "]";
+            }
+
+            renderPortalCards();
+        }
+
+        function handleSearch(val) {
+            portalSearchString = val.toLowerCase();
+            renderPortalCards();
+        }
+
+        function renderPortalCards() {
+            const grid = document.getElementById('portal-cards-matrix');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            let filtered = loadedTools;
+            if (portalCategoryFilter !== 'all') {
+                filtered = filtered.filter(t => t.category === portalCategoryFilter);
+            }
+
+            if (portalSearchString.trim() !== '') {
+                filtered = filtered.filter(t => 
+                    t.title.toLowerCase().includes(portalSearchString) || 
+                    t.desc.toLowerCase().includes(portalSearchString)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="col-span-1 md:col-span-2 lg:col-span-3 p-12 text-center text-slate-500 text-sm font-bold uppercase tracking-wider">登録ツールが見つかりませんでした</div>';
+                return;
+            }
+
+            filtered.forEach(tool => {
+                const card = document.createElement('div');
+                card.className = "glass-portal-card rounded-2xl p-6 flex flex-col justify-between animate-float-card shadow-[0_10px_30px_rgba(0,0,0,0.4)]";
+                
+                // Get display icon
+                let iconHTML = '';
+                if (tool.iconMode === 'custom') {
+                    iconHTML = '<div class="w-10 h-10 p-2 bg-slate-900 rounded-xl flex items-center justify-center border border-slate-800/80 shrink-0">' + tool.customSVG + '</div>';
+                } else {
+                    iconHTML = '<div class="w-10 h-10 p-2 bg-slate-900 rounded-xl flex items-center justify-center border border-slate-800/80 shrink-0">' + (PRESET_ICONS[tool.iconKey] || PRESET_ICONS.sparkles) + '</div>';
+                }
+
+                // Render Badge (Evaluate accent dynamically at export time)
+                let badgeClass = "text-[" + '${primaryAccent}' + "] bg-[" + '${primaryAccent}' + "]/10 border-[" + '${primaryAccent}' + "]/20";
+                
+                // Status Class
+                let statusBadge = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+                if (tool.status === 'Beta') {
+                    statusBadge = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                } else if (tool.status === 'W.I.P' || tool.status === 'Work In Progress') {
+                    statusBadge = "bg-slate-500/10 text-slate-400 border-slate-500/20";
+                }
+
+                card.innerHTML = '<div class="flex items-start gap-4 mb-4">' +
+                    iconHTML +
+                    '<div class="flex flex-col gap-1">' +
+                    '<h3 class="text-sm font-black text-slate-100">' + tool.title + '</h3>' +
+                    '<p class="text-xs text-slate-400 font-medium leading-relaxed">' + tool.desc + '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="flex items-center justify-between border-t border-slate-800/60 pt-4">' +
+                    '<div class="flex items-center gap-1.5">' +
+                    '<span class="text-[9px] font-bold px-2 py-0.5 rounded border ' + badgeClass + '">' + tool.category + '</span>' +
+                    '<span class="text-[9px] font-bold px-2 py-0.5 rounded border ' + statusBadge + '">' + tool.status + '</span>' +
+                    '</div>' +
+                    '<a href="' + tool.link + '" class="text-[10px] font-extrabold text-white px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800/80 flex items-center gap-1.5 transition-all active:scale-95">' +
+                    '<span>起動</span><i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>' +
+                    '</a>' +
+                    '</div>';
+
+                grid.appendChild(card);
+            });
+        }
+    <\/script>
+</body>
+</html>`;
+        }
+
+        // Super-Exporter Executer: Instantly downloads compiled HP
+        function downloadStandalonePortal() {
+            if (toolsList.length === 0) {
+                showModal('出力停止', '書き出すツールが一つも登録されていません。まずはツールを登録してください。', 'error');
+                return;
+            }
+
+            const htmlContent = buildStandalonePortalHTML();
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `hiro_tech_artisan_portal.html`;
+            link.click();
+            showToast("📥 『Hiro-Tech匠工房』HP(単一HTML)の書き出しに成功しました！");
+        }
+
+        // JSON Export
+        function exportJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(toolsList, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "hiro_tech_portal_tools.json");
+            dlAnchorElem.click();
+            showToast("📥 JSONバックアップファイルを保存しました！");
+        }
+
+        // JSON Import
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (Array.isArray(parsed)) {
+                        toolsList = parsed;
+                        saveToLocalStorage();
+                        renderToolsListAdmin();
+                        updateLivePreview();
+                        showModal('インポート成功', 'JSONファイルから登録データを正常に復元しました！', 'success');
+                    } else {
+                        showModal('データ不正', 'ファイル形式が正しくありません。配列形式のJSONを指定してください。', 'error');
+                    }
+                } catch (err) {
+                    showModal('ロード失敗', 'JSONのパースに失敗しました。ファイルが破損していないかご確認ください。', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Global Startup logic
+        window.onload = function() {
+            // Load tools from LocalStorage or fallback to default pre-populated masterpieces
+            const storedTools = localStorage.getItem('hiro_tech_portal_tools');
+            const storedTheme = localStorage.getItem('hiro_tech_portal_theme');
+
+            if (storedTools) {
+                try {
+                    toolsList = JSON.parse(storedTools);
+                } catch(e) {
+                    toolsList = JSON.parse(JSON.stringify(DEFAULT_TOOLS));
+                }
+            } else {
+                toolsList = JSON.parse(JSON.stringify(DEFAULT_TOOLS));
+            }
+
+            if (storedTheme) {
+                currentTheme = storedTheme;
+            }
+
+            // Sync visual UI elements
+            setPortalTheme(currentTheme);
+            setSimulatedDevice('desktop');
+            renderPresetIcons();
+            renderToolsListAdmin();
+            updateLivePreview();
+        };
+    </script>
+</body>
+</html>
