@@ -21,7 +21,6 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        // Keep the glorious dark cyber theme colors for containers/frames
                         cyberDark: '#060a12',
                         cyberCard: '#0b132b',
                         cyberBorder: '#1c2541',
@@ -62,6 +61,7 @@
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
 
     <!-- ロック画面 (セキュリティ確保のため、ロック時は上質なダークに保ち、解除時に白銀に展開) -->
+    <!-- [LOCAL DEV NOTE]: The structure is fully preserved for future remote hosting but bypassed automatically in script below. -->
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -74,7 +74,7 @@
             
             <div class="space-y-2">
                 <h2 class="text-xl font-bold tracking-tight text-white font-mono uppercase">Hiro-Kantaro Portal AUTH</h2>
-                <p class="text-xs text-slate-400">認証キーを入力してゲートを開放してください。</p>
+                <p class="text-xs text-slate-400">認証キーを入力してゲートを開放してください。（ローカル起動時は自動で通過します）</p>
             </div>
 
             <form id="auth-form" class="space-y-4" onsubmit="handleAuth(event)">
@@ -107,7 +107,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-sm tracking-tight text-white font-mono">HIRO_KANTARO_PORTAL</h1>
-                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold">Central Hub // Status: Online</p>
+                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold">Central Hub // Status: Local Dev</p>
                     </div>
                 </div>
 
@@ -289,6 +289,27 @@
                         </div>
                     </div>
 
+                    <!-- [NEW] PLIP & Hiro-Tech 匠工房 -->
+                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden ring-1 ring-yellow-500/20">
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div class="h-12 w-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl flex items-center justify-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                                </div>
+                                <span class="text-[10px] bg-yellow-950/50 text-yellow-400 border border-yellow-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Studio Hub</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-yellow-400 transition text-base">PLIP & Hiro-Tech 匠工房</h4>
+                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの輝かしい作品群や、便利なツール、シンボルボタンを自在にカスタマイズ＆生成するための「便利作品制作スタジオ」。私たちの知恵の結晶をここで研ぎ澄ましましょう。</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="https://hiro-seki-tech.github.io/Hiro-Kantarou-partner-hub/takumi-kobo/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-xs font-bold text-slate-950 hover:brightness-110 transition flex items-center justify-center gap-1.5 shadow-md shadow-yellow-500/10">
+                                <i class="fa-solid fa-hammer"></i> 匠工房へ入る
+                            </a>
+                        </div>
+                    </div>
+
                     <!-- Hiro-Tech公開サイト（仮） -->
                     <div class="bg-cyberCard/90 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
                         <div class="space-y-4">
@@ -302,7 +323,7 @@
                             </div>
                         </div>
                         <div class="pt-6 mt-6 flex gap-2">
-                            <a href="./tech/seki.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a>
+                            <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a>
                         </div>
                     </div>
 
@@ -657,6 +678,11 @@
         const accessKeyInput = document.getElementById('access-key');
 
         window.addEventListener('DOMContentLoaded', () => {
+            // [LOCAL PC MODE BY GEMPICK]: Automatically unlock on local start.
+            // Comment out the next line if you ever want to re-enable security auth lock screen!
+            // （ローカルPC用：ロード時に自動ロック解除。認証機能を有効にしたい場合は下の1行をコメントアウトしてね！）
+            // unlockHubInstant(); // GitHub公開用に自動解除を無効化
+
             if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
                 unlockHubInstant();
             }
