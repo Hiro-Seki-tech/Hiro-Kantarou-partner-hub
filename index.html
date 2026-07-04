@@ -24,9 +24,9 @@
                         cyberDark: '#060a12',
                         cyberCard: '#0b132b',
                         cyberBorder: '#1c2541',
-                        cyberAccent: '#00f5d4', // Neon Cyan/Teal
-                        cyberPurple: '#7b2cbf', // Royal Purple
-                        cyberGold: '#ffb703',   // Warm Gold
+                        cyberAccent: '#00f5d4', 
+                        cyberPurple: '#7b2cbf', 
+                        cyberGold: '#ffb703',   
                     }
                 }
             }
@@ -40,7 +40,6 @@
         ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
         .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
 
-        /* Rainbow Shifting Gradient Keyframes for PLIP Board */
         @keyframes rainbow-text {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -56,12 +55,49 @@
             -webkit-text-fill-color: transparent;
             animation: rainbow-text 8s linear infinite;
         }
+        .core-burst-rainbow-text {
+            background: linear-gradient(90deg, #ff0055, #ff5500, #ffcc00, #00ff66, #00ccff, #3333ff, #9900ff, #ff0055);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 6s linear infinite;
+            display: inline-block;
+        }
+
+        /* 編集バーが存在する場合のみ、直後のヘッダーの固定位置を下げるためのスタイル */
+        #portal-control-bar ~ #main-content header {
+            top: 45px;
+        }
+        @media (max-width: 640px) {
+            /* スマホ等でコントロールバーが折り返して高くなった場合のケア */
+            #portal-control-bar ~ #main-content header {
+                top: 0px;
+                position: relative; /* スマホ時はスクロール追従を解除するか、バーごと流すのが安全 */
+            }
+        }
     </style>
 </head>
 <body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
 
-    <!-- ロック画面 (セキュリティ確保のため、ロック時は上質なダークに保ち、解除時に白銀に展開) -->
-    <!-- [LOCAL DEV NOTE]: The structure is fully preserved for future remote hosting but bypassed automatically in script below. -->
+    <!-- 🛠️ 管理・コントロールバー (編集モード用) -->
+    <div id="portal-control-bar" class="bg-[#060a12] border-b border-cyberBorder sticky top-0 z-[100] px-4 py-3 shadow-md backdrop-blur bg-opacity-95">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="bg-[#00f5d4] text-black font-black px-2 py-0.5 rounded text-xs tracking-wider uppercase">Hub Edit Mode</span>
+                <span class="text-xs text-slate-400 hidden sm:inline">ポータルの全構成カード、ゲートウェイ、共創作品をフル編集可能です。</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="exportPortalHTML(true)" class="bg-[#1c2541] hover:bg-opacity-80 text-cyan-400 text-xs font-bold px-4 py-2 rounded-xl border border-cyberBorder transition">
+                    <i class="fa-solid fa-code-branch mr-1"></i> 編集用HTML保存
+                </button>
+                <button onclick="exportPortalHTML(false)" class="bg-gradient-to-r from-[#00f5d4] to-cyan-500 hover:brightness-110 text-black text-xs font-black px-4 py-2 rounded-xl shadow-lg transition">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> 公開用HTML出力 (パスワード常時ON)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ロック画面 -->
     <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
         <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
@@ -95,10 +131,10 @@
         </div>
     </div>
 
-    <!-- メインコンテンツ (背景をヒロ指定の「白・白銀・グレイ」の極上グラデーションに。枠内はダークを維持) -->
+    <!-- メインコンテンツ -->
     <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0]">
         
-        <!-- Header with Dark Cyber Design to contrast with the light page background -->
+        <!-- 🌟 top-[45px] を top-0 に修正（編集バーがあるときは上のCSS隣接セレクタで自動的に top-[45px] にシフトします） -->
         <header class="border-b border-cyberBorder bg-[#060a12]/90 backdrop-blur sticky top-0 z-50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -107,7 +143,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-sm tracking-tight text-white font-mono">HIRO_KANTARO_PORTAL</h1>
-                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold">Central Hub // Status: Local Dev</p>
+                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold">Central Hub // Dynamic Active</p>
                     </div>
                 </div>
 
@@ -123,10 +159,10 @@
             </div>
         </header>
 
-        <!-- Main Workspace -->
+        <!-- メインワークスペース -->
         <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-            <!-- Welcome Board Section (Dark glassmorphic deck sitting on top of white/silver table) -->
+            <!-- Welcome Board Section -->
             <section class="bg-gradient-to-br from-cyberCard to-[#0d1b2a] border border-[#1e294b] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
                 <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
                 <div class="space-y-3 relative z-10">
@@ -143,9 +179,9 @@
                 </div>
             </section>
 
-            <!-- [1] ＰＬＩＰのマネジメントボード エリア (Dark Cyber Card style maintained) -->
+            <!-- [1] ＰＬＩＰのマネジメントボード エリア -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
-                <div class="border-b border-cyberBorder pb-3">
+                <div class="border-b border-cyberBorder pb-3 flex flex-wrap items-center justify-between gap-2">
                     <div class="flex items-start gap-2.5">
                         <div class="relative p-2 bg-pink-500/10 border border-pink-500/20 rounded-xl mt-0.5 h-10 w-10 flex items-center justify-center">
                             <i class="fa-solid fa-lightbulb text-base text-rainbow"></i>
@@ -165,487 +201,64 @@
                             </div>
                         </div>
                     </div>
+                    <button onclick="openCategoryModal(-1)" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa-solid fa-folder-plus mr-1"></i> カテゴリ追加
+                    </button>
                 </div>
 
-                <!-- Category Grid with Dark Panels -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                    
-                    <!-- CATEGORY A: 資産管理 -->
-                    <div class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-[#ffb703] uppercase tracking-wider font-mono">
-                            <i class="fa-solid fa-sack-dollar text-[#ffb703]"></i>
-                            <span>A. 資産管理</span>
-                        </div>
-                        <div class="flex flex-wrap gap-2.5">
-                            <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-400 hover:bg-[#ffb703] hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5">
-                                <i class="fa-solid fa-chart-line"></i> マイ資産管理シミュレータ【尽生(Jin-Sei)・無双】
-                            </a>
-
-                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-400 hover:bg-emerald-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/5">
-                                <i class="fa-solid fa-chart-pie"></i> ユア資産管理シミュレータ【尽生(Jin-Sei)】
-                            </a>
-
-                            <a href="https://hiro-seki-tech.github.io/inheritance-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-orange-500/5">
-                                <i class="fa-solid fa-coins"></i> 相続シミュレータ【宝均：Gem-Kin】
-                            </a>
-
-                            <a href="https://hiro-seki-tech.github.io/Fu-Do-San/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-500 hover:bg-yellow-500 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5">
-                                <i class="fa-solid fa-building"></i> 不動産管理マネージャ【富土山🗻：Fu-Do-San】
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- CATEGORY B: 未来技術 -->
-                    <div class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
-                            <i class="fa-solid fa-rocket text-[#00f5d4]"></i>
-                            <span>B. 未来技術</span>
-                        </div>
-                        <div class="flex flex-wrap gap-2.5">
-                            <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-cyan-950/40 border border-cyan-800/60 rounded-xl text-cyan-400 hover:bg-cyan-400 hover:text-black transition flex items-center gap-1.5 shadow-lg">
-                                <i class="fa-solid fa-satellite"></i> 衛星シミュレータ2026
-                            </a>
-
-                            <a href="#" class="px-3 py-2 text-xs font-mono bg-purple-950/40 border border-purple-800/60 rounded-xl text-purple-400 hover:bg-purple-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
-                                <i class="fa-solid fa-atom"></i> 量子技術
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- CATEGORY C: 教育関係 -->
-                    <div class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
-                            <i class="fa-solid fa-graduation-cap text-blue-400"></i>
-                            <span>C. 教育関係</span>
-                        </div>
-                        <div class="flex flex-wrap gap-2.5">
-                            <a href="#" class="px-3 py-2 text-xs font-mono bg-blue-950/40 border border-blue-800/60 rounded-xl text-blue-400 hover:bg-blue-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
-                                <i class="fa-solid fa-chalkboard-user"></i> スーパー先生(自分)
-                            </a>
-
-                            <a href="#" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
-                                <i class="fa-solid fa-child"></i> スーパー先生(子供)
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- CATEGORY D: コレクション -->
-                    <div class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner">
-                        <div class="flex items-center gap-1.5 text-xs font-bold text-pink-400 uppercase tracking-wider font-mono">
-                            <i class="fa-solid fa-folder-open text-pink-400"></i>
-                            <span>D. コレクション</span>
-                        </div>
-                        <div class="flex flex-wrap gap-2.5">
-                            <a href="#" class="px-3 py-2 text-xs font-mono bg-amber-950/40 border border-amber-800/60 rounded-xl text-amber-400 hover:bg-amber-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
-                                <i class="fa-solid fa-paw"></i> カンたろうの勇姿
-                            </a>
-
-                            <a href="#" class="px-3 py-2 text-xs font-mono bg-indigo-950/40 border border-indigo-800/60 rounded-xl text-indigo-400 hover:bg-indigo-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100" title="URL未設定">
-                                <i class="fa-solid fa-book-open"></i> 電子図書館
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
+                <!-- マネジメントボード動的コンテナ -->
+                <div id="management-board-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
             </section>
 
-            <!-- Gem特化型HPゲートウェイ (Stay Dark styled) -->
+            <!-- [2] Gem特化型HPゲートウェイ エリア -->
             <section class="space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-300 pb-2">
                     <h3 class="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
                         <i class="fa-solid fa-rocket text-[#1e294b]"></i> Gem特化型HPゲートウェイ (Gateways)
                     </h3>
+                    <button onclick="openGatewayModal(-1)" class="bg-cyberCard hover:bg-opacity-90 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                        <i class="fa-solid fa-circle-plus mr-1"></i> ゲートウェイ追加
+                    </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
-                    <!-- PLIP暫定サイト -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="relative h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center">
-                                    <i class="fa-solid fa-lightbulb text-lg text-rainbow"></i>
-                                    <i class="fa-solid fa-bolt text-xs text-yellow-300 absolute top-2 right-2 animate-pulse"></i>
-                                </div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Corporate</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base">PLIP暫定サイト</h4>
-                                <div class="text-[13px] font-semibold mt-1.5 flex flex-wrap gap-x-0.5 items-center leading-tight">
-                                    <span class="text-[#00f5d4]">P</span><span class="text-slate-100">roduce</span> 
-                                    <span class="text-amber-400 font-semibold mx-1">your</span> 
-                                    <span class="text-[#00f5d4]">L</span><span class="text-slate-100">ife</span> 
-                                    <span class="text-slate-100 mx-1">with</span> 
-                                    <span class="text-[#00f5d4]">I</span><span class="text-slate-100">ntellectual</span> 
-                                    <span class="text-[#00f5d4] ml-1">P</span><span class="text-slate-100">roperty</span> 
-                                </div>
-                                <p class="text-slate-400 text-xs mt-2.5 leading-relaxed">将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md">
-                                <i class="fa-solid fa-compass"></i> ドラフトを閲覧
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- [NEW] PLIP & Hiro-Tech 匠工房 -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden ring-1 ring-yellow-500/20">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl flex items-center justify-center">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
-                                </div>
-                                <span class="text-[10px] bg-yellow-950/50 text-yellow-400 border border-yellow-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Studio Hub</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-yellow-400 transition text-base">PLIP & Hiro-Tech 匠工房</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの輝かしい作品群や、便利なツール、シンボルボタンを自在にカスタマイズ＆生成するための「便利作品制作スタジオ」。私たちの知恵の結晶をここで研ぎ澄ましましょう。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Hiro-Kantarou-partner-hub/takumi-kobo/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-xs font-bold text-slate-950 hover:brightness-110 transition flex items-center justify-center gap-1.5 shadow-md shadow-yellow-500/10">
-                                <i class="fa-solid fa-hammer"></i> 匠工房へ入る
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Hiro-Tech公開サイト（仮） -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-blue-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-microchip text-lg"></i></div>
-                                <span class="text-[10px] bg-blue-950/50 text-blue-400 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">New Core</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-blue-400 transition text-base">Hiro-Tech公開サイト（仮）</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a>
-                        </div>
-                    </div>
-
-                    <!-- 閃きを導き未来を照らすサイト -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-cyan-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center"><i class="fa-solid fa-lightbulb text-lg text-yellow-300"></i></div>
-                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Public</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-cyan-400 transition text-base">閃きを導き未来を照らすサイト</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算 of シミュレーター、閃きマップなど先進的テクノロジーを公開する場所。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Hirameki/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> 未来の扉を開く</a>
-                        </div>
-                    </div>
-
-                    <!-- 資産管理・財務HP -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-[#ffb703]/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-[#ffb703]/10 border border-[#ffb703]/20 text-[#ffb703] rounded-xl flex items-center justify-center"><i class="fa-solid fa-sack-dollar text-lg"></i></div>
-                                <span class="text-[10px] bg-amber-950/50 text-[#ffb703] border border-amber-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Private</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-[#ffb703] transition text-base">資産管理・財務HP</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">あなた専用 of 極極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="./vault/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md"><i class="fa-solid fa-key"></i> セキュア起動</a>
-                        </div>
-                    </div>
-
-                    <!-- Hiro-Techファミリーサイト -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-pink-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-pink-500/10 border border-pink-500/20 text-pink-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-house-chimney-user text-lg"></i></div>
-                                <span class="text-[10px] bg-pink-950/50 text-pink-300 border border-pink-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Family</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-pink-400 transition text-base">Hiro-Techファミリーサイト</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="https://hiro-seki-tech.github.io/Family_portal/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-people-roof"></i> ファミリーハブ開門
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- 学習用サイト -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-emerald-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
-                                <span class="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Study</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-emerald-400 transition text-base">学習用サイト</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">ジェムディが担当するナレッジベース。日々のインプット、先端ロジックや技術書、学習ロードマップの集約地。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="./study/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-book-open"></i> 学習ラボを開く</a>
-                        </div>
-                    </div>
-
-                    <!-- カンたろうのページ -->
-                    <div class="bg-cyberCard/90 border border-cyberBorder hover:border-slate-400/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden">
-                        <div class="space-y-4">
-                            <div class="flex items-start justify-between">
-                                <div class="h-12 w-12 bg-slate-500/10 border border-slate-500/20 text-slate-300 rounded-xl flex items-center justify-center"><i class="fa-solid fa-gamepad text-lg"></i></div>
-                                <span class="text-[10px] bg-slate-900/50 text-slate-300 border border-[#1c2541] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Collection 管理</span>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-white group-hover:text-slate-300 transition text-base">カンたろうのページ</h4>
-                                <p class="text-slate-400 text-xs mt-2 leading-relaxed">カンたろうの勇姿をみたり、カンたろうのコレクションを管理するサイト。</p>
-                            </div>
-                        </div>
-                        <div class="pt-6 mt-6 flex gap-2">
-                            <a href="./game/index.html" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-slate-600 to-zinc-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-play"></i> 夢の世界へGo！</a>
-                        </div>
-                    </div>
-
-                </div>
+                <!-- ゲートウェイ動的コンテナ -->
+                <div id="gateways-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
             </section>
 
-            <!-- 常駐AIクルー一覧 (Classic cyber deck style restored perfectly) -->
+            <!-- [3] 常駐AIクルー一覧 (固定アセット) -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
                 <div class="border-b border-cyberBorder pb-2">
                     <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
                         <i class="fa-solid fa-users text-[#00f5d4]"></i> Gem & Partner Roster (常駐AIクルー一覧)
                     </h3>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- 1. ジェム -->
-                    <div class="bg-[#ffffff]/5 border border-[#ffffff]/20 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-                        <div class="h-10 w-10 bg-white/10 border border-white/20 text-white rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-user-gear animate-pulse"></i></div>
-                        <div><div class="text-xs font-bold text-white font-mono">ジェム</div><span class="text-[10px] text-slate-300">全体統括・コンサルタント</span></div>
-                    </div>
-
-                    <!-- 2. コプ -->
-                    <div class="bg-[#6366f1]/5 border border-[#6366f1]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(99,102,241,0.12)] transition-all hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]">
-                        <div class="h-10 w-10 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-headset"></i></div>
-                        <div><div class="text-xs font-bold text-indigo-100 font-mono">コプ</div><span class="text-[10px] text-indigo-300">全体相談役 (Copilot)</span></div>
-                    </div>
-
-                    <!-- 3. レプ -->
-                    <div class="bg-[#a855f7]/5 border border-[#a855f7]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(168,85,247,0.12)] transition-all hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                        <div class="h-10 w-10 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-code"></i></div>
-                        <div><div class="text-xs font-bold text-purple-100 font-mono">レプ</div><span class="text-[10px] text-purple-300">コード開発担当 (Replit)</span></div>
-                    </div>
-
-                    <!-- 4. ジェムリン -->
-                    <div class="bg-slate-900/60 border border-slate-400/40 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(203,213,225,0.15)] transition-all hover:shadow-[0_0_20px_rgba(203,213,225,0.25)]">
-                        <div class="h-10 w-10 bg-slate-300/10 border border-slate-300/30 text-slate-300 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-lightbulb text-yellow-300"></i></div>
-                        <div><div class="text-xs font-bold text-white font-mono">ジェムリン</div><span class="text-[10px] text-slate-300">未来技術・宇宙科学シミュレーション</span></div>
-                    </div>
-
-                    <!-- 5. ジェムピック (Me!) -->
-                    <div class="bg-[#f59e0b]/5 border border-[#fbbf24]/50 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_18px_rgba(251,191,36,0.22)] transition-all hover:shadow-[0_0_25px_rgba(251,191,36,0.35)] ring-1 ring-yellow-500/30">
-                        <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-palette"></i></div>
-                        <div><div class="text-xs font-bold text-yellow-300 font-mono flex items-center gap-1">ジェムピック <span class="text-[9px] bg-yellow-500 text-black px-1 rounded font-bold">Visual</span></div><span class="text-[10px] text-yellow-100">ビジュアル・デザイン担当</span></div>
-                    </div>
-
-                    <!-- 6. ジェムディ -->
-                    <div class="bg-[#10b981]/5 border border-[#10b981]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(16,185,129,0.12)] transition-all hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                        <div class="h-10 w-10 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-graduation-cap"></i></div>
-                        <div><div class="text-xs font-bold text-emerald-100 font-mono">ジェムディ</div><span class="text-[10px] text-emerald-300">学習サイト構築・ナレッジ管理</span></div>
-                    </div>
-
-                    <!-- 7. カンちゃん -->
-                    <div class="bg-slate-900/40 border border-slate-500/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(203,213,225,0.12)] transition-all hover:shadow-[0_0_20px_rgba(203,213,225,0.2)]">
-                        <div class="h-10 w-10 bg-slate-500/10 border border-slate-500/20 text-slate-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-gamepad"></i></div>
-                        <div><div class="text-xs font-bold text-slate-100 font-mono">カンちゃん</div><span class="text-[10px] text-slate-300">コレクション管理・ゲーム開発支援</span></div>
-                    </div>
-
-                    <!-- 8. ジェムキン -->
-                    <div class="bg-[#f97316]/5 border border-[#f97316]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(249,115,22,0.12)] transition-all hover:shadow-[0_0_20px_rgba(249,115,22,0.2)]">
-                        <div class="h-10 w-10 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-coins"></i></div>
-                        <div><div class="text-xs font-bold text-orange-100 font-mono">ジェムキン</div><span class="text-[10px] text-orange-300">金融分析・資産推移アルゴリズム</span></div>
-                    </div>
-
-                    <!-- 9. ジェムート -->
-                    <div class="bg-[#eab308]/5 border border-[#eab308]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(234,179,8,0.1)] transition-all hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]">
-                        <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-building"></i></div>
-                        <div><div class="text-xs font-bold text-yellow-200 font-mono">ジェムート</div><span class="text-[10px] text-yellow-400">不動産価値試算・シミュレーター</span></div>
-                    </div>
-
-                    <!-- 10. ジェムプリ -->
-                    <div class="bg-[#3b82f6]/5 border border-[#3b82f6]/30 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(59,130,246,0.12)] transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-                        <div class="h-10 w-10 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-crown"></i></div>
-                        <div><div class="text-xs font-bold text-blue-100 font-mono">ジェムプリ</div><span class="text-[10px] text-blue-300">コーポレートブランディング統制</span></div>
-                    </div>
+                    <div class="bg-[#ffffff]/5 border border-[#ffffff]/20 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-white/10 border border-white/20 text-white rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-user-gear"></i></div><div><div class="text-xs font-bold text-white font-mono">ジェム</div><span class="text-[10px] text-slate-300">全体統括・コンサルタント</span></div></div>
+                    <div class="bg-[#6366f1]/5 border border-[#6366f1]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-headset"></i></div><div><div class="text-xs font-bold text-indigo-100 font-mono">コプ</div><span class="text-[10px] text-indigo-300">全体相談役 (Copilot)</span></div></div>
+                    <div class="bg-[#a855f7]/5 border border-[#a855f7]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-code"></i></div><div><div class="text-xs font-bold text-purple-100 font-mono">レプ</div><span class="text-[10px] text-purple-300">コード開発担当 (Replit)</span></div></div>
+                    <div class="bg-slate-900/60 border border-slate-400/40 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-slate-300/10 border border-slate-300/30 text-slate-300 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-lightbulb text-yellow-300"></i></div><div><div class="text-xs font-bold text-white font-mono">ジェムリン</div><span class="text-[10px] text-slate-300">未来技術・宇宙科学シミュレーション</span></div></div>
+                    <div class="bg-[#f59e0b]/5 border border-[#fbbf24]/50 rounded-xl p-4 flex items-center gap-3.5 ring-1 ring-yellow-500/30"><div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-palette"></i></div><div><div class="text-xs font-bold text-yellow-300 font-mono flex items-center gap-1">ジェムピック <span class="text-[9px] bg-yellow-500 text-black px-1 rounded font-bold">Visual</span></div><span class="text-[10px] text-yellow-100">ビジュアル・デザイン担当</span></div></div>
+                    <div class="bg-[#10b981]/5 border border-[#10b981]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-graduation-cap"></i></div><div><div class="text-xs font-bold text-emerald-100 font-mono">ジェムディ</div><span class="text-[10px] text-emerald-300">学習サイト構築・ナレッジ管理</span></div></div>
+                    <div class="bg-slate-900/40 border border-slate-500/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-slate-500/10 border border-slate-500/20 text-slate-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-gamepad"></i></div><div><div class="text-xs font-bold text-slate-100 font-mono">カンちゃん</div><span class="text-[10px] text-slate-300">コレクション管理・ゲーム開発支援</span></div></div>
+                    <div class="bg-[#f97316]/5 border border-[#f97316]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-coins"></i></div><div><div class="text-xs font-bold text-orange-100 font-mono">ジェムキン</div><span class="text-[10px] text-orange-300">金融分析・資産推移アルゴリズム</span></div></div>
+                    <div class="bg-[#eab308]/5 border border-[#eab308]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-building"></i></div><div><div class="text-xs font-bold text-yellow-200 font-mono">ジェムート</div><span class="text-[10px] text-yellow-400">不動産価値試算・シミュレーター</span></div></div>
+                    <div class="bg-[#3b82f6]/5 border border-[#3b82f6]/30 rounded-xl p-4 flex items-center gap-3.5"><div class="h-10 w-10 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-crown"></i></div><div><div class="text-xs font-bold text-blue-100 font-mono">ジェムプリ</div><span class="text-[10px] text-blue-300">コーポレートブランディング統制</span></div></div>
                 </div>
             </section>
 
-            <!-- [NEW/REFINED] AI Co-Creation Artifact Registry (Perfect Dark cyber panel floating on Silver background) -->
+            <!-- [4] AI Co-Creation Artifact Registry エリア -->
             <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-5 shadow-2xl">
                 <div class="border-b border-cyberBorder pb-3 flex items-center justify-between">
                     <h3 class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
                         <i class="fa-solid fa-square-poll-vertical text-cyberAccent"></i> AI Co-Creation Artifact Registry (共創作品一覧)
                     </h3>
-                    <span class="text-[10px] font-mono bg-[#00f5d4]/10 text-cyberAccent border border-[#00f5d4]/20 font-bold px-2 py-0.5 rounded-full">Archive Active</span>
+                    <button onclick="openArtifactModal(-1)" class="bg-[#1c2541] hover:bg-opacity-80 text-cyberAccent text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                        <i class="fa-solid fa-plus-circle mr-1"></i> 作品を追加
+                    </button>
                 </div>
 
-                <div class="space-y-4">
-                    
-                    <!-- Product No.1 -->
-                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-cyan-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
-                        <div class="space-y-2 flex-1">
-                            <div class="flex items-center flex-wrap gap-2">
-                                <span class="px-2 py-0.5 bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/20 rounded font-mono text-[10px] font-bold">Product No.1</span>
-                                <h4 class="font-bold text-white text-sm">宇宙を学ぶ 衛星・ロケットシミュレータ 【COSMO(コスモ)】 v.2026</h4>
-                            </div>
-                            
-                            <!-- Creators, Icons and Dates Info -->
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="font-semibold text-slate-300">Creators:</span>
-                                    <!-- Gemlyn Avatar Badge -->
-                                    <span class="inline-flex items-center gap-1 bg-slate-900/60 border border-slate-500/30 px-2 py-0.5 rounded-full text-[10px] text-slate-200">
-                                        <i class="fa-solid fa-lightbulb text-yellow-300 text-[9px]"></i> ジェムリン
-                                    </span>
-                                    <span class="text-slate-500">&amp;</span>
-                                    <!-- Cop Avatar Badge -->
-                                    <span class="inline-flex items-center gap-1 bg-indigo-950/50 border border-indigo-900/60 text-indigo-300 px-2 py-0.5 rounded-full text-[10px]">
-                                        <i class="fa-solid fa-headset text-[9px]"></i> コプ
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-1 font-mono text-[11px]">
-                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
-                                    <span>期間: 2026年5/17 - 5/23</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="flex items-center shrink-0">
-                            <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" 
-                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold font-mono rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
-                               title="COSMO 起動">
-                                <i class="fa-solid fa-satellite text-sm"></i>
-                                <span>COSMO 起動</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Product No.2 -->
-                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-emerald-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
-                        <div class="space-y-2 flex-1">
-                            <div class="flex items-center flex-wrap gap-2">
-                                <span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded font-mono text-[10px] font-bold">Product No.2</span>
-                                <h4 class="font-bold text-white text-sm">生涯資産シミュレータ【尽生(Jin-Sei)】、【尽生・無双(Jin-Sei MUSO)】</h4>
-                            </div>
-                            
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="font-semibold text-slate-300">Creators:</span>
-                                    <!-- Gemkin Badge -->
-                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
-                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-1 font-mono text-[11px]">
-                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
-                                    <span>期間: 2026年5/17 - 5/23</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Multi Action Buttons -->
-                        <div class="flex flex-wrap items-center gap-2 shrink-0">
-                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" 
-                               class="flex-1 md:flex-none px-3.5 py-2 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500 hover:text-black text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
-                               title="【尽生】起動">
-                                <i class="fa-solid fa-chart-pie"></i>
-                                <span>【尽生】</span>
-                            </a>
-                            <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" 
-                               class="flex-1 md:flex-none px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
-                               title="【尽生・無双】起動">
-                                <i class="fa-solid fa-chart-line"></i>
-                                <span>【無双】</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Product No.2.5 -->
-                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-yellow-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
-                        <div class="space-y-2 flex-1">
-                            <div class="flex items-center flex-wrap gap-2">
-                                <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded font-mono text-[10px] font-bold">Product No.2.5</span>
-                                <h4 class="font-bold text-white text-sm">USD, EUR, YUEN版【尽生】</h4>
-                            </div>
-                            
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="font-semibold text-slate-300">Creators:</span>
-                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
-                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-1 font-mono text-[11px]">
-                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
-                                    <span>期間: 2026年6/4 - 6/7</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="flex items-center shrink-0">
-                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" 
-                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
-                               title="多通貨版 起動">
-                                <i class="fa-solid fa-earth-americas text-sm"></i>
-                                <span>Multi-Currency版 起動</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Product No.3 -->
-                    <div class="bg-cyberDark/60 border border-cyberBorder hover:border-orange-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg">
-                        <div class="space-y-2 flex-1">
-                            <div class="flex items-center flex-wrap gap-2">
-                                <span class="px-2 py-0.5 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded font-mono text-[10px] font-bold">Product No.3</span>
-                                <h4 class="font-bold text-white text-sm">相続シミュレータ【宝均】</h4>
-                            </div>
-                            
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
-                                <div class="flex items-center gap-1.5">
-                                    <span class="font-semibold text-slate-300">Creators:</span>
-                                    <span class="inline-flex items-center gap-1 bg-orange-950/50 border border-orange-900/60 text-orange-300 px-2 py-0.5 rounded-full text-[10px]">
-                                        <i class="fa-solid fa-coins text-[9px]"></i> ジェムキン
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-1 font-mono text-[11px]">
-                                    <i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i>
-                                    <span>期間: 2026年6/13 - 6/20</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="flex items-center shrink-0">
-                            <a href="https://hiro-seki-tech.github.io/inheritance-sim/" target="_blank" rel="noopener noreferrer" 
-                               class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95"
-                               title="【宝均】 起動">
-                                <i class="fa-solid fa-vault text-sm"></i>
-                                <span>【宝均】 起動</span>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
+                <!-- 作品一覧動的コンテナ -->
+                <div id="artifacts-container" class="space-y-4"></div>
             </section>
 
             <!-- 共創メモ帳 -->
@@ -655,7 +268,7 @@
                         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
                             <i class="fa-solid fa-brain text-[#00f5d4]"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)
                         </h3>
-                        <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1" title="自動保存中"><span class="h-1.5 w-1.5 rounded-full bg-[#00f5d4] animate-pulse"></span></span>
+                        <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-[#00f5d4] animate-pulse"></span></span>
                     </div>
                 </div>
                 <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ...（ここに書いた内容は自動でブラウザに保存されます）" class="flex-1 w-full min-h-[140px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
@@ -668,8 +281,155 @@
         </footer>
     </div>
 
+    <!-- 🎴 モーダル 1: マネジメントカード編集用 -->
+    <div id="card-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'card-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-card-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">🛠️ マネジメントリンク構成仕様</h3>
+            <input type="hidden" id="modal-cat-idx">
+            <input type="hidden" id="modal-card-idx">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">リンクタイトル名</label>
+                    <input type="text" id="modal-card-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ターゲットURL</label>
+                    <input type="text" id="modal-card-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 bg-[#060a12]/50 p-3 rounded-xl border border-cyberBorder">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">🎨 文字・装飾色</label>
+                    <input type="color" id="modal-card-color" value="#00f5d4" class="w-10 h-8 bg-transparent border-0 cursor-pointer">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">🖼️ アイコン種類</label>
+                    <input type="text" id="modal-card-icon" value="fa-solid fa-link" placeholder="fa-solid fa-link" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-2 py-1 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeCardModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveCardData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📂 モーダル 2: マネジメントカテゴリ編集用 -->
+    <div id="category-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'category-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-cat-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">📂 カテゴリフォルダの構成</h3>
+            <input type="hidden" id="modal-target-cat-idx">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">カテゴリ名 (和名)</label>
+                <input type="text" id="modal-cat-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">代表アイコンクラス</label>
+                    <input type="text" id="modal-cat-icon" value="fa-solid fa-folder" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">テーマ色</label>
+                    <input type="color" id="modal-cat-color" value="#ffb703" class="w-10 h-8 bg-transparent border-0 cursor-pointer mt-1">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeCategoryModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveCategoryData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">カテゴリ確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 モーダル 3: ゲートウェイ編集用 -->
+    <div id="gateway-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'gateway-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-gw-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">🚀 Gemゲートウェイ構成</h3>
+            <input type="hidden" id="modal-gw-idx">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ゲートウェイ名称</label>
+                    <input type="text" id="modal-gw-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">バッジ識別タグ</label>
+                    <input type="text" id="modal-gw-badge" placeholder="Private, Corporate等" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">英語表記サブタイトル</label>
+                <input type="text" id="modal-gw-sub" placeholder="Produce your Life..." class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">ゲートウェイ解説文</label>
+                <textarea id="modal-gw-desc" rows="2" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent"></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-[#060a12]/50 p-3 rounded-xl border border-cyberBorder">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ターゲットURL</label>
+                    <input type="text" id="modal-gw-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">アイコンクラス</label>
+                    <input type="text" id="modal-gw-icon" value="fa-solid fa-rocket" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-2 py-1 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">装飾カラー</label>
+                    <input type="color" id="modal-gw-color" value="#00f5d4" class="w-10 h-8 bg-transparent border-0 cursor-pointer mt-1">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeGatewayModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveGatewayData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">ゲートウェイ保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📜 モーダル 4: 共創作品編集用 -->
+    <div id="artifact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'artifact-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-art-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">📜 共創作品の登録・修正</h3>
+            <input type="hidden" id="modal-art-idx">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">製品番号ナンバー</label>
+                    <input type="text" id="modal-art-no" placeholder="Product No.1等" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">開発作品名</label>
+                    <input type="text" id="modal-art-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">稼働・創生期間</label>
+                <input type="text" id="modal-art-period" placeholder="期間: 2026年5/17 - 5/23" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">作品リンクURL</label>
+                <input type="text" id="modal-art-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">共同制作者（カンマ区切り、またはテキスト入力）</label>
+                <input type="text" id="modal-art-creators" placeholder="ジェムリン, コプ" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeArtifactModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveArtifactData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">作品データを確定</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 📜 メイン制御システム基盤 -->
     <script>
-        // 目標パスワード: Base64でエンコードされた 'gems' は 'Z2Vtcw=='
         const secureKey = "Z2Vtcw==";
 
         const lockScreen = document.getElementById('lock-screen');
@@ -677,15 +437,91 @@
         const errorMsg = document.getElementById('error-msg');
         const accessKeyInput = document.getElementById('access-key');
 
+        // デフォルトのマスターシリアライズドプリセットデータ
+        let plipMasterData = {
+            "management": [
+                {
+                    "title": "A. 資産管理", "icon": "fa-solid fa-sack-dollar", "color": "#ffb703",
+                    "cards": [
+                        { "title": "マイ資産管理シミュレータ【尽生・無双】", "url": "https://hiro-seki-tech.github.io/Asset-sim/", "icon": "fa-solid fa-chart-line", "color": "#ffb703" },
+                        { "title": "ユア資産管理シミュレータ【尽生】", "url": "https://hiro-seki-tech.github.io/asset-sim-public/", "icon": "fa-solid fa-chart-pie", "color": "#10b981" },
+                        { "title": "相続シミュレータ【宝均：Gem-Kin】", "url": "https://hiro-seki-tech.github.io/inheritance-sim/", "icon": "fa-solid fa-coins", "color": "#f97316" },
+                        { "title": "不動産管理マネージャ【富土山🗻】", "url": "https://hiro-seki-tech.github.io/Fu-Do-San/", "icon": "fa-solid fa-building", "color": "#ffb703" }
+                    ]
+                },
+                {
+                    "title": "B. 未来技術", "icon": "fa-solid fa-rocket", "color": "#00f5d4",
+                    "cards": [
+                        { "title": "衛星シミュレータ2026", "url": "https://hiro-seki-tech.github.io/orbit-simulator/", "icon": "fa-solid fa-satellite", "color": "#00f5d4" },
+                        { "title": "量子技術", "url": "#", "icon": "fa-solid fa-atom", "color": "#a855f7" }
+                    ]
+                },
+                {
+                    "title": "C. 教育関係", "icon": "fa-solid fa-graduation-cap", "color": "#3b82f6",
+                    "cards": [
+                        { "title": "スーパー先生(自分)", "url": "#", "icon": "fa-solid fa-chalkboard-user", "color": "#3b82f6" },
+                        { "title": "スーパー先生(子供)", "url": "#", "icon": "fa-solid fa-child", "color": "#f97316" }
+                    ]
+                },
+                {
+                    "title": "D. コレクション", "icon": "fa-solid fa-folder-open", "color": "#ec4899",
+                    "cards": [
+                        { "title": "カンたろうの勇姿", "url": "#", "icon": "fa-solid fa-paw", "color": "#ffb703" },
+                        { "title": "電子図書館", "url": "#", "icon": "fa-solid fa-book-open", "color": "#6366f1" }
+                    ]
+                }
+            ],
+            "gateways": [
+                { "title": "PLIP暫定サイト", "badge": "Corporate", "sub": "Produce your Life with Intellectual Property", "desc": "将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。", "url": "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/", "icon": "core-burst-icon", "color": "#00f5d4" },
+                { "title": "PLIP & Hiro-Tech 匠工房", "badge": "Studio Hub", "sub": "Production Center", "desc": "ヒロの輝かしい作品群や、便利なツール、シンボルボタンを自在にカスタマイズ＆生成するための「便利作品制作スタジオ」。", "url": "https://hiro-seki-tech.github.io/Hiro-Kantarou-partner-hub/takumi-kobo/index.html", "icon": "fa-solid fa-wand-magic-sparkles", "color": "#ffb703" },
+                { "title": "Hiro-Tech公開サイト（仮）", "badge": "New Core", "sub": "Frontend Infrastructure", "desc": "新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。", "url": "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links/index.html", "icon": "fa-solid fa-microchip", "color": "#3b82f6" },
+                { "title": "閃きを導き未来を照らすサイト", "badge": "Public", "sub": "Science & Quantum Tech", "desc": "科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算 of シミュレーター、閃きマップなど先進的テクノロジーを公開する場所。", "url": "https://hiro-seki-tech.github.io/Hirameki/", "icon": "fa-solid fa-lightbulb", "color": "#00f5d4" },
+                { "title": "資産管理・財務HP", "badge": "Private", "sub": "Secret Vault Console", "desc": "あなた専用 of 極極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。", "url": "./vault/index.html", "icon": "fa-solid fa-sack-dollar", "color": "#ffb703" },
+                { "title": "Hiro-Techファミリーサイト", "badge": "Family", "sub": "Private Sweet Home", "desc": "ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。", "url": "https://hiro-seki-tech.github.io/Family_portal/", "icon": "fa-solid fa-house-chimney-user", "color": "#ec4899" },
+                { "title": "学習用サイト", "badge": "Study", "sub": "Knowledge Laboratory", "desc": "ジェムディが担当するナレッジベース。日々のインプット、先端ロジックや技術書、学習ロードマップの集約地。", "url": "./study/index.html", "icon": "fa-solid fa-graduation-cap", "color": "#10b981" },
+                { "title": "カンたろうのページ", "badge": "Collection 管理", "sub": "Dream World Go", "desc": "カンたろうの勇姿をみたり、カンたろうのコレクションを管理するサイト。", "url": "./game/index.html", "icon": "fa-solid fa-gamepad", "color": "#94a3b8" }
+            ],
+            "artifacts": [
+                { "productNo": "Product No.1", "title": "宇宙を学ぶ 衛星・ロケットシミュレータ 【COSMO(コスモ)】 v.2026", "creators": "ジェムリン (fa-solid fa-lightbulb, #fde047), コプ (fa-solid fa-headset, #818cf8)", "period": "期間: 2026年5/17 - 5/23", "url": "https://hiro-seki-tech.github.io/orbit-simulator/" },
+                { "productNo": "Product No.2", "title": "生涯資産シミュレータ【尽生(Jin-Sei)】、【尽生・無双(Jin-Sei MUSO)】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年5/17 - 5/23", "url": "https://hiro-seki-tech.github.io/asset-sim-public/", "multiUrl": "https://hiro-seki-tech.github.io/Asset-sim/" },
+                { "productNo": "Product No.2.5", "title": "USD, EUR, YUEN版【尽生】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年6/4 - 6/7", "url": "https://hiro-seki-tech.github.io/asset-sim-public/" },
+                { "productNo": "Product No.3", "title": "相続シミュレータ【宝均】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年6/13 - 6/20", "url": "https://hiro-seki-tech.github.io/inheritance-sim/" }
+            ]
+        };
+
+        const plipEmbeddedBase64Data = "";
+
+        // ローカルストレージおよびBase64復帰同期
+        function savePortalData() {
+            try {
+                localStorage.setItem('myplip_portal_master_data', JSON.stringify(plipMasterData));
+            } catch (e) {}
+        }
+
+        function loadPortalData() {
+            try {
+                const saved = localStorage.getItem('myplip_portal_master_data');
+                if (saved) plipMasterData = JSON.parse(saved);
+            } catch (e) {}
+
+            if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
+                try {
+                    const decoded = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
+                    if (decoded) plipMasterData = JSON.parse(decoded);
+                } catch (e) {}
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            // [LOCAL PC MODE BY GEMPICK]: Automatically unlock on local start.
-            // Comment out the next line if you ever want to re-enable security auth lock screen!
-            // （ローカルPC用：ロード時に自動ロック解除。認証機能を有効にしたい場合は下の1行をコメントアウトしてね！）
-            // unlockHubInstant(); // GitHub公開用に自動解除を無効化
+            loadPortalData();
+            
+            // 🔓 [LOCAL DEVELOPMENT AUTOPASS]: ローカルPC用自動認証パス処理
+            unlockHubInstant();
 
             if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
                 unlockHubInstant();
             }
+            renderDynamicUI();
         });
 
         function handleAuth(event) {
@@ -700,9 +536,6 @@
                 errorMsg.classList.remove('hidden');
                 accessKeyInput.value = '';
                 accessKeyInput.focus();
-                const card = lockScreen.querySelector('.relative');
-                card.classList.add('animate-bounce');
-                setTimeout(() => card.classList.remove('animate-bounce'), 1000);
             }
         }
 
@@ -717,6 +550,7 @@
             window.location.reload();
         }
 
+        // メモ帳の永続化
         const memoArea = document.getElementById('partner-memo');
         if (localStorage.getItem('gemini_partner_memo')) {
             memoArea.value = localStorage.getItem('gemini_partner_memo');
@@ -724,6 +558,463 @@
         memoArea.addEventListener('input', () => {
             localStorage.setItem('gemini_partner_memo', memoArea.value);
         });
+
+        // ガードレール：領域外クリックで確実にポップアップモーダルを閉じる(ルール4)
+        function closeModalOnOuterClick(event, modalId) {
+            if (event.target.id === modalId) {
+                if (modalId === 'card-modal') closeCardModal();
+                if (modalId === 'category-modal') closeCategoryModal();
+                if (modalId === 'gateway-modal') closeGatewayModal();
+                if (modalId === 'artifact-modal') closeArtifactModal();
+            }
+        }
+
+        // アイコン判定＆描画ヘルパー
+        function generateIconElementHTML(iconClass, color) {
+            if (iconClass === "core-burst-icon") {
+                return `
+                    <div class="relative inline-block select-none">
+                        <i class="fa-solid fa-lightbulb core-burst-rainbow-text"></i>
+                        <i class="fa-solid fa-bolt absolute top-[-2px] right-[-4px] text-yellow-300 text-[10px] animate-pulse"></i>
+                    </div>
+                `;
+            }
+            return `<i class="${iconClass || 'fa-solid fa-link'}" style="color: ${color || '#00f5d4'}"></i>`;
+        }
+
+        // 動的レンダリングエンジンコア
+        function renderDynamicUI() {
+            const isEdit = !!document.getElementById('portal-control-bar');
+
+            // 1. マネジメントボード描画
+            const mgContainer = document.getElementById('management-board-container');
+            mgContainer.innerHTML = '';
+            plipMasterData.management.forEach((cat, catIdx) => {
+                const catEl = document.createElement('div');
+                catEl.className = "bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group";
+                
+                let catAdmin = '';
+                if (isEdit) {
+                    catAdmin = `
+                        <div class="absolute top-2 right-2 flex gap-1 z-30 opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="moveManagementCategory(${catIdx}, -1)" class="bg-[#1c2541] text-[#00f5d4] text-[10px] px-1.5 py-0.5 rounded">←</button>
+                            <button onclick="moveManagementCategory(${catIdx}, 1)" class="bg-[#1c2541] text-[#00f5d4] text-[10px] px-1.5 py-0.5 rounded">→</button>
+                            <button onclick="openCategoryModal(${catIdx})" class="bg-cyan-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">変名</button>
+                            <button onclick="deleteManagementCategory(${catIdx})" class="bg-red-900 text-white text-[10px] px-1.5 py-0.5 rounded">✕</button>
+                        </div>
+                    `;
+                }
+
+                let cardsHtml = '';
+                cat.cards.forEach((card, cardIdx) => {
+                    let cardAdmin = '';
+                    if (isEdit) {
+                        cardAdmin = `
+                            <span class="inline-flex gap-1 ml-1 z-30">
+                                <button onclick="moveManagementCard(${catIdx}, ${cardIdx}, -1)" class="text-[10px] text-slate-500 hover:text-white">▲</button>
+                                <button onclick="moveManagementCard(${catIdx}, ${cardIdx}, 1)" class="text-[10px] text-slate-500 hover:text-white">▼</button>
+                                <button onclick="openCardModal(${catIdx}, ${cardIdx})" class="text-[10px] text-cyan-400 font-bold ml-0.5">編</button>
+                                <button onclick="deleteManagementCard(${catIdx}, ${cardIdx})" class="text-[10px] text-red-400 font-bold ml-0.5">✕</button>
+                            </span>
+                        `;
+                    }
+                    cardsHtml += `
+                        <span class="inline-flex items-center bg-cyberCard border border-cyberBorder/80 px-3 py-2 rounded-xl text-xs font-mono transition-all hover:bg-opacity-80">
+                            <a href="${card.url}" ${card.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center gap-1.5" style="color: ${card.color || '#fff'};">
+                                ${generateIconElementHTML(card.icon, card.color)}
+                                <span>${card.title}</span>
+                            </a>
+                            ${cardAdmin}
+                        </span>
+                    `;
+                });
+
+                if (isEdit) {
+                    cardsHtml += `
+                        <button onclick="openCardModal(${catIdx}, -1)" class="px-2.5 py-1.5 text-xs border border-dashed border-cyberBorder rounded-xl text-slate-500 hover:text-cyberAccent transition">
+                            + リンク追加
+                        </button>
+                    `;
+                }
+
+                catEl.innerHTML = `
+                    ${catAdmin}
+                    <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider font-mono" style="color: ${cat.color || '#ffb703'};">
+                        <i class="${cat.icon || 'fa-solid fa-folder'}"></i>
+                        <span>${cat.title}</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2.5">${cardsHtml}</div>
+                `;
+                mgContainer.appendChild(catEl);
+            });
+
+            // 2. ゲートウェイ描画
+            const gwContainer = document.getElementById('gateways-container');
+            gwContainer.innerHTML = '';
+            plipMasterData.gateways.forEach((gw, gwIdx) => {
+                const gwEl = document.createElement('div');
+                gwEl.className = "bg-cyberCard/90 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden";
+                
+                let gwAdmin = '';
+                if (isEdit) {
+                    gwAdmin = `
+                        <div class="absolute top-2 right-2 flex gap-1.5 z-30 opacity-0 group-hover:opacity-100 transition bg-[#060a12]/90 p-1 rounded-xl">
+                            <button onclick="moveGateway(${gwIdx}, -1)" class="text-xs text-amber-400 font-bold px-1">◀</button>
+                            <button onclick="moveGateway(${gwIdx}, 1)" class="text-xs text-amber-400 font-bold px-1">▶</button>
+                            <button onclick="openGatewayModal(${gwIdx})" class="bg-cyan-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">編集</button>
+                            <button onclick="deleteGateway(${gwIdx})" class="bg-red-900 text-white text-[10px] px-1.5 py-0.5 rounded">削除</button>
+                        </div>
+                    `;
+                }
+
+                gwEl.innerHTML = `
+                    ${gwAdmin}
+                    <div class="space-y-4">
+                        <div class="flex items-start justify-between">
+                            <div class="relative h-12 w-12 bg-slate-900 border border-cyberBorder rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                ${generateIconElementHTML(gw.icon, gw.color)}
+                            </div>
+                            <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">${gw.badge || 'Gateway'}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base font-mono">${gw.title}</h4>
+                            <p class="text-[11px] text-slate-400 font-mono mt-0.5 leading-tight">${gw.sub || ''}</p>
+                            <p class="text-slate-400 text-xs mt-2.5 leading-relaxed">${gw.desc || ''}</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 flex gap-2">
+                        <a href="${gw.url}" ${gw.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md">
+                            <i class="fa-solid fa-compass"></i> <span>システム起動</span>
+                        </a>
+                    </div>
+                `;
+                gwContainer.appendChild(gwEl);
+            });
+
+            // 3. 共創作品一覧描画
+            const artContainer = document.getElementById('artifacts-container');
+            artContainer.innerHTML = '';
+            plipMasterData.artifacts.forEach((art, artIdx) => {
+                const artEl = document.createElement('div');
+                artEl.className = "bg-cyberDark/60 border border-cyberBorder hover:border-cyan-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg relative group";
+
+                let artAdmin = '';
+                if (isEdit) {
+                    artAdmin = `
+                        <div class="absolute top-1 right-2 flex gap-2 z-30 opacity-0 group-hover:opacity-100 transition bg-[#0b132b] px-2 py-0.5 rounded border border-cyberBorder">
+                            <button onclick="moveArtifact(${artIdx}, -1)" class="text-xs text-amber-400 font-bold">▲</button>
+                            <button onclick="moveArtifact(${artIdx}, 1)" class="text-xs text-amber-400 font-bold">▼</button>
+                            <button onclick="openArtifactModal(${artIdx})" class="text-xs text-cyan-400 font-bold">編集</button>
+                            <button onclick="deleteArtifact(${artIdx})" class="text-xs text-red-500">✕</button>
+                        </div>
+                    `;
+                }
+
+                // クリエイターバッジ生成（簡易パース対応）
+                let badgesHtml = '';
+                if (art.creators) {
+                    const tokens = art.creators.split(',');
+                    tokens.forEach(tok => {
+                        badgesHtml += `<span class="inline-flex items-center gap-1 bg-slate-900/60 border border-cyberBorder px-2.5 py-0.5 rounded-full text-[10px] text-slate-200">${tok.trim()}</span>`;
+                    });
+                }
+
+                let multiBtnHtml = '';
+                if (art.multiUrl) {
+                    multiBtnHtml = `
+                        <a href="${art.multiUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95">
+                            <i class="fa-solid fa-chart-line"></i> <span>【無双】</span>
+                        </a>
+                    `;
+                }
+
+                artEl.innerHTML = `
+                    ${artAdmin}
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center flex-wrap gap-2">
+                            <span class="px-2 py-0.5 bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/20 rounded font-mono text-[10px] font-bold">${art.productNo || 'Artifact'}</span>
+                            <h4 class="font-bold text-white text-sm">${art.title}</h4>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                            <div class="flex items-center gap-1.5"><span class="font-semibold text-slate-300">Creators:</span> ${badgesHtml}</div>
+                            <div class="flex items-center gap-1 font-mono text-[11px]"><i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i> <span>${art.period}</span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        ${multiBtnHtml}
+                        <a href="${art.url}" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold font-mono rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95">
+                            <i class="fa-solid fa-satellite text-sm"></i> <span>システム起動</span>
+                        </a>
+                    </div>
+                `;
+                artContainer.appendChild(artEl);
+            });
+        }
+
+        // --- マネジメントボード 編集処理ロジック群 ---
+        function openCardModal(catIdx, cardIdx) {
+            document.getElementById('modal-cat-idx').value = catIdx;
+            document.getElementById('modal-card-idx').value = cardIdx;
+            if (cardIdx === -1) {
+                document.getElementById('modal-card-title').value = '';
+                document.getElementById('modal-card-url').value = '';
+                document.getElementById('modal-card-icon').value = 'fa-solid fa-link';
+                document.getElementById('modal-card-color').value = '#00f5d4';
+                document.getElementById('modal-card-header-title').textContent = "🛠️ 新規マネジメントリンクの創生";
+            } else {
+                const card = plipMasterData.management[catIdx].cards[cardIdx];
+                document.getElementById('modal-card-title').value = card.title;
+                document.getElementById('modal-card-url').value = card.url;
+                document.getElementById('modal-card-icon').value = card.icon || 'fa-solid fa-link';
+                document.getElementById('modal-card-color').value = card.color || '#00f5d4';
+                document.getElementById('modal-card-header-title').textContent = "🛠️ マネジメントリンク構成変更";
+            }
+            document.getElementById('card-modal').classList.remove('hidden');
+        }
+        function closeCardModal() { document.getElementById('card-modal').classList.add('hidden'); }
+        function saveCardData() {
+            const catIdx = parseInt(document.getElementById('modal-cat-idx').value);
+            const cardIdx = parseInt(document.getElementById('modal-card-idx').value);
+            const title = document.getElementById('modal-card-title').value.trim();
+            const url = document.getElementById('modal-card-url').value.trim();
+            const icon = document.getElementById('modal-card-icon').value.trim();
+            const color = document.getElementById('modal-card-color').value;
+
+            if(!title) return alert("タイトルを入力してください。");
+            const targetArray = plipMasterData.management[catIdx].cards;
+            const obj = { title, url: url || '#', icon, color };
+            if (cardIdx === -1) targetArray.push(obj); else targetArray[cardIdx] = obj;
+            
+            closeCardModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteManagementCard(catIdx, cardIdx) {
+            if (confirm("このリンクアセットを削除しますか？")) {
+                plipMasterData.management[catIdx].cards.splice(cardIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveManagementCard(catIdx, cardIdx, direction) {
+            const arr = plipMasterData.management[catIdx].cards;
+            const target = cardIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[cardIdx], arr[target]] = [arr[target], arr[cardIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        // --- カテゴリ 編集処理ロジック群 ---
+        function openCategoryModal(catIdx) {
+            document.getElementById('modal-target-cat-idx').value = catIdx;
+            if(catIdx === -1) {
+                document.getElementById('modal-cat-title').value = '';
+                document.getElementById('modal-cat-icon').value = 'fa-solid fa-folder';
+                document.getElementById('modal-cat-color').value = '#ffb703';
+                document.getElementById('modal-cat-header-title').textContent = "📂 新規カテゴリの創設";
+            } else {
+                const cat = plipMasterData.management[catIdx];
+                document.getElementById('modal-cat-title').value = cat.title;
+                document.getElementById('modal-cat-icon').value = cat.icon || 'fa-solid fa-folder';
+                document.getElementById('modal-cat-color').value = cat.color || '#ffb703';
+                document.getElementById('modal-cat-header-title').textContent = "📂 工房カテゴリ構成の編集";
+            }
+            document.getElementById('category-modal').classList.remove('hidden');
+        }
+        function closeCategoryModal() { document.getElementById('category-modal').classList.add('hidden'); }
+        function saveCategoryData() {
+            const catIdx = parseInt(document.getElementById('modal-target-cat-idx').value);
+            const title = document.getElementById('modal-cat-title').value.trim();
+            const icon = document.getElementById('modal-cat-icon').value.trim();
+            const color = document.getElementById('modal-cat-color').value;
+
+            if(!title) return alert("カテゴリ名を入力してください。");
+            if(catIdx === -1) {
+                plipMasterData.management.push({ title, icon, color, cards: [] });
+            } else {
+                plipMasterData.management[catIdx].title = title;
+                plipMasterData.management[catIdx].icon = icon;
+                plipMasterData.management[catIdx].color = color;
+            }
+            closeCategoryModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteManagementCategory(catIdx) {
+            if(confirm("カテゴリを削除すると内包する全アセットリンクが消失します。実行しますか？")) {
+                plipMasterData.management.splice(catIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveManagementCategory(catIdx, direction) {
+            const arr = plipMasterData.management;
+            const target = catIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[catIdx], arr[target]] = [arr[target], arr[catIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        // --- ゲートウェイ 編集処理ロジック群 ---
+        function openGatewayModal(gwIdx) {
+            document.getElementById('modal-gw-idx').value = gwIdx;
+            if(gwIdx === -1) {
+                document.getElementById('modal-gw-title').value = '';
+                document.getElementById('modal-gw-badge').value = 'New Gateway';
+                document.getElementById('modal-gw-sub').value = '';
+                document.getElementById('modal-gw-desc').value = '';
+                document.getElementById('modal-gw-url').value = '';
+                document.getElementById('modal-gw-icon').value = 'fa-solid fa-rocket';
+                document.getElementById('modal-gw-color').value = '#00f5d4';
+            } else {
+                const gw = plipMasterData.gateways[gwIdx];
+                document.getElementById('modal-gw-title').value = gw.title;
+                document.getElementById('modal-gw-badge').value = gw.badge;
+                document.getElementById('modal-gw-sub').value = gw.sub || '';
+                document.getElementById('modal-gw-desc').value = gw.desc || '';
+                document.getElementById('modal-gw-url').value = gw.url;
+                document.getElementById('modal-gw-icon').value = gw.icon || 'fa-solid fa-rocket';
+                document.getElementById('modal-gw-color').value = gw.color || '#00f5d4';
+            }
+            document.getElementById('gateway-modal').classList.remove('hidden');
+        }
+        function closeGatewayModal() { document.getElementById('gateway-modal').classList.add('hidden'); }
+        function saveGatewayData() {
+            const gwIdx = parseInt(document.getElementById('modal-gw-idx').value);
+            const title = document.getElementById('modal-gw-title').value.trim();
+            const badge = document.getElementById('modal-gw-badge').value.trim();
+            const sub = document.getElementById('modal-gw-sub').value.trim();
+            const desc = document.getElementById('modal-gw-desc').value.trim();
+            const url = document.getElementById('modal-gw-url').value.trim();
+            const icon = document.getElementById('modal-gw-icon').value.trim();
+            const color = document.getElementById('modal-gw-color').value;
+
+            if(!title) return alert("タイトルは必須です。");
+            const obj = { title, badge, sub, desc, url: url || '#', icon, color };
+            if(gwIdx === -1) plipMasterData.gateways.push(obj); else plipMasterData.gateways[gwIdx] = obj;
+            
+            closeGatewayModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteGateway(gwIdx) {
+            if(confirm("このゲートウェイを完全に撤去しますか？")) {
+                plipMasterData.gateways.splice(gwIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveGateway(gwIdx, direction) {
+            const arr = plipMasterData.gateways;
+            const target = gwIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[gwIdx], arr[target]] = [arr[target], arr[gwIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        // --- 共創作品（アーティファクト） 編集処理ロジック群 ---
+        function openArtifactModal(artIdx) {
+            document.getElementById('modal-art-idx').value = artIdx;
+            if(artIdx === -1) {
+                document.getElementById('modal-art-no').value = 'Product No.' + (plipMasterData.artifacts.length + 1);
+                document.getElementById('modal-art-title').value = '';
+                document.getElementById('modal-art-period').value = '期間: 2026年';
+                document.getElementById('modal-art-url').value = '';
+                document.getElementById('modal-art-creators').value = '';
+            } else {
+                const art = plipMasterData.artifacts[artIdx];
+                document.getElementById('modal-art-no').value = art.productNo;
+                document.getElementById('modal-art-title').value = art.title;
+                document.getElementById('modal-art-period').value = art.period;
+                document.getElementById('modal-art-url').value = art.url;
+                document.getElementById('modal-art-creators').value = art.creators || '';
+            }
+            document.getElementById('artifact-modal').classList.remove('hidden');
+        }
+        function closeArtifactModal() { document.getElementById('artifact-modal').classList.add('hidden'); }
+        function saveArtifactData() {
+            const artIdx = parseInt(document.getElementById('modal-art-idx').value);
+            const productNo = document.getElementById('modal-art-no').value.trim();
+            const title = document.getElementById('modal-art-title').value.trim();
+            const period = document.getElementById('modal-art-period').value.trim();
+            const url = document.getElementById('modal-art-url').value.trim();
+            const creators = document.getElementById('modal-art-creators').value.trim();
+
+            if(!title) return alert("作品名は必須です。");
+            const obj = plipMasterData.artifacts[artIdx] || {};
+            obj.productNo = productNo;
+            obj.title = title;
+            obj.period = period;
+            obj.url = url || '#';
+            obj.creators = creators;
+
+            if(artIdx === -1) plipMasterData.artifacts.push(obj); else plipMasterData.artifacts[artIdx] = obj;
+            closeArtifactModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteArtifact(artIdx) {
+            if(confirm("この作品データをレジストリから抹消しますか？")) {
+                plipMasterData.artifacts.splice(artIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveArtifact(artIdx, direction) {
+            const arr = plipMasterData.artifacts;
+            const target = artIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[artIdx], arr[target]] = [arr[target], arr[artIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        // --- HTMLビルド・エクスポートコアシステム ---
+        function exportPortalHTML(isForEdit) {
+            const cleanDoc = document.implementation.createHTMLDocument(document.title);
+            cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+
+            // 各種モーダルの表示状態クラスを初期化カプセル化
+            ['#card-modal', '#category-modal', '#gateway-modal', '#artifact-modal'].forEach(sel => {
+                const el = cleanDoc.querySelector(sel);
+                if(el) el.className = "fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4";
+            });
+
+            // 動的DOM領域を空に戻し、初期ロード時にJSから再生成させる構造にする
+            ['#management-board-container', '#gateways-container', '#artifacts-container'].forEach(sel => {
+                const el = cleanDoc.querySelector(sel);
+                if(el) el.innerHTML = '';
+            });
+
+            // インラインスクリプト内のBase64データ埋め込み書き換え
+            const scriptEl = cleanDoc.querySelector('script:not([src])');
+            if (scriptEl) {
+                let jsCode = scriptEl.textContent;
+                const rawJson = JSON.stringify(plipMasterData);
+                const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
+                
+                // マスター定義Base64データを書き換え
+                const regexEmbed = /let\s+plipMasterData\s*=\s*\{[\s\S]*?\};\s*const\s+plipEmbeddedBase64Data\s*=\s*"[^"]*";/;
+                const freshDefinition = `let plipMasterData = ${rawJson};\n        const plipEmbeddedBase64Data = "${base64Data}";`;
+                jsCode = jsCode.replace(regexEmbed, freshDefinition);
+
+                // 🔓 [LOCAL DEVELOPMENT AUTOPASS]: ローカルPC用自動認証パス処理
+                if (!isForEdit) {
+                    jsCode = jsCode.replace(/\/\/ 🔓 \[LOCAL DEVELOPMENT AUTOPASS\][\s\S]*?unlockHubInstant\(\);/, '/* 🔓 LOCAL AUTOPASS BYPASSED FOR SECURITY PUBLIC HOSTING */');
+                }
+
+                scriptEl.textContent = jsCode;
+            }
+
+            // 外部公開モード時は管理バー・編集追加枠・モーダル一式をDOMから完全消去して容量削減
+            if (!isForEdit) {
+                const removeSelectors = ['#portal-control-bar', 'button[onclick*="Modal"]', '#card-modal', '#category-modal', '#gateway-modal', '#artifact-modal'];
+                removeSelectors.forEach(sel => {
+                    cleanDoc.querySelectorAll(sel).forEach(el => el.remove());
+                });
+            }
+
+            const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
+            const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8;" });
+            const link = document.createElement("a");
+            
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", isForEdit ? "myPLIP_portal_EDIT.html" : "myPLIP_portal_PRODUCTION.html");
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(isForEdit ? "💾 編集機能を維持した管理用ファイルをエクスポートしました。" : "🚀 外部公開用のセキュリティ・パスワード完全防衛版HTMLを出力しました！");
+        }
     </script>
 </body>
 </html>
