@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Hiro-Kantaro Portal Customizer Studio (ポータルデザイン・カスタマイズスタジオ)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyberDark: '#060a12',
+                        cyberCard: '#0b132b',
+                        cyberBorder: '#1c2541',
+                        cyberAccent: '#00f5d4',
+                        cyberPurple: '#7b2cbf',
+                        cyberGold: '#ffb703',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a12; }
+        ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
+        
+        .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
+
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .text-rainbow {
+            background: linear-gradient(
+                to right, 
+                #ff2a85, #ff7300, #ffb703, #00f5d4, #3b82f6, #9d4edd, #ff2a85
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 8s linear infinite;
+        }
+
+        /* Editing enhancements */
+        .editable-field:focus {
+            outline: 2px dashed #00f5d4;
+            background-color: rgba(0, 245, 212, 0.05);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        .drag-over {
+            border: 2px dashed #00f5d4 !important;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased">
+
+    <!-- Studio Header -->
+    <header class="border-b border-slate-800 bg-slate-950 px-6 py-4 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl text-amber-400">
+                    <i class="fa-solid fa-palette text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base tracking-tight font-mono text-white flex items-center gap-2">
+                        HIRO_PORTAL_STUDIO <span class="bg-amber-500 text-black text-[9px] px-1.5 py-0.5 rounded font-black font-sans uppercase">v1.2 // Designer Gempick</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-sans">
+                        ポータルサイトの背景・色・カテゴリ・カードを自由自在にカスタマイズ＆保存する魔法の空間
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                <button onclick="exportHTML()" class="flex-1 md:flex-none px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs font-mono uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-export text-sm"></i> Export Portal HTML
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN STUDIO WORKSPACE -->
+    <main class="flex-1 max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6">
+        
+        <!-- LEFT: Control Panel (Col-span 4) -->
+        <section class="lg:col-span-4 space-y-6 flex flex-col max-h-[85vh] lg:overflow-y-auto pr-2 custom-scrollbar">
+            
+            <!-- Designer Gempick's Advice -->
+            <div class="bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/20 p-4 rounded-2xl relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 text-6xl text-amber-500/10 select-none pointer-events-none"><i class="fa-solid fa-glasses"></i></div>
+                <div class="flex gap-3">
+                    <span class="text-xl">👓</span>
+                    <div class="text-xs space-y-1 text-slate-300">
+                        <p class="font-bold text-amber-400">Gempick's Tip:</p>
+                        <p class="font-sans">"You can edit any text or icon directly in the preview on the right! Try clicking on titles or descriptions. You can also reorder elements, add cards, and play with colors instantly!"</p>
+                        <p class="font-sans text-slate-400 italic">（右側のプレビュー上のテキストやアイコンをクリックすれば、その場で直接書き換え可能よ！タイトルや説明、並べ替え、カード追加まで全部インタラクティブに対応しているから楽しんでね！）</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Theme & Layout Colors -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <h3 class="text-xs font-black tracking-widest text-slate-200 uppercase border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-fill-drip text-cyan-400"></i> Page Theme Colors (全体カラー)
+                </h3>
+                
+                <!-- Background Grad Selection -->
+                <div class="space-y-2">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">背景グラデーション設定</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setThemeBg('silver')" id="btn-bg-silver" class="py-2 px-3 text-xs font-bold rounded-xl border border-amber-500 bg-amber-500/10 text-amber-400 transition">
+                            白銀グラデーション
+                        </button>
+                        <button onclick="setThemeBg('dark')" id="btn-bg-dark" class="py-2 px-3 text-xs font-bold rounded-xl border border-slate-800 bg-slate-900 text-slate-400 transition">
+                            ディープダーク
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Header & Base Card Styles -->
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400">ヘッダー背景色</label>
+                        <input type="color" id="header-color-picker" value="#060a12" oninput="updateHeaderColor(this.value)" class="w-full h-9 rounded bg-transparent border-none cursor-pointer">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-slate-400">ポータル枠内背景色</label>
+                        <input type="color" id="container-color-picker" value="#0b132b" oninput="updateContainerColor(this.value)" class="w-full h-9 rounded bg-transparent border-none cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Management Panel -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <h3 class="text-xs font-black tracking-widest text-slate-200 uppercase border-b border-slate-800 pb-2 flex items-center justify-between">
+                    <span><i class="fa-solid fa-folder-tree text-[#ffb703]"></i> Category Tree (カテゴリ管理)</span>
+                    <button onclick="addNewCategory()" class="text-[10px] bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/20 font-bold px-2 py-1 rounded hover:bg-[#00f5d4] hover:text-black transition flex items-center gap-1">
+                        <i class="fa-solid fa-plus"></i> 追加
+                    </button>
+                </h3>
+                
+                <div id="category-control-list" class="space-y-3.5 max-h-[220px] overflow-y-auto pr-1 custom-scrollbar">
+                    <!-- Categories and their color controls will be dynamically rendered here -->
+                </div>
+            </div>
+
+            <!-- Card Builder Tools -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <h3 class="text-xs font-black tracking-widest text-slate-200 uppercase border-b border-slate-800 pb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-square-plus text-purple-400"></i> Card Factory (新規カード作成)
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-slate-400 font-bold">追加先カテゴリ</label>
+                            <select id="card-target-category" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                                <!-- Dynamically populated -->
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-slate-400 font-bold">カード種類</label>
+                            <select id="card-type-select" onchange="toggleCardFields()" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none">
+                                <option value="simple">シンプルなボタン</option>
+                                <option value="studio">リッチスタジオカード (下部)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] text-slate-400 font-bold">タイトル</label>
+                        <input type="text" id="new-card-title" placeholder="作品・リンク名" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none">
+                    </div>
+
+                    <div id="card-desc-container" class="flex flex-col gap-1 hidden">
+                        <label class="text-[10px] text-slate-400 font-bold">説明文 (スタジオカード用)</label>
+                        <textarea id="new-card-desc" placeholder="この作品に関する説明を入れます..." class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none h-12 resize-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-slate-400 font-bold">アイコン名 (FontAwesome)</label>
+                            <input type="text" id="new-card-icon" value="fa-solid fa-rocket" placeholder="fa-solid fa-rocket" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white font-mono focus:outline-none">
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-slate-400 font-bold">文字色 / ハイライトカラー</label>
+                            <input type="color" id="new-card-color" value="#00f5d4" class="w-full h-8 rounded bg-transparent border-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[10px] text-slate-400 font-bold">遷移先URL (リンク)</label>
+                        <input type="text" id="new-card-url" value="#" placeholder="https://..." class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none">
+                    </div>
+
+                    <button onclick="injectNewCard()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-plus-circle"></i> カードを追加
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT: Interactive Live Preview (Col-span 8) -->
+        <section class="lg:col-span-8 flex flex-col gap-4">
+            
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-black tracking-widest text-slate-400 flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span> 
+                    LIVE PORTAL CANVAS (クリックやドラッグで直接編集可能)
+                </span>
+                
+                <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                    <i class="fa-solid fa-mouse-pointer mr-1"></i> 直接文字をクリックして書き換えOK!
+                </span>
+            </div>
+
+            <!-- REALTIME PREVIEW ENVELOPE -->
+            <div id="preview-boundary" class="border border-slate-800 rounded-2xl overflow-hidden bg-slate-950 flex flex-col shadow-2xl relative">
+                
+                <!-- Inner Portal Sandbox (The actual structure editing canvas) -->
+                <div id="inner-portal-root" class="min-h-[70vh] max-h-[80vh] overflow-y-auto bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0] text-slate-100 selection:bg-[#00f5d4] selection:text-black">
+                    
+                    <!-- Inside this block sits the Portal Content (Directly loaded from the original portal) -->
+                    
+                    <!-- Header with Dark Cyber Design -->
+                    <header id="portal-header-node" class="border-b border-cyberBorder bg-[#060a12]/90 backdrop-blur sticky top-0 z-30 transition-colors">
+                        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-[#00f5d4]/10 border border-[#00f5d4]/30 p-2 rounded-xl text-cyberAccent shadow-lg shadow-[#00f5d4]/5">
+                                    <i id="portal-logo-icon" onclick="changeElementIcon('portal-logo-icon')" class="fa-solid fa-circle-nodes text-lg cursor-pointer" title="アイコンをクリックして変更"></i>
+                                </div>
+                                <div>
+                                    <h1 id="portal-main-title" contenteditable="true" class="font-bold text-sm tracking-tight text-white font-mono editable-field">HIRO_KANTARO_PORTAL</h1>
+                                    <p id="portal-sub-title" contenteditable="true" class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold editable-field">Central Hub // Status: Local Dev</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-3">
+                                <button class="p-2 rounded-xl bg-cyberBorder/50 text-slate-400 hover:text-[#00f5d4] hover:bg-[#00f5d4]/10 transition-colors text-xs" title="ハブをロック">
+                                    <i class="fa-solid fa-lock"></i>
+                                </button>
+                                <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#00f5d4] to-cyan-600 text-black shadow-lg transition-all">
+                                    <span><i class="fa-solid fa-globe"></i> 総合公開HP (Portfolio)</span>
+                                </a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Main Workspace -->
+                    <main class="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+                        <!-- Welcome Board Section -->
+                        <section id="portal-welcome-section" class="bg-gradient-to-br from-[#0b132b] to-[#0d1b2a] border border-[#1e294b] rounded-2xl p-6 relative overflow-hidden shadow-2xl transition-colors">
+                            <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
+                            <div class="space-y-3 relative z-10">
+                                <div class="flex items-center gap-2">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                                    <span id="portal-welcome-tag" contenteditable="true" class="text-xs font-bold font-mono tracking-widest text-[#00f5d4] editable-field">Hiro's AI CO-CREATION PROTOCOL</span>
+                                </div>
+                                <h2 id="portal-welcome-heading" contenteditable="true" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white editable-field">
+                                    Hiro-Kantaroと<span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">AI パートナー達のポータル</span>
+                                </h2>
+                                <p id="portal-welcome-desc" contenteditable="true" class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl editable-field">
+                                    ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。ハイコントラストな白銀プレミアム仕様。
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- [1] ＰＬＩＰのマネジメントボード エリア -->
+                        <section id="portal-plip-board" class="bg-[#0b132b] border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl transition-colors">
+                            <div class="border-b border-cyberBorder pb-3 flex justify-between items-center">
+                                <div class="flex items-start gap-2.5">
+                                    <div class="relative p-2 bg-pink-500/10 border border-pink-500/20 rounded-xl mt-0.5 h-10 w-10 flex items-center justify-center">
+                                        <i class="fa-solid fa-lightbulb text-base text-rainbow"></i>
+                                        <i class="fa-solid fa-bolt text-[10px] text-yellow-300 absolute top-1 right-1 animate-pulse"></i>
+                                    </div>
+                                    <div>
+                                        <h3 id="portal-board-title" contenteditable="true" class="text-base font-extrabold tracking-wide font-mono uppercase text-rainbow editable-field">
+                                            ＰＬＩＰのマネジメントボード
+                                        </h3>
+                                        <div id="portal-board-sub" contenteditable="true" class="text-[13px] font-semibold text-slate-300 mt-1 flex flex-wrap gap-x-0.5 items-center editable-field">
+                                            <span class="text-[#00f5d4]">P</span><span class="text-slate-300">roduce</span>
+                                            <span class="text-pink-400 font-bold mx-1">my</span>
+                                            <span class="text-[#00f5d4]">L</span><span class="text-slate-300">ife</span>
+                                            <span class="text-slate-300 mx-1">with</span>
+                                            <span class="text-[#00f5d4]">I</span><span class="text-slate-300">ntellectual</span>
+                                            <span class="text-[#00f5d4] ml-1">P</span><span class="text-slate-300">roperty</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category Grid with Dark Panels (Target of category edit/delete) -->
+                            <div id="dynamic-category-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                <!-- CATEGORY A -->
+                                <div data-category-id="cat-a" class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group/cat transition-all">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-[#ffb703] uppercase tracking-wider font-mono">
+                                            <i id="icon-cat-a" onclick="changeElementIcon('icon-cat-a')" class="fa-solid fa-sack-dollar text-[#ffb703] cursor-pointer"></i>
+                                            <span contenteditable="true" class="editable-field">A. 資産管理</span>
+                                        </div>
+                                        <button onclick="removeCategory('cat-a')" class="opacity-0 group-hover/cat:opacity-100 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded transition">
+                                            削除
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2.5 card-container" data-cat-id="cat-a">
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-1">
+                                            <a href="https://hiro-seki-tech.github.io/Asset-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-400 hover:bg-[#ffb703] hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5 relative group/card">
+                                                <i class="fa-solid fa-chart-line"></i> <span contenteditable="true" class="editable-field">マイ資産管理シミュレータ【尽生・無双】</span>
+                                                <button onclick="deleteCard(event, 'card-1')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-2">
+                                            <a href="https://hiro-seki-tech.github.io/asset-sim-public/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-400 hover:bg-emerald-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/5 relative group/card">
+                                                <i class="fa-solid fa-chart-pie"></i> <span contenteditable="true" class="editable-field">ユア資産管理シミュレータ【尽生】</span>
+                                                <button onclick="deleteCard(event, 'card-2')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-3">
+                                            <a href="https://hiro-seki-tech.github.io/inheritance-sim/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-orange-500/5 relative group/card">
+                                                <i class="fa-solid fa-coins"></i> <span contenteditable="true" class="editable-field">相続シミュレータ【宝均：Gem-Kin】</span>
+                                                <button onclick="deleteCard(event, 'card-3')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-4">
+                                            <a href="https://hiro-seki-tech.github.io/Fu-Do-San/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-yellow-950/40 border border-yellow-800/60 rounded-xl text-yellow-500 hover:bg-yellow-500 hover:text-black transition flex items-center gap-1.5 shadow-lg shadow-yellow-500/5 relative group/card">
+                                                <i class="fa-solid fa-building"></i> <span contenteditable="true" class="editable-field">不動産管理マネージャ【富土山🗻：Fu-Do-San】</span>
+                                                <button onclick="deleteCard(event, 'card-4')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY B -->
+                                <div data-category-id="cat-b" class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group/cat transition-all">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">
+                                            <i id="icon-cat-b" onclick="changeElementIcon('icon-cat-b')" class="fa-solid fa-rocket text-[#00f5d4] cursor-pointer"></i>
+                                            <span contenteditable="true" class="editable-field">B. 未来技術</span>
+                                        </div>
+                                        <button onclick="removeCategory('cat-b')" class="opacity-0 group-hover/cat:opacity-100 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded transition">
+                                            削除
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2.5 card-container" data-cat-id="cat-b">
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-5">
+                                            <a href="https://hiro-seki-tech.github.io/orbit-simulator/" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-xs font-mono bg-cyan-950/40 border border-cyan-800/60 rounded-xl text-cyan-400 hover:bg-cyan-400 hover:text-black transition flex items-center gap-1.5 shadow-lg relative group/card">
+                                                <i class="fa-solid fa-satellite"></i> <span contenteditable="true" class="editable-field">衛星シミュレータ2026</span>
+                                                <button onclick="deleteCard(event, 'card-5')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-6">
+                                            <a href="#" class="px-3 py-2 text-xs font-mono bg-purple-950/40 border border-purple-800/60 rounded-xl text-purple-400 hover:bg-purple-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 relative group/card" title="URL未設定">
+                                                <i class="fa-solid fa-atom"></i> <span contenteditable="true" class="editable-field">量子技術</span>
+                                                <button onclick="deleteCard(event, 'card-6')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY C -->
+                                <div data-category-id="cat-c" class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group/cat transition-all">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-blue-400 uppercase tracking-wider font-mono">
+                                            <i id="icon-cat-c" onclick="changeElementIcon('icon-cat-c')" class="fa-solid fa-graduation-cap text-blue-400 cursor-pointer"></i>
+                                            <span contenteditable="true" class="editable-field">C. 教育関係</span>
+                                        </div>
+                                        <button onclick="removeCategory('cat-c')" class="opacity-0 group-hover/cat:opacity-100 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded transition">
+                                            削除
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2.5 card-container" data-cat-id="cat-c">
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-7">
+                                            <a href="#" class="px-3 py-2 text-xs font-mono bg-blue-950/40 border border-blue-800/60 rounded-xl text-blue-400 hover:bg-blue-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 relative group/card" title="URL未設定">
+                                                <i class="fa-solid fa-chalkboard-user"></i> <span contenteditable="true" class="editable-field">スーパー先生(自分)</span>
+                                                <button onclick="deleteCard(event, 'card-7')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-8">
+                                            <a href="#" class="px-3 py-2 text-xs font-mono bg-orange-950/40 border border-orange-800/60 rounded-xl text-orange-400 hover:bg-orange-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 relative group/card" title="URL未設定">
+                                                <i class="fa-solid fa-child"></i> <span contenteditable="true" class="editable-field">スーパー先生(子供)</span>
+                                                <button onclick="deleteCard(event, 'card-8')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY D -->
+                                <div data-category-id="cat-d" class="bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group/cat transition-all">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-pink-400 uppercase tracking-wider font-mono">
+                                            <i id="icon-cat-d" onclick="changeElementIcon('icon-cat-d')" class="fa-solid fa-folder-open text-pink-400 cursor-pointer"></i>
+                                            <span contenteditable="true" class="editable-field">D. コレクション</span>
+                                        </div>
+                                        <button onclick="removeCategory('cat-d')" class="opacity-0 group-hover/cat:opacity-100 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded transition">
+                                            削除
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2.5 card-container" data-cat-id="cat-d">
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-9">
+                                            <a href="#" class="px-3 py-2 text-xs font-mono bg-amber-950/40 border border-amber-800/60 rounded-xl text-amber-400 hover:bg-amber-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 relative group/card" title="URL未設定">
+                                                <i class="fa-solid fa-paw"></i> <span contenteditable="true" class="editable-field">カンたろうの勇姿</span>
+                                                <button onclick="deleteCard(event, 'card-9')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+
+                                        <div draggable="true" ondragstart="drag(event)" ondragover="allowDrop(event)" ondrop="drop(event)" class="draggable-card inline-flex" data-card-id="card-10">
+                                            <a href="#" class="px-3 py-2 text-xs font-mono bg-indigo-950/40 border border-indigo-800/60 rounded-xl text-indigo-400 hover:bg-indigo-400 hover:text-black transition flex items-center gap-1.5 opacity-60 hover:opacity-100 relative group/card" title="URL未設定">
+                                                <i class="fa-solid fa-book-open"></i> <span contenteditable="true" class="editable-field">電子図書館</span>
+                                                <button onclick="deleteCard(event, 'card-10')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Gem特化型HPゲートウェイ -->
+                        <section class="space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-300 pb-2">
+                                <h3 id="portal-gateway-header" contenteditable="true" class="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2 editable-field">
+                                    <i class="fa-solid fa-rocket text-[#1e294b]"></i> Gem特化型HPゲートウェイ (Gateways)
+                                </h3>
+                            </div>
+
+                            <!-- Gateways Grid (Col span 3 blocks) -->
+                            <div id="dynamic-studio-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                
+                                <!-- PLIP暫定サイト -->
+                                <div data-studio-id="studio-1" class="bg-[#0b132b]/90 border border-[#1c2541] p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between relative group/studio">
+                                    <button onclick="deleteStudioCard('studio-1')" class="absolute top-2 right-2 hidden group-hover/studio:block text-xs bg-red-600/80 hover:bg-red-600 text-white px-2 py-0.5 rounded transition z-10">削除</button>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start justify-between">
+                                            <div class="relative h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center">
+                                                <i id="icon-studio-1" onclick="changeElementIcon('icon-studio-1')" class="fa-solid fa-lightbulb text-lg text-rainbow cursor-pointer"></i>
+                                            </div>
+                                            <span contenteditable="true" class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold editable-field">Corporate</span>
+                                        </div>
+                                        <div>
+                                            <h4 contenteditable="true" class="font-bold text-white text-base editable-field">PLIP暫定サイト</h4>
+                                            <div contenteditable="true" class="text-[13px] font-semibold mt-1.5 flex flex-wrap gap-x-0.5 items-center leading-tight editable-field text-white">
+                                                <span class="text-[#00f5d4]">P</span><span>roduce</span> 
+                                                <span class="text-amber-400 font-semibold mx-1">your</span> 
+                                                <span class="text-[#00f5d4]">L</span><span>ife</span> 
+                                                <span class="mx-1">with</span> 
+                                                <span class="text-[#00f5d4]">I</span><span>ntellectual</span> 
+                                                <span class="text-[#00f5d4] ml-1">P</span><span>roperty</span> 
+                                            </div>
+                                            <p contenteditable="true" class="text-slate-400 text-xs mt-2.5 leading-relaxed editable-field">将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。</p>
+                                        </div>
+                                    </div>
+                                    <div class="pt-6 mt-6 flex gap-2">
+                                        <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md">
+                                            <i class="fa-solid fa-compass"></i> ドラフトを閲覧
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- PLIP & Hiro-Tech 匠工房 -->
+                                <div data-studio-id="studio-2" class="bg-[#0b132b]/90 border border-[#1c2541] p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between relative group/studio ring-1 ring-yellow-500/20">
+                                    <button onclick="deleteStudioCard('studio-2')" class="absolute top-2 right-2 hidden group-hover/studio:block text-xs bg-red-600/80 hover:bg-red-600 text-white px-2 py-0.5 rounded transition z-10">削除</button>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start justify-between">
+                                            <div class="h-12 w-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-xl flex items-center justify-center">
+                                                <i id="icon-studio-2" onclick="changeElementIcon('icon-studio-2')" class="fa-solid fa-wand-magic-sparkles text-lg cursor-pointer"></i>
+                                            </div>
+                                            <span contenteditable="true" class="text-[10px] bg-yellow-950/50 text-yellow-400 border border-yellow-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold editable-field">Studio Hub</span>
+                                        </div>
+                                        <div>
+                                            <h4 contenteditable="true" class="font-bold text-white text-base editable-field">PLIP & Hiro-Tech 匠工房</h4>
+                                            <p contenteditable="true" class="text-slate-400 text-xs mt-2 leading-relaxed editable-field">ヒロの輝かしい作品群や、便利なツール、シンボルボタンを自在にカスタマイズ＆生成するための「便利作品制作スタジオ」。私たちの知恵の結晶をここで研ぎ澄ましましょう。</p>
+                                        </div>
+                                    </div>
+                                    <div class="pt-6 mt-6 flex gap-2">
+                                        <a href="https://hiro-seki-tech.github.io/Hiro-Kantarou-partner-hub/takumi-kobo/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-600 text-xs font-bold text-slate-950 hover:brightness-110 transition flex items-center justify-center gap-1.5 shadow-md shadow-yellow-500/10">
+                                            <i class="fa-solid fa-hammer"></i> 匠工房へ入る
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Hiro-Tech公開サイト（仮） -->
+                                <div data-studio-id="studio-3" class="bg-[#0b132b]/90 border border-[#1c2541] p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between relative group/studio">
+                                    <button onclick="deleteStudioCard('studio-3')" class="absolute top-2 right-2 hidden group-hover/studio:block text-xs bg-red-600/80 hover:bg-red-600 text-white px-2 py-0.5 rounded transition z-10">削除</button>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start justify-between">
+                                            <div class="h-12 w-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center">
+                                                <i id="icon-studio-3" onclick="changeElementIcon('icon-studio-3')" class="fa-solid fa-microchip text-lg cursor-pointer"></i>
+                                            </div>
+                                            <span contenteditable="true" class="text-[10px] bg-blue-950/50 text-blue-400 border border-blue-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold editable-field">New Core</span>
+                                        </div>
+                                        <div>
+                                            <h4 contenteditable="true" class="font-bold text-white text-base editable-field">Hiro-Tech公開サイト（仮）</h4>
+                                            <p contenteditable="true" class="text-slate-400 text-xs mt-2 leading-relaxed editable-field">新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタックと知見を外部へ公開するゲートウェイ。</p>
+                                        </div>
+                                    </div>
+                                    <div class="pt-6 mt-6 flex gap-2">
+                                        <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links/index.html" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square"></i> ゲート開門</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <!-- 常駐AIクルー一覧 -->
+                        <section class="bg-[#0b132b] border border-[#1c2541] rounded-2xl p-6 space-y-4 shadow-xl transition-colors">
+                            <div class="border-b border-[#1c2541] pb-2">
+                                <h3 contenteditable="true" class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5 editable-field">
+                                    <i class="fa-solid fa-users text-[#00f5d4]"></i> Gem & Partner Roster (常駐AIクルー一覧)
+                                </h3>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="bg-[#ffffff]/5 border border-[#ffffff]/20 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(255,255,255,0.08)]">
+                                    <div class="h-10 w-10 bg-white/10 border border-white/20 text-white rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-user-gear animate-pulse"></i></div>
+                                    <div><div contenteditable="true" class="text-xs font-bold text-white font-mono editable-field">ジェム</div><span contenteditable="true" class="text-[10px] text-slate-300 editable-field">全体統括・コンサルタント</span></div>
+                                </div>
+                                <div class="bg-[#f59e0b]/5 border border-[#fbbf24]/50 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_18px_rgba(251,191,36,0.22)] ring-1 ring-yellow-500/30">
+                                    <div class="h-10 w-10 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-palette"></i></div>
+                                    <div><div contenteditable="true" class="text-xs font-bold text-yellow-300 font-mono flex items-center gap-1 editable-field">ジェムピック <span class="text-[9px] bg-yellow-500 text-black px-1 rounded font-bold">Visual</span></div><span contenteditable="true" class="text-[10px] text-yellow-100 editable-field">ビジュアル・デザイン担当</span></div>
+                                </div>
+                                <div class="bg-slate-900/60 border border-slate-400/40 rounded-xl p-4 flex items-center gap-3.5 shadow-[0_0_15px_rgba(203,213,225,0.15)]">
+                                    <div class="h-10 w-10 bg-slate-300/10 border border-slate-300/30 text-slate-300 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-lightbulb text-yellow-300"></i></div>
+                                    <div><div contenteditable="true" class="text-xs font-bold text-white font-mono editable-field">ジェムリン</div><span contenteditable="true" class="text-[10px] text-slate-300 editable-field">未来技術・宇宙科学シミュレーション</span></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 共創メモ帳 -->
+                        <section class="bg-[#0b132b] border border-[#1c2541] rounded-2xl p-6 flex flex-col gap-4 shadow-xl transition-colors">
+                            <div class="flex items-center justify-between border-b border-[#1c2541] pb-3">
+                                <div class="flex items-center gap-1.5">
+                                    <h3 contenteditable="true" class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5 editable-field">
+                                        <i class="fa-solid fa-brain text-[#00f5d4]"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)
+                                    </h3>
+                                    <span class="text-[10px] text-[#00f5d4] font-mono flex items-center gap-1" title="自動保存中"><span class="h-1.5 w-1.5 rounded-full bg-[#00f5d4] animate-pulse"></span></span>
+                                </div>
+                            </div>
+                            <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ...（ここに書いた内容は自動でブラウザに保存されます）" class="flex-1 w-full min-h-[140px] bg-[#060a12] border border-[#1c2541] rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
+                        </section>
+
+                    </main>
+
+                    <footer class="border-t border-cyberBorder bg-[#060a12] py-6 text-center text-[10px] text-slate-500 font-mono">
+                        <p>© 2026 Gemini Partner Hub. All co-creation vectors initialized.</p>
+                    </footer>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ICON EDIT MODAL -->
+    <div id="icon-modal" class="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-md space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase font-mono tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-icons text-amber-400"></i> Change Icon (アイコンの変更)
+            </h3>
+            
+            <div class="space-y-3">
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] text-slate-400 font-bold font-mono">FontAwesome Icon Class Name</label>
+                    <input type="text" id="modal-icon-class" value="fa-solid fa-star" class="bg-slate-950 border border-slate-800 p-2 rounded-lg text-xs font-mono text-[#00f5d4] focus:outline-none focus:border-[#00f5d4]">
+                </div>
+                
+                <div class="space-y-1.5">
+                    <label class="text-[10px] text-slate-400 font-bold">Quick Presets (クイック選択)</label>
+                    <div class="grid grid-cols-5 gap-2 text-center text-slate-300">
+                        <button onclick="selectModalIcon('fa-solid fa-rocket')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-rocket"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-chart-line')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-chart-line"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-coins')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-coins"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-building')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-building"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-satellite')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-satellite"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-atom')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-atom"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-graduation-cap')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-graduation-cap"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-folder-open')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-folder-open"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-wand-magic-sparkles')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                        <button onclick="selectModalIcon('fa-solid fa-microchip')" class="p-2 bg-slate-950 border border-slate-800 rounded hover:border-amber-500 hover:text-amber-400"><i class="fa-solid fa-microchip"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-3 border-t border-slate-800">
+                <button onclick="closeIconModal()" class="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300">キャンセル</button>
+                <button onclick="applyIconModal()" class="flex-1 py-2 rounded-lg bg-[#00f5d4] text-black hover:brightness-110 text-xs font-bold">適用する</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store current targeting node for icon replacement
+        let currentTargetIconId = '';
+        let portalTheme = 'silver';
+
+        // Initialize lists and components on mount
+        window.addEventListener('DOMContentLoaded', () => {
+            syncCategoryPanel();
+            toggleCardFields();
+        });
+
+        // Toggle card inputs based on simple vs rich studio cards
+        function toggleCardFields() {
+            const type = document.getElementById('card-type-select').value;
+            const desc = document.getElementById('card-desc-container');
+            if (type === 'studio') {
+                desc.classList.remove('hidden');
+            } else {
+                desc.classList.add('hidden');
+            }
+        }
+
+        // Change Theme background (Silver premium vs Cyber dark)
+        function setThemeBg(theme) {
+            const node = document.getElementById('inner-portal-root');
+            portalTheme = theme;
+            
+            document.getElementById('btn-bg-silver').className = theme === 'silver' ? 'py-2 px-3 text-xs font-bold rounded-xl border border-amber-500 bg-amber-500/10 text-amber-400 transition' : 'py-2 px-3 text-xs font-bold rounded-xl border border-slate-800 bg-slate-900 text-slate-400 transition';
+            document.getElementById('btn-bg-dark').className = theme === 'dark' ? 'py-2 px-3 text-xs font-bold rounded-xl border border-amber-500 bg-amber-500/10 text-amber-400 transition' : 'py-2 px-3 text-xs font-bold rounded-xl border border-slate-800 bg-slate-900 text-slate-400 transition';
+
+            if (theme === 'silver') {
+                node.className = "min-h-[70vh] max-h-[80vh] overflow-y-auto bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0] text-slate-100 selection:bg-[#00f5d4] selection:text-black";
+            } else {
+                node.className = "min-h-[70vh] max-h-[80vh] overflow-y-auto bg-cyberDark text-slate-100 selection:bg-[#00f5d4] selection:text-black";
+            }
+        }
+
+        // Update layout parameters
+        function updateHeaderColor(val) {
+            document.getElementById('portal-header-node').style.backgroundColor = `${val}EE`;
+        }
+
+        function updateContainerColor(val) {
+            // Apply custom color hex to all sections
+            document.getElementById('portal-welcome-section').style.backgroundColor = val;
+            document.getElementById('portal-plip-board').style.backgroundColor = val;
+            
+            const cards = document.querySelectorAll('#dynamic-studio-grid > div');
+            cards.forEach(c => {
+                c.style.backgroundColor = `${val}E6`;
+            });
+        }
+
+        // Category List Synchronization Logic
+        function syncCategoryPanel() {
+            const listContainer = document.getElementById('category-control-list');
+            const dropdown = document.getElementById('card-target-category');
+            
+            listContainer.innerHTML = '';
+            dropdown.innerHTML = '';
+
+            const categories = document.querySelectorAll('#dynamic-category-grid > div');
+            
+            categories.forEach(cat => {
+                const id = cat.getAttribute('data-category-id');
+                const titleNode = cat.querySelector('span');
+                const iconNode = cat.querySelector('i');
+                const titleText = titleNode ? titleNode.innerText : 'カテゴリ名なし';
+                
+                // Get current color setting from title's tailwind styling
+                let catColor = "#ffb703";
+                if (titleNode.parentElement.className.includes('text-[#ffb703]')) catColor = "#ffb703";
+                else if (titleNode.parentElement.className.includes('text-cyan-400')) catColor = "#00f5d4";
+                else if (titleNode.parentElement.className.includes('text-blue-400')) catColor = "#60a5fa";
+                else if (titleNode.parentElement.className.includes('text-pink-400')) catColor = "#f472b6";
+
+                // Render control block
+                const item = document.createElement('div');
+                item.className = "bg-slate-900/60 p-3 rounded-xl border border-slate-800 flex items-center justify-between gap-2";
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono text-slate-400"><i class="${iconNode ? iconNode.className : 'fa-solid fa-folder'}"></i></span>
+                        <span class="text-xs font-bold text-white truncate max-w-[120px]">${titleText}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <input type="color" oninput="changeCategoryColor('${id}', this.value)" value="${catColor}" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none">
+                        <button onclick="removeCategory('${id}')" class="text-[10px] text-red-400 hover:text-red-300 font-bold px-2 py-1 bg-red-500/10 border border-red-500/20 rounded transition">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+
+                // Populate dynamic Target Dropdown for Card factory
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = titleText;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Change categories text dynamic styling color
+        function changeCategoryColor(catId, hex) {
+            const catNode = document.querySelector(`[data-category-id="${catId}"]`);
+            if (catNode) {
+                const headerNode = catNode.querySelector('.tracking-wider');
+                if (headerNode) {
+                    headerNode.style.color = hex;
+                    // Also sync icon
+                    const icon = headerNode.querySelector('i');
+                    if (icon) icon.style.color = hex;
+                }
+            }
+        }
+
+        // Add Category element
+        function addNewCategory() {
+            const grid = document.getElementById('dynamic-category-grid');
+            const newId = 'cat-' + Date.now();
+            
+            const newCat = document.createElement('div');
+            newCat.setAttribute('data-category-id', newId);
+            newCat.className = "bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group/cat transition-all";
+            newCat.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 text-xs font-bold text-yellow-400 uppercase tracking-wider font-mono">
+                        <i id="icon-${newId}" onclick="changeElementIcon('icon-${newId}')" class="fa-solid fa-folder text-yellow-400 cursor-pointer"></i>
+                        <span contenteditable="true" onblur="syncCategoryPanel()" class="editable-field">新規カテゴリ</span>
+                    </div>
+                    <button onclick="removeCategory('${newId}')" class="opacity-0 group-hover/cat:opacity-100 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded transition">
+                        削除
+                    </button>
+                </div>
+                <div class="flex flex-wrap gap-2.5 card-container" data-cat-id="${newId}">
+                    <!-- Cards sit here -->
+                </div>
+            `;
+            grid.appendChild(newCat);
+            syncCategoryPanel();
+        }
+
+        // Remove Category Block
+        function removeCategory(catId) {
+            const cat = document.querySelector(`[data-category-id="${catId}"]`);
+            if (cat) {
+                if (confirm('このカテゴリと中にある全カードを削除してもよろしいですか？')) {
+                    cat.remove();
+                    syncCategoryPanel();
+                }
+            }
+        }
+
+        // Injecting new Card to target container
+        function injectNewCard() {
+            const targetCatId = document.getElementById('card-target-category').value;
+            const cardType = document.getElementById('card-type-select').value;
+            const title = document.getElementById('new-card-title').value.trim() || '新タイトル';
+            const iconClass = document.getElementById('new-card-icon').value.trim() || 'fa-solid fa-link';
+            const color = document.getElementById('new-card-color').value;
+            const url = document.getElementById('new-card-url').value.trim() || '#';
+            const desc = document.getElementById('new-card-desc').value.trim() || '説明文を入力してください。';
+
+            if (!targetCatId && cardType === 'simple') {
+                alert('対象のカテゴリが存在しません。カテゴリを追加してからカードを追加してください。');
+                return;
+            }
+
+            const uniqueCardId = 'card-' + Date.now();
+
+            if (cardType === 'simple') {
+                const catContainer = document.querySelector(`[data-cat-id="${targetCatId}"]`);
+                if (catContainer) {
+                    const inlineDiv = document.createElement('div');
+                    inlineDiv.setAttribute('draggable', 'true');
+                    inlineDiv.setAttribute('ondragstart', 'drag(event)');
+                    inlineDiv.setAttribute('ondragover', 'allowDrop(event)');
+                    inlineDiv.setAttribute('ondrop', 'drop(event)');
+                    inlineDiv.className = "draggable-card inline-flex";
+                    inlineDiv.setAttribute('data-card-id', uniqueCardId);
+                    
+                    // Style matching other cards
+                    inlineDiv.innerHTML = `
+                        <a href="${url}" target="_blank" rel="noopener noreferrer" style="color: ${color}; border-color: ${color}60; background-color: ${color}10" class="px-3 py-2 text-xs font-mono border rounded-xl hover:text-black transition flex items-center gap-1.5 shadow-lg relative group/card">
+                            <i class="${iconClass}"></i> <span contenteditable="true" class="editable-field">${title}</span>
+                            <button onclick="deleteCard(event, '${uniqueCardId}')" class="absolute -top-2 -right-2 hidden group-hover/card:flex w-4 h-4 bg-red-600 text-white rounded-full items-center justify-center text-[8px] border border-white font-sans pointer-events-auto">×</button>
+                        </a>
+                    `;
+                    catContainer.appendChild(inlineDiv);
+                }
+            } else {
+                // Add to Gateways / Studio grids
+                const studioGrid = document.getElementById('dynamic-studio-grid');
+                const studioId = 'studio-' + Date.now();
+                const containerBg = document.getElementById('container-color-picker').value;
+
+                const cardHtml = document.createElement('div');
+                cardHtml.setAttribute('data-studio-id', studioId);
+                cardHtml.style.backgroundColor = `${containerBg}E6`;
+                cardHtml.className = "border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between relative group/studio";
+                cardHtml.innerHTML = `
+                    <button onclick="deleteStudioCard('${studioId}')" class="absolute top-2 right-2 hidden group-hover/studio:block text-xs bg-red-600/80 hover:bg-red-600 text-white px-2 py-0.5 rounded transition z-10">削除</button>
+                    <div class="space-y-4">
+                        <div class="flex items-start justify-between">
+                            <div class="relative h-12 w-12 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center" style="color: ${color}">
+                                <i id="icon-${studioId}" onclick="changeElementIcon('icon-${studioId}')" class="${iconClass} text-lg cursor-pointer"></i>
+                            </div>
+                            <span contenteditable="true" class="text-[10px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold editable-field" style="color: ${color}; background-color: ${color}15; border: 1px solid ${color}40">New Studio</span>
+                        </div>
+                        <div>
+                            <h4 contenteditable="true" class="font-bold text-white text-base editable-field">${title}</h4>
+                            <p contenteditable="true" class="text-slate-400 text-xs mt-2.5 leading-relaxed editable-field">${desc}</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 flex gap-2">
+                        <a href="${url}" target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-2 rounded-xl text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md" style="background-image: linear-gradient(to right, ${color}cc, #3b82f6)">
+                            <i class="fa-solid fa-compass"></i> ドラフトを閲覧
+                        </a>
+                    </div>
+                `;
+                studioGrid.appendChild(cardHtml);
+            }
+
+            // Reset Input title
+            document.getElementById('new-card-title').value = '';
+        }
+
+        // Drag and Drop Implementation
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.currentTarget.getAttribute('data-card-id'));
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.remove('drag-over');
+            
+            const draggedId = ev.dataTransfer.getData("text");
+            const draggedElement = document.querySelector(`[data-card-id="${draggedId}"]`);
+            const targetElement = ev.currentTarget;
+
+            if (draggedElement && targetElement && draggedElement !== targetElement) {
+                // Ensure nodes belong to the same parent before moving
+                if (draggedElement.parentNode === targetElement.parentNode) {
+                    const parent = targetElement.parentNode;
+                    const children = Array.from(parent.children);
+                    const draggedIndex = children.indexOf(draggedElement);
+                    const targetIndex = children.indexOf(targetElement);
+
+                    if (draggedIndex < targetIndex) {
+                        parent.insertBefore(draggedElement, targetElement.nextSibling);
+                    } else {
+                        parent.insertBefore(draggedElement, targetElement);
+                    }
+                }
+            }
+        }
+
+        // Card removal functions
+        function deleteCard(event, cardId) {
+            event.preventDefault();
+            event.stopPropagation();
+            const card = document.querySelector(`[data-card-id="${cardId}"]`);
+            if (card) {
+                card.remove();
+            }
+        }
+
+        function deleteStudioCard(studioId) {
+            const card = document.querySelector(`[data-studio-id="${studioId}"]`);
+            if (card) {
+                card.remove();
+            }
+        }
+
+        // Change Icons dynamically with modal popup selector
+        function changeElementIcon(id) {
+            currentTargetIconId = id;
+            const currentClass = document.getElementById(id).className;
+            document.getElementById('modal-icon-class').value = currentClass;
+            document.getElementById('icon-modal').classList.remove('hidden');
+        }
+
+        function selectModalIcon(className) {
+            document.getElementById('modal-icon-class').value = className;
+        }
+
+        function closeIconModal() {
+            document.getElementById('icon-modal').classList.add('hidden');
+        }
+
+        function applyIconModal() {
+            const val = document.getElementById('modal-icon-class').value.trim();
+            if (val && currentTargetIconId) {
+                const el = document.getElementById(currentTargetIconId);
+                if (el) {
+                    el.className = val;
+                }
+            }
+            closeIconModal();
+        }
+
+        // EXPORT PORTAL AS NEW HTML FILE
+        function exportHTML() {
+            // Retrieve values from form config
+            const headerHex = document.getElementById('header-color-picker').value;
+            const containerHex = document.getElementById('container-color-picker').value;
+            
+            // Build the static HTML clone structure
+            const rootClone = document.getElementById('inner-portal-root').cloneNode(true);
+
+            // Strip editor overlays, contenteditables, cursors & close icons from the exported file
+            rootClone.querySelectorAll('.editable-field').forEach(node => {
+                node.removeAttribute('contenteditable');
+                node.classList.remove('editable-field');
+            });
+            rootClone.querySelectorAll('button').forEach(node => {
+                if (node.innerText === '×' || node.innerText === '削除') {
+                    node.remove();
+                }
+            });
+            rootClone.querySelectorAll('.draggable-card').forEach(node => {
+                node.removeAttribute('draggable');
+                node.removeAttribute('ondragstart');
+                node.removeAttribute('ondragover');
+                node.removeAttribute('ondrop');
+                node.classList.remove('draggable-card');
+            });
+            rootClone.querySelectorAll('.cursor-pointer').forEach(node => {
+                node.classList.remove('cursor-pointer');
+            });
+
+            // Extract fully structured content
+            const portalInnerContentHtml = rootClone.innerHTML;
+
+            const finalDocument = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Hiro-KantaroとAI パートナー達のポータル</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyberDark: '#060a12',
+                        cyberCard: '${containerHex}',
+                        cyberBorder: '#1c2541',
+                        cyberAccent: '#00f5d4',
+                        cyberPurple: '#7b2cbf',
+                        cyberGold: '#ffb703',
+                    }
+                }
+            }
+        }
+    <\/script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a12; }
+        ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
+        .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
+
+        /* Rainbow Shifting Gradient Keyframes for PLIP Board */
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .text-rainbow {
+            background: linear-gradient(
+                to right, 
+                #ff2a85, #ff7300, #ffb703, #00f5d4, #3b82f6, #9d4edd, #ff2a85
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 8s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#060a12] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
+
+    <!-- ロック画面 -->
+    <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500">
+        <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7b2cbf]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+
+        <div class="relative w-full max-w-md bg-cyberCard border border-cyberBorder p-8 rounded-2xl shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 rounded-full bg-[#00f5d4]/10 border border-[#00f5d4]/20 text-[#00f5d4] animate-pulse">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold tracking-tight text-white font-mono uppercase">Hiro-Kantaro Portal AUTH</h2>
+                <p class="text-xs text-slate-400">認証キーを入力してゲートを開放してください。（ローカル起動時は自動で通過します）</p>
+            </div>
+
+            <form id="auth-form" class="space-y-4" onsubmit="handleAuth(event)">
+                <div class="relative">
+                    <input type="password" id="access-key" placeholder="認証キーを入力..." 
+                           class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-4 py-3 text-sm text-center font-mono tracking-widest text-white focus:outline-none focus:border-[#00f5d4] focus:ring-1 focus:ring-[#00f5d4]/20 transition">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full py-3 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black font-bold text-xs font-mono uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-[#00f5d4]/10">
+                    <i class="fa-solid fa-key mr-1"></i> Unlock Gateway
+                </button>
+            </form>
+
+            <div id="error-msg" class="text-xs text-red-400 font-mono hidden">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> 認証失敗: キーが一致しません。
+            </div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main-content" class="hidden opacity-0 transition-opacity duration-500 flex flex-col min-h-screen ${portalTheme === 'silver' ? 'bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0]' : 'bg-cyberDark'}">
+        ${portalInnerContentHtml}
+    </div>
+
+    <script>
+        const secureKey = "Z2Vtcw==";
+
+        const lockScreen = document.getElementById('lock-screen');
+        const mainContent = document.getElementById('main-content');
+        const errorMsg = document.getElementById('error-msg');
+        const accessKeyInput = document.getElementById('access-key');
+
+        window.addEventListener('DOMContentLoaded', () => {
+            unlockHubInstant();
+            if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
+                unlockHubInstant();
+            }
+        });
+
+        function handleAuth(event) {
+            event.preventDefault();
+            if (btoa(accessKeyInput.value) === secureKey) {
+                sessionStorage.setItem('partner_hub_unlocked', 'true');
+                errorMsg.classList.add('hidden');
+                lockScreen.classList.add('opacity-0', 'pointer-events-none');
+                mainContent.classList.remove('hidden');
+                setTimeout(() => { mainContent.classList.add('opacity-100'); }, 50);
+            } else {
+                errorMsg.classList.remove('hidden');
+                accessKeyInput.value = '';
+                accessKeyInput.focus();
+                const card = lockScreen.querySelector('.relative');
+                card.classList.add('animate-bounce');
+                setTimeout(() => card.classList.remove('animate-bounce'), 1000);
+            }
+        }
+
+        function unlockHubInstant() {
+            lockScreen.style.display = 'none';
+            mainContent.classList.remove('hidden');
+            mainContent.classList.add('opacity-100');
+        }
+
+        function lockHub() {
+            sessionStorage.removeItem('partner_hub_unlocked');
+            window.location.reload();
+        }
+
+        const memoArea = document.getElementById('partner-memo');
+        if (localStorage.getItem('gemini_partner_memo')) {
+            memoArea.value = localStorage.getItem('gemini_partner_memo');
+        }
+        memoArea.addEventListener('input', () => {
+            localStorage.setItem('gemini_partner_memo', memoArea.value);
+        });
+    <\/script>
+</body>
+</html>`;
+
+            // Download trigger block
+            const blob = new Blob([finalDocument], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "index.html";
+            link.click();
+        }
+    </script>
+</body>
+</html>
