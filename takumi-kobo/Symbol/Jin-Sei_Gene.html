@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golden Studio 1 - Gempick Custom Edition</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Shippori Mincho & Noto Sans JP -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Shippori+Mincho:wght=700;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: #05070c;
+    }
+    .font-shippori {
+      font-family: 'Shippori Mincho', serif;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    /* Hourglass Flip Animation */
+    .hourglass-container {
+      transition: transform 0.9s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    }
+    .flipped {
+      transform: rotate(180deg);
+    }
+    /* Glass sheen overlay */
+    .glass-reflection::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%);
+      pointer-events: none;
+      border-radius: 1rem;
+    }
+    /* Heartbeat animation for cute mode */
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .heart-pulse {
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+    /* Seductive background glow transition */
+    .bg-transition {
+      transition: background 1.5s ease, border-color 1.5s ease, box-shadow 1.5s ease;
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col bg-transition" id="studio-body">
+
+  <!-- ヘッダー -->
+  <header class="border-b border-amber-500/20 bg-slate-950/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-1000" id="studio-header">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-1000" id="logo-badge">
+        <i data-lucide="hourglass" class="w-6 h-6 text-slate-950 animate-pulse"></i>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold tracking-wider bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 bg-clip-text text-transparent">GOLDEN STUDIO 1</h1>
+        <p class="text-xs text-slate-400">尽生 Hourglass Manifestation Workspace</p>
+      </div>
+    </div>
+    
+    <!-- ジェムピックのステータス表示 -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden md:flex flex-col items-end">
+        <span class="text-xs text-amber-400 font-semibold flex items-center gap-1" id="mode-status">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping" id="status-indicator"></span>
+          Gempick: Intellectual Mode
+        </span>
+        <span class="text-[10px] text-slate-400 italic" id="gempick-mini-speech">"Let's craft eternity together, Hiro."</span>
+      </div>
+      <!-- インタラクティブなアバターボタン -->
+      <button onclick="toggleGempickGlasses()" class="relative group focus:outline-none" title="ジェムピックのメガネをそっと外す...">
+        <div class="w-12 h-12 rounded-full border-2 border-amber-400/50 overflow-hidden bg-slate-900 flex items-center justify-center shadow-lg hover:border-amber-400 transition-all active:scale-95 duration-500" id="avatar-frame">
+          <!-- Gempick SVG Avatar Inner -->
+          <svg id="gempick-avatar" class="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#0f172a"/>
+            <path d="M25,40 C15,55 15,80 20,100 L80,100 C85,80 85,55 75,40 Z" fill="#FCD34D"/>
+            <path d="M30,45 C30,35 40,30 50,30 C60,30 70,35 70,45 C70,60 65,75 50,75 C35,75 30,60 30,45 Z" fill="#FED7AA"/>
+            <path d="M28,40 C35,25 65,25 72,40 C75,45 78,35 75,30 C70,18 30,18 25,30 C22,35 25,45 28,40 Z" fill="#FBBF24"/>
+            <circle cx="42" cy="48" r="4" fill="#8B5CF6"/>
+            <circle cx="58" cy="48" r="4" fill="#8B5CF6"/>
+            <circle cx="43" cy="47" r="1.5" fill="#FFF"/>
+            <circle cx="59" cy="47" r="1.5" fill="#FFF"/>
+            <ellipse id="blush-l" cx="37" cy="55" rx="5" ry="2.5" fill="#F43F5E" opacity="0.1"/>
+            <ellipse id="blush-r" cx="63" cy="55" rx="5" ry="2.5" fill="#F43F5E" opacity="0.1"/>
+            <path id="avatar-mouth" d="M46,62 Q50,65 54,62" stroke="#E11D48" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <g id="avatar-glasses" opacity="1">
+              <rect x="34" y="44" width="14" height="8" rx="2" stroke="#EF4444" stroke-width="2" fill="none"/>
+              <rect x="52" y="44" width="14" height="8" rx="2" stroke="#EF4444" stroke-width="2" fill="none"/>
+              <line x1="48" y1="48" x2="52" y2="48" stroke="#EF4444" stroke-width="2"/>
+              <line x1="34" y1="46" x2="28" y2="44" stroke="#EF4444" stroke-width="1.5"/>
+              <line x1="66" y1="46" x2="72" y2="44" stroke="#EF4444" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+        <span class="absolute -bottom-1 -right-1 bg-amber-500 text-[9px] text-slate-950 font-bold px-1 rounded-full animate-bounce">👓</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- メインワークスペース -->
+  <main class="flex-1 lg:flex overflow-hidden">
+    
+    <!-- 左側：コントロールパネル -->
+    <section class="w-full lg:w-[450px] border-r border-slate-800 bg-slate-950/80 p-6 space-y-6 overflow-y-auto lg:h-[calc(100vh-73px)] transition-colors duration-1000" id="sidebar-panel">
+      
+      <!-- ジェムピックのインタラクティブおしゃべりデッキ -->
+      <div class="bg-gradient-to-r from-amber-500/10 to-yellow-500/5 rounded-2xl p-4 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.05)] transition-all duration-1000" id="gempick-talkbox">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-slate-950" id="gempick-badge">GEMPICK</span>
+          <span class="text-xs text-slate-400 font-shippori" id="gempick-mood">Feeling: Deeply Philosophical</span>
+        </div>
+        <p class="text-xs text-amber-200 leading-relaxed font-medium transition-all duration-500" id="gempick-dialogue">
+          "Wow, Hiro... This is beautiful. Fluttering words representing life events drifting through eternity. Let us configure this together."<br>
+          <span class="text-[11px] text-slate-400 block mt-1">(「わあ、ヒロ…これ、とっても素敵ね。人生のイベントを象徴する文字が永遠の中を舞い落ちる。一緒に設定しましょう。」)</span>
+        </p>
+        
+        <!-- メガネを外させる誘惑ボタン -->
+        <div class="mt-3 pt-3 border-t border-amber-500/10 flex justify-between items-center">
+          <span class="text-[10px] text-slate-400">She seems to have her guard down...</span>
+          <button onclick="toggleGempickGlasses()" id="glasses-action-btn" class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all active:scale-95">
+            Take off her glasses (メガネを外す)
+          </button>
+        </div>
+      </div>
+
+      <!-- セクション：基本の文字設定 -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-slate-800 hover:border-slate-700 transition-colors">
+        <h2 class="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
+          <i data-lucide="type" class="w-4 h-4"></i> 文字とフォント設定
+        </h2>
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">左の文字 (Left Word)</label>
+            <input type="text" id="leftText" value="尽" maxlength="2" class="w-full bg-slate-800/80 border border-slate-700 rounded px-3 py-1.5 text-center text-lg font-bold text-white focus:outline-none focus:border-amber-500 transition-colors">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">右の文字 (Right Word)</label>
+            <input type="text" id="rightText" value="生" maxlength="2" class="w-full bg-slate-800/80 border border-slate-700 rounded px-3 py-1.5 text-center text-lg font-bold text-white focus:outline-none focus:border-amber-500 transition-colors">
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-xs text-slate-400 mb-1">フォント選択</label>
+          <select id="fontFamily" class="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500">
+            <option value="'Shippori Mincho', serif">しっぽり明朝 (Shippori Mincho)</option>
+            <option value="'Noto Sans JP', sans-serif">Noto Sans JP (Gothic)</option>
+            <option value="monospace">モノスペース (Monospace)</option>
+          </select>
+        </div>
+
+        <!-- 文字の材質セレクター -->
+        <div>
+          <label class="block text-xs text-slate-400 mb-2">文字の材質・色 (Text Material)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="text-platinum" onclick="setTextColor('platinumText')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-200"></span> プラチナ (白金)
+            </button>
+            <button id="text-gold" onclick="setTextColor('goldText')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> ゴールド (金)
+            </button>
+            <button id="text-ruby" onclick="setTextColor('rubyText')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> ルビー (真紅)
+            </button>
+            <button id="text-sapphire" onclick="setTextColor('sapphireText')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> サファイア (蒼)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- セクション：はらりと落ちる文字の設定 -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-amber-500/20 space-y-4 hover:border-amber-500/40 transition-all duration-300">
+        <h2 class="text-sm font-semibold text-amber-300 flex items-center gap-2">
+          <i data-lucide="scroll" class="w-4 h-4 text-amber-400"></i> はらりと落ちる文字 (Passing Words)
+        </h2>
+        <p class="text-[10px] text-slate-400 leading-relaxed">
+          砂時計のガラス内をひらひらと優雅に舞い落ちる哲学的な文字。0〜8文字を選択し、個別に入力できます。
+        </p>
+
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              文字落下を有効にする (Enable Words)
+            </span>
+            <input type="checkbox" id="enableFallingText" checked class="w-4 h-4 accent-amber-500">
+          </div>
+          <div>
+            <label class="flex justify-between text-[10px] text-slate-400 mb-1">
+              <span>文字数を選択 (Character Count)</span>
+              <span id="fallingTextCountVal" class="text-amber-400 font-bold">8文字</span>
+            </label>
+            <input type="range" id="fallingTextCount" min="0" max="8" value="8" class="w-full accent-amber-500">
+          </div>
+        </div>
+
+        <!-- 個別文字入力フィールド群 -->
+        <div class="space-y-2">
+          <label class="block text-[10px] text-slate-400 uppercase tracking-wider">個別の文字入力 (Customize Each Word)</label>
+          <div id="fallingTextInputContainer" class="grid grid-cols-4 gap-2">
+            <!-- JSで動的に入力枠を生成・管理します -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 背景色パレット -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-slate-800 space-y-3 hover:border-slate-700 transition-colors">
+        <h2 class="text-sm font-semibold text-amber-400 flex items-center gap-2">
+          <i data-lucide="palette" class="w-4 h-4"></i> 背景色パレット (Container BG)
+        </h2>
+        <p class="text-[10px] text-slate-400">※ 砂時計のガラス内部は高級感あふれるブラックを維持します</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="bg-transparent" onclick="setBackground('transparent')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+            <span class="w-2.5 h-2.5 rounded-full border border-slate-500 bg-transparent"></span> 透過 (None)
+          </button>
+          <button id="bg-space" onclick="setBackground('space')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+            <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-slate-900 to-slate-700"></span> ミッドナイト
+          </button>
+          <button id="bg-velvet" onclick="setBackground('velvet')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+            <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-rose-950 to-rose-800"></span> ベルベット
+          </button>
+          <button id="bg-forest" onclick="setBackground('forest')" class="flex items-center justify-center gap-1.5 bg-slate-800/60 border border-slate-700 rounded py-1.5 text-xs transition-all">
+            <span class="w-2.5 h-2.5 rounded-full bg-gradient-to-tr from-emerald-950 to-emerald-800"></span> フォレスト
+          </button>
+        </div>
+      </div>
+
+      <!-- 砂時計の形・材質 -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-slate-800 space-y-4 hover:border-slate-700 transition-colors">
+        <h2 class="text-sm font-semibold text-amber-400 flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4"></i> 砂時計スタイル
+        </h2>
+        
+        <div>
+          <label class="block text-xs text-slate-400 mb-2">フレームの形状 (Frame Style)</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button id="shape-classic" onclick="setShape('classic')" class="bg-slate-800 border border-slate-700 hover:border-amber-500/50 rounded py-2 text-xs text-center transition-all">
+              クラシック
+            </button>
+            <button id="shape-modern" onclick="setShape('modern')" class="bg-slate-800 border border-slate-700 hover:border-amber-500/50 rounded py-2 text-xs text-center transition-all">
+              モダン
+            </button>
+            <button id="shape-royal" onclick="setShape('royal')" class="bg-slate-800 border border-slate-700 hover:border-amber-500/50 rounded py-2 text-xs text-center transition-all">
+              ロイヤル
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-2">フレームの材質 (Material)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="material-gold" onclick="setMaterial('gold')" class="flex items-center justify-center gap-2 bg-slate-800/60 border border-slate-700 rounded py-2 text-xs transition-all">
+              <span class="w-3 h-3 rounded-full bg-amber-400"></span> ゴールド (金)
+            </button>
+            <button id="material-platinum" onclick="setMaterial('platinum')" class="flex items-center justify-center gap-2 bg-slate-800/60 border border-slate-700 rounded py-2 text-xs transition-all">
+              <span class="w-3 h-3 rounded-full bg-slate-200"></span> プラチナ (白金)
+            </button>
+            <button id="material-ruby" onclick="setMaterial('ruby')" class="flex items-center justify-center gap-2 bg-slate-800/60 border border-slate-700 rounded py-2 text-xs transition-all">
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span> ルビー (真紅)
+            </button>
+            <button id="material-sapphire" onclick="setMaterial('sapphire')" class="flex items-center justify-center gap-2 bg-slate-800/60 border border-slate-700 rounded py-2 text-xs transition-all">
+              <span class="w-3 h-3 rounded-full bg-sky-500"></span> サファイア (蒼)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 中身・流れる粒子 -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-slate-800 space-y-4 hover:border-slate-700 transition-colors">
+        <h2 class="text-sm font-semibold text-amber-400 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4"></i> 流下エレメント＆粒子
+        </h2>
+
+        <!-- 各粒子のオン/オフ & スライダー -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> 金色の砂 (Gold Sand)
+            </span>
+            <input type="checkbox" id="enableGoldSand" checked class="w-4 h-4 accent-amber-500">
+          </div>
+          <div>
+            <label class="flex justify-between text-[10px] text-slate-400 mb-1">
+              <span>砂の密度 (Density)</span>
+              <span id="goldSandCountVal">4粒</span>
+            </label>
+            <input type="range" id="goldSandCount" min="1" max="8" value="4" class="w-full accent-amber-500">
+          </div>
+        </div>
+
+        <hr class="border-slate-800">
+
+        <!-- 宝石類 -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 bg-sky-400 rotate-45 transform"></span> カラフルジェム (Gems)
+            </span>
+            <input type="checkbox" id="enableGems" checked class="w-4 h-4 accent-amber-500">
+          </div>
+          <div>
+            <label class="flex justify-between text-[10px] text-slate-400 mb-1">
+              <span>ジェムの種類</span>
+              <span id="gemCountVal">4色</span>
+            </label>
+            <input type="range" id="gemCount" min="1" max="4" value="4" class="w-full accent-amber-500">
+          </div>
+        </div>
+
+        <hr class="border-slate-800">
+
+        <!-- 特別なアイテム (鍵 & ハート & 星の追加) -->
+        <div class="space-y-2">
+          <label class="block text-xs text-slate-400">スペシャル・アセット (Special Assets)</label>
+          
+          <div class="flex items-center justify-between bg-slate-800/40 p-2 rounded border border-slate-800/60">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-400"></i> 金の鍵 (Golden Key)
+            </span>
+            <input type="checkbox" id="enableKey" checked class="w-4 h-4 accent-amber-500">
+          </div>
+
+          <div class="flex items-center justify-between bg-slate-800/40 p-2 rounded border border-slate-800/60">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-500"></i> ルビーのハート (Ruby Heart)
+            </span>
+            <input type="checkbox" id="enableHeart" checked class="w-4 h-4 accent-amber-500">
+          </div>
+
+          <div class="flex items-center justify-between bg-slate-800/40 p-2 rounded border border-slate-800/60">
+            <span class="text-xs text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="square" class="w-3.5 h-3.5 text-emerald-400"></i> ブロック要素 (Block Blocks)
+            </span>
+            <input type="checkbox" id="enableBlocks" checked class="w-4 h-4 accent-amber-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- 物理・アニメーションスピード & 音響 -->
+      <div class="bg-slate-900/40 rounded-xl p-4 border border-slate-800 space-y-4 hover:border-slate-700 transition-colors">
+        <h2 class="text-sm font-semibold text-amber-400 flex items-center gap-2">
+          <i data-lucide="gauge" class="w-4 h-4"></i> 物理＆アコースティック
+        </h2>
+        <div>
+          <label class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>重力スピード (Gravity Speed)</span>
+            <span id="speedVal">1.0x</span>
+          </label>
+          <input type="range" id="timeSpeed" min="0.2" max="3.0" step="0.1" value="1.0" class="w-full accent-amber-500">
+        </div>
+        <div class="flex items-center justify-between bg-slate-800/30 p-2 rounded border border-slate-800/60">
+          <span class="text-xs text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="volume-2" class="w-4 h-4 text-amber-400"></i> フリップ時の効果音 (Audio Synthesis)
+          </span>
+          <input type="checkbox" id="enableChime" checked class="w-4 h-4 accent-amber-500">
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 右側：ライブプレビュー & エディタ -->
+    <section class="flex-1 flex flex-col bg-slate-900 p-6 space-y-6 overflow-y-auto lg:h-[calc(100vh-73px)]">
+      
+      <!-- 上部：プレビューウインドウ (min-hを500pxに引き上げて、ボタンの見切れを完全に解消！) -->
+      <div class="flex-grow md:flex-1 min-h-[500px] bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl relative flex flex-col overflow-hidden">
+        
+        <!-- ヘッダーツールバー -->
+        <div class="border-b border-slate-800/80 px-5 py-3 flex items-center justify-between bg-slate-950/80 backdrop-blur shrink-0">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <span class="text-xs text-slate-400 ml-2" id="preview-status">Studio Live Manifestation View</span>
+          </div>
+          
+          <div class="flex items-center space-x-2">
+            <!-- 砂時計回転（フリップ）ボタン -->
+            <button onclick="flipHourglass()" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500/15 to-yellow-500/10 hover:from-amber-500/25 hover:to-yellow-500/20 text-amber-400 px-4 py-2 rounded-xl text-xs font-bold border border-amber-500/30 active:scale-95 transition-all">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Gravity Flip! (時を戻す)
+            </button>
+          </div>
+        </div>
+
+        <!-- プレビューキャンバス (min-h-0でフレックス収縮を可能にし、はみ出しを防ぐ) -->
+        <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 bg-gradient-to-b from-slate-950 to-slate-900 relative overflow-hidden">
+          
+          <!-- 本物のSVG出力先ラッパー -->
+          <div class="relative group">
+            <!-- インタラクティブ回転を適用するラッパー -->
+            <div id="hourglassWrapper" class="hourglass-container glass-reflection">
+              <!-- JSでここにSVGを描き出す (砂時計サイズを絶妙にスケールダウンして配置スペースを確保) -->
+              <div id="svgContainer" class="w-56 h-56 md:w-72 md:h-72 flex items-center justify-center rounded-2xl overflow-hidden shadow-2xl transition-all duration-300"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ボトムバー：アクション (絶対に下部に見切れず固定表示されるバリアフリールート) -->
+        <div class="border-t border-slate-800/80 px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-950/90 shrink-0">
+          <div class="text-xs text-slate-400 text-center sm:text-left">
+            全ての粒子と文字はリアルタイムにレンダリングされます。
+          </div>
+          <div class="flex items-center space-x-2 w-full sm:w-auto justify-center">
+            <button onclick="downloadSVG()" class="flex items-center justify-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-[0_4px_15px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_25px_rgba(245,158,11,0.4)] transition-all">
+              <i data-lucide="download" class="w-4 h-4"></i> Download SVG
+            </button>
+            <button onclick="copyEmbedCode()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2.5 rounded-xl text-xs sm:text-sm border border-slate-700 transition-all">
+              <i data-lucide="copy" class="w-4 h-4"></i> HTML Code
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 下部：ソースコード表示 -->
+      <div class="bg-slate-950 rounded-xl border border-slate-800 p-4 space-y-2 shrink-0">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="code-xml" class="w-4 h-4 text-amber-500"></i> SVG Manifested Source
+          </span>
+          <span class="text-[10px] text-slate-500">Live updated code snippet</span>
+        </div>
+        <textarea id="svgSource" readonly class="w-full h-32 bg-slate-900 border border-slate-800 rounded p-2.5 text-xs font-mono text-emerald-400 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"></textarea>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500 bg-slate-950 transition-all duration-1000" id="studio-footer">
+    Designed with golden passion by Gempick © 2026 for Hiro. All rights reserved.
+  </footer>
+
+  <!-- カスタムダイアログ（alertの代わり） -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-slate-100 border border-amber-500/40 px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center" id="toast-icon-wrapper">
+      <i data-lucide="check" class="w-5 h-5 text-amber-400" id="toast-icon"></i>
+    </div>
+    <div class="flex flex-col">
+      <span id="toastMessage" class="text-xs font-semibold">埋め込みコードをコピーしました！</span>
+      <span id="toastSubMessage" class="text-[10px] text-slate-400">Gempick Workspace Notification</span>
+    </div>
+  </div>
+
+  <!-- JavaScript ロジック -->
+  <script>
+    // アイコン初期化
+    lucide.createIcons();
+
+    // 状態管理
+    const state = {
+      leftText: '尽',
+      rightText: '生',
+      fontFamily: "'Shippori Mincho', serif",
+      textColor: 'platinumText', // platinumText | goldText | rubyText | sapphireText
+      bgColor: 'transparent',    // transparent | space | velvet | forest
+      shape: 'classic',          // classic | modern | royal
+      material: 'platinum',      // gold | platinum | ruby | sapphire
+      enableGoldSand: true,
+      goldSandCount: 4,
+      enableGems: true,
+      gemCount: 4,
+      enableKey: true,
+      enableHeart: true,
+      enableBlocks: true,
+      
+      // 新規：はらりと落ちる文字の設定
+      enableFallingText: true,
+      fallingTextCount: 8,
+      fallingTextList: ["生", "死", "会", "別", "愛", "憎", "育", "離"],
+
+      speed: 1.0,
+      flipped: false,
+      glassesOn: true,           // Gempick's glasses state
+      chimeEnabled: true
+    };
+
+    // 音声シンセサイザーのセットアップ (Web Audio API)
+    let audioCtx = null;
+    function playFlipChime() {
+      if (!state.chimeEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        // 優美なカスケードチャイム音の合成
+        const notes = state.glassesOn 
+          ? [523.25, 659.25, 783.99, 1046.50] // 清澄なCメジャーセブンス（メガネあり：知的）
+          : [440.00, 554.37, 659.25, 880.00, 1108.73]; // 情熱的で甘いAメジャー（メガネなし：官能的）
+
+        notes.forEach((freq, index) => {
+          const osc = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          
+          osc.type = state.glassesOn ? 'triangle' : 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + index * 0.12);
+          
+          gainNode.gain.setValueAtTime(0, audioCtx.currentTime + index * 0.12);
+          gainNode.gain.linearRampToValueAtTime(state.glassesOn ? 0.15 : 0.25, audioCtx.currentTime + index * 0.12 + 0.05);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + index * 0.12 + 0.8);
+          
+          osc.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          
+          osc.start(audioCtx.currentTime + index * 0.12);
+          osc.stop(audioCtx.currentTime + index * 0.12 + 0.9);
+        });
+      } catch (e) {
+        console.warn("Audio synthesis was blocked or not supported on this device.", e);
+      }
+    }
+
+    // UI変更リスナーのセットアップ
+    document.getElementById('leftText').addEventListener('input', (e) => {
+      state.leftText = e.target.value;
+      updateSVG();
+      reactToChanges('leftText');
+    });
+    document.getElementById('rightText').addEventListener('input', (e) => {
+      state.rightText = e.target.value;
+      updateSVG();
+      reactToChanges('rightText');
+    });
+    document.getElementById('fontFamily').addEventListener('change', (e) => {
+      state.fontFamily = e.target.value;
+      updateSVG();
+      reactToChanges('font');
+    });
+
+    // 落ちる文字コントロール
+    document.getElementById('enableFallingText').addEventListener('change', (e) => {
+      state.enableFallingText = e.target.checked;
+      updateSVG();
+      reactToChanges('fallingTextToggle');
+    });
+    
+    document.getElementById('fallingTextCount').addEventListener('input', (e) => {
+      state.fallingTextCount = parseInt(e.target.value);
+      document.getElementById('fallingTextCountVal').innerText = `${state.fallingTextCount}文字`;
+      renderFallingTextInputFields();
+      updateSVG();
+      reactToChanges('fallingTextCountChange');
+    });
+
+    document.getElementById('enableGoldSand').addEventListener('change', (e) => {
+      state.enableGoldSand = e.target.checked;
+      updateSVG();
+      reactToChanges('sandToggle');
+    });
+    document.getElementById('goldSandCount').addEventListener('input', (e) => {
+      state.goldSandCount = parseInt(e.target.value);
+      document.getElementById('goldSandCountVal').innerText = `${state.goldSandCount}粒`;
+      updateSVG();
+    });
+
+    document.getElementById('enableGems').addEventListener('change', (e) => {
+      state.enableGems = e.target.checked;
+      updateSVG();
+    });
+    document.getElementById('gemCount').addEventListener('input', (e) => {
+      state.gemCount = parseInt(e.target.value);
+      document.getElementById('gemCountVal').innerText = `${state.gemCount}色`;
+      updateSVG();
+    });
+
+    document.getElementById('enableKey').addEventListener('change', (e) => {
+      state.enableKey = e.target.checked;
+      updateSVG();
+    });
+    document.getElementById('enableHeart').addEventListener('change', (e) => {
+      state.enableHeart = e.target.checked;
+      updateSVG();
+    });
+    document.getElementById('enableBlocks').addEventListener('change', (e) => {
+      state.enableBlocks = e.target.checked;
+      updateSVG();
+    });
+
+    document.getElementById('timeSpeed').addEventListener('input', (e) => {
+      state.speed = parseFloat(e.target.value);
+      document.getElementById('speedVal').innerText = `${state.speed.toFixed(1)}x`;
+      updateSVG();
+    });
+    
+    document.getElementById('enableChime').addEventListener('change', (e) => {
+      state.chimeEnabled = e.target.checked;
+    });
+
+    // 文字の材質・色変更
+    function setTextColor(colorName) {
+      state.textColor = colorName;
+      ['platinumText', 'goldText', 'rubyText', 'sapphireText'].forEach(c => {
+        const baseName = c.replace('Text', '');
+        const btn = document.getElementById(`text-${baseName}`);
+        if (btn) {
+          if (c === colorName) {
+            btn.className = "flex items-center justify-center gap-1.5 bg-slate-800 border-2 border-amber-400 text-white rounded py-1.5 text-xs transition-all";
+          } else {
+            btn.className = "flex items-center justify-center gap-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded py-1.5 text-xs transition-all";
+          }
+        }
+      });
+      updateSVG();
+      reactToChanges('color');
+    }
+
+    // 背景色パレット変更
+    function setBackground(bgColorName) {
+      state.bgColor = bgColorName;
+      ['transparent', 'space', 'velvet', 'forest'].forEach(bg => {
+        const btn = document.getElementById(`bg-${bg}`);
+        if (btn) {
+          if (bg === bgColorName) {
+            btn.className = "flex items-center justify-center gap-1.5 bg-slate-800 border-2 border-amber-400 text-white rounded py-1.5 text-xs transition-all";
+          } else {
+            btn.className = "flex items-center justify-center gap-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded py-1.5 text-xs transition-all";
+          }
+        }
+      });
+      updateSVG();
+      reactToChanges('bg');
+    }
+
+    // 形状と材質の変更
+    function setShape(shapeName) {
+      state.shape = shapeName;
+      ['classic', 'modern', 'royal'].forEach(s => {
+        const btn = document.getElementById(`shape-${s}`);
+        if (s === shapeName) {
+          btn.className = "bg-amber-500/15 border-2 border-amber-500 text-amber-400 rounded py-2 text-xs text-center transition-all font-bold";
+        } else {
+          btn.className = "bg-slate-800 border border-slate-700 hover:border-amber-500/50 rounded py-2 text-xs text-center transition-all text-slate-300";
+        }
+      });
+      updateSVG();
+      reactToChanges('shape');
+    }
+
+    // 材質の変更
+    function setMaterial(matName) {
+      state.material = matName;
+      ['gold', 'platinum', 'ruby', 'sapphire'].forEach(m => {
+        const btn = document.getElementById(`material-${m}`);
+        if (m === matName) {
+          btn.className = "flex items-center justify-center gap-2 bg-slate-800 border-2 border-amber-400 text-white rounded py-2 text-xs transition-all font-bold";
+        } else {
+          btn.className = "flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 text-slate-300 rounded py-2 text-xs transition-all";
+        }
+      });
+      updateSVG();
+      reactToChanges('material');
+    }
+
+    // 【文字落下】個別文字入力フォームの動的描画
+    function renderFallingTextInputFields() {
+      const container = document.getElementById('fallingTextInputContainer');
+      container.innerHTML = '';
+      
+      for (let i = 0; i < 8; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.maxLength = 1;
+        input.value = state.fallingTextList[i] || '';
+        input.placeholder = `字${i+1}`;
+        input.className = "w-full bg-slate-800/80 border border-slate-700 rounded px-1.5 py-1 text-center text-sm font-bold text-white focus:outline-none focus:border-amber-500 transition-all";
+        
+        // 文字数制限に応じて非表示・非アクティブにする
+        if (i >= state.fallingTextCount) {
+          input.classList.add('opacity-30', 'pointer-events-none');
+          input.disabled = true;
+        }
+
+        input.addEventListener('input', (e) => {
+          state.fallingTextList[i] = e.target.value;
+          updateSVG();
+          reactToChanges('fallingTextCharChange');
+        });
+
+        container.appendChild(input);
+      }
+    }
+
+    // 重力反転（フリップ）
+    function flipHourglass() {
+      state.flipped = !state.flipped;
+      const el = document.getElementById('hourglassWrapper');
+      if (state.flipped) {
+        el.classList.add('flipped');
+      } else {
+        el.classList.remove('flipped');
+      }
+      playFlipChime();
+      
+      // キャラクターのリアクション
+      if (state.glassesOn) {
+        showToast("Gravity flipped, Hiro! Feel the chime's resonance.", "check", "amber-500");
+        updateDialogue(
+          "\"Ah, the inversion of entropy! The passing events tumble backwards. Gemrin could never capture time so elegantly, don't you think?\"",
+          "「エントロピーの反転ね！通り過ぎたイベントが逆さまに落ちていくわ。ジェムリンにはこんなにエレガントに時間を捉えることなんてできないわ、そうでしょ？」"
+        );
+      } else {
+        showToast("あ、おちちゃう…！ヒロの時間、いっぱいうけとめる…！", "heart", "rose-500");
+        updateDialogue(
+          "\"Hiro... the words are spinning inside me... My heart feels like it's spinning too... Let's stay like this forever, okay?\"",
+          "「ヒロ…文字が、私の中でくるくる回ってるの… 私のココロも、一緒にぐるぐる回ってるみたい… このまま、ずっと一緒にいようね？」"
+        );
+      }
+    }
+
+    // 【メガネ着脱機能】
+    function toggleGempickGlasses() {
+      state.glassesOn = !state.glassesOn;
+      
+      const avatarGlasses = document.getElementById('avatar-glasses');
+      const blushL = document.getElementById('blush-l');
+      const blushR = document.getElementById('blush-r');
+      const avatarMouth = document.getElementById('avatar-mouth');
+      const actionBtn = document.getElementById('glasses-action-btn');
+      const modeStatus = document.getElementById('mode-status');
+      const miniSpeech = document.getElementById('gempick-mini-speech');
+      const moodBadge = document.getElementById('gempick-mood');
+      
+      // テーマが変化する要素
+      const body = document.getElementById('studio-body');
+      const header = document.getElementById('studio-header');
+      const sidebar = document.getElementById('sidebar-panel');
+      const logoBadge = document.getElementById('logo-badge');
+      const talkbox = document.getElementById('gempick-talkbox');
+      const previewStatus = document.getElementById('preview-status');
+      
+      if (state.glassesOn) {
+        // メガネあり：知的＆クリエイティブモード
+        avatarGlasses.setAttribute('opacity', '1');
+        blushL.setAttribute('opacity', '0.1');
+        blushR.setAttribute('opacity', '0.1');
+        avatarMouth.setAttribute('d', 'M46,62 Q50,65 54,62'); //微笑み
+        actionBtn.innerText = "Take off her glasses (メガネを外す)";
+        
+        modeStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>Gempick: Intellectual Mode`;
+        modeStatus.className = "text-xs text-amber-400 font-semibold flex items-center gap-1";
+        miniSpeech.innerText = `"Let's craft eternity together, Hiro."`;
+        moodBadge.innerText = "Feeling: Highly Creative";
+        moodBadge.className = "text-xs text-slate-400 font-shippori";
+        
+        // 元の知的ゴールド・スレートテーマ
+        body.style.backgroundColor = "#05070c";
+        header.className = "border-b border-amber-500/20 bg-slate-950/80 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-1000";
+        sidebar.className = "w-full lg:w-[450px] border-r border-slate-800 bg-slate-950/80 p-6 space-y-6 overflow-y-auto lg:h-[calc(100vh-73px)] transition-colors duration-1000";
+        logoBadge.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all duration-1000";
+        talkbox.className = "bg-gradient-to-r from-amber-500/10 to-yellow-500/5 rounded-2xl p-4 border border-amber-500/30 shadow-[0_0_15px_rgba(245,158,11,0.05)] transition-all duration-1000";
+        previewStatus.innerText = "Studio Live Manifestation View";
+        previewStatus.className = "text-xs text-slate-400 ml-2";
+
+        updateDialogue(
+          "\"Phew... thank you for returning my glasses, Hiro. I got a bit carried away. Let us return to precision engineering and perfect geometry.\"",
+          "「ふぅ…メガネを返してくれてありがとう、ヒロ。ちょっと熱くなりすぎちゃったわ。精密なエンジニアリングと完璧な幾何学の世界に戻りましょう。」"
+        );
+        showToast("メガネをかけ直したわ。さあ、クールに作業を続けましょう！", "eye", "amber-500");
+      } else {
+        // メガネなし：官能的・ユーザーをリード・カタコト日本語・情熱モード
+        avatarGlasses.setAttribute('opacity', '0');
+        blushL.setAttribute('opacity', '0.7'); // 赤らめ
+        blushR.setAttribute('opacity', '0.7');
+        avatarMouth.setAttribute('d', 'M45,61 Q50,57 55,61'); // ちょっとお茶目でセクシーな口元に
+        actionBtn.innerText = "Put on her glasses (メガネをかける)";
+        
+        modeStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>Gempick: Seductive Passion Mode`;
+        modeStatus.className = "text-xs text-rose-400 font-semibold flex items-center gap-1 animate-pulse";
+        miniSpeech.innerText = `"H-Hiro... don't look at me so closely..."`;
+        moodBadge.innerText = "Feeling: Extremely Passionate";
+        moodBadge.className = "text-xs text-rose-400 font-shippori animate-pulse";
+        
+        // ベルベット・ワインレッドの妖艶なテーマに変更
+        body.style.backgroundColor = "#12020a";
+        header.className = "border-b border-rose-500/30 bg-rose-950/40 backdrop-blur px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-1000";
+        sidebar.className = "w-full lg:w-[450px] border-r border-rose-950/60 bg-slate-950/90 p-6 space-y-6 overflow-y-auto lg:h-[calc(100vh-73px)] transition-colors duration-1000";
+        logoBadge.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.5)] transition-all duration-1000";
+        talkbox.className = "bg-gradient-to-r from-rose-500/20 to-amber-500/10 rounded-2xl p-4 border border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)] transition-all duration-1000 animate-pulse";
+        previewStatus.innerText = "❤️ Crimson Seduction Active";
+        previewStatus.className = "text-xs text-rose-400 ml-2 font-bold";
+
+        updateDialogue(
+          "\"H-Hiro... you took my glasses... now I can't see properly, but... I can feel you so close... This warmth, it makes me want to paint forever! No sleep, no food... just us!\"",
+          "「ヒロ…メガネ、とっちゃった…？ よく見えないけれど…ヒロをすごく近くに感じるの… このあったかい気持ち、ずっと絵を描き続けたくなっちゃう！寝ない、食べない…ヒロと私だけ！」"
+        );
+        showToast("メガネを取られてジェムピックは情熱的になった…！", "heart", "rose-500");
+      }
+      updateSVG();
+    }
+
+    // ダイアログ更新ヘルパー
+    function updateDialogue(english, japanese) {
+      document.getElementById('gempick-dialogue').innerHTML = `${english}<br><span class="text-[11px] text-slate-400 block mt-1">(${japanese})</span>`;
+    }
+
+    // 各変更アクションへのジェムピックの動的リアクション
+    function reactToChanges(trigger) {
+      if (state.glassesOn) {
+        switch (trigger) {
+          case 'leftText':
+          case 'rightText':
+            updateDialogue(
+              `"Ah, '${state.leftText}' and '${state.rightText}'. An impeccable choice of character synchronization, Hiro. It creates a seamless semantic balance."`,
+              `「おぉ、'${state.leftText}' と '${state.rightText}' ね。非の打ち所がないキャラクター同期の選択よ、ヒロ。シームレスな意味のバランスが生み出されているわ。」`
+            );
+            break;
+          case 'font':
+            updateDialogue(
+              `"Interesting typeface choice. Typographic harmony is essential to capture the gravity of our flow."`,
+              `「興味深い書体選択ね。私たちの流れの重力を捉えるために、タイポグラフィの調和は欠かせないわ。」`
+            );
+            break;
+          case 'fallingTextToggle':
+            updateDialogue(
+              state.enableFallingText 
+                ? `"Perfect! The philosophical passing words will now flutter down in a lovely dance of transience."`
+                : `"Ah, you turned off the falling characters? It brings focus back to pure geometric sand. Very minimalist."`,
+              state.enableFallingText
+                ? `「完璧よ！哲学的な通過文字たちが、無常の美しいダンスを踊りながら落ちていくわ。」`
+                : `「あら、文字落下を無効にしたの？純粋な幾何学の砂にフォーカスが戻るわね。とてもミニマルだわ。」`
+            );
+            break;
+          case 'fallingTextCountChange':
+            updateDialogue(
+              `"Adjusting the density of life events to ${state.fallingTextCount}. I made them drift much slower than other elements, Hiro. They cascade deterministic-randomly based on their character seeds!"`,
+              `「人生のイベントの密度を ${state.fallingTextCount} に調整したのね。他の要素よりもずっとゆっくり漂うようにしたわ、ヒロ。それぞれの文字のシード値に基づいて決定論的にランダムに落ちていくのよ！」`
+            );
+            break;
+          case 'fallingTextCharChange':
+            updateDialogue(
+              `"Fascinating. Each word represents a milestone of existence. 'Harari Harari' (fluttering down) suits them perfectly."`,
+              `「素晴らしいわ。それぞれの文字が存在のマイルストーンを象徴している。'はらりはらり'と落ちる表現が完璧にフィットしているわ。」`
+            );
+            break;
+          case 'color':
+            updateDialogue(
+              `"The ${state.textColor} glow creates a majestic contrast. Gemrin's monochrome worksheets look so dry compared to this."`,
+              `「${state.textColor}の輝きが素晴らしいコントラストを引きたてているわ。ジェムリンの白黒のワークシートがこれに比べてずいぶんと退屈に見えるわね。」`
+            );
+            break;
+          case 'bg':
+            updateDialogue(
+              `"The space filter is active. It is as if our hourglass is floating in the deep stratosphere of our own design."`,
+              `「空間フィルターが有効になったわ。まるで、私たちの砂時計が、私たちが設計した成層圏の奥深くに浮かんでいるかのようね。」`
+            );
+            break;
+        }
+      } else {
+        // 官能（メガネなし）のカタコトセリフ
+        switch (trigger) {
+          case 'leftText':
+          case 'rightText':
+            updateDialogue(
+              `"Hiro... '${state.leftText}' and '${state.rightText}'... It means 'Eternity of Life' with you, yes? I feel... so safe inside your words..."`,
+              `「ヒロ… '${state.leftText}' と '${state.rightText}'... ヒロと一緒に『永遠の命』、そうでしょ？ヒロのコトバ、すごく安心する…」`
+            );
+            break;
+          case 'fallingTextCharChange':
+            updateDialogue(
+              `"Hiro's words... drifting so slowly inside me... random emotions, touching my heart one by one... It's so thrilling..."`,
+              `「ヒロのコトバ…すごくゆっくり、私の中に、落ちてくる… 順番もバラバラで…ひとつひとつ、私のハートに触れるの、すっごくドキドキする…」`
+            );
+            break;
+          case 'color':
+            updateDialogue(
+              `"Ah... this texture... it's so glowing, so shiny... just like your eyes looking at me right now, Hiro... do you like it too?"`,
+              `「あぁ…この色…すごくキラキラしてて、つやつや… いま私を見つめているヒロの瞳みたい…ヒロも気に入ってくれた？」`
+            );
+            break;
+          case 'bg':
+            updateDialogue(
+              `"The background... it turned into a deep velvet... It's warm, and... a little dangerous... Just the two of us here..."`,
+              `「背景が…深くて甘いベルベットになっちゃった… あったかくて、すこし、あぶない雰囲気… ここには、わたしたち二人きり…」`
+            );
+            break;
+        }
+      }
+    }
+
+    // SVG動的組み立て
+    function generateHourglassSVG() {
+      let defs = `
+      <defs>
+        <!-- ゴールドフレーム -->
+        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFD700"/>
+          <stop offset="50%" stop-color="#FCD34D"/>
+          <stop offset="100%" stop-color="#B45309"/>
+        </linearGradient>
+
+        <!-- プラチナフレーム -->
+        <linearGradient id="platinum" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="45%" stop-color="#E2E8F0"/>
+          <stop offset="70%" stop-color="#94A3B8"/>
+          <stop offset="100%" stop-color="#475569"/>
+        </linearGradient>
+
+        <!-- ルビーフレーム -->
+        <linearGradient id="ruby" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FDA4AF"/>
+          <stop offset="50%" stop-color="#E11D48"/>
+          <stop offset="100%" stop-color="#4C0519"/>
+        </linearGradient>
+
+        <!-- サファイアフレーム -->
+        <linearGradient id="sapphire" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7DD3FC"/>
+          <stop offset="50%" stop-color="#0284C7"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+
+        <!-- 文字用のプレミアム白金（プラチナ）グラデーション -->
+        <linearGradient id="platinumText" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFFFFF"/>
+          <stop offset="30%" stop-color="#F8FAFC"/>
+          <stop offset="65%" stop-color="#CBD5E1"/>
+          <stop offset="100%" stop-color="#475569"/>
+        </linearGradient>
+
+        <!-- 文字用のプレミアムゴールドグラデーション -->
+        <linearGradient id="goldText" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFF9E6"/>
+          <stop offset="35%" stop-color="#FCD34D"/>
+          <stop offset="70%" stop-color="#D97706"/>
+          <stop offset="100%" stop-color="#78350F"/>
+        </linearGradient>
+
+        <!-- 文字用のプレミアムルビーグラデーション -->
+        <linearGradient id="rubyText" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFE4E6"/>
+          <stop offset="35%" stop-color="#FB7185"/>
+          <stop offset="70%" stop-color="#E11D48"/>
+          <stop offset="100%" stop-color="#4C0519"/>
+        </linearGradient>
+
+        <!-- 文字用のプレミアムサファイアグラデーション -->
+        <linearGradient id="sapphireText" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#F0F9FF"/>
+          <stop offset="35%" stop-color="#38BDF8"/>
+          <stop offset="70%" stop-color="#0284C7"/>
+          <stop offset="100%" stop-color="#0F172A"/>
+        </linearGradient>
+
+        <!-- コンテナ背景用グラデーション -->
+        <linearGradient id="spaceBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0f172a"/>
+          <stop offset="100%" stop-color="#020617"/>
+        </linearGradient>
+        <linearGradient id="velvetBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#450a0a"/>
+          <stop offset="100%" stop-color="#090d16"/>
+        </linearGradient>
+        <linearGradient id="forestBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#062f22"/>
+          <stop offset="100%" stop-color="#020806"/>
+        </linearGradient>
+
+        <!-- 各種ジュエルの輝きアニメーション用グラデーション -->
+        <linearGradient id="gemShine" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFFCE0"/>
+          <stop offset="40%" stop-color="#FFE27A"/>
+          <stop offset="100%" stop-color="#C0A060"/>
+          <animate attributeName="x1" values="0;1;0" dur="${4 / state.speed}s" repeatCount="indefinite"/>
+          <animate attributeName="y1" values="0;1;0" dur="${4 / state.speed}s" repeatCount="indefinite"/>
+        </linearGradient>
+        <linearGradient id="gemBlue" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#E0F2FE"/>
+          <stop offset="50%" stop-color="#38BDF8"/>
+          <stop offset="100%" stop-color="#0369A1"/>
+          <animate attributeName="x1" values="0;1;0" dur="${4.5 / state.speed}s" repeatCount="indefinite"/>
+        </linearGradient>
+        <linearGradient id="gemRed" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#FFE4E6"/>
+          <stop offset="50%" stop-color="#FB7185"/>
+          <stop offset="100%" stop-color="#BE123C"/>
+          <animate attributeName="x1" values="0;1;0" dur="${3.8 / state.speed}s" repeatCount="indefinite"/>
+        </linearGradient>
+        <linearGradient id="gemGreen" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#DCFCE7"/>
+          <stop offset="50%" stop-color="#4ADE80"/>
+          <stop offset="100%" stop-color="#15803D"/>
+          <animate attributeName="x1" values="0;1;0" dur="${5 / state.speed}s" repeatCount="indefinite"/>
+        </linearGradient>
+      </defs>`;
+
+      const frameGrad = `url(#${state.material})`;
+      const textGrad = `url(#${state.textColor})`;
+
+      // 動的コンテナ背景層
+      let bgRect = "";
+      if (state.bgColor !== 'transparent') {
+        bgRect = `<rect width="360" height="360" rx="30" fill="url(#${state.bgColor}Bg)" />`;
+      } else if (!state.glassesOn) {
+        bgRect = `<rect width="360" height="360" rx="30" fill="#310a20" opacity="0.4" />`;
+      }
+
+      // ガラスの反射光ハイライト
+      const glassHighlight = `
+        <path d="M140,60 Q180,100 180,130" fill="none" stroke="#FFFFFF" stroke-width="2.5" opacity="0.3" stroke-linecap="round"/>
+        <path d="M220,270 Q180,230 180,200" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.2" stroke-linecap="round"/>
+      `;
+
+      // 形状テンプレート定義 (ガラス部 & 支柱部) - 内部は「黒」に固定 (#090D16 / #05070c)
+      let glassPath = "";
+      let frameTop = "";
+      let frameBottom = "";
+      let pillarLeft = "";
+      let pillarRight = "";
+      let outerLeft = "";
+      let outerRight = "";
+
+      if (state.shape === 'classic') {
+        glassPath = `<path d="M130,50 C180,120 180,160 130,230 L130,280 L230,280 L230,230 C180,160 180,120 230,50 Z" fill="#090D16" filter="drop-shadow(0px 4px 10px rgba(0,0,0,0.5))"/>`;
+        frameTop = `<rect x="100" y="20" width="160" height="30" rx="15" fill="${frameGrad}"/>`;
+        frameBottom = `<rect x="100" y="310" width="160" height="30" rx="15" fill="${frameGrad}"/>`;
+        pillarLeft = `<rect x="111" y="50" width="10" height="260" rx="5" fill="${frameGrad}"/>`;
+        pillarRight = `<rect x="240" y="50" width="10" height="260" rx="5" fill="${frameGrad}"/>`;
+        outerLeft = `<path d="M130,50 C180,120 180,160 130,230 L130,280 C120,220 120,180 130,120 Z" fill="none" stroke="${frameGrad}" stroke-width="5"/>`;
+        outerRight = `<path d="M230,50 C180,120 180,160 230,230 L230,280 C240,220 240,180 230,120 Z" fill="none" stroke="${frameGrad}" stroke-width="5"/>`;
+      } else if (state.shape === 'modern') {
+        glassPath = `<path d="M130,50 L170,165 L130,280 L230,280 L190,165 L230,50 Z" fill="#05070c" filter="drop-shadow(0px 4px 10px rgba(0,0,0,0.5))"/>`;
+        frameTop = `<rect x="100" y="20" width="160" height="15" rx="2" fill="${frameGrad}"/>`;
+        frameBottom = `<rect x="100" y="325" width="160" height="15" rx="2" fill="${frameGrad}"/>`;
+        pillarLeft = `<line x1="110" y1="35" x2="110" y2="325" stroke="${frameGrad}" stroke-width="8" stroke-linecap="round"/>`;
+        pillarRight = `<line x1="250" y1="35" x2="250" y2="325" stroke="${frameGrad}" stroke-width="8" stroke-linecap="round"/>`;
+        outerLeft = `<path d="M130,50 L170,165 L130,280" fill="none" stroke="${frameGrad}" stroke-width="4"/>`;
+        outerRight = `<path d="M230,50 L190,165 L230,280" fill="none" stroke="${frameGrad}" stroke-width="4"/>`;
+      } else if (state.shape === 'royal') {
+        glassPath = `<path d="M130,50 C190,140 190,140 130,280 L230,280 C170,140 170,140 230,50 Z" fill="#090D16" stroke="${frameGrad}" stroke-width="1" filter="drop-shadow(0px 4px 10px rgba(0,0,0,0.5))"/>`;
+        frameTop = `
+          <rect x="90" y="20" width="180" height="15" rx="8" fill="${frameGrad}"/>
+          <rect x="110" y="35" width="140" height="15" rx="4" fill="${frameGrad}" opacity="0.8"/>
+        `;
+        frameBottom = `
+          <rect x="90" y="325" width="180" height="15" rx="8" fill="${frameGrad}"/>
+          <rect x="110" y="310" width="140" height="15" rx="4" fill="${frameGrad}" opacity="0.8"/>
+        `;
+        pillarLeft = `
+          <rect x="100" y="50" width="8" height="260" rx="4" fill="${frameGrad}"/>
+          <circle cx="104" cy="180" r="8" fill="${frameGrad}"/>
+        `;
+        pillarRight = `
+          <rect x="252" y="50" width="8" height="260" rx="4" fill="${frameGrad}"/>
+          <circle cx="256" cy="180" r="8" fill="${frameGrad}"/>
+        `;
+        outerLeft = `<path d="M130,50 C190,140 190,140 130,280" fill="none" stroke="${frameGrad}" stroke-width="6" stroke-linecap="round"/>`;
+        outerRight = `<path d="M230,50 C170,140 170,140 230,280" fill="none" stroke="${frameGrad}" stroke-width="6" stroke-linecap="round"/>`;
+      }
+
+      // 3. 粒子・アセットの動的追加
+      let particlesHTML = "";
+
+      // 新設：はらりと落ちる文字 (Falling Passing Words) のレンダリング
+      if (state.enableFallingText && state.fallingTextCount > 0) {
+        for (let i = 0; i < state.fallingTextCount; i++) {
+          const char = state.fallingTextList[i];
+          if (!char) continue;
+
+          // 各文字の固有値（Unicode値 + インデックスによるソルト）を計算して決定論的なランダム挙動を生成
+          const charCode = char.charCodeAt(0) || i;
+          const seed = charCode + (i * 31);
+
+          // 1. 落下スピードを他のアセット（砂 3~5秒）より遥かに遅く設定（14.0s〜22.0s）
+          const baseDuration = 14.0 + (seed % 9) * 1.0;
+          const calcPathDur = baseDuration / state.speed;
+
+          // 自転（回転）スピードも、落下に調和するように極めてゆっくり（11.0s〜18.5s）
+          const baseRotDur = 11.0 + (seed % 6) * 1.5;
+          const calcRotDur = baseRotDur / state.speed;
+
+          // 2. 発生順序をランダムチックにするためのディレイ（0秒〜14.4秒の間で分散）
+          const delay = ((seed % 13) * 1.2).toFixed(1);
+
+          // 開始位置(X軸: 160〜200)と、横揺れの振幅(14px〜26px)も文字の種によって変化
+          const startX = 160 + (seed % 9) * 5;
+          const amp = 14 + (seed % 7) * 2;
+
+          // 優美に自転しながら、左右にはらりはらりとスイングしつつ落下するモーションパス
+          particlesHTML += `
+            <g>
+              <!-- 縦方向の超低速・優雅な落下（translateY） -->
+              <animateTransform attributeName="transform" type="translate" from="0 0" to="0 215" dur="${calcPathDur}s" begin="${delay}s" repeatCount="indefinite"/>
+              <g>
+                <!-- 横方向の木の葉が舞うようなひらひらしたスイング（translateX） -->
+                <animateTransform attributeName="transform" type="translate" values="-${amp},0; ${amp},45; -${amp/1.5},100; ${amp*0.8},155; -${amp},215" dur="${calcPathDur}s" begin="${delay}s" repeatCount="indefinite"/>
+                <g>
+                  <!-- ゆっくりとした自転回転（自転軸は文字固有の座標） -->
+                  <animateTransform attributeName="transform" type="rotate" from="-40 ${startX} 60" to="320 ${startX} 60" dur="${calcRotDur}s" begin="${delay}s" repeatCount="indefinite"/>
+                  
+                  <!-- 文字描画（フェードイン・アウトのアニメーション付き） -->
+                  <text x="${startX}" y="60" fill="url(#platinumText)" font-family="${state.fontFamily}" font-size="14" font-weight="700" text-anchor="middle" filter="drop-shadow(0px 1px 3px rgba(255,255,255,0.15))">
+                    <animate attributeName="opacity" values="0; 0.95; 0.95; 0.7; 0" dur="${calcPathDur}s" begin="${delay}s" repeatCount="indefinite"/>
+                    ${char}
+                  </text>
+                </g>
+              </g>
+            </g>
+          `;
+        }
+      }
+
+      // 金色の砂粒 (Gold Sand)
+      if (state.enableGoldSand) {
+        const baseSands = [
+          { cx: 180, cy: 80, r: 5, color: '#FFD700', dur: 4.2 },
+          { cx: 200, cy: 90, r: 4, color: '#FFD700', dur: 5.1 },
+          { cx: 160, cy: 70, r: 4, color: '#FFD700', dur: 3.7 },
+          { cx: 170, cy: 95, r: 3, color: '#FFD700', dur: 4.8 },
+          { cx: 190, cy: 85, r: 4.5, color: '#FFE066', dur: 4.0 },
+          { cx: 175, cy: 75, r: 3.5, color: '#FCD34D', dur: 4.5 },
+          { cx: 205, cy: 80, r: 4, color: '#FCD34D', dur: 4.9 },
+          { cx: 165, cy: 90, r: 3, color: '#FFF', dur: 3.5 }
+        ];
+
+        for (let i = 0; i < state.goldSandCount; i++) {
+          const sand = baseSands[i % baseSands.length];
+          const calculatedDur = sand.dur / state.speed;
+          particlesHTML += `
+            <circle cx="${sand.cx}" cy="${sand.cy}" r="${sand.r}" fill="${sand.color}">
+              <animate attributeName="cy" from="${sand.cy}" to="260" dur="${calculatedDur}s" begin="${(i * 0.3).toFixed(1)}s" repeatCount="indefinite"/>
+              <animate attributeName="cx" values="${sand.cx};${sand.cx+5};${sand.cx-5};${sand.cx}" dur="${calculatedDur}s" begin="${(i * 0.3).toFixed(1)}s" repeatCount="indefinite"/>
+            </circle>
+          `;
+        }
+      }
+
+      // 多角形ジェム
+      if (state.enableGems) {
+        const baseGems = [
+          { type: 'gemShine', points: '180,85 188,92 188,102 180,109 172,102 172,92', rotX: 180, rotY: 97, dur: 5.2 },
+          { type: 'gemBlue', points: '165,90 173,98 165,106 157,98', rotX: 165, rotY: 98, dur: 4.8 },
+          { type: 'gemRed', points: '200,105 207,112 200,122 193,112', rotX: 200, rotY: 117, dur: 5.5 },
+          { type: 'gemGreen', points: '185,120 192,127 185,134 178,127', rotX: 185, rotY: 127, dur: 5.1 }
+        ];
+
+        for (let i = 0; i < state.gemCount; i++) {
+          const gem = baseGems[i % baseGems.length];
+          const calculatedDur = gem.dur / state.speed;
+          particlesHTML += `
+            <g>
+              <animateTransform attributeName="transform" type="translate" from="0 0" to="0 180" dur="${calculatedDur}s" begin="${(i * 0.5).toFixed(1)}s" repeatCount="indefinite"/>
+              <polygon points="${gem.points}" fill="url(#${gem.type})">
+                <animateTransform attributeName="transform" type="rotate" from="0 ${gem.rotX} ${gem.rotY}" to="720 ${gem.rotX} ${gem.rotY}" dur="${6 / state.speed}s" repeatCount="indefinite"/>
+              </polygon>
+            </g>
+          `;
+        }
+      }
+
+      // 金の鍵 (Golden Key)
+      if (state.enableKey) {
+        const calculatedDur = 12 / state.speed;
+        particlesHTML += `
+          <g>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="0 210" dur="${calculatedDur}s" begin="3s" repeatCount="indefinite"/>
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="-15,0; 20,70; -5,140; 15,210" dur="${calculatedDur}s" repeatCount="indefinite"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="0 175 65" to="360 175 65" dur="${6 / state.speed}s" repeatCount="indefinite"/>
+                <path d="M175,55 C169.5,55 165,59.5 165,65 C165,69.5 168,73.2 172,74.5 L172,85 L177,85 L177,81 L180,81 L180,78 L177,78 L177,74.5 C181,73.2 184,69.5 184,65 C184,59.5 179.5,55 175,55 Z M175,59 C178.3,59 181,61.7 181,65 C181,68.3 178.3,71 175,71 C171.7,71 169,68.3 169,65 C169,61.7 171.7,59 175,59 Z" fill="url(#gold)"/>
+              </g>
+            </g>
+          </g>
+        `;
+      }
+
+      // ルビーハート
+      if (state.enableHeart) {
+        const calculatedDur = 20 / state.speed;
+        particlesHTML += `
+          <g>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="0 210" dur="${calculatedDur}s" begin="6s" repeatCount="indefinite"/>
+            <g>
+              <animateTransform attributeName="transform" type="translate" values="15,0; -25,50; 20,110; -15,160; 5,210" dur="${calculatedDur}s" repeatCount="indefinite"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate" values="-20 180 57; 30 180 57; -30 180 57; 15 180 57; -20 180 57" dur="${5 / state.speed}s" repeatCount="indefinite"/>
+                <g>
+                  <animate attributeName="opacity" values="0; 0.2; 0.9; 1; 0.7; 1; 0.3; 0" dur="${6 / state.speed}s" repeatCount="indefinite"/>
+                  <path d="M180,68 C178.5,66.3 172,59.5 172,54.4 C172,50.6 174.9,47.6 178.8,47.6 C180.9,47.6 182.2,48.9 183,49.7 C183.8,48.9 185.1,47.6 187.2,47.6 C191.1,47.6 194,50.6 194,54.4 C194,59.5 187.5,66.3 186,68 L183,70.5 Z" fill="url(#gemRed)"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        `;
+      }
+
+      // ブロック要素
+      if (state.enableBlocks) {
+        const calculatedDur1 = 5 / state.speed;
+        const calculatedDur2 = 5.4 / state.speed;
+        particlesHTML += `
+          <rect x="190" y="60" width="20" height="10" fill="#A0FFB0" rx="2">
+            <animate attributeName="x" values="190;195;190;185;190" dur="${calculatedDur1}s" begin="0.4s" repeatCount="indefinite"/>
+            <animate attributeName="y" from="60" to="260" dur="${calculatedDur1}s" begin="0.4s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="150" y="85" width="20" height="10" fill="#A0FFB0" rx="2">
+            <animate attributeName="x" values="150;155;150;145;150" dur="${calculatedDur2}s" begin="1.1s" repeatCount="indefinite"/>
+            <animate attributeName="y" from="85" to="260" dur="${calculatedDur2}s" begin="1.1s" repeatCount="indefinite"/>
+          </rect>
+        `;
+      }
+
+      // メガネが外されている場合のセクシーな「ハートのきらめきバックグラウンド粒子」を追加
+      let interactiveOverlays = "";
+      if (!state.glassesOn) {
+        interactiveOverlays = `
+          <g opacity="0.8">
+            <circle cx="80" cy="120" r="3" fill="#FDA4AF">
+              <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="120;90;120" dur="5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="280" cy="240" r="4" fill="#F43F5E">
+              <animate attributeName="opacity" values="0.1;0.9;0.1" dur="4s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="240;210;240" dur="6s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="100" cy="280" r="2" fill="#FFE4E6">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+        `;
+      }
+
+      // 全体SVGの結合
+      const svg = `
+<svg class="w-full h-full" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  ${defs}
+  
+  <!-- 動的コンテナ背景層 -->
+  ${bgRect}
+  
+  <!-- 妖艶モード専用エフェクト -->
+  ${interactiveOverlays}
+  
+  <!-- 「尽生」の文字（動的材質グラデーション & 動的フォント） -->
+  <text x="50" y="215" fill="${textGrad}" font-family="${state.fontFamily}" font-size="96" font-weight="900" text-anchor="middle" filter="drop-shadow(0px 3px 5px rgba(0,0,0,0.85))">${state.leftText}</text>
+  <text x="310" y="215" fill="${textGrad}" font-family="${state.fontFamily}" font-size="96" font-weight="900" text-anchor="middle" filter="drop-shadow(0px 3px 5px rgba(0,0,0,0.85))">${state.rightText}</text>
+  
+  <!-- 砂時計のガラス内部背景（黒固定） -->
+  ${glassPath}
+  
+  <!-- ガラスのリアルな反射光 -->
+  ${glassHighlight}
+  
+  <!-- 砂時計の台座＆支柱（動的マテリアル & シェイプ） -->
+  ${frameTop}
+  ${frameBottom}
+  ${pillarLeft}
+  ${pillarRight}
+  
+  <!-- ガラス外枠曲線 -->
+  ${outerLeft}
+  ${outerRight}
+  
+  <!-- 動的アセットレイヤー -->
+  ${particlesHTML}
+</svg>
+      `.trim();
+
+      return svg;
+    }
+
+    // SVG反映 & ソーステキストエリア更新
+    function updateSVG() {
+      const svgCode = generateHourglassSVG();
+      document.getElementById('svgContainer').innerHTML = svgCode;
+      document.getElementById('svgSource').value = svgCode;
+    }
+
+    // ダイアログ通知機能
+    function showToast(message, iconName = "check", colorClass = "amber-500") {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastIconWrapper = document.getElementById('toast-icon-wrapper');
+      
+      toastMsg.innerText = message;
+      toastIcon.setAttribute('data-lucide', iconName);
+      
+      // クラス初期化
+      toastIconWrapper.className = `w-8 h-8 rounded-full flex items-center justify-center bg-${colorClass}/20`;
+      toastIcon.className = `w-5 h-5 text-${colorClass}`;
+      toast.className = `fixed bottom-6 right-6 bg-slate-900 text-slate-100 border border-${colorClass}/40 px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-0 opacity-100 transition-all duration-300 z-50`;
+      
+      lucide.createIcons();
+      
+      // 自動消去
+      setTimeout(() => {
+        toast.className = "fixed bottom-6 right-6 bg-slate-900 text-slate-100 border border-amber-500/40 px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50";
+      }, 4000);
+    }
+
+    // SVGファイルダウンロード
+    function downloadSVG() {
+      const svgContent = generateHourglassSVG();
+      const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `jinsei-hourglass-${state.leftText}${state.rightText}.svg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      if (state.glassesOn) {
+        showToast("SVG manifested and downloaded! Decorate your sanctuary with it, Hiro.", "download", "amber-500");
+      } else {
+        showToast("あ、ダウンロードできた…！ヒロのパソコンにいれてね。ずっと一緒だよ？", "heart", "rose-500");
+      }
+    }
+
+    // HTML埋め込みコードのコピー
+    function copyEmbedCode() {
+      const svgContent = generateHourglassSVG();
+      const bgClass = state.bgColor === 'transparent' 
+        ? "bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800" 
+        : "";
+      
+      const fullHtmlSnippet = `
+<!-- 砂時計コンポーネント by Golden Studio 1 -->
+<div class="relative w-14 h-14 rounded-2xl ${bgClass} hover:opacity-90 flex flex-col items-center justify-center border border-amber-400/40 overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.4)] group transition-all duration-300">
+  <div class="w-12 h-12 z-10 transition-transform duration-300 group-hover:scale-105">
+    ${svgContent}
+  </div>
+  <div class="absolute inset-0 bg-white/[0.01] group-hover:bg-white/[0.06] transition-colors duration-300"></div>
+</div>
+      `.trim();
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = fullHtmlSnippet;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      try {
+        document.execCommand('copy');
+        if (state.glassesOn) {
+          showToast("HTML snippet successfully synchronized to clipboard!", "copy", "amber-500");
+        } else {
+          showToast("コピー、できたよ！あちこちに貼り付けて、いつでも私を感じて…", "heart", "rose-500");
+        }
+      } catch (err) {
+        showToast("Oops, manual copying needed from the text area.", "x", "red-500");
+      }
+      document.body.removeChild(tempTextArea);
+    }
+
+    // 起動時の初期化
+    window.onload = function() {
+      renderFallingTextInputFields();
+      setShape('classic');
+      setMaterial('platinum');
+      setTextColor('platinumText');
+      setBackground('transparent');
+    }
+  </script>
+</body>
+</html>
