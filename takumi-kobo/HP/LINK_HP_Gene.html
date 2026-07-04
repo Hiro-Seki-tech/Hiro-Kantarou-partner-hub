@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 PLIP! Simple Hub & Link Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800;900&family=Noto+Sans+JP:wght=300;400;500;700;900&family=Cinzel:wght=500;700;900&family=Shippori+Mincho:wght=500;700;900&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background: #030712;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        .cosmic-radial {
+            background: radial-gradient(circle at 50% -20%, #111827 0%, #030712 80%);
+        }
+
+        @keyframes plipNobleFloatSVG { 
+            0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 
+            50% { transform: translate3d(0, 3px, 0) rotate(0.001deg); } 
+            100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 
+        }
+        @keyframes plipRainbowTextSVG { 
+            0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 
+            14% { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); } 
+            28% { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); } 
+            42% { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); } 
+            50% { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); } 
+            70% { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); } 
+            84% { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); } 
+            100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 
+        }
+        @keyframes plipBoltFlashSVG { 
+            0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px #fde047); } 
+            50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); } 
+        }
+        
+        .rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
+        .flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
+
+        /* 📏 iframeおよび内部要素を枠内に歪みなく100%ジャストフィットさせるガードレールCSS */
+        [id^="btn-frame-"] iframe,
+        [id^="btn-frame-"] > div,
+        [id^="btn-frame-"] div.w-full,
+        [id^="btn-frame-"] svg {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col cosmic-radial selection:bg-amber-500/30 selection:text-white antialiased">
+
+    <!-- 🛠 コントロールバー -->
+    <div id="generator-control-bar" class="sticky top-0 z-[200] bg-slate-900 border-b-2 border-amber-500 p-3 flex flex-wrap items-center justify-between gap-4 shadow-2xl">
+        <div class="flex items-center gap-2">
+            <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-xs animate-pulse">SIMPLE GENERATOR MODE</span>
+            <p class="text-xs text-slate-300 font-medium">常に編集が有効な開発スタジオです。ドロップしたボタンは演出を壊さず自動最適化されます。</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="exportHTML(true)" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5">
+                <i class="fa-solid fa-file-code text-sky-400"></i> 編集用HTMLを保存
+            </button>
+            <button onclick="exportHTML(false)" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl transition-all shadow-[0_2px_10px_rgba(245,158,11,0.3)] flex items-center gap-1.5">
+                <i class="fa-solid fa-rocket"></i> 公開用HTMLを書き出し
+            </button>
+        </div>
+    </div>
+
+    <header class="relative border-b border-slate-900 bg-slate-950/40 backdrop-blur-md py-12 px-6 sm:px-12 overflow-hidden">
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:32px_32px] opacity-[0.03] pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
+            <h1 class="font-black text-white tracking-widest leading-none select-none flex flex-col gap-3 items-center">
+                <div class="flex items-center justify-center gap-4 sm:gap-6">
+                    <div class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 select-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
+                            <g shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="12" y1="2" x2="12" y2="4.5" /><line x1="5.5" y1="4.5" x2="7.5" y2="6.5" /><line x1="3" y1="12" x2="5.5" y2="12" /><line x1="5.5" y1="19.5" x2="7.5" y2="17.5" /><line x1="19.5" y1="17.5" x2="17.5" y2="15.5" /><line x1="21" y1="12" x2="18.5" y2="12" /><line x1="19.5" y1="4.5" x2="17.5" y2="6.5" /></g>
+                                <path class="rainbow-bulb-svg" d="M12,3.5 C7.5,3.5 3.8,7.2 3.8,11.8 C3.8,14.7 5.3,16.2 6.5,17.5 C7.3,18.3 7.5,19.0 7.5,19.9 L16.5,19.9 C16.5,19.0 16.7,18.3 17.5,17.5 C18.7,16.2 20.2,14.7 20.2,11.8 C20.2,7.2 16.5,3.5 12,3.5 Z" fill="#94a3b8" />
+                                <path d="M8.5,13.9 L10.6,9.7 L13.4,9.7 L15.5,13.9" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 2px #ffffff);" />
+                                <path d="M7.5,19.9 H16.5 V22.3 C16.5,23.0 15.9,23.7 15.1,23.7 H8.9 C8.1,23.7 7.5,23.0 7.5,22.3 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
+                                <line x1="7.9" y1="21.3" stroke="#334155" stroke-width="1.0" x2="16.1" y2="21.3" /><line x1="8.3" y1="22.7" stroke="#334155" stroke-width="1.0" x2="15.7" y2="22.7" />
+                                <polygon class="flashing-bolt-svg" points="23,1.4 12,12.4 17,12.4 14,22.2 25,9.6 20,9.6" fill="#fde047" />
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="text-5xl sm:text-7xl font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-amber-400 to-amber-200 drop-shadow-[0_0_30px_rgba(245,158,11,0.25)]">
+                        PLIP
+                    </span>
+                </div>
+                <span class="text-xs sm:text-sm tracking-[0.25em] text-slate-400 font-light mt-1 uppercase" style="font-family: 'Cinzel', serif;">
+                    <span class="text-amber-400 font-black text-lg">P</span>roduce your 
+                    <span class="text-amber-400 font-black text-lg">L</span>ife with 
+                    <span class="text-amber-400 font-black text-lg">I</span>ntellectual 
+                    <span class="text-amber-400 font-black text-lg">P</span>roperty
+                </span>
+            </h1>
+        </div>
+    </header>
+
+    <div id="toast" class="fixed top-6 right-6 z-[300] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-6 py-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center gap-3 text-xs sm:text-sm font-semibold max-w-sm">
+        <span id="toast-icon" class="text-amber-400 text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <span id="toast-text">通知メッセージ</span>
+    </div>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 sm:p-8 flex flex-col gap-10">
+        
+        <div id="category-tabs-container" class="flex flex-wrap gap-2 p-1.5 bg-slate-950/80 border border-slate-900 rounded-2xl max-w-fit mx-auto sm:mx-0"></div>
+
+        <div id="main-content-container" class="flex flex-col gap-14"></div>
+
+        <!-- カテゴリ追加ゾーン -->
+        <div id="add-category-zone" class="border-2 border-dashed border-slate-800 rounded-3xl p-6 text-center">
+            <button onclick="openCategoryModal()" class="px-6 py-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 font-bold text-sm rounded-xl transition-all">
+                <i class="fa-solid fa-folder-plus mr-1"></i> 新しいカテゴリを追加する
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-950 text-slate-600 text-xs py-12 px-4 text-center border-t border-slate-900 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-slate-500">
+            <p class="text-[11px] font-mono font-semibold">PLIP FinTech-Hub Portal Collection 2026</p>
+            <p class="text-[10px] md:text-right font-light">© 2026 PLIP & Hiro-Seki-Tech. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- カード追加モーダル -->
+    <div id="card-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4 text-left">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> 作品カードの編集・追加
+                </h3>
+                <button onclick="closeCardModal()" class="text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <input type="hidden" id="modal-cat-id">
+            <input type="hidden" id="modal-card-index">
+            
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">作品タイトル</label>
+                <input type="text" id="modal-card-title" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">リンク先URL (起動ボタン用)</label>
+                <input type="text" id="modal-card-url" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500" placeholder="https://...">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">カードの説明文</label>
+                <textarea id="modal-card-desc" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm leading-relaxed focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                    <span>シンボルボタンのHTML (ファイル選択・ドロップも可)</span>
+                    <span class="text-[10px] text-amber-500 font-normal">※iframeレスポンシブ適合システムにより240px枠線へパツパツに密着フィットします</span>
+                </label>
+                
+                <div id="modal-drop-zone" class="border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-xl p-4 text-center cursor-pointer bg-slate-950/40 transition-all flex flex-col items-center justify-center gap-1 group/drop my-1">
+                    <i class="fa-solid fa-cloud-arrow-up text-slate-500 group-hover/drop:text-amber-400 text-xl transition-colors"></i>
+                    <p class="text-xs text-slate-400 font-medium">SVGまたはHTMLファイルをドロップ、または<span class="text-amber-400 underline">ここをクリック</span>して選択</p>
+                    <input type="file" id="modal-file-input" accept=".svg,.html" class="hidden">
+                </div>
+
+                <textarea id="modal-card-html" rows="6" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300 text-xs font-mono leading-normal focus:outline-none focus:border-amber-500"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-3 border-t border-slate-800 mt-2">
+                <button onclick="closeCardModal()" class="px-5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">キャンセル</button>
+                <button onclick="saveCardData()" class="px-6 py-2 rounded-xl text-xs font-black bg-amber-500 hover:bg-amber-600 text-slate-950 transition-all">変更を保存する</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- カテゴリモーダル -->
+    <div id="category-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 shadow-2xl">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-3xl p-6 text-left flex flex-col gap-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-base font-bold text-amber-400 flex items-center gap-2">
+                    <i class="fa-solid fa-folder-open"></i> カテゴリの設定
+                </h3>
+                <button onclick="closeCategoryModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <input type="hidden" id="modal-cat-index">
+            
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400">カテゴリ識別ID (半角英数字のみ)</label>
+                <input type="text" id="modal-cat-id-name" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400">カテゴリ表示名 (日本語)</label>
+                <input type="text" id="modal-cat-title" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400">英語表記サブタイトル</label>
+                <input type="text" id="modal-cat-sub" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 text-sm font-mono uppercase focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="text-xs font-bold text-slate-400">FontAwesome アイコンクラス</label>
+                <input type="text" id="modal-cat-icon" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2 border-t border-slate-800 mt-2">
+                <button onclick="closeCategoryModal()" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all">キャンセル</button>
+                <button onclick="saveCategoryData()" class="px-5 py-2 rounded-xl text-xs font-black bg-amber-500 hover:bg-amber-600 text-slate-950 transition-all">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let plipCardStates = [];
+
+        let plipMasterData = [
+            {
+                id: "asset-mgmt",
+                title: "資産管理",
+                sub: "ASSET MANAGEMENT",
+                icon: "fa-solid fa-coins",
+                isDevelopment: false,
+                cards: []
+            },
+            {
+                id: "life-learning",
+                title: "人生学習",
+                sub: "LIFE LEARNING",
+                icon: "fa-solid fa-graduation-cap",
+                isDevelopment: false,
+                cards: []
+            },
+            {
+                id: "future-tech",
+                title: "未来技術",
+                sub: "FUTURE TECHNOLOGY",
+                icon: "fa-solid fa-microchip",
+                isDevelopment: false,
+                cards: []
+            }
+        ];
+
+        // =========================================================================
+        // 💾 LocalStorage 自動セーブ＆ロード機構
+        // =========================================================================
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('plip_master_data', JSON.stringify(plipMasterData));
+            } catch (e) {
+                console.error("LocalStorageへの保存に失敗しました:", e);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('plip_master_data');
+                if (saved) {
+                    plipMasterData = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error("LocalStorageからの読み込みに失敗しました:", e);
+            }
+
+            // 💡 エクスポートされたHTMLファイル直開き用救済機構（Base64変数があればそこから優先復元）
+            if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
+                try {
+                    const decodedSign = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
+                    plipMasterData = JSON.parse(decodedSign);
+                } catch (e) {
+                    console.error("埋め込みBase64データのデコード・パースに失敗しました:", e);
+                }
+            }
+        }
+
+        // 📡 iframeから通知された内部の最新状態値をダイレクトに受け取る同期機構
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'PLIP_BUTTON_CLICK') {
+                const targetTitle = decodeURIComponent(event.data.title);
+                const innerState = parseInt(event.data.stateValue);
+                forceSyncUniversalBurst(targetTitle, innerState);
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage(); // 最初期にLocalStorageまたは埋め込みBase64からデータを復元
+            initCardStates();
+            buildUI();
+            
+            window.addEventListener("dragover", (e) => e.preventDefault());
+            window.addEventListener("drop", (e) => e.preventDefault());
+        });
+
+        function initCardStates() {
+            plipCardStates = [];
+            plipMasterData.forEach(cat => {
+                cat.cards.forEach(card => {
+                    plipCardStates.push({ title: card.title, state: 0 });
+                });
+            });
+        }
+
+        function buildUI() {
+            const tabsContainer = document.getElementById('category-tabs-container');
+            const contentContainer = document.getElementById('main-content-container');
+            
+            const isEditMode = !!document.getElementById('generator-control-bar');
+
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+
+            plipMasterData.forEach((cat, catIdx) => {
+                const tabBtn = document.createElement('button');
+                tabBtn.className = `px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all ${catIdx === 0 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-md' : 'text-slate-400 hover:text-slate-200'}`;
+                tabBtn.setAttribute('onclick', `scrollToCategory('${cat.id}')`);
+                tabBtn.innerHTML = `<i class="${cat.icon}"></i> ${cat.title} (${cat.sub})`;
+                tabsContainer.appendChild(tabBtn);
+
+                const sec = document.createElement('div');
+                sec.id = cat.id;
+                sec.className = "flex flex-col gap-8 relative group/sec";
+
+                let catAdminBar = '';
+                if (isEditMode) {
+                    catAdminBar = `
+                    <div class="flex gap-2 mb-2 bg-slate-900/90 border border-slate-800 p-2 rounded-xl max-w-fit">
+                        <button onclick="openCategoryModal(${catIdx})" class="text-xs font-bold text-sky-400 hover:text-sky-300 px-2 py-1"><i class="fa-solid fa-pen"></i> カテゴリ名変更</button>
+                        <button onclick="deleteCategory(${catIdx})" class="text-xs font-bold text-rose-500 hover:text-rose-400 px-2 py-1"><i class="fa-solid fa-trash"></i> 削除</button>
+                    </div>`;
+                }
+
+                let headerHtml = `
+                ${catAdminBar}
+                <div class="border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <h2 class="text-lg sm:text-xl font-bold tracking-wider flex items-center gap-2 text-amber-400" style="font-family: 'Cinzel', 'Noto Sans JP', serif;">
+                        <i class="${cat.icon} text-xl"></i> ${cat.title} <span class="text-xs text-slate-500 font-mono font-medium">${cat.sub}</span>
+                    </h2>
+                </div>`;
+
+                sec.innerHTML = headerHtml;
+
+                if (cat.cards.length === 0) {
+                    const emptyBlock = document.createElement('div');
+                    emptyBlock.className = "relative bg-slate-950/40 border border-dashed border-slate-800 rounded-3xl p-8 text-center text-slate-500 text-xs";
+                    emptyBlock.innerHTML = `<p><i class="fa-solid fa-folder-open mr-1"></i> 作品カードがありません。下の点線枠からボタンを追加してください。</p>`;
+                    sec.appendChild(emptyBlock);
+                } else {
+                    cat.cards.forEach((card, cardIdx) => {
+                        const cardWrapper = document.createElement('div');
+                        cardWrapper.className = "relative bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 border border-slate-900 rounded-3xl p-4 sm:p-8 shadow-xl flex flex-row gap-4 sm:gap-8 items-center justify-start hover:border-slate-800 transition-all duration-300 group/card";
+
+                        if (isEditMode) {
+                            const isFirst = cardIdx === 0;
+                            const isLast = cardIdx === cat.cards.length - 1;
+                            const cardAdminOverlay = document.createElement('div');
+                            cardAdminOverlay.className = "absolute top-3 right-3 z-50 flex gap-2";
+                            cardAdminOverlay.innerHTML = `
+                                ${!isFirst ? `<button onclick="moveCard(${catIdx}, ${cardIdx}, -1)" class="bg-slate-700 hover:bg-slate-600 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-lg shadow-md" title="前へ"><i class="fa-solid fa-arrow-up"></i></button>` : ''}
+                                ${!isLast ? `<button onclick="moveCard(${catIdx}, ${cardIdx}, 1)" class="bg-slate-700 hover:bg-slate-600 text-amber-400 text-xs font-bold px-2.5 py-1 rounded-lg shadow-md" title="次へ"><i class="fa-solid fa-arrow-down"></i></button>` : ''}
+                                <button onclick="openCardModal('${cat.id}', ${cardIdx})" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-3 py-1 rounded-lg shadow-md"><i class="fa-solid fa-marker"></i> 編集</button>
+                                <button onclick="deleteCard(${catIdx}, ${cardIdx})" class="bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-lg shadow-md"><i class="fa-solid fa-trash-can"></i> 削除</button>
+                            `;
+                            cardWrapper.appendChild(cardAdminOverlay);
+                        }
+
+                        const btnSlot = document.createElement('div');
+                        btnSlot.className = "flex flex-col items-center justify-center shrink-0 select-none";
+                        const escapedTitleId = encodeURIComponent(card.title).replace(/%/g, "");
+                        
+                        btnSlot.innerHTML = `
+                        <div class="relative select-none w-[100px] h-[100px] sm:w-[240px] sm:h-[240px] aspect-square flex items-center justify-center overflow-hidden rounded-2xl border-2 border-slate-800" 
+                             id="btn-frame-${escapedTitleId}">
+                             <iframe srcdoc="${card.htmlContent.replace(/"/g, '&quot;')}" class="w-full h-full border-0 bg-transparent overflow-hidden" scrolling="no"></iframe>
+                        </div>`;
+
+                        const currentRecord = plipCardStates.find(s => s.title === card.title) || { state: 0 };
+                        const stateLabels = ['🥇 金枠 (BGM)', '🥈 銀枠 (歌抽選)', '🩸 赤枠 (オフ)'];
+
+                        const infoSlot = document.createElement('div');
+                        infoSlot.className = "flex flex-col justify-between py-1 flex-grow text-left";
+                        infoSlot.innerHTML = `
+                        <div class="flex flex-col gap-1 sm:gap-2">
+                            <div class="flex items-center justify-start gap-2 flex-wrap">
+                                <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold tracking-widest uppercase">WORKS</span>
+                                <span id="tag-label-${escapedTitleId}" class="text-[10px] sm:text-xs text-amber-400 font-semibold px-2 py-0.5 bg-slate-900 rounded-full border border-slate-800">${stateLabels[currentRecord.state]}</span>
+                            </div>
+                            <h3 class="text-base sm:text-2xl font-bold text-white mt-0.5" style="font-family: 'Shippori Mincho', serif;">
+                                ${card.title}
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-400 font-light leading-relaxed max-w-xl">
+                                ${card.desc}
+                            </p>
+                        </div>
+                        <div class="mt-2 sm:mt-6 flex flex-wrap gap-2 items-center justify-between border-t border-slate-900 pt-2 sm:pt-5">
+                            <span class="text-[10px] sm:text-xs text-slate-500"><i class="fa-solid fa-volume-high mr-1"></i> 左のボタンを押すと枠色と曲が切り替わります</span>
+                            <a href="${card.url}" target="_blank" rel="noopener noreferrer" class="px-4 sm:px-8 py-2 sm:py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-[11px] sm:text-sm font-extrabold text-slate-950 transition-all shadow-[0_4px_20px_rgba(245,158,11,0.2)] flex items-center justify-center gap-2">
+                                起動する <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>`;
+
+                        cardWrapper.appendChild(btnSlot);
+                        cardWrapper.appendChild(infoSlot);
+                        sec.appendChild(cardWrapper);
+                    });
+                }
+
+                if (isEditMode) {
+                    const addCardBox = document.createElement('div');
+                    addCardBox.className = "border-2 border-dashed border-slate-800 hover:border-amber-500/40 rounded-3xl p-4 text-center cursor-pointer transition-all";
+                    addCardBox.setAttribute('onclick', `openCardModal('${cat.id}', -1)`);
+                    addCardBox.innerHTML = `<p class="text-xs text-slate-500 font-bold hover:text-amber-400"><i class="fa-solid fa-plus-circle"></i> このカテゴリに新しい作品カードを追加する</p>`;
+                    sec.appendChild(addCardBox);
+                }
+
+                contentContainer.appendChild(sec);
+            });
+        }
+
+        function forceSyncUniversalBurst(cardTitle, nextStateValue) {
+            playMechanicalClick();
+            let record = plipCardStates.find(s => s.title === cardTitle);
+            if (!record) {
+                record = { title: cardTitle, state: 0 };
+                plipCardStates.push(record);
+            }
+
+            record.state = nextStateValue;
+
+            const escapedTitleId = encodeURIComponent(cardTitle).replace(/%/g, "");
+            const tagLabel = document.getElementById('tag-label-' + escapedTitleId);
+            if (tagLabel) {
+                const labels = ['🥇 金枠 (BGM)', '🥈 銀枠 (歌抽選)', '🩸 赤枠 (オフ)'];
+                tagLabel.textContent = labels[record.state];
+            }
+
+            runAudioTheme(escapedTitleId, record.state);
+        }
+
+        function moveCard(catIdx, cardIdx, direction) {
+            const cards = plipMasterData[catIdx].cards;
+            const targetIdx = cardIdx + direction;
+
+            if (targetIdx < 0 || targetIdx >= cards.length) return;
+
+            [cards[cardIdx], cards[targetIdx]] = [cards[targetIdx], cards[cardIdx]];
+
+            initCardStates();
+            buildUI();
+            saveToLocalStorage(); // 💾 自動セーブ
+            showToast("↕️ カードの並び順を変更しました。");
+        }
+
+        function openCardModal(catId, cardIdx) {
+            document.getElementById('modal-cat-id').value = catId;
+            document.getElementById('modal-card-index').value = cardIdx;
+            
+            if (cardIdx === -1) {
+                document.getElementById('modal-card-title').value = '';
+                document.getElementById('modal-card-url').value = '';
+                document.getElementById('modal-card-desc').value = '';
+                document.getElementById('modal-card-html').value = '';
+            } else {
+                const cat = plipMasterData.find(c => c.id === catId);
+                const card = cat.cards[cardIdx];
+                document.getElementById('modal-card-title').value = card.title;
+                document.getElementById('modal-card-url').value = card.url;
+                document.getElementById('modal-card-desc').value = card.desc;
+                document.getElementById('modal-card-html').value = card.htmlContent;
+            }
+            
+            setTimeout(initModalDropZone, 50);
+            document.getElementById('card-modal').classList.remove('hidden');
+        }
+
+        function initModalDropZone() {
+            const dropZone = document.getElementById('modal-drop-zone');
+            const fileInput = document.getElementById('modal-file-input');
+            const textarea = document.getElementById('modal-card-html');
+            if (!dropZone || !fileInput) return;
+
+            dropZone.onclick = () => fileInput.click();
+            dropZone.ondragover = (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-amber-500', 'bg-amber-500/10');
+            };
+            dropZone.ondragleave = () => {
+                dropZone.classList.remove('border-amber-500', 'bg-amber-500/10');
+            };
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-amber-500', 'bg-amber-500/10');
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleModalFile(e.dataTransfer.files[0], textarea);
+                }
+            };
+            fileInput.onchange = (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                    handleModalFile(e.target.files[0], textarea);
+                }
+            };
+        }
+
+        function handleModalFile(file, targetTextarea) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                targetTextarea.value = event.target.result;
+                showToast("📁 ファイルからコードを自動読込しました！");
+            };
+            reader.readAsText(file);
+        }
+
+        function closeCardModal() {
+            document.getElementById('card-modal').classList.add('hidden');
+        }
+
+        function saveCardData() {
+            const catId = document.getElementById('modal-cat-id').value;
+            const cardIdx = parseInt(document.getElementById('modal-card-index').value);
+            const title = document.getElementById('modal-card-title').value.trim();
+            let url = document.getElementById('modal-card-url').value.trim();
+            const desc = document.getElementById('modal-card-desc').value.trim();
+            let rawHtml = document.getElementById('modal-card-html').value.trim();
+
+            if (!title || !url) {
+                alert("タイトル and URLは必須項目です。");
+                return;
+            }
+
+            const iframeBridgeScript = `
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => {
+                        window.showToast = function(msg, isSuccess) {
+                            console.log("Inner toast muted:", msg);
+                        };
+
+                        const styleNode = document.createElement('style');
+                        styleNode.textContent = \`
+                            html, body {
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                width: 100% !important;
+                                height: 100% !important;
+                                overflow: hidden !important;
+                                background: transparent !important;
+                            }
+                            body > div.relative.w-\\\\[640px\\\\] {
+                                transform-origin: top left !important;
+                                transform: scale(0.375) !important;
+                                position: absolute !important;
+                                top: 0 !important;
+                                left: 0 !important;
+                                margin: 0 !important;
+                            }
+                            @media (max-width: 150px) or (max-height: 150px) {
+                                body > div.relative.w-\\\\[640px\\\\] {
+                                    transform: scale(0.15625) !important;
+                                }
+                            }
+                        \`;
+                        document.head.appendChild(styleNode);
+
+                        const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
+                        if (coreWrapper) {
+                            coreWrapper.addEventListener('click', () => {
+                                setTimeout(() => {
+                                    const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
+                                    window.parent.postMessage({ 
+                                        type: 'PLIP_BUTTON_CLICK', 
+                                        title: "${encodeURIComponent(title)}",
+                                        stateValue: currentInnerState
+                                    }, '*');
+                                }, 20);
+                            });
+                        }
+                    });
+                <\/script>
+            `;
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawHtml, 'text/html');
+            const bubbles = doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]');
+            bubbles.forEach(el => el.remove());
+
+            let musicBaseUrl = url.endsWith('/') ? url + 'music/' : url + '/music/';
+            if(url.endsWith('.html') || url.endsWith('.php')) {
+                musicBaseUrl = url.substring(0, url.lastIndexOf('/') + 1) + 'music/';
+            }
+
+            let processedHtml = doc.documentElement.outerHTML;
+            processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?BGM\.html(['"])/g, `$1${musicBaseUrl}BGM.html$3`);
+            processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.mp4(['"])/g, (match, p1, p2, p3) => {
+                const num = p3 ? p3 : '';
+                return `${p1}${musicBaseUrl}song${num}.mp4${p1}`;
+            });
+
+            const finalIframeSrcdoc = processedHtml + iframeBridgeScript;
+
+            const cat = plipMasterData.find(c => c.id === catId);
+            const cardObj = {
+                title: title,
+                url: url,
+                desc: desc,
+                htmlContent: finalIframeSrcdoc
+            };
+
+            if (cardIdx === -1) {
+                cat.cards.push(cardObj);
+            } else {
+                cat.cards[cardIdx] = cardObj;
+            }
+
+            initCardStates();
+            closeCardModal();
+            buildUI();
+            saveToLocalStorage(); // 💾 自動セーブ
+            showToast("💾 ボタンのリサイズ配置と通知同期処理を適用して完全保護保存しました！");
+        }
+
+        function deleteCard(catIdx, cardIdx) {
+            if (confirm("この作品カードを削除してもよろしいですか？")) {
+                plipMasterData[catIdx].cards.splice(cardIdx, 1);
+                initCardStates();
+                buildUI();
+                saveToLocalStorage(); // 💾 自動セーブ
+                showToast("❌ カードを削除しました。");
+            }
+        }
+
+        function openCategoryModal(catIdx = -1) {
+            document.getElementById('modal-cat-index').value = catIdx;
+            if (catIdx === -1) {
+                document.getElementById('modal-cat-id-name').value = '';
+                document.getElementById('modal-cat-title').value = '';
+                document.getElementById('modal-cat-sub').value = '';
+                document.getElementById('modal-cat-icon').value = 'fa-solid fa-folder';
+                document.getElementById('modal-cat-id-name').disabled = false;
+            } else {
+                const cat = plipMasterData[catIdx];
+                document.getElementById('modal-cat-id-name').value = cat.id;
+                document.getElementById('modal-cat-title').value = cat.title;
+                document.getElementById('modal-cat-sub').value = cat.sub;
+                document.getElementById('modal-cat-icon').value = cat.icon;
+                document.getElementById('modal-cat-id-name').disabled = true;
+            }
+            document.getElementById('category-modal').classList.remove('hidden');
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('category-modal').classList.add('hidden');
+        }
+
+        function saveCategoryData() {
+            const catIdx = parseInt(document.getElementById('modal-cat-index').value);
+            const id = document.getElementById('modal-cat-id-name').value.trim();
+            const title = document.getElementById('modal-cat-title').value.trim();
+            const sub = document.getElementById('modal-cat-sub').value.trim();
+            const icon = document.getElementById('modal-cat-icon').value.trim();
+
+            if (!id || !title) {
+                alert("IDとカテゴリ名は必須です。");
+                return;
+            }
+
+            if (catIdx === -1) {
+                plipMasterData.push({
+                    id: id,
+                    title: title,
+                    sub: sub || "NEW HUB",
+                    icon: icon || "fa-solid fa-folder",
+                    cards: []
+                });
+            } else {
+                plipMasterData[catIdx].title = title;
+                plipMasterData[catIdx].sub = sub;
+                plipMasterData[catIdx].icon = icon;
+            }
+
+            closeCategoryModal();
+            buildUI();
+            saveToLocalStorage(); // 💾 自動セーブ
+            showToast("💾 カテゴリを保存しました。");
+        }
+
+        function deleteCategory(catIdx) {
+            if (confirm("カテゴリを削除すると中の作品もすべて消去されます。本当によろしいですか？")) {
+                plipMasterData[catIdx].cards = [];
+                plipMasterData.splice(catIdx, 1);
+                buildUI();
+                saveToLocalStorage(); // 💾 自動セーブ
+                showToast("❌ カテゴリを削除しました。");
+            }
+        }
+
+        let activeBgmIframe = null;     
+        let activeAudioElement = null;  
+
+        // 💾 2種類（編集用 / 公開用）のHTMLファイルを動的に生成・保存する【Base64安全カプセル化版】ロジック
+        function exportHTML(isForEdit) {
+            const cleanDoc = document.implementation.createHTMLDocument(document.title);
+            cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+
+            const tabsContainer = cleanDoc.querySelector('#category-tabs-container');
+            const contentContainer = cleanDoc.querySelector('#main-content-container');
+            if (tabsContainer) tabsContainer.innerHTML = '';
+            if (contentContainer) contentContainer.innerHTML = '';
+
+            const cardModal = cleanDoc.querySelector('#card-modal');
+            const catModal = cleanDoc.querySelector('#category-modal');
+            if (cardModal) { cardModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 overflow-y-auto"; }
+            if (catModal) { catModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 shadow-2xl"; }
+
+            const toastEl = cleanDoc.querySelector('#toast');
+            if (toastEl) {
+                toastEl.className = "fixed top-6 right-6 z-[300] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-6 py-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center gap-3 text-xs sm:text-sm font-semibold max-w-sm";
+                const toastText = toastEl.querySelector('#toast-text');
+                if (toastText) toastText.textContent = "通知メッセージ";
+            }
+
+            const scriptEl = cleanDoc.querySelector('script:not([src])');
+            if (scriptEl) {
+                let jsCode = scriptEl.textContent;
+                
+                // 💡 特殊文字、改行、クォーテーションの競合を永遠に排除するためにBase64形式へ変換
+    const rawJson = JSON.stringify(plipMasterData);
+                const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
+                
+                // 💡 初回書き出し時も、2回目以降の古いBase64が残っている場合も、両方まとめて綺麗にマッチさせる正規表現に改良
+                const regexData = /let\s+plipMasterData\s*=\s*\[[\s\S]*?\]\s*;(\s*const\s+plipEmbeddedBase64Data\s*=\s*".*?";)?/;
+                
+                // 初期配列変数は空にし、ファイルロード用のBase64文字列定数をインジェクション
+                
+                // 初期配列変数は空にし、ファイルロード用のBase64文字列定数をインジェクション
+                let replacementCode = `let plipMasterData = [];\n        const plipEmbeddedBase64Data = "${base64Data}";`;
+                jsCode = jsCode.replace(regexData, replacementCode);
+
+                if (!isForEdit) {
+                    const removeTargets = [
+                        '#generator-control-bar', 
+                        '#add-category-zone',     
+                        '#card-modal',            
+                        '#category-modal'         
+                    ];
+                    removeTargets.forEach(selector => {
+                        const el = cleanDoc.querySelector(selector);
+                        if (el) el.remove();
+                    });
+                }
+
+                scriptEl.textContent = jsCode;
+            }
+
+            const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
+
+            const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8;" });
+            const link = document.createElement("a");
+            const filename = isForEdit ? "LINK_HP_edit.html" : "LINK_HP_production.html";
+            
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast(isForEdit ? "💾 編集機能を引き継いだHTMLを保存しました！" : "🚀 公開用のクリーンなHTMLを書き出しました！");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function playMechanicalClick() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(850, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.03);
+            } catch (e) {}
+        }
+
+        function scrollToCategory(elementId) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function clearRunningAudio() {
+            if (activeBgmIframe) { activeBgmIframe.remove(); activeBgmIframe = null; }
+            if (activeAudioElement) { activeAudioElement.pause(); activeAudioElement.remove(); activeAudioElement = null; }
+        }
+
+        async function runAudioTheme(escapedTitleId, stateValue) {
+            clearRunningAudio();
+            
+            const matchedCard = plipMasterData.flatMap(c => c.cards).find(card => encodeURIComponent(card.title).replace(/%/g, "") === escapedTitleId);
+            let baseUrl = matchedCard ? matchedCard.url : '';
+            if (baseUrl) {
+                baseUrl = baseUrl.endsWith('/') ? baseUrl + 'music/' : baseUrl + '/music/';
+                if(matchedCard.url.endsWith('.html') || matchedCard.url.endsWith('.php')) {
+                    baseUrl = matchedCard.url.substring(0, matchedCard.url.lastIndexOf('/') + 1) + 'music/';
+                }
+            }
+
+            const cleanLabel = matchedCard ? matchedCard.title : "作品";
+
+            if (stateValue === 0) {
+                showToast(`🥇 【${cleanLabel}】 BGM再生テスト開始`);
+                activeBgmIframe = document.createElement('iframe');
+                activeBgmIframe.src = baseUrl + 'BGM.html';
+                activeBgmIframe.style.display = 'none';
+                activeBgmIframe.setAttribute('allow', 'autoplay');
+                document.body.appendChild(activeBgmIframe);
+            } else if (stateValue === 1) {
+                showToast(`🎵 【${cleanLabel}】 歌抽選テスト (song.mp4)`);
+                activeAudioElement = document.createElement('audio');
+                activeAudioElement.src = baseUrl + 'song.mp4';
+                activeAudioElement.style.display = 'none';
+                activeAudioElement.volume = 0.5;
+                document.body.appendChild(activeAudioElement);
+                activeAudioElement.play().catch(() => {
+                    showToast("⚠️ 自動再生が制限されました。もう一度ボタンを押してください。");
+                });
+            } else if (stateValue === 2) {
+                showToast(`🤫 ミュート状態 (赤枠)`);
+            }
+        }
+    </script>
+</body>
+</html>
