@@ -1,1 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡PLIP! Magic Bubble Studio (魔法の吹き出し生成盤)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700&family=Noto+Sans+JP:wght=300;400;500;700&family=Cinzel:wght=500;700&family=Shippori+Mincho:wght=500;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background: #090d16;
+            color: #f1f5f9;
+        }
 
+        /* 宇宙的な背景グラデーション */
+        .cosmic-bg {
+            background: radial-gradient(circle at 50% 50%, #111827 0%, #030712 100%);
+        }
+
+        /* 虹色のアニメーションテキスト */
+        @keyframes rainbowText {
+            0%   { color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.6); }
+            14%  { color: #ff5500; text-shadow: 0 0 10px rgba(255, 85, 0, 0.6); }
+            28%  { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.6); }
+            42%  { color: #00ff66; text-shadow: 0 0 10px rgba(0, 255, 102, 0.6); }
+            56%  { color: #00ccff; text-shadow: 0 0 10px rgba(0, 204, 255, 0.6); }
+            70%  { color: #3333ff; text-shadow: 0 0 10px rgba(51, 51, 255, 0.6); }
+            84%  { color: #9900ff; text-shadow: 0 0 10px rgba(153, 0, 255, 0.6); }
+            100% { color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.6); }
+        }
+        .rainbow-title {
+            animation: rainbowText 8s linear infinite;
+        }
+
+        /* カスタムスクロールバー */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col cosmic-bg selection:bg-amber-500/30 selection:text-white">
+
+    <!-- トースト通知 -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.2)] border border-amber-500/30 flex items-center gap-3">
+        <span class="text-amber-400 text-lg"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-text" class="text-xs font-bold tracking-wider">コピーしました！</span>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.3)] border border-amber-400/30">
+                    <i class="fa-solid fa-wand-magic-sparkles text-slate-950 text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black text-white flex items-center gap-2" style="font-family: 'Cinzel', 'Shippori Mincho', serif; tracking-content: 0.15em; letter-spacing: 0.06em;">
+                        PLIP! <span class="rainbow-title">Magic Bubble Studio</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-light">
+                        資産シミュレータ『尽生』から飛び出した、煌めく七色電球と稲妻のベクトル吹き出しジェネレーター
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-xl">
+                <span class="text-xs font-semibold text-slate-400 px-2"><i class="fa-solid fa-glasses text-amber-400 mr-1"></i>Designer: Gempick</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- コントロールパネル (左側) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-5">
+                <h2 class="text-sm font-bold tracking-widest text-slate-200 border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-sliders text-amber-500 mr-2"></i>BUBBLE CONFIGURATION (構成設定)</span>
+                    <span class="text-[9px] text-amber-400 px-2 py-0.5 bg-amber-400/10 rounded font-mono font-bold">LIVE PREVIEW</span>
+                </h2>
+
+                <!-- 1. テキスト設定 -->
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider" for="bubble-text">表示テキスト</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-slate-500 text-xs"><i class="fa-solid fa-quote-left"></i></span>
+                        <input type="text" id="bubble-text" value="PLIP !!" oninput="updateBubble()" class="pl-8 w-full rounded-xl bg-slate-950 border border-slate-800 p-2.5 text-slate-200 font-bold focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 focus:outline-none text-xs">
+                    </div>
+                </div>
+
+                <!-- 2. 背景・ボーダーカラー -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider" for="bg-color">吹き出し背景色</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="bg-color" value="#151d30" oninput="updateBubble()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="bg-color-text" value="#151d30" oninput="syncColorInput('bg-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-xs">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider" for="border-color">外枠カラー</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="border-color" value="#f59e0b" oninput="updateBubble()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="border-color-text" value="#f59e0b" oninput="syncColorInput('border-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. テキストカラー -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider" for="text-color">テキストカラー</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="text-color" value="#fbbf24" oninput="updateBubble()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="text-color-text" value="#fbbf24" oninput="syncColorInput('text-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-xs">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider" for="lightning-color">稲妻カラー</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="lightning-color" value="#fde047" oninput="updateBubble()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="lightning-color-text" value="#fde047" oninput="syncColorInput('lightning-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. アニメーション設定 -->
+                <div class="grid grid-cols-2 gap-3 border-t border-slate-800 pt-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">浮遊周期 (秒)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="float-speed" min="0.5" max="8.0" step="0.1" value="3.0" oninput="updateBubble()" class="w-full accent-amber-500">
+                            <span id="float-speed-val" class="text-xs text-slate-300 font-mono font-bold w-8">3.0s</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">七色変化周期 (秒)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="rainbow-speed" min="1" max="15" step="1" value="7" oninput="updateBubble()" class="w-full accent-amber-500">
+                            <span id="rainbow-speed-val" class="text-xs text-slate-300 font-mono font-bold w-8">7s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.5 サイズ設定 (新設) -->
+                <div class="grid grid-cols-3 gap-3 border-t border-slate-800 pt-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">横幅 (px)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="bubble-width" min="120" max="250" step="1" value="154" oninput="updateBubble()" class="w-full accent-amber-500">
+                            <span id="bubble-width-val" class="text-xs text-slate-300 font-mono font-bold w-10">154px</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">縦幅 (px)</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="bubble-height" min="30" max="100" step="1" value="46" oninput="updateBubble()" class="w-full accent-amber-500">
+                            <span id="bubble-height-val" class="text-xs text-slate-300 font-mono font-bold w-8">46px</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">文字サイズ</label>
+                        <div class="flex items-center gap-2">
+                            <input type="range" id="font-size" min="8" max="20" step="0.5" value="11.5" oninput="updateBubble()" class="w-full accent-amber-500">
+                            <span id="font-size-val" class="text-xs text-slate-300 font-mono font-bold w-10">11.5px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 吹き出しのしっぽ（突起）位置調整 -->
+                <div class="flex flex-col gap-1 border-t border-slate-800 pt-3">
+                    <label class="text-[11px] font-bold text-slate-400 tracking-wider">吹き出し三角形の方向</label>
+                    <div class="grid grid-cols-4 gap-2 mt-1">
+                        <button onclick="setTailDirection('top')" id="tail-top-btn" class="tail-btn py-2 px-1.5 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-caret-up text-xs"></i><span>上向き</span>
+                        </button>
+                        <button onclick="setTailDirection('bottom')" id="tail-bottom-btn" class="tail-btn py-2 px-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-caret-down text-xs"></i><span>下向き</span>
+                        </button>
+                        <button onclick="setTailDirection('left')" id="tail-left-btn" class="tail-btn py-2 px-1.5 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-caret-left text-xs"></i><span>左向き</span>
+                        </button>
+                        <button onclick="setTailDirection('right')" id="tail-right-btn" class="tail-btn py-2 px-1.5 rounded-xl border border-slate-800 bg-slate-950 text-slate-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-caret-right text-xs"></i><span>右向き</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- プリセット選択 -->
+                <div class="flex flex-col gap-1 border-t border-slate-800 pt-3">
+                    <label class="text-[11px] font-bold text-slate-400 tracking-wider">カラースキームプリセット</label>
+                    <div class="grid grid-cols-3 gap-1.5 mt-1.5">
+                        <button onclick="applyPreset('#151d30', '#f59e0b', '#fbbf24', '#fde047')" class="py-1.5 rounded bg-slate-950 hover:bg-slate-800 text-[10px] border border-slate-800 font-bold text-slate-300">ノーブル軍師</button>
+                        <button onclick="applyPreset('#1e1b4b', '#ec4899', '#f472b6', '#38bdf8')" class="py-1.5 rounded bg-indigo-950 hover:bg-indigo-900 text-[10px] border border-indigo-900 font-bold text-pink-400">サイバーパンク</button>
+                        <button onclick="applyPreset('#064e3b', '#10b981', '#34d399', '#fde047')" class="py-1.5 rounded bg-emerald-950 hover:bg-emerald-900 text-[10px] border border-emerald-900 font-bold text-emerald-400">生命フォース</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- プレビュー＆コード生成 (右側) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- リアルタイムシミュレートエリア -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+                <h2 class="text-sm font-bold tracking-widest text-slate-200 border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-eye text-cyan-500 mr-2"></i>PREVIEW IN VIRTUAL SPACE</span>
+                    <span class="text-[9px] text-slate-400">ドラッグ＆ドロップで任意の背景に馴染むかテストできます</span>
+                </h2>
+
+                <div class="relative w-full h-[320px] rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-center overflow-hidden custom-scrollbar">
+                    
+                    <!-- グリッド背景 -->
+                    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:24px_24px] opacity-10"></div>
+                    <!-- グラデーションオーラ -->
+                    <div class="absolute w-72 h-72 rounded-full bg-indigo-500/5 blur-[80px] -top-10 -left-10"></div>
+                    <div class="absolute w-72 h-72 rounded-full bg-emerald-500/5 blur-[80px] -bottom-10 -right-10"></div>
+
+                    <!-- プレビュー本体をラッピングする浮遊DIV -->
+                    <div id="preview-wrapper" class="relative z-10 transition-transform duration-300">
+                        <!-- ここに生成されたSVGがマウントされます -->
+                    </div>
+
+                    <!-- 背景切り替えミニパネル -->
+                    <div class="absolute bottom-3 left-3 flex gap-1.5 bg-slate-900/80 p-1.5 rounded-lg border border-slate-800">
+                        <button onclick="setPreviewBg('dark')" class="w-4 h-4 rounded-full bg-slate-950 border border-slate-700 active:scale-95" title="ダーク"></button>
+                        <button onclick="setPreviewBg('light')" class="w-4 h-4 rounded-full bg-slate-100 border border-slate-300 active:scale-95" title="ライト"></button>
+                        <button onclick="setPreviewBg('cosmic')" class="w-4 h-4 rounded-full bg-gradient-to-r from-slate-900 via-purple-950 to-indigo-950 border border-slate-700 active:scale-95" title="コズミック"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- コード出力エリア -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h2 class="text-sm font-bold tracking-widest text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-code text-indigo-500"></i> SOURCE EXPORTER (エクスポート)
+                    </h2>
+                    
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button id="tab-svg" onclick="switchTab('svg')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            SVG FILE
+                        </button>
+                        <button id="tab-html" onclick="switchTab('html')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200">
+                            HTML Embed
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 各タブのコード表示 -->
+                <div class="relative">
+                    <pre class="bg-slate-950 rounded-xl p-4 text-[11px] font-mono overflow-x-auto border border-slate-800 text-emerald-400 max-h-[220px] custom-scrollbar"><code id="code-box">出力中...</code></pre>
+                </div>
+
+                <!-- 操作ボタン群 -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button onclick="copyCode()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-slate-700 active:scale-95">
+                        <i class="fa-solid fa-copy text-amber-400"></i> コードをコピー
+                    </button>
+                    <button onclick="downloadAsSVG()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 active:scale-95 shadow-[0_4px_15px_rgba(245,158,11,0.2)]">
+                        <i class="fa-solid fa-download"></i> SVGをダウンロード
+                    </button>
+                    <button onclick="copyRawHTML()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-slate-700 active:scale-95">
+                        <i class="fa-solid fa-code-branch text-indigo-400"></i> 元のインラインHTML版
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-600 text-xs py-6 px-4 text-center border-t border-slate-900 mt-auto">
+        <p>© 2026 PLIP & Hiro-Seki-Tech & 投資運用のジェムキン. Produced by 金髪の軍師ジェムピック (Gempick FinTech Lab).</p>
+    </footer>
+
+    <script>
+        let currentTab = 'svg';
+        let currentTailDirection = 'bottom';
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // カラーパレットの同期
+        function syncColorInput(inputId, hexValue) {
+            const colorInput = document.getElementById(inputId);
+            if (colorInput && /^#[0-9A-F]{6}$/i.test(hexValue)) {
+                colorInput.value = hexValue;
+                updateBubble();
+            }
+        }
+
+        // プリセット適用
+        function applyPreset(bg, border, text, lightning) {
+            document.getElementById('bg-color').value = bg;
+            document.getElementById('bg-color-text').value = bg;
+            document.getElementById('border-color').value = border;
+            document.getElementById('border-color-text').value = border;
+            document.getElementById('text-color').value = text;
+            document.getElementById('text-color-text').value = text;
+            document.getElementById('lightning-color').value = lightning;
+            document.getElementById('lightning-color-text').value = lightning;
+            updateBubble();
+            showToast("🎨 プリセットを適用しました！");
+        }
+
+        // テールの方向設定
+        function setTailDirection(direction) {
+            currentTailDirection = direction;
+            document.querySelectorAll('.tail-btn').forEach(btn => {
+                btn.classList.remove('border-amber-500/40', 'bg-amber-500/10', 'text-amber-400');
+                btn.classList.add('border-slate-800', 'bg-slate-950', 'text-slate-400');
+            });
+            const activeBtn = document.getElementById(`tail-${direction}-btn`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-slate-800', 'bg-slate-950', 'text-slate-400');
+                activeBtn.classList.add('border-amber-500/40', 'bg-amber-500/10', 'text-amber-400');
+            }
+            updateBubble();
+        }
+
+        // 背景切り替え
+        function setPreviewBg(mode) {
+            const container = document.getElementById('preview-wrapper').parentElement;
+            container.className = "relative w-full h-[320px] rounded-xl border border-slate-800 flex items-center justify-center overflow-hidden custom-scrollbar";
+            if (mode === 'dark') {
+                container.classList.add('bg-slate-950');
+            } else if (mode === 'light') {
+                container.classList.add('bg-slate-100');
+            } else if (mode === 'cosmic') {
+                container.classList.add('bg-gradient-to-tr', 'from-slate-950', 'via-indigo-950', 'to-slate-900');
+            }
+        }
+
+        // SVGコードの動的生成
+        function generateSVG() {
+            const textValue = document.getElementById('bubble-text').value;
+            const bgColor = document.getElementById('bg-color').value;
+            const borderColor = document.getElementById('border-color').value;
+            const textColor = document.getElementById('text-color').value;
+            const lightningColor = document.getElementById('lightning-color').value;
+            const floatSpeed = parseFloat(document.getElementById('float-speed').value) || 3.0;
+            const rainbowSpeed = parseInt(document.getElementById('rainbow-speed').value) || 7;
+
+            // サイズパラメータの動的読み込み
+            const bubbleWidth = parseInt(document.getElementById('bubble-width').value) || 154;
+            const bubbleHeight = parseInt(document.getElementById('bubble-height').value) || 46;
+            const fontSize = parseFloat(document.getElementById('font-size').value) || 11.5;
+
+            // スライダー表示更新
+            document.getElementById('float-speed-val').textContent = floatSpeed.toFixed(1) + 's';
+            document.getElementById('rainbow-speed-val').textContent = rainbowSpeed + 's';
+            document.getElementById('bubble-width-val').textContent = bubbleWidth + 'px';
+            document.getElementById('bubble-height-val').textContent = bubbleHeight + 'px';
+            document.getElementById('font-size-val').textContent = fontSize.toFixed(1) + 'px';
+
+            // カラーテキスト更新
+            document.getElementById('bg-color-text').value = bgColor;
+            document.getElementById('border-color-text').value = borderColor;
+            document.getElementById('text-color-text').value = textColor;
+            document.getElementById('lightning-color-text').value = lightningColor;
+
+            // 方向に応じた高精度な数式配置パラメータ
+            let pathD = "";
+            let viewWidth = bubbleWidth + 16;
+            let viewHeight = bubbleHeight + 26;
+            let bubbleTransform = "translate(8, 6)";
+            let textX = Math.round(bubbleWidth / 2 + 10);
+            let textY = Math.round(bubbleHeight / 2 + 7);
+            let iconTransform = `translate(16, ${Math.round(bubbleHeight / 2 - 9)})`;
+
+            let W = bubbleWidth;
+            let H = bubbleHeight;
+
+            if (currentTailDirection === 'bottom') {
+                pathD = `M 10 2 H ${W-8} A 8 8 0 0 1 ${W} 10 V ${H-8} A 8 8 0 0 1 ${W-8} ${H} H ${Math.round(W/2 + 11)} L ${Math.round(W/2)} ${H+6} L ${Math.round(W/2 - 11)} ${H} H 10 A 8 8 0 0 1 2 ${H-8} V 10 A 8 8 0 0 1 10 2 Z`;
+                viewWidth = W + 16;
+                viewHeight = H + 26;
+                bubbleTransform = "translate(8, 6)";
+                textX = Math.round(W / 2 + 10);
+                textY = Math.round(H / 2 + 7);
+                iconTransform = `translate(16, ${Math.round(H / 2 - 9)})`;
+            } else if (currentTailDirection === 'top') {
+                pathD = `M 10 10 H ${Math.round(W/2 - 11)} L ${Math.round(W/2)} 4 L ${Math.round(W/2 + 11)} 10 H ${W-8} A 8 8 0 0 1 ${W} 18 V ${H+2} A 8 8 0 0 1 ${W-8} ${H+10} H 10 A 8 8 0 0 1 2 ${H+2} V 18 A 8 8 0 0 1 10 10 Z`;
+                viewWidth = W + 16;
+                viewHeight = H + 26;
+                bubbleTransform = "translate(8, 6)";
+                textX = Math.round(W / 2 + 10);
+                textY = Math.round(H / 2 + 10 + 7); // 10pxシフトして縦中央！
+                iconTransform = `translate(16, ${Math.round(H / 2 + 10 - 9)})`; // アイコンも10pxシフト！
+            } else if (currentTailDirection === 'left') {
+                pathD = `M 16 6 H ${W-8} A 8 8 0 0 1 ${W} 14 V ${H-8} A 8 8 0 0 1 ${W-8} ${H} H 16 L 10 ${Math.round(H/2 + 3)} L 16 ${Math.round(H/2 - 3)} Z`;
+                viewWidth = W + 20;
+                viewHeight = H + 20;
+                bubbleTransform = "translate(6, 6)";
+                textX = Math.round((W - 16) / 2 + 16 + 10); // 右にシフト
+                textY = Math.round(H / 2 + 7); // 真ん中
+                iconTransform = `translate(22, ${Math.round(H / 2 - 9)})`; // 右にシフト
+            } else if (currentTailDirection === 'right') {
+                pathD = `M 6 6 H ${W-6} L ${W} ${Math.round(H/2 - 3)} L ${W-6} ${Math.round(H/2 + 3)} V ${H-8} A 8 8 0 0 1 ${W-14} ${H} H 10 A 8 8 0 0 1 2 ${H-8} V 14 A 8 8 0 0 1 10 6 Z`;
+                viewWidth = W + 20;
+                viewHeight = H + 20;
+                bubbleTransform = "translate(10, 6)";
+                textX = Math.round(W / 2); // 左にシフト
+                textY = Math.round(H / 2 + 7); // 真ん中
+                iconTransform = `translate(12, ${Math.round(H / 2 - 9)})`; // 左にシフト
+            }
+
+            // SVGソースコードのビルド
+            const svgSource = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewWidth} ${viewHeight}" width="100%" height="100%">
+  <defs>
+    <!-- 極上の浮遊感とレンダリングチラつき防止のスタイル定義 (GPUレイヤー強制化) -->
+    <style>
+      @keyframes plipNobleFloat {
+        0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); }
+        50% { transform: translate3d(0, 3px, 0) rotate(0.001deg); }
+        100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); }
+      }
+      @keyframes plipRainbowText {
+        0%   { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); }
+        14%  { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); }
+        28%  { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); }
+        42%  { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); }
+        56%  { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); }
+        70%  { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); }
+        84%  { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); }
+        100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); }
+      }
+      @keyframes plipBoltFlash {
+        0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px ${lightningColor}); }
+        50% { opacity: 1; filter: drop-shadow(0 0 5px ${lightningColor}); }
+      }
+      .animated-bubble-container {
+        animation: plipNobleFloat ${floatSpeed}s infinite ease-in-out;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+      .rainbow-bulb {
+        animation: plipRainbowText ${rainbowSpeed}s linear infinite;
+      }
+      .flashing-bolt {
+        animation: plipBoltFlash 1.5s infinite ease-in-out;
+      }
+    </style>
+  </defs>
+
+  <!-- 浮遊コンテナ (will-change と geometricPrecision で完全に手ブレを吸収) -->
+  <g class="animated-bubble-container" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+    <g transform="${bubbleTransform}">
+      <!-- 吹き出しの背景と境界 -->
+      <path d="${pathD}" fill="${bgColor}" stroke="${borderColor}" stroke-width="1.3" stroke-opacity="0.75" filter="drop-shadow(0 6px 12px rgba(0,0,0,0.35))" />
+
+      <!-- アイコンセクション（電球＆稲妻のベクターをハイエンドに精密化） -->
+      <g transform="${iconTransform}">
+        <!-- 💡周囲を照らす高輝度放射線 -->
+        <g stroke="${textColor}" stroke-linecap="round" stroke-width="1.2" opacity="0.55">
+          <line x1="8" y1="1" x2="8" y2="3" />
+          <line x1="3" y1="3" x2="4.5" y2="4.5" />
+          <line x1="1" y1="8" x2="3" y2="8" />
+          <line x1="3" y1="13" x2="4.5" y2="11.5" />
+          <line x1="13" y1="11.5" x2="11.5" y2="10" />
+          <line x1="15" y1="8" x2="13" y2="8" />
+          <line x1="13" y1="3" x2="11.5" y2="4.5" />
+        </g>
+
+        <!-- 💡電球のふっくら美しいガラス本体 (ここが虹色に変化！) -->
+        <path class="rainbow-bulb" d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z" fill="#94a3b8" />
+        
+        <!-- 💡電球内部の光り輝くM字フィラメント (高輝度ホワイト) -->
+        <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 1px #ffffff);" />
+        
+        <!-- 💡電球の金属製スレッドソケット(口金) -->
+        <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
+        <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z" fill="#475569" />
+        <line x1="5" y1="14.8" x2="11" y2="14.8" stroke="#334155" stroke-width="0.8" />
+        <line x1="5.3" y1="15.8" x2="10.7" y2="15.8" stroke="#334155" stroke-width="0.8" />
+
+        <!-- ⚡稲妻ボルト（輝く閃光） -->
+        <polygon class="flashing-bolt" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="${lightningColor}" />
+      </g>
+
+      <!-- テキストセクション (ど真ん中同期 ＆ プルプル防止フォント補正) -->
+      <text x="${textX}" y="${textY}" fill="${textColor}" font-family="'Plus Jakarta Sans', 'Noto Sans JP', sans-serif" font-size="${fontSize}" font-weight="900" letter-spacing="0.1em" text-anchor="middle">${textValue}</text>
+    </g>
+  </g>
+</svg>`;
+            return svgSource;
+        }
+
+        // HTML埋め込み用のコード生成
+        function generateHTMLEmbed() {
+            const textValue = document.getElementById('bubble-text').value;
+            const bgColor = document.getElementById('bg-color').value;
+            const borderColor = document.getElementById('border-color').value;
+            const textColor = document.getElementById('text-color').value;
+            const lightningColor = document.getElementById('lightning-color').value;
+            const floatSpeed = parseFloat(document.getElementById('float-speed').value) || 3.0;
+            const rainbowSpeed = parseInt(document.getElementById('rainbow-speed').value) || 7;
+
+            // サイズパラメータの動的読み込み
+            const bubbleWidth = parseInt(document.getElementById('bubble-width').value) || 154;
+            const bubbleHeight = parseInt(document.getElementById('bubble-height').value) || 46;
+            const fontSize = parseFloat(document.getElementById('font-size').value) || 11.5;
+
+            // HTML版でのテール位置に応じたトランスフォームクラスの設定
+            let tailHtml = "";
+            if (currentTailDirection === 'bottom') {
+                tailHtml = `<span class="absolute bottom-full left-1/2 -translate-x-1/2 w-2.5 h-2.5 transform rotate-45 translate-y-[5px] border-t border-l" style="background-color: ${bgColor}; border-color: ${borderColor}60;"></span>`;
+            } else if (currentTailDirection === 'top') {
+                tailHtml = `<span class="absolute top-full left-1/2 -translate-x-1/2 w-2.5 h-2.5 transform rotate-45 -translate-y-[5px] border-b border-r" style="background-color: ${bgColor}; border-color: ${borderColor}60;"></span>`;
+            } else if (currentTailDirection === 'left') {
+                tailHtml = `<span class="absolute left-full top-1/2 -translate-y-1/2 w-2.5 h-2.5 transform rotate-45 -translate-x-[5px] border-t border-r" style="background-color: ${bgColor}; border-color: ${borderColor}60;"></span>`;
+            } else if (currentTailDirection === 'right') {
+                tailHtml = `<span class="absolute right-full top-1/2 -translate-y-1/2 w-2.5 h-2.5 transform rotate-45 translate-x-[5px] border-b border-l" style="background-color: ${bgColor}; border-color: ${borderColor}60;"></span>`;
+            }
+
+            return `<!-- PLIP! 吹き出しコンポーネントここから (GPU支援で滑らか仕様) -->
+<div class="relative inline-block select-none" style="animation: plipNobleFloat ${floatSpeed}s infinite ease-in-out; will-change: transform; transform: translate3d(0,0,0) rotate(0.001deg); -webkit-font-smoothing: antialiased; backface-visibility: hidden;">
+  <style>
+    @keyframes plipRainbowText {
+      0%   { color: #ff0055; text-shadow: 0 0 6px rgba(255, 0, 85, 0.4); }
+      14%  { color: #ff5500; text-shadow: 0 0 6px rgba(255, 85, 0, 0.4); }
+      28%  { color: #ffcc00; text-shadow: 0 0 6px rgba(255, 204, 0, 0.4); }
+      42%  { color: #00ff66; text-shadow: 0 0 6px rgba(0, 255, 102, 0.4); }
+      56%  { color: #00ccff; text-shadow: 0 0 6px rgba(0, 204, 255, 0.4); }
+      70%  { color: #3333ff; text-shadow: 0 0 6px rgba(51, 51, 255, 0.4); }
+      84%  { color: #9900ff; text-shadow: 0 0 6px rgba(153, 0, 255, 0.4); }
+      100% { color: #ff0055; text-shadow: 0 0 6px rgba(255, 0, 85, 0.4); }
+    }
+    @keyframes plipNobleFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0.001deg); }
+      50% { transform: translate3d(0, 3px, 0) rotate(0.001deg); }
+    }
+    .plip-rainbow-bulb {
+      animation: plipRainbowText ${rainbowSpeed}s linear infinite;
+    }
+  </style>
+
+  <!-- 吹き出しコンテナ (動的サイズ同期) -->
+  <div class="flex items-center gap-2 px-4 py-2 rounded-xl shadow-[0_10px_25px_rgba(0,0,0,0.5)] border" 
+       style="background-color: ${bgColor}; border-color: ${borderColor}60; color: ${textColor}; font-size: ${fontSize}px; font-weight: 900; letter-spacing: 0.1em; width: ${bubbleWidth}px; height: ${bubbleHeight}px; justify-content: center; box-sizing: border-box;">
+    
+    <!-- 💡＋⚡のアイコン領域 (FontAwesome使用のフォールバック版) -->
+    <div class="relative w-5 h-5 shrink-0">
+      <i class="fa-solid fa-lightbulb plip-rainbow-bulb absolute left-0 top-0.5 text-xs"></i>
+      <i class="fa-solid fa-bolt absolute right-0 -top-0.5 text-[9px] drop-shadow-[0_0_2px_${lightningColor}]" style="color: ${lightningColor};"></i>
+    </div>
+    
+    <!-- テキスト -->
+    <span style="font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;">${textValue}</span>
+  </div>
+  
+  <!-- 三角形のしっぽ -->
+  ${tailHtml}
+</div>
+<!-- PLIP! 吹き出しコンポーネントここまで -->`;
+        }
+
+        // 吹き出しの更新処理
+        function updateBubble() {
+            const svgContent = generateSVG();
+            
+            // プレビュー表示へのマウント
+            document.getElementById('preview-wrapper').innerHTML = svgContent;
+            
+            // コード表示更新
+            updateCodeBox();
+        }
+
+        function updateCodeBox() {
+            const box = document.getElementById('code-box');
+            if (currentTab === 'svg') {
+                box.textContent = generateSVG();
+            } else {
+                box.textContent = generateHTMLEmbed();
+            }
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('tab-svg').className = tabName === 'svg' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200';
+            document.getElementById('tab-html').className = tabName === 'html' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200';
+            updateCodeBox();
+        }
+
+        // クリップボードコピー機能
+        function copyCode() {
+            const codeText = document.getElementById('code-box').textContent;
+            
+            // 安全なクリップボード複製
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            showToast("📋 コードをクリップボードに記憶させました！");
+        }
+
+        // 1回前のピュアHTML版をコピー
+        function copyRawHTML() {
+            const originalHTML = `<!-- PLIP !! 吹き出し -->
+<div class="absolute top-[62px] left-1/2 plip-noble-bubble bg-[#151d30] border border-amber-500/40 text-[10px] font-black tracking-widest px-3 py-1.5 rounded-lg text-amber-400 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.5)] pointer-events-none select-none z-50 flex items-center justify-center gap-1.5" style="transform: translateX(-50%);">
+    <span class="absolute bottom-full left-1/2 -translate-x-1/2 w-2 h-2 bg-[#151d30] border-t border-l border-amber-500/40 transform rotate-45 translate-y-[5px]"></span>                            
+    <span class="relative inline-block w-4 h-4 align-middle">
+        <i class="fa-solid fa-lightbulb plip-rainbow-text-bulb text-[11px] absolute left-0 top-0.5"></i>
+        <i class="fa-solid fa-bolt text-yellow-300 text-[8px] absolute right-0 -top-0.5 drop-shadow-[0_0_2px_#fde047]"></i>
+    </span>
+    <span>PLIP !!</span>
+</div>`;
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = originalHTML;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            showToast("💡 元のインラインHTMLをコピーしました！");
+        }
+
+        // SVGとして保存/ダウンロードする
+        function downloadAsSVG() {
+            const svgContent = generateSVG();
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `plip_bubble_${currentTailDirection}.svg`;
+            link.click();
+            showToast("📥 SVGファイルのダウンロードに成功しました！");
+        }
+
+        window.onload = function() {
+            updateBubble();
+        }
+    </script>
+</body>
+</html>
