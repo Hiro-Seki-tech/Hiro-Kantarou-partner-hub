@@ -1,1 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛠️ シミュネータ（テンプレート・ジェネレータ）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
 
+  <header class="bg-slate-950 border-b border-slate-800 px-6 py-4 flex items-center justify-between shadow-xl">
+    <div class="flex items-center space-x-3">
+      <div class="text-2xl text-slate-400"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+      <h1 class="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
+        シミュネータ <span class="text-sm font-medium text-slate-500">v1.2 [完全統合Canvas版]</span>
+      </h1>
+    </div>
+    <div class="text-xs text-slate-500 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
+      Developer Studio for Hiro
+    </div>
+  </header>
+
+  <main class="max-w-[1800px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <section class="lg:col-span-5 flex flex-col space-y-4">
+      <div class="bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 p-0.5 rounded-2xl shadow-2xl border border-slate-700/50">
+        <div class="bg-slate-950 rounded-[14px] p-6">
+          <h2 class="text-lg font-bold text-slate-200 mb-4 flex items-center border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-sliders text-indigo-400 mr-2"></i>設定インプット
+          </h2>
+
+          <div class="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mb-6">
+            <button onclick="switchGenTab('gen-tab-1')" id="btn-gen-tab-1" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 bg-gradient-to-r from-slate-700 to-slate-800 text-white shadow-md">
+              1. 基本設定
+            </button>
+            <button onclick="switchGenTab('gen-tab-2')" id="btn-gen-tab-2" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200">
+              2. シンボル入力
+            </button>
+            <button onclick="switchGenTab('gen-tab-3')" id="btn-gen-tab-3" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200">
+              3. 出力・保存
+            </button>
+          </div>
+
+          <div id="gen-tab-1" class="gen-tab-content space-y-5">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">シミュレータ名</label>
+              <input type="text" id="cfg-title" value="💡生涯資産シミュレータ【尽生】" oninput="updatePreviewCanvas()" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">ヘッダー帯カラー</label>
+                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg p-2">
+                  <input type="color" id="cfg-header-color" value="#0f172a" oninput="updatePreviewCanvas()" class="w-8 h-8 rounded border border-slate-700 cursor-pointer bg-transparent">
+                  <span id="cfg-header-val" class="text-xs font-mono text-slate-400">#0F172A</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">メイン背景カラー</label>
+                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg p-2">
+                  <input type="color" id="cfg-main-color" value="#020617" oninput="updatePreviewCanvas()" class="w-8 h-8 rounded border border-slate-700 cursor-pointer bg-transparent">
+                  <span id="cfg-main-val" class="text-xs font-mono text-slate-400">#020617</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="gen-tab-2" class="gen-tab-content space-y-4 hidden">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">シンボルHTMLコード (<span class="text-indigo-400">コアバースト仕様</span>)</label>
+              <textarea id="cfg-symbol-html" rows="10" oninput="updatePreviewCanvas()" placeholder="<svg>...</svg>などを貼り付け" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:outline-none"></textarea>
+            </div>
+          </div>
+
+          <div id="gen-tab-3" class="gen-tab-content space-y-4 hidden">
+            <p class="text-xs text-slate-400 leading-relaxed">
+              設定した内容が右側のコードおよびキャンバスに100%リアルタイム適用されています。
+            </p>
+            <div class="grid grid-cols-1 gap-3">
+              <button onclick="copyGeneratedCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
+                <i class="fa-solid fa-copy mr-2"></i>コードをクリップボードにコピー
+              </button>
+              <button onclick="downloadGeneratedHTML()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
+                <i class="fa-solid fa-file-arrow-down mr-2"></i>HTMLファイルを保存 (.html)
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="lg:col-span-7 flex flex-col space-y-3">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-1">
+        <div class="flex space-x-2">
+          <button onclick="switchViewMode('preview')" id="btn-view-preview" class="px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700">
+            <i class="fa-solid fa-desktop mr-1.5"></i>🖥️ HPプレビュー
+          </button>
+          <button onclick="switchViewMode('code')" id="btn-view-code" class="px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50">
+            <i class="fa-solid fa-code mr-1.5"></i>📄 生成HTMLコード
+          </button>
+        </div>
+        <span class="text-[10px] text-slate-500 font-mono">Live Sync Canvas System</span>
+      </div>
+
+      <div class="relative flex-1 min-h-[680px] bg-slate-950 border border-slate-800 rounded-b-2xl rounded-tr-2xl overflow-hidden flex flex-col shadow-inner">
+        <iframe id="canvas-iframe" class="w-full flex-1 border-none bg-slate-900"></iframe>
+
+        <textarea id="code-output-area" readonly class="w-full flex-1 bg-slate-950 text-slate-300 font-mono text-xs p-4 focus:outline-none resize-none overflow-y-auto leading-relaxed hidden"></textarea>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // コアバーストアイコンの初期設定（ライトバルブ＋右上ゴールドボルト＋レインボーグラデーション）
+    const defaultSymbol = `<div class="relative w-full h-full flex items-center justify-center text-slate-400">
+  <i class="fa-solid fa-lightbulb text-3xl" style="background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+  <i class="fa-solid fa-bolt absolute top-1 right-2 text-yellow-300 text-xs animate-pulse"></i>
+</div>`;
+    
+    document.getElementById('cfg-symbol-html').value = defaultSymbol;
+
+    function switchGenTab(tabId) {
+      document.querySelectorAll('.gen-tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+      for(let i=1; i<=3; i++) {
+        document.getElementById(`btn-gen-tab-${i}`).className = (id => id === `btn-${tabId}` ? "py-2 text-xs font-bold rounded-lg transition-all duration-200 bg-gradient-to-r from-slate-700 to-slate-800 text-white shadow-md" : "py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200")(`btn-${tabId}`);
+      }
+    }
+
+    function switchViewMode(mode) {
+      const iframe = document.getElementById('canvas-iframe');
+      const codeArea = document.getElementById('code-output-area');
+      const btnPreview = document.getElementById('btn-view-preview');
+      const btnCode = document.getElementById('btn-view-code');
+
+      if (mode === 'preview') {
+        iframe.classList.remove('hidden');
+        codeArea.classList.add('hidden');
+        btnPreview.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700";
+        btnCode.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50";
+      } else {
+        iframe.classList.add('hidden');
+        codeArea.classList.remove('hidden');
+        btnPreview.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50";
+        btnCode.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700";
+      }
+    }
+
+    // 双方向リアルタイムCanvasレンダリングエンジン
+    function updatePreviewCanvas() {
+      const title = document.getElementById('cfg-title').value;
+      const hColor = document.getElementById('cfg-header-color').value;
+      const mColor = document.getElementById('cfg-main-color').value;
+      let symbol = document.getElementById('cfg-symbol-html').value || defaultSymbol;
+
+      document.getElementById('cfg-header-val').innerText = hColor.toUpperCase();
+      document.getElementById('cfg-main-val').innerText = mColor.toUpperCase();
+
+      // 👑 自由カラーと『尽生・宝均』の最前面調停ロジックが組み込まれた完全なる出力用HTML構造
+      const template = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            premium: {
+              silver: {
+                50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 700: '#334155', 800: '#1e293b', 950: '#0f172a'
+              }
+            }
+          }
+        }
+      }
+    }
+  <\/script>
+  <style>
+    /* 銀縁プレミアムシルバーパネル装飾 */
+    .silver-gradient-panel {
+      border: 2px solid rgba(226, 232, 240, 0.35);
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5), 0 0 15px 1px rgba(226, 232, 240, 0.1);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+    }
+    .active-silver-tab {
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%) !important;
+      color: #0f172a !important;
+      font-weight: 900 !important;
+    }
+/* 他のUIの陰に絶対隠れない最前面調停レイヤー */
+    .z-top-调停 { z-index: 100 !important; }
+
+    /* 💡吹き出し内部の極小電球を7色へ美しく循環させるグラデーション定義（挿入部分） */
+    @keyframes plipRainbowText {
+      0%   { color: #ff0055; text-shadow: 0 0 4px rgba(255, 0, 85, 0.3); }
+      14%  { color: #ff5500; text-shadow: 0 0 4px rgba(255, 85, 0, 0.3); }
+      28%  { color: #ffcc00; text-shadow: 0 0 4px rgba(255, 204, 0, 0.3); }
+      42%  { color: #00ff66; text-shadow: 0 0 4px rgba(0, 255, 102, 0.3); }
+      56%  { color: #00ccff; text-shadow: 0 0 4px rgba(0, 204, 255, 0.3); }
+      70%  { color: #3333ff; text-shadow: 0 0 4px rgba(51, 51, 255, 0.3); }
+      84%  { color: #9900ff; text-shadow: 0 0 4px rgba(153, 0, 255, 0.3); }
+      100% { color: #ff0055; text-shadow: 0 0 4px rgba(255, 0, 85, 0.3); }
+    }
+    .plip-rainbow-text-bulb {
+      animation: plipRainbowText 7s linear infinite;
+    }
+  </style>
+</head>
+<body style="background-color: ${mColor};" class="text-slate-100 min-h-screen font-sans flex flex-col antialiased selection:bg-indigo-500/30">
+
+  <header style="background-color: ${hColor};" class="border-b border-slate-800/80 sticky top-0 z-40 shadow-xl backdrop-blur-md px-4 py-3 flex items-center justify-between gap-4">
+    
+    <div class="flex items-center space-x-3 min-w-0">
+      <div class="flex-shrink-0 flex items-center justify-center overflow-hidden" style="min-width: 64px; max-width: 96px; width: 9vw;">
+        ${symbol}
+      </div>
+      <h1 class="text-sm sm:text-lg font-black tracking-tight text-white truncate max-w-[220px] sm:max-w-md">
+        ${title}
+      </h1>
+    </div>
+
+<div class="flex items-center space-x-2 flex-shrink-0">
+      <!-- 👑 PLIPコアバースト付き テンプレート用リンクボタン（上書き部分） -->
+      <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links" target="_blank" rel="noopener noreferrer" class="bg-slate-900 border border-slate-700 text-[11px] font-bold text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 hover:text-white transition-all flex items-center gap-1.5 shadow no-underline">
+        <span class="fa-layers fa-fw relative w-3.5 h-3.5 inline-block">
+          <i class="fa-solid fa-lightbulb plip-rainbow-text-bulb text-xs"></i>
+          <i class="fa-solid fa-bolt text-yellow-300 text-[8px] absolute -top-1 -right-0.5 drop-shadow-[0_0_2px_rgba(253,224,71,0.6)]"></i>
+        </span>
+        <span>リンク</span>
+      </a>
+      <button id="btn-open-usage-modal" class="bg-gradient-to-r from-slate-800 to-slate-700 border border-slate-600 text-[11px] font-bold text-slate-200 px-2.5 py-1.5 rounded-lg hover:from-slate-700 hover:to-slate-600 transition-all shadow-md">
+        使い方？
+      </button>
+    </div>
+	
+  </header>
+
+  <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6 flex-grow">
+    
+    <div class="xl:col-span-5 flex flex-col space-y-4">
+      
+      <div class="p-1 rounded-xl silver-gradient-panel flex gap-1">
+        <button id="tab-btn-1" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab" data-tooltip="📊 基本的な数値パラメータを入力してグラフにリアルタイムで反映させます。">
+          1. 基本設定
+        </button>
+        <button id="tab-btn-2" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white" data-tooltip="✨ 固有の拡張ロジックやコピペ用カスタムパーツを挿入する空間です。">
+          2. カスタム要素
+        </button>
+        <button id="tab-btn-3" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white" data-tooltip="💾 LocalStorageに名前付きでシミュレーション構成を3件までセーブ・ロードします。">
+          保存／呼出
+        </button>
+      </div>
+
+      <div id="panel-box-1" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <h3 class="text-xs font-bold text-slate-300">パラメータ基本データ</h3>
+          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="初期値と毎年の純増額を変更することで、右側の折れ線グラフが即座に同期反転計算されます。">？</button>
+        </div>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">現在の保有資産 (万円)</label>
+            <input type="number" id="input-asset" value="800" class="sim-val-change w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">毎年の積立純増 (万円)</label>
+            <input type="number" id="input-delta" value="150" class="sim-val-change w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-box-2" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl hidden space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <h3 class="text-xs font-bold text-slate-300">カスタム拡張ブロック</h3>
+          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="量産時に個別の追加スイッチやフック変数群を埋め込むためのカスタム自由スロットです。">？</button>
+        </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          ここに複製先の各特化型シミュレータに合わせた独自のUIロジックを追加していきます。
+        </p>
+      </div>
+
+      <div id="panel-box-3" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl hidden space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <h3 class="text-xs font-bold text-slate-300">3宇宙伝承セーブスロット</h3>
+          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="ブラウザのLocalStorageにプランデータを独立記憶。名義をつけて保存が可能です。">？</button>
+        </div>
+        <div class="space-y-3">
+          <input type="text" id="storage-name-input" placeholder="セーブデータ名 (例: 堅実プラン)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none">
+          
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
+              <span id="slot-text-1" class="text-slate-400 truncate max-w-[160px]">書一: [記録なし]</span>
+              <div class="flex space-x-1">
+                <button onclick="saveSlot(1)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
+                <button onclick="loadSlot(1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
+              </div>
+            </div>
+            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
+              <span id="slot-text-2" class="text-slate-400 truncate max-w-[160px]">書二: [記録なし]</span>
+              <div class="flex space-x-1">
+                <button onclick="saveSlot(2)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
+                <button onclick="loadSlot(2)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
+              </div>
+            </div>
+            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
+              <span id="slot-text-3" class="text-slate-400 truncate max-w-[160px]">書三: [記録なし]</span>
+              <div class="flex space-x-1">
+                <button onclick="saveSlot(3)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
+                <button onclick="loadSlot(3)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="xl:col-span-7 flex flex-col space-y-4">
+      <div class="bg-slate-950/80 border border-slate-800 p-4 md:p-5 rounded-xl flex flex-col space-y-3 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <span class="text-xs font-bold text-slate-400 tracking-wider"><i class="fa-solid fa-chart-line text-emerald-400 mr-2"></i>リアルタイム資産推移シミュレーション</span>
+          <span class="text-[10px] text-slate-500 font-mono">Chart.js Live Ready</span>
+        </div>
+        
+        <div class="relative w-full h-[240px] sm:h-[280px] bg-slate-900/40 rounded-xl p-1 border border-slate-800/40">
+          <canvas id="simChart"></canvas>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[140px] overflow-y-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold sticky top-0">
+                <th class="p-2">時間年数</th>
+                <th class="p-2 text-right">予測アセット残高</th>
+              </tr>
+            </thead>
+            <tbody id="sim-table-rows" class="divide-y divide-slate-800/40 font-mono text-slate-300"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="usage-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-top-调停">
+    <div id="usage-modal-box" class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+        <h4 class="text-xs font-bold text-slate-200 flex items-center gap-1"><i class="fa-solid fa-circle-info text-indigo-400"></i>操作のガイダンス</h4>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white font-bold">&times;</button>
+      </div>
+      <p class="text-[11px] text-slate-300 leading-relaxed">
+        左側の数値入力を操作すると、右側のグラフィック・テーブルデータが同期反転して駆動します。ツールチップやポップオーバー（？」）は、枠外をタップ・クリックすると調停ロジックにより自動でクローズします。
+      </p>
+    </div>
+  </div>
+
+  <div id="global-tooltip" class="fixed bg-slate-800 text-slate-200 text-[10px] font-medium px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-2xl pointer-events-none hidden z-top-调停 max-w-[200px] transition-opacity opacity-0"></div>
+
+  <div id="global-popover" class="fixed bg-indigo-950 border border-indigo-700 text-slate-200 text-xs px-3 py-2.5 rounded-xl shadow-2xl hidden z-top-调停 max-w-[240px]">
+    <div class="flex items-start gap-1.5">
+      <div class="text-indigo-400 text-xs"><i class="fa-solid fa-circle-nodes"></i></div>
+      <div id="popover-text" class="leading-relaxed text-[11px]"></div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // 【ルール4適用】モーダル、最前面ツールチップ、ポップオーバー調停
+    // ----------------------------------------------------
+    const modalEl = document.getElementById('usage-modal');
+    const modalBox = document.getElementById('usage-modal-box');
+    const tipEl = document.getElementById('global-tooltip');
+    const popEl = document.getElementById('global-popover');
+    const popTxt = document.getElementById('popover-text');
+
+    document.getElementById('btn-open-usage-modal').addEventListener('click', (e) => {
+      e.stopPropagation();
+      modalEl.classList.remove('hidden');
+      modalEl.classList.add('flex');
+    });
+
+    function closeModal() {
+      modalEl.classList.add('hidden');
+      modalEl.classList.remove('flex');
+    }
+
+    modalEl.addEventListener('click', (e) => {
+      if(!modalBox.contains(e.target)) closeModal();
+    });
+
+    // ツールチップ最前面＆外側タップクローズ調停
+    document.querySelectorAll('.tab-trigger').forEach(btn => {
+      const showTip = () => {
+        tipEl.innerText = btn.getAttribute('data-tooltip');
+        tipEl.classList.remove('hidden');
+        tipEl.style.opacity = '1';
+        const r = btn.getBoundingClientRect();
+        tipEl.style.left = r.left + 'px';
+        tipEl.style.top = (r.bottom + window.scrollY + 6) + 'px';
+      };
+      const hideTip = () => {
+        tipEl.style.opacity = '0';
+        tipEl.classList.add('hidden');
+      };
+      btn.addEventListener('mouseenter', showTip);
+      btn.addEventListener('mouseleave', hideTip);
+      btn.addEventListener('touchstart', (e) => { e.stopPropagation(); showTip(); });
+    });
+
+    window.addEventListener('touchstart', () => {
+      tipEl.style.opacity = '0';
+      tipEl.classList.add('hidden');
+    });
+
+    // ポップオーバー（？」ヘルプ）調停
+    document.querySelectorAll('.help-popover-trigger').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popTxt.innerText = btn.getAttribute('data-popover');
+        popEl.classList.remove('hidden');
+        const r = btn.getBoundingClientRect();
+        let left = r.left - 80;
+        if(left < 10) left = 10;
+        popEl.style.left = left + 'px';
+        popEl.style.top = (r.bottom + window.scrollY + 6) + 'px';
+      });
+    });
+
+    // 枠外タップ/クリックで閉じる
+    window.addEventListener('click', (e) => {
+      if(!popEl.classList.contains('hidden') && !popEl.contains(e.target)) {
+        popEl.classList.add('hidden');
+      }
+    });
+
+    // ----------------------------------------------------
+    // テンプレート側 タブ切替
+    // ----------------------------------------------------
+    const tBtns = ['tab-btn-1', 'tab-btn-2', 'tab-btn-3'];
+    const tPanels = ['panel-box-1', 'panel-box-2', 'panel-box-3'];
+
+    tBtns.forEach((id, idx) => {
+      document.getElementById(id).addEventListener('click', () => {
+        tPanels.forEach(p => document.getElementById(p).classList.add('hidden'));
+        document.getElementById(tPanels[idx]).classList.remove('hidden');
+        tBtns.forEach(b => document.getElementById(b).className = "tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white");
+        document.getElementById(id).className = "tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab";
+      });
+    });
+
+    // ----------------------------------------------------
+    // LocalStorage 連動プラン記憶ロジック
+    // ----------------------------------------------------
+    const sPrefix = 'TEMPLATE_PRODUCTION_SLOT_';
+
+    function renderSlotLabels() {
+      for(let i=1; i<=3; i++) {
+        const raw = localStorage.getItem(sPrefix + i);
+        const lbl = document.getElementById('slot-text-' + i);
+        if(raw) {
+          const d = JSON.parse(raw);
+          lbl.innerText = '書 ' + (i===1?'一':i===2?'二':'三') + ': ' + d.name;
+          lbl.className = "text-xs font-bold text-emerald-400 truncate max-w-[160px]";
+        } else {
+          lbl.innerText = '書 ' + (i===1?'一':i===2?'二':'三') + ': [記録なし]';
+          lbl.className = "text-xs text-slate-500 truncate max-w-[160px]";
+        }
+      }
+    }
+
+    function saveSlot(slot) {
+      const n = document.getElementById('storage-name-input').value.trim() || 'テンプレート世界線';
+      const payload = {
+        name: n,
+        asset: document.getElementById('input-asset').value,
+        delta: document.getElementById('input-delta').value
+      };
+      localStorage.setItem(sPrefix + slot, JSON.stringify(payload));
+      document.getElementById('storage-name-input').value = '';
+      renderSlotLabels();
+    }
+
+    function loadSlot(slot) {
+      const raw = localStorage.getItem(sPrefix + slot);
+      if(!raw) return alert('展開可能な記憶がありません。');
+      const d = JSON.parse(raw);
+      document.getElementById('input-asset').value = d.asset;
+      document.getElementById('input-delta').value = d.delta;
+      runCalcSimulation();
+    }
+
+    // ----------------------------------------------------
+    // Chart.js ＆ データテーブル駆動サンプル
+    // ----------------------------------------------------
+    let cInstance = null;
+
+    function runCalcSimulation() {
+      const asset = parseFloat(document.getElementById('input-asset').value) || 0;
+      const delta = parseFloat(document.getElementById('input-delta').value) || 0;
+
+      const labels = ['初期'];
+      const data = [asset];
+      let rowsHtml = \`<tr class="hover:bg-slate-900/40"><td class="p-2">初期布陣</td><td class="p-2 text-right text-white font-bold">\${asset.toLocaleString()} 万円</td></tr>\`;
+
+      let current = asset;
+      for(let i=1; i<=5; i++) {
+        current += delta;
+        labels.push(i + '年後');
+        data.push(current);
+        rowsHtml += \`<tr class="hover:bg-slate-900/40"><td class="p-2 text-slate-400">\${i} 年目</td><td class="p-2 text-right text-emerald-400 font-bold">\text{\${current.toLocaleString()}} 万円</td></tr>\`;
+      }
+      document.getElementById('sim-table-rows').innerHTML = rowsHtml;
+
+      if(cInstance) {
+        cInstance.data.labels = labels;
+        cInstance.data.datasets[0].data = data;
+        cInstance.update();
+      } else {
+        cInstance = new Chart(document.getElementById('simChart').getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.06)', borderWidth: 2, fill: true, tension: 0.15
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } },
+              y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } }
+            }
+          }
+        });
+      }
+    }
+
+    document.querySelectorAll('.sim-val-change').forEach(input => input.addEventListener('input', runCalcSimulation));
+
+    renderSlotLabels();
+    runCalcSimulation();
+  <\/script>
+</body>
+</html>`;
+
+      // ジェネレータ側のコードテキストエリアを更新
+      document.getElementById('code-output-area').value = template;
+      
+      // ジェネレータ側のプレビューiframeへHTMLをリアルタイム流し込み
+      const iframe = document.getElementById('canvas-iframe');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(template);
+      doc.close();
+    }
+
+    // ジェネレータツール本体のコントロール制御
+    function copyGeneratedCode() {
+      const area = document.getElementById('code-output-area');
+      area.select();
+      navigator.clipboard.writeText(area.value);
+      alert('📋 テンプレートHTMLコードを完全にクリップボードへ格納しました！');
+    }
+
+    function downloadGeneratedHTML() {
+      const code = document.getElementById('code-output-area').value;
+      const blob = new Blob([code], { type: 'text/html;charset=utf-8;' });
+      const link = document.createElement('a');
+      const title = document.getElementById('cfg-title').value.replace(/[\/\\?%*:|"<>\s]/g, '_');
+      link.href = URL.createObjectURL(blob);
+      link.download = `simulator_${title}.html`;
+      link.click();
+    }
+
+    // 起動時自動レンダリング初期フック
+    window.onload = function() {
+      updatePreviewCanvas();
+    };
+  </script>
+</body>
+</html>
