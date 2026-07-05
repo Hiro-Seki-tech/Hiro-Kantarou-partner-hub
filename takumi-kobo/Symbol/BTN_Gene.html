@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 シンボルマーク連動ボタン生成ツール【尽生直系】</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700&family=Noto+Sans+JP:wght=400;500;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col p-4 sm:p-8 antialiased">
+
+    <div class="max-w-6xl w-full mx-auto flex flex-col gap-6">
+        
+        <header class="border-b border-slate-800 pb-4">
+            <h1 class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <span>シンボルマーク連動ボタン生成ツール</span>
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                任意のSVGコードをペーストするだけで、640px × 640pxの「金・銀・赤3色変転＋BGM/SE完全調停＋PLIP吹き出し」ボタンHTMLを出力します。
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <section class="lg:col-span-5 flex flex-col gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-xl">
+                    <label class="text-xs font-bold text-slate-300 tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-code text-blue-400"></i> 1. SVGコードをペースト
+                    </label>
+                    <textarea id="svg-input" placeholder="<svg ...> ... </svg>" class="w-full h-80 bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-slate-300 focus:outline-none focus:border-amber-500 custom-scrollbar resize-none"></textarea>
+                    
+                    <button onclick="generateAndDownloadButtonHtml()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3.5 rounded-xl text-xs transition-all transform active:scale-95 shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download text-sm"></i> 2. 連動ボタンHTMLを生成して保存
+                    </button>
+                </div>
+
+                <div class="bg-slate-900/50 border border-slate-800/60 rounded-xl p-4 text-xs text-slate-400 leading-relaxed space-y-2">
+                    <div class="font-bold text-slate-300 text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-info text-amber-400"></i> 生成されるHTMLの配置仕様</div>
+                    <p>• 出力されるHTMLは、それ単体でローカル動作するファイルです。</p>
+                    <p>• 音源パスは『尽生』と全く同じ相対パス（<code class="text-slate-200">./music/BGM.html</code>、<code class="text-slate-200">./music/song*.mp4</code>）で出力されます。</p>
+                </div>
+            </section>
+
+            <section class="lg:col-span-7 flex flex-col gap-3 items-center">
+                <div class="text-xs font-bold text-slate-400 self-start tracking-wider flex items-center gap-1">
+                    <i class="fa-solid fa-eye text-emerald-400"></i> リアルタイムプレビュー枠 (640px × 640px)
+                </div>
+
+                <div class="relative select-none w-[640px] h-[640px] group/core bg-slate-900/30 rounded-2xl border border-slate-800/80 flex items-center justify-center overflow-visible">
+                    
+                    <div id="preview-border-box" class="absolute inset-0 rounded-2xl border-2 border-amber-400 flex items-center justify-center overflow-hidden bg-slate-900/60 transition-all duration-200">
+                        <div id="preview-svg-placeholder" class="w-full h-full flex items-center justify-center text-slate-600 text-xs font-mono p-8 text-center leading-normal">
+                            左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。
+                        </div>
+                    </div>
+
+                    <div class="absolute top-[calc(100%-5px)] left-0 w-full pointer-events-none select-none z-50 px-[1px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35" class="w-full h-auto">
+                            <defs>
+                                <style>
+                                    @keyframes plipNobleFloatSVG { 0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 50% { transform: translate3d(0, 2px, 0) rotate(0.001deg); } 100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } }
+                                    @keyframes plipRainbowTextSVG { 0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 14% { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); } 28% { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); } 42% { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); } 50% { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); } 70% { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); } 84% { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); } 100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } }
+                                    @keyframes plipBoltFlashSVG { 0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px #fde047); } 50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); } }
+                                    .animated-bubble-container-svg { animation: plipNobleFloatSVG 3s infinite ease-in-out; will-change: transform; backface-visibility: hidden; }
+                                    .rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
+                                    .flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
+                                </style>
+                            </defs>
+                            <g class="animated-bubble-container-svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                                <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z" fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))" />
+                                <g transform="translate(6, 11) scale(0.85)">
+                                    <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="8" y1="1" x2="8" y2="3" /><line x1="3" y1="3" x2="4.5" y2="4.5" /><line x1="1" y1="8" x2="3" y2="8" /><line x1="3" y1="13" x2="4.5" y2="11.5" /><line x1="13" y1="11.5" x2="11.5" y2="10" /><line x1="15" y1="8" x2="13" y2="8" /><line x1="13" y1="3" x2="11.5" y2="4.5" /></g>
+                                    <path class="rainbow-bulb-svg" d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z" fill="#94a3b8" />
+                                    <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 1px #ffffff);" />
+                                    <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
+                                    <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z" fill="#475569" />
+                                    <line x1="5" y1="14.8" stroke="#334155" stroke-width="0.8" x2="11" y2="14.8" /><line x1="5.3" y1="15.8" stroke="#334155" stroke-width="0.8" x2="10.7" y2="15.8" />
+                                    <polygon class="flashing-bolt-svg" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047" />
+                                </g>
+                                <text x="58" y="24" fill="#fbbf24" font-family="'Plus Jakarta Sans', 'Noto Sans JP', sans-serif" font-size="11" font-weight="900" letter-spacing="0.03em" text-anchor="middle">PLIP !!</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        // 入力時のリアルタイムプレビュー同期
+        document.getElementById('svg-input').addEventListener('input', function(e) {
+            const val = e.target.value.trim();
+            const placeholder = document.getElementById('preview-svg-placeholder');
+            if(val) {
+                placeholder.innerHTML = val;
+                // ペーストされた内包SVGにフィット用のクラスを付与
+                const injectedSvg = placeholder.querySelector('svg');
+                if(injectedSvg) {
+                    injectedSvg.setAttribute('class', 'w-full h-full object-contain');
+                }
+            } else {
+                placeholder.innerHTML = `左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。`;
+            }
+        });
+
+        // 🌟 連動完成品HTMLの文字列を動的生成してダウンロードさせる本丸関数
+        function generateAndDownloadButtonHtml() {
+            const svgSource = document.getElementById('svg-input').value.trim();
+            if(!svgSource) {
+                alert('先にSVGコードをペーストしてください。');
+                return;
+            }
+
+            // 出力用HTMLソースコードの組み立て
+            const outputHtml = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💡 3色変転・連動シンボルマークコンポーネント</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=700;900&family=Noto+Sans+JP:wght=700;900&display=swap');
+        body { font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; }
+        
+        /* 👑 吹き出し全体の静かな浮遊挙動定義（尽生完全移植） */
+        @keyframes plipNobleFloatSVG { 0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 50% { transform: translate3d(0, 2px, 0) rotate(0.001deg); } 100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } }
+        @keyframes plipRainbowTextSVG { 0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 14% { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); } 28% { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); } 42% { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); } 50% { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); } 70% { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); } 84% { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); } 100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } }
+        @keyframes plipBoltFlashSVG { 0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px #fde047); } 50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); } }
+        .animated-bubble-container-svg { animation: plipNobleFloatSVG 3s infinite ease-in-out; will-change: transform; backface-visibility: hidden; }
+        .rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
+        .flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-8 antialiased select-none">
+
+    <div class="relative shrink-0 select-none w-[640px] h-[640px] group/core">
+
+        <div id="jinsei-core-btn" onclick="triggerCoreBurstInterlocking();" class="absolute inset-0 cursor-pointer group flex items-center justify-center rounded-2xl bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 border-2 border-amber-400 overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out active:scale-95 active:translate-y-1 active:shadow-[0_2px_5px_rgba(0,0,0,0.3)] active:brightness-125 active:duration-75">             
+            
+            <div class="w-full h-full p-6 flex items-center justify-center">
+                ${svgSource}
+            </div>
+
+        </div>
+
+        <div class="absolute top-[calc(100%-5px)] left-0 w-full pointer-events-none select-none z-50 px-[1px]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35" class="w-full h-auto">
+                <g class="animated-bubble-container-svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                    <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z" fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))" />
+                    <g transform="translate(6, 11) scale(0.85)">
+                        <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="8" y1="1" x2="8" y2="3" /><line x1="3" y1="3" x2="4.5" y2="4.5" /><line x1="1" y1="8" x2="3" y2="8" /><line x1="3" y1="13" x2="4.5" y2="11.5" /><line x1="13" y1="11.5" x2="11.5" y2="10" /><line x1="15" y1="8" x2="13" y2="8" /><line x1="13" y1="3" x2="11.5" y2="4.5" /></g>
+                        <path class="rainbow-bulb-svg" d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z" fill="#94a3b8" />
+                        <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 1px #ffffff);" />
+                        <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
+                        <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z" fill="#475569" />
+                        <line x1="5" y1="14.8" stroke="#334155" stroke-width="0.8" x2="11" y2="14.8" /><line x1="5.3" y1="15.8" stroke="#334155" stroke-width="0.8" x2="10.7" y2="15.8" />
+                        <polygon class="flashing-bolt-svg" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047" />
+                    </g>
+                    <text x="58" y="24" fill="#fbbf24" font-family="'Plus Jakarta Sans', 'Noto Sans JP', sans-serif" font-size="11" font-weight="900" letter-spacing="0.03em" text-anchor="middle">PLIP !!</text>
+                </g>
+            </svg>
+        </div>
+
+    </div>
+
+    <div id="toast" class="fixed top-5 right-5 z-[100] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-medium">
+        <span id="toast-icon" class="text-emerald-400"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-text">通知</span>
+    </div>
+
+    <script>
+        let currentCoreStyleState = 0; // 0:金枠, 1:銀枠, 2:赤枠
+        let audioBgmIframe = null;     // 金枠用（BGM.html）
+        let audioMediaElement = null;  // 銀枠用（song*.mp4）
+
+        // トースト通知発動
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = message;
+            const icon = document.getElementById('toast-icon');
+            icon.innerHTML = isSuccess ? '<i class="fa-solid fa-circle-check"><\/i>' : '<i class="fa-solid fa-volume-xmark"><\/i>';
+            icon.className = isSuccess ? 'text-emerald-400' : 'text-rose-400';
+            
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // ⌛ コントロール中枢クリック発火
+        function triggerCoreBurstInterlocking() {
+            playClickClickSound();
+            currentCoreStyleState = (currentCoreStyleState + 1) % 3;
+            applyCoreBurstStyleAndMusic();
+        }
+
+        // 🔊 上品な「コッ」スイッチ音生成（完全再利用）
+        function playClickClickSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(850, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.03);
+                
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.03);
+            } catch (e) {
+                console.warn("SE生成失敗:", e);
+            }
+        }
+
+        // 🔮 枠色とBGMの調停執行（速度変化処理だけを除去した手堅い再利用版）
+        async function applyCoreBurstStyleAndMusic() {
+            const btn = document.getElementById('jinsei-core-btn');
+            if (!btn) return;
+
+            if (audioBgmIframe) { audioBgmIframe.remove(); audioBgmIframe = null; }
+            if (audioMediaElement) { audioMediaElement.pause(); audioMediaElement.remove(); audioMediaElement = null; }
+
+            if (currentCoreStyleState === 0) {
+                // 🥇【金枠の陣】
+                btn.style.borderColor = '#FFD700';
+                btn.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4)';
+                showToast('⚡️ 金枠の陣：テーマ曲を起動 (BGM on!)');
+
+                audioBgmIframe = document.createElement('iframe');
+                audioBgmIframe.src = './music/BGM.html';
+                audioBgmIframe.style.display = 'none';
+                audioBgmIframe.setAttribute('allow', 'autoplay');
+                document.body.appendChild(audioBgmIframe);
+
+            } else if (currentCoreStyleState === 1) {
+                // 🥈【銀枠の陣】（5曲自動並列検知・ランダム抽選＆自動帰還）
+                btn.style.borderColor = '#E2E8F0';
+                btn.style.boxShadow = '0 0 20px rgba(226, 232, 240, 0.4)';
+
+                const songCandidates = [
+                    './music/song.mp4', './music/song1.mp4', './music/song2.mp4', './music/song3.mp4', './music/song4.mp4'
+                ];
+                const availableSongs = [];
+
+                await Promise.all(songCandidates.map(async (url) => {
+                    try {
+                        const response = await fetch(url, { method: 'HEAD' });
+                        if (response.ok) availableSongs.push(url);
+                    } catch (e) {}
+                }));
+
+                if (availableSongs.length === 0) availableSongs.push('./music/song.mp4');
+
+                const chosenSong = availableSongs[Math.floor(Math.random() * availableSongs.length)];
+                const songFileName = chosenSong.substring(chosenSong.lastIndexOf('/') + 1);
+                showToast('🎵 銀枠の陣：抽選曲 [' + songFileName + '] を爆音再生！');
+
+                audioMediaElement = document.createElement('audio');
+                audioMediaElement.src = chosenSong;
+                audioMediaElement.style.display = 'none';
+                audioMediaElement.volume = 0.5;
+                audioMediaElement.loop = false;
+                
+                audioMediaElement.addEventListener('ended', () => {
+                    currentCoreStyleState = 0;
+                    applyCoreBurstStyleAndMusic();
+                });
+
+                document.body.appendChild(audioMediaElement);
+                audioMediaElement.play().catch(e => console.warn("自動再生制限制限:", e));
+
+            } else if (currentCoreStyleState === 2) {
+                // 🩸【赤枠の陣】
+                btn.style.borderColor = '#EF4444';
+                btn.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.4)';
+                showToast('🤫 赤枠の陣：静寂の世界 (音声 off!)', false);
+            }
+        }
+    <\/script>
+</body>
+</html>`;
+
+            // Blob形式でブラウザにダウンロード処理を実行させる
+            const blob = new Blob([outputHtml], { type: 'text/html;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.setAttribute("href", URL.createObjectURL(blob));
+            link.setAttribute("download", "interlocking_symbol_button.html");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
