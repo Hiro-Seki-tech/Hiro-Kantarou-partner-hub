@@ -153,7 +153,7 @@
                         <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
                         <span id="welcome-badge" class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">Hiro's AI CO-CREATION PROTOCOL</span>
                     </div>
-                    <h2 id="welcome-title" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">My　PLIP（HiroとAI パートナー達のポータル）</h2>
+                    <h2 id="welcome-title" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white"><span class="text-rainbow">My/Your　PLIP</span>（HiroとAI パートナーのポータル）</h2>
                     <p id="welcome-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">ここは、ユーザと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。</p>
                 </div>
             </section>
@@ -449,13 +449,17 @@
 
             const sec = plipMasterData.sections;
 
-            if (sec.welcome) {
+  if (sec.welcome) {
                 const welcomeBadgeEl = document.getElementById('welcome-badge');
                 const welcomeTitleEl = document.getElementById('welcome-title');
                 const welcomeDescEl = document.getElementById('welcome-desc');
                 
                 if (welcomeBadgeEl) welcomeBadgeEl.textContent = sec.welcome.sub || '';
-                if (welcomeTitleEl) welcomeTitleEl.textContent = sec.welcome.title || '';
+                if (welcomeTitleEl) {
+                    // 入力されたタイトル分の中から「My PLIP」を自動で七色タグに置き換える
+                    const rawTitle = sec.welcome.title || '';
+                    welcomeTitleEl.innerHTML = rawTitle.replace(/My\s*PLIP/g, '<span class="text-rainbow">$&</span>');
+                }
                 if (welcomeDescEl) welcomeDescEl.textContent = sec.welcome.desc || '';
             }
 
@@ -1022,13 +1026,18 @@
         
         function closeSectionModal() { document.getElementById('section-modal').classList.add('hidden'); }
         
-        function saveSectionData() {
+function saveSectionData() {
             const secKey = document.getElementById('modal-sec-key').value;
-            const title = document.getElementById('modal-sec-title').value.trim();
+            let title = document.getElementById('modal-sec-title').value.trim();
             const icon = document.getElementById('modal-sec-icon').value.trim();
             const color = document.getElementById('modal-sec-color').value;
 
             if (!title) return alert("セクションタイトルを入力してください。");
+
+            // ★ここに挿入：ウェルカムボードの編集時、My PLIPという文字があれば最初から七色タグで囲んで保存する
+            if (secKey === 'welcome' && !title.includes('text-rainbow')) {
+                title = title.replace(/My\s*PLIP/g, '<span class="text-rainbow">$&</span>');
+            }
 
             plipMasterData.sections[secKey].title = title;
             plipMasterData.sections[secKey].icon = icon;
