@@ -53,7 +53,7 @@
                 <div class="relative select-none w-[640px] h-[640px] group/core bg-slate-900/30 rounded-2xl border border-slate-800/80 flex items-center justify-center overflow-visible">
                     
                     <div id="preview-border-box" class="absolute inset-0 rounded-2xl border-2 border-amber-400 flex items-center justify-center overflow-hidden bg-slate-900/60 transition-all duration-200">
-                        <div id="preview-svg-placeholder" class="w-full h-full flex items-center justify-center text-slate-600 text-xs font-mono p-8 text-center leading-normal">
+                        <div id="preview-svg-placeholder" class="w-full h-full flex items-center justify-center text-slate-600 text-xs font-mono text-center leading-normal">
                             左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。
                         </div>
                     </div>
@@ -93,31 +93,53 @@
     </div>
 
     <script>
+        // 🧼 内部のグラフィック構造（rectやpath等）を決して破壊せず、最外殻の<svg>タグのサイズ属性のみをクレンジングする安全な関数
+        function cleanAndOptimizeSvg(rawSvg) {
+            let svgCode = rawSvg.trim();
+            if (!svgCode) return "";
+
+            // 最初に現れる <svg ...> タグの開始部分（最外殻）だけを正確に特定して抽出
+            const svgTagMatch = svgCode.match(/<svg[^>]*>/i);
+            if (!svgTagMatch) return svgCode;
+
+            let svgTag = svgTagMatch[0];
+
+            // 最外殻タグの中からのみ width, height, class 属性をクレンジング（大文字小文字対応）
+            svgTag = svgTag.replace(/\bwidth\s*=\s*['"][^'"]*['"]/gi, '');
+            svgTag = svgTag.replace(/\bheight\s*=\s*['"][^'"]*['"]/gi, '');
+            svgTag = svgTag.replace(/\bclass\s*=\s*['"][^'"]*['"]/gi, '');
+
+            // 新たに余白なしでぴったり100%フィットさせるTailwind CSSクラスを安全に付与
+            svgTag = svgTag.replace(/<svg/i, '<svg class="w-full h-full object-contain"');
+
+            // 元のコードの最外殻部分だけをクレンジング済みのタグに差し替え（内部要素には一切干渉しない）
+            svgCode = svgCode.replace(/<svg[^>]*>/i, svgTag);
+
+            return svgCode;
+        }
+
         // 入力時のリアルタイムプレビュー同期
         document.getElementById('svg-input').addEventListener('input', function(e) {
             const val = e.target.value.trim();
             const placeholder = document.getElementById('preview-svg-placeholder');
             if(val) {
-                placeholder.innerHTML = val;
-                // ペーストされた内包SVGにフィット用のクラスを付与
-                const injectedSvg = placeholder.querySelector('svg');
-                if(injectedSvg) {
-                    injectedSvg.setAttribute('class', 'w-full h-full object-contain');
-                }
+                placeholder.innerHTML = cleanAndOptimizeSvg(val);
             } else {
                 placeholder.innerHTML = `左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。`;
             }
         });
 
-        // 🌟 連動完成品HTMLの文字列を動的生成してダウンロードさせる本丸関数
+        // 🌟 連動完成品HTMLの文字列を動的生成してダウンロードさせる関数
         function generateAndDownloadButtonHtml() {
-            const svgSource = document.getElementById('svg-input').value.trim();
-            if(!svgSource) {
+            const svgRawSource = document.getElementById('svg-input').value.trim();
+            if(!svgRawSource) {
                 alert('先にSVGコードをペーストしてください。');
                 return;
             }
 
-            // 出力用HTMLソースコードの組み立て
+            const svgOptimized = cleanAndOptimizeSvg(svgRawSource);
+
+            // 出力用HTMLソースコードの組み立て（p-6を完全に排除し、枠線いっぱいに密着させる構造）
             const outputHtml = `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -145,8 +167,8 @@
 
         <div id="jinsei-core-btn" onclick="triggerCoreBurstInterlocking();" class="absolute inset-0 cursor-pointer group flex items-center justify-center rounded-2xl bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 border-2 border-amber-400 overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out active:scale-95 active:translate-y-1 active:shadow-[0_2px_5px_rgba(0,0,0,0.3)] active:brightness-125 active:duration-75">             
             
-            <div class="w-full h-full p-6 flex items-center justify-center">
-                ${svgSource}
+            <div class="w-full h-full flex items-center justify-center">
+                ${svgOptimized}
             </div>
 
         </div>
@@ -181,7 +203,6 @@
         let audioBgmIframe = null;     // 金枠用（BGM.html）
         let audioMediaElement = null;  // 銀枠用（song*.mp4）
 
-        // トースト通知発動
         function showToast(message, isSuccess = true) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-text').textContent = message;
@@ -197,14 +218,12 @@
             }, 2500);
         }
 
-        // ⌛ コントロール中枢クリック発火
         function triggerCoreBurstInterlocking() {
             playClickClickSound();
             currentCoreStyleState = (currentCoreStyleState + 1) % 3;
             applyCoreBurstStyleAndMusic();
         }
 
-        // 🔊 上品な「コッ」スイッチ音生成（完全再利用）
         function playClickClickSound() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -230,7 +249,6 @@
             }
         }
 
-        // 🔮 枠色とBGMの調停執行（速度変化処理だけを除去した手堅い再利用版）
         async function applyCoreBurstStyleAndMusic() {
             const btn = document.getElementById('jinsei-core-btn');
             if (!btn) return;
@@ -239,7 +257,6 @@
             if (audioMediaElement) { audioMediaElement.pause(); audioMediaElement.remove(); audioMediaElement = null; }
 
             if (currentCoreStyleState === 0) {
-                // 🥇【金枠の陣】
                 btn.style.borderColor = '#FFD700';
                 btn.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4)';
                 showToast('⚡️ 金枠の陣：テーマ曲を起動 (BGM on!)');
@@ -251,7 +268,6 @@
                 document.body.appendChild(audioBgmIframe);
 
             } else if (currentCoreStyleState === 1) {
-                // 🥈【銀枠の陣】（5曲自動並列検知・ランダム抽選＆自動帰還）
                 btn.style.borderColor = '#E2E8F0';
                 btn.style.boxShadow = '0 0 20px rgba(226, 232, 240, 0.4)';
 
@@ -288,7 +304,6 @@
                 audioMediaElement.play().catch(e => console.warn("自動再生制限制限:", e));
 
             } else if (currentCoreStyleState === 2) {
-                // 🩸【赤枠の陣】
                 btn.style.borderColor = '#EF4444';
                 btn.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.4)';
                 showToast('🤫 赤枠の陣：静寂の世界 (音声 off!)', false);
@@ -298,7 +313,6 @@
 </body>
 </html>`;
 
-            // Blob形式でブラウザにダウンロード処理を実行させる
             const blob = new Blob([outputHtml], { type: 'text/html;charset=utf-8;' });
             const link = document.createElement("a");
             link.setAttribute("href", URL.createObjectURL(blob));
