@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗻 Fuji Symbol Mark Design Studio (富土山シンボルマーク・デザインスタジオ)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Noto+Sans+JP:wght=300;400;500;700;900&family=Cinzel:wght=600;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background: #05070f;
+            color: #f8fafc;
+        }
+
+        .studio-gradient {
+            background: radial-gradient(circle at 50% 0%, #111424 0%, #05070f 70%);
+        }
+
+        /* Premium glassmorphism effect */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .accent-border {
+            border-color: rgba(255, 215, 0, 0.25);
+        }
+
+        /* Custom gorgeous scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #05070f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col studio-gradient">
+
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 ease-out bg-slate-900 text-white px-5 py-3 rounded-xl shadow-[0_0_20px_rgba(255,215,0,0.2)] border border-yellow-500/30 flex items-center gap-3">
+        <span class="text-yellow-400 text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <span id="toast-text" class="text-xs font-bold tracking-wider">Settings copied! (設定をコピーしました！)</span>
+    </div>
+
+    <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-600 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] border border-yellow-300/30">
+                    <i class="fa-solid fa-mountain-sun text-slate-950 text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-2xl font-extrabold text-white flex items-center gap-2 tracking-wider" style="font-family: 'Cinzel', serif;">
+                        FUJI <span class="text-yellow-400 font-bold">CLOCKWORK</span> STUDIO
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-slate-400 font-light">
+                        Pure SMIL Animation Engine • Built with precision by Gempick
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-900/90 border border-yellow-500/20 p-2 rounded-xl">
+                <span class="text-xs font-semibold text-slate-300 px-2 flex items-center gap-2">
+                    <i class="fa-solid fa-glasses text-yellow-400"></i>
+                    <span>Designer: Gempick (ジェムピック)</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div class="glass-panel rounded-2xl p-6 shadow-2xl flex flex-col gap-5">
+                <h2 class="text-xs font-bold tracking-widest text-yellow-400 border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-sliders mr-2"></i>THEME & LIGHTING CONFIGURATION</span>
+                    <span class="text-[9px] text-emerald-400 px-2 py-0.5 bg-emerald-500/10 rounded font-mono font-bold">SMIL ENGINE ACTIVE</span>
+                </h2>
+
+                <!-- 1. Sky Gradient Customizer -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">🌌 Cosmic Sky Gradient</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Top Sky (Cosmic Deep)</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="sky-top" value="#0b132b" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="sky-top-txt" value="#0b132b" oninput="syncColorInput('sky-top', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Bottom Sky (Horizon Glow)</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="sky-bottom" value="#3a506b" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="sky-bottom-txt" value="#3a506b" oninput="syncColorInput('sky-bottom', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Mt. Fuji Shading Customizer -->
+                <div class="flex flex-col gap-2 border-t border-slate-800/60 pt-4">
+                    <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">🗻 Majestic Fuji Color</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Peak Shade</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="fuji-peak" value="#1e3a8a" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="fuji-peak-txt" value="#1e3a8a" oninput="syncColorInput('fuji-peak', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Base Shade</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="fuji-base" value="#1d4ed8" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="fuji-base-txt" value="#1d4ed8" oninput="syncColorInput('fuji-base', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Neon Hologram Intensity -->
+                <div class="flex flex-col gap-2 border-t border-slate-800/60 pt-4">
+                    <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">✨ Hologram Neon & Gold Highlights</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Glow Color (Holo Grid)</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="holo-color" value="#67e8f9" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="holo-color-txt" value="#67e8f9" oninput="syncColorInput('holo-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[9px] text-slate-500">Gold Accent Line</span>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="gold-color" value="#ffd700" oninput="updateFujiColors()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                                <input type="text" id="gold-color-txt" value="#ffd700" oninput="syncColorInput('gold-color', this.value)" class="w-full text-center rounded-lg bg-slate-950 border border-slate-800 p-1.5 text-slate-300 font-mono text-[10px]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Clockwork Timing Control -->
+                <div class="flex flex-col gap-2 border-t border-slate-800/60 pt-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">⏱ Clockwork Speed Ratio</label>
+                        <span id="speed-indicator" class="text-xs font-mono font-bold text-yellow-400">1.0x (Normal)</span>
+                    </div>
+                    <input type="range" id="time-speed" min="0.5" max="3.0" step="0.1" value="1.0" oninput="changeTimelineSpeed()" class="w-full accent-yellow-400 bg-slate-950 h-1.5 rounded-lg cursor-pointer">
+                    <span class="text-[9px] text-slate-500">Speeds up or slows down the SMIL timeline logic in the preview.</span>
+                </div>
+
+                <!-- 5. Presets Selector -->
+                <div class="flex flex-col gap-1.5 border-t border-slate-800/60 pt-4">
+                    <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">🎨 Cosmic Presets</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="applyPreset('#0b132b', '#3a506b', '#1e3a8a', '#1d4ed8', '#67e8f9', '#ffd700')" class="py-2 px-1 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-[10px] font-bold text-slate-300 transition-all">Classic Tokyo</button>
+                        <button onclick="applyPreset('#020617', '#1e1b4b', '#311042', '#581c87', '#ec4899', '#facc15')" class="py-2 px-1 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 border border-purple-800/30 text-[10px] font-bold text-purple-300 transition-all">Neon Violet</button>
+                        <button onclick="applyPreset('#022c22', '#064e3b', '#065f46', '#0f766e', '#22d3ee', '#10b981')" class="py-2 px-1 rounded-xl bg-teal-950/40 hover:bg-teal-900/40 border border-teal-800/30 text-[10px] font-bold text-teal-300 transition-all">Emerald Forest</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Live Preview -->
+            <div class="glass-panel rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+                <h2 class="text-xs font-bold tracking-widest text-slate-200 border-b border-slate-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-eye text-yellow-400 mr-2"></i>LIVE CLOCKWORK SYSTEM PREVIEW</span>
+                    <span class="text-[9px] text-slate-400">Pure Vector • No Javascript in the rendering box</span>
+                </h2>
+
+                <div class="relative w-full h-[360px] rounded-xl border border-slate-800 bg-slate-950/80 flex items-center justify-center overflow-hidden">
+                    <!-- Cosmic background stars decoration -->
+                    <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
+                    
+                    <!-- Preview mounting point -->
+                    <div id="svg-preview-mount" class="w-[300px] h-[300px] transition-transform duration-300 hover:scale-105">
+                        <!-- Loaded dynamically via JavaScript -->
+                    </div>
+
+                    <!-- Holographic stats sidebar inside preview -->
+                    <div class="absolute bottom-4 left-4 right-4 flex justify-between bg-slate-950/90 p-2.5 rounded-lg border border-slate-800/50 text-[10px] text-slate-400 font-mono">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span>SMIL CLOCKWORK SYSTEM</span>
+                        </div>
+                        <div class="flex gap-4">
+                            <span>L-Group: 富/Fu/不</span>
+                            <span>C-Group: 土/Do/動</span>
+                            <span>R-Group: 山/San/産</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h2 class="text-xs font-bold tracking-widest text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-code text-indigo-400"></i> SOURCE EXPORTER
+                    </h2>
+                    
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button id="tab-svg" onclick="switchExportTab('svg')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20">
+                            PURE SVG FILE
+                        </button>
+                        <button id="tab-html" onclick="switchExportTab('html')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200">
+                            HTML EMBED
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code display box -->
+                <div class="relative">
+                    <pre class="bg-slate-950 rounded-xl p-4 text-[10px] font-mono overflow-x-auto border border-slate-800 text-yellow-400/90 max-h-[160px]"><code id="exporter-code-box">Preparing Clockwork Code...</code></pre>
+                </div>
+
+                <!-- Export Action Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="copyGeneratedCode()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-slate-700 active:scale-95">
+                        <i class="fa-solid fa-copy text-yellow-400"></i> Copy to Clipboard
+                    </button>
+                    <button onclick="downloadAsSvgFile()" class="bg-gradient-to-r from-yellow-500 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-slate-950 font-black py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 active:scale-95 shadow-[0_4px_20px_rgba(255,215,0,0.2)]">
+                        <i class="fa-solid fa-download"></i> Download Self-Contained SVG
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <section class="max-w-7xl w-full mx-auto p-4 sm:p-8 pt-0">
+        <div class="glass-panel rounded-2xl p-6 shadow-2xl">
+            <h3 class="text-sm font-bold text-yellow-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-diagram-project"></i> Architectural Plan: High-Order SMIL Pseudo-Randomization
+            </h3>
+            <div class="text-xs text-slate-400 leading-relaxed space-y-3">
+                <p>
+                    Because we decided on **Approach A (Pure SVG)**, I have implemented an extremely sophisticated synchronization trick. Each building has an individual opacity cycle duration (e.g., Building 1 runs on an 18s loop, Building 2 on a 14s loop, Building 3 on a 20s loop). Underneath each signboard, three distinct text nodes exist (e.g., "富", "Fu", and "不" for the Left group) which rotate their visibility over a long master cycle (e.g., 54 seconds for Building 1).
+                </p>
+                <p>
+                    By coupling this with a signboard `display` animation that oscillates every alternative loop, we ensure that:
+                    <ol class="list-decimal pl-5 mt-1 space-y-1">
+                        <li>Only some active buildings in a group hold a sign during any single cycle.</li>
+                        <li>Every time a building fades in, it shows a completely different word choice.</li>
+                        <li>This entire complex system runs purely on standard GPU-accelerated SVG vectors, compatible with all web browsers and markdown editors, with zero JS dependencies!</li>
+                    </ol>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-600 text-xs py-6 px-4 text-center border-t border-slate-900 mt-auto">
+        <p>© 2026 Fuji Symbol Mark Design Studio. Engineered by Gempick FinTech Lab. Shared with Hiro.</p>
+    </footer>
+
+    <script>
+        let currentExportTab = 'svg';
+        let speedMultiplier = 1.0;
+
+        function showToastMessage(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Color syncing between text hex and color selectors
+        function syncColorInput(pickerId, hexValue) {
+            const picker = document.getElementById(pickerId);
+            if (picker && /^#[0-9A-F]{6}$/i.test(hexValue)) {
+                picker.value = hexValue;
+                updateFujiColors();
+            }
+        }
+
+        function changeTimelineSpeed() {
+            const speedSlider = document.getElementById('time-speed');
+            speedMultiplier = parseFloat(speedSlider.value);
+            document.getElementById('speed-indicator').textContent = speedMultiplier.toFixed(1) + 'x (' + (speedMultiplier === 1.0 ? 'Normal' : speedMultiplier < 1.0 ? 'Slower' : 'Faster') + ')';
+            updateFujiColors();
+        }
+
+        function applyPreset(skyTop, skyBottom, fujiPeak, fujiBase, holoColor, goldColor) {
+            document.getElementById('sky-top').value = skyTop;
+            document.getElementById('sky-top-txt').value = skyTop;
+            document.getElementById('sky-bottom').value = skyBottom;
+            document.getElementById('sky-bottom-txt').value = skyBottom;
+            document.getElementById('fuji-peak').value = fujiPeak;
+            document.getElementById('fuji-peak-txt').value = fujiPeak;
+            document.getElementById('fuji-base').value = fujiBase;
+            document.getElementById('fuji-base-txt').value = fujiBase;
+            document.getElementById('holo-color').value = holoColor;
+            document.getElementById('holo-color-txt').value = holoColor;
+            document.getElementById('gold-color').value = goldColor;
+            document.getElementById('gold-color-txt').value = goldColor;
+            updateFujiColors();
+            showToastMessage("Preset Applied Successfully! (プリセットを適用したわ！)");
+        }
+
+        function buildFujiSVG() {
+            // Read active color fields
+            const skyTop = document.getElementById('sky-top').value;
+            const skyBottom = document.getElementById('sky-bottom').value;
+            const fujiPeak = document.getElementById('fuji-peak').value;
+            const fujiBase = document.getElementById('fuji-base').value;
+            const holoColor = document.getElementById('holo-color').value;
+            const goldColor = document.getElementById('gold-color').value;
+
+            // Apply synced textual display
+            document.getElementById('sky-top-txt').value = skyTop;
+            document.getElementById('sky-bottom-txt').value = skyBottom;
+            document.getElementById('fuji-peak-txt').value = fujiPeak;
+            document.getElementById('fuji-base-txt').value = fujiBase;
+            document.getElementById('holo-color-txt').value = holoColor;
+            document.getElementById('gold-color-txt').value = goldColor;
+
+            // Generate time factors
+            const t = (baseSec) => (baseSec / speedMultiplier).toFixed(2) + 's';
+
+            // Master self-contained SVG construction
+            return `<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${skyTop}"/>
+      <stop offset="100%" stop-color="${skyBottom}"/>
+    </linearGradient>
+    <linearGradient id="fujiBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${fujiPeak}"/>
+      <stop offset="100%" stop-color="${fujiBase}"/>
+    </linearGradient>
+    <linearGradient id="snowGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <filter id="holoGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ground Frame and Background Canvas -->
+  <rect width="240" height="240" rx="24" fill="url(#skyGrad)" stroke="${goldColor}" stroke-width="2" />
+
+  <!-- Mt. Fuji towering to edges with majestic power -->
+  <g>
+    <path d="M 5 215 Q 70 110 105 25 L 135 25 Q 170 110 235 215 Z" fill="url(#fujiBlue)" />
+    <path d="M 105 25 L 135 25 Q 144 60 131 70 L 123 62 L 118 75 L 113 64 L 106 69 Q 96 60 105 25 Z" fill="url(#snowGrad)" />
+  </g>
+
+  <!-- Golden Horizon Ground Line -->
+  <rect x="10" y="210" width="220" height="6" rx="3" fill="${goldColor}" />
+
+  <!-- ==================== LEFT GROUP (富, Fu, 不) ==================== -->
+  
+  <!-- 1. Leftmost Tower (Backdrop Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(18)}" keyTimes="0;0.05;0.15;0.75;0.85;1" repeatCount="indefinite" begin="${t(1)}"/>
+    <rect x="25" y="100" width="22" height="110" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(18)}" keyTimes="0;0.15;0.25;0.75;0.85;1" repeatCount="indefinite" begin="${t(1)}"/>
+    </rect>
+    <rect x="25" y="100" width="22" height="110" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <rect x="29" y="110" width="4" height="6" fill="#fde047"/>
+    <rect x="39" y="110" width="4" height="6" fill="#fde047"/>
+    <rect x="29" y="130" width="4" height="6" fill="#fde047"/>
+    <rect x="39" y="130" width="4" height="6" fill="#fde047"/>
+    <rect x="29" y="150" width="4" height="6" fill="#38bdf8"/>
+    <rect x="39" y="150" width="4" height="6" fill="#38bdf8"/>
+    <rect x="29" y="170" width="4" height="6" fill="#fde047"/>
+    <rect x="39" y="170" width="4" height="6" fill="#fde047"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(36)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="36" y1="85" x2="36" y2="100" stroke="${goldColor}" stroke-width="1" />
+      <rect x="23" y="73" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <!-- Rotating Words (富, Fu, 不) -->
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="36" y="82" opacity="1">
+          富<animate attributeName="opacity" values="1;0;0;1" dur="${t(54)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="36" y="82" opacity="0">
+          Fu<animate attributeName="opacity" values="0;1;0;0" dur="${t(54)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="36" y="82" opacity="0">
+          不<animate attributeName="opacity" values="0;0;1;0" dur="${t(54)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 2. Suburban House Left (Midground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(14)}" keyTimes="0;0.08;0.2;0.7;0.82;1" repeatCount="indefinite" begin="${t(4)}"/>
+    <polygon points="10,175 25,155 40,175" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(14)}" keyTimes="0;0.2;0.3;0.7;0.82;1" repeatCount="indefinite" begin="${t(4)}"/>
+    </polygon>
+    <polygon points="10,175 25,155 40,175" fill="#ca8a04"/>
+    <rect x="15" y="175" width="20" height="35" fill="#e2e8f0" stroke="#000" stroke-width="0.5"/>
+    <rect x="22" y="190" width="6" height="20" fill="#78350f"/>
+
+    <!-- Signboard Controller (Cycle 1 Hidden, Cycle 2 Active) -->
+    <g>
+      <animate attributeName="display" values="none;inline;none" dur="${t(28)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="25" y1="140" x2="25" y2="155" stroke="${goldColor}" stroke-width="1" />
+      <rect x="12" y="128" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="25" y="137" opacity="1">
+          不<animate attributeName="opacity" values="1;0;0;1" dur="${t(42)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="25" y="137" opacity="0">
+          富<animate attributeName="opacity" values="0;1;0;0" dur="${t(42)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="25" y="137" opacity="0">
+          Fu<animate attributeName="opacity" values="0;0;1;0" dur="${t(42)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 3. Giant Left-Center Highrise (Background Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(20)}" keyTimes="0;0.04;0.12;0.8;0.88;1" repeatCount="indefinite" begin="${t(0)}"/>
+    <rect x="52" y="80" width="28" height="130" rx="1" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(20)}" keyTimes="0;0.12;0.2;0.8;0.88;1" repeatCount="indefinite" begin="${t(0)}"/>
+    </rect>
+    <rect x="52" y="80" width="28" height="130" rx="1" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <rect x="57" y="90" width="6" height="8" fill="#eab308"/>
+    <rect x="69" y="90" width="6" height="8" fill="#38bdf8"/>
+    <rect x="57" y="110" width="6" height="8" fill="#eab308"/>
+    <rect x="69" y="110" width="6" height="8" fill="#eab308"/>
+    <rect x="57" y="130" width="6" height="8" fill="#38bdf8"/>
+    <rect x="69" y="130" width="6" height="8" fill="#eab308"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(40)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="66" y1="65" x2="66" y2="80" stroke="${goldColor}" stroke-width="1" />
+      <rect x="53" y="53" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="66" y="62" opacity="1">
+          Fu<animate attributeName="opacity" values="1;0;0;1" dur="${t(60)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="66" y="62" opacity="0">
+          不<animate attributeName="opacity" values="0;1;0;0" dur="${t(60)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="66" y="62" opacity="0">
+          富<animate attributeName="opacity" values="0;0;1;0" dur="${t(60)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 5. Front-Left Retail Store (Foreground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(12)}" keyTimes="0;0.1;0.25;0.7;0.85;1" repeatCount="indefinite" begin="${t(3)}"/>
+    <rect x="42" y="175" width="22" height="35" rx="1" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(12)}" keyTimes="0;0.25;0.35;0.7;0.85;1" repeatCount="indefinite" begin="${t(3)}"/>
+    </rect>
+    <rect x="42" y="175" width="22" height="35" rx="1" fill="#10b981" stroke="#047857" stroke-width="1"/>
+    <polygon points="38,175 53,165 68,175" fill="#f97316"/>
+    <rect x="47" y="185" width="12" height="25" fill="#f8fafc"/>
+  </g>
+
+  <!-- ==================== CENTER GROUP (土, Do, 動) ==================== -->
+  
+  <!-- 4. Overlapping Modern Condominium (Mid-Foreground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(16)}" keyTimes="0;0.06;0.18;0.76;0.88;1" repeatCount="indefinite" begin="${t(6.5)}"/>
+    <rect x="70" y="135" width="32" height="75" rx="2" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(16)}" keyTimes="0;0.18;0.28;0.76;0.88;1" repeatCount="indefinite" begin="${t(6.5)}"/>
+    </rect>
+    <rect x="70" y="135" width="32" height="75" rx="2" fill="#334155" stroke="#475569" stroke-width="1"/>
+    <rect x="74" y="145" width="24" height="6" fill="#64748b"/>
+    <rect x="74" y="160" width="24" height="6" fill="#e2e8f0"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(32)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="86" y1="120" x2="86" y2="135" stroke="${goldColor}" stroke-width="1" />
+      <rect x="73" y="108" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="86" y="117" opacity="1">
+          土<animate attributeName="opacity" values="1;0;0;1" dur="${t(48)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="86" y="117" opacity="0">
+          Do<animate attributeName="opacity" values="0;1;0;0" dur="${t(48)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="86" y="117" opacity="0">
+          動<animate attributeName="opacity" values="0;0;1;0" dur="${t(48)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 9. Center-Front Cozy House (Foreground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(11)}" keyTimes="0;0.12;0.25;0.72;0.85;1" repeatCount="indefinite" begin="${t(1)}"/>
+    <polygon points="105,180 117,162 129,180" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(11)}" keyTimes="0;0.25;0.35;0.72;0.85;1" repeatCount="indefinite" begin="${t(1)}"/>
+    </polygon>
+    <polygon points="105,180 117,162 129,180" fill="#0284c7"/>
+    <rect x="109" y="180" width="16" height="30" fill="#bae6fd" stroke="#0284c7" stroke-width="0.5"/>
+    <rect x="114" y="192" width="6" height="18" fill="#78350f"/>
+
+    <!-- Signboard Controller (Cycle 1 Hidden, Cycle 2 Active) -->
+    <g>
+      <animate attributeName="display" values="none;inline;none" dur="${t(22)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="117" y1="147" x2="117" y2="162" stroke="${goldColor}" stroke-width="1" />
+      <rect x="104" y="135" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="117" y="144" opacity="1">
+          動<animate attributeName="opacity" values="1;0;0;1" dur="${t(33)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="117" y="144" opacity="0">
+          土<animate attributeName="opacity" values="0;1;0;0" dur="${t(33)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="117" y="144" opacity="0">
+          Do<animate attributeName="opacity" values="0;0;1;0" dur="${t(33)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 10. Foreground Corporate Hub (Frontmost Center Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(17)}" keyTimes="0;0.06;0.18;0.76;0.88;1" repeatCount="indefinite" begin="${t(9.5)}"/>
+    <rect x="123" y="145" width="32" height="65" rx="3" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(17)}" keyTimes="0;0.18;0.28;0.76;0.88;1" repeatCount="indefinite" begin="${t(9.5)}"/>
+    </rect>
+    <rect x="123" y="145" width="32" height="65" rx="3" fill="#020617" stroke="#334155" stroke-width="1"/>
+    <rect x="127" y="152" width="24" height="50" fill="#1e293b"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(34)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="139" y1="130" x2="139" y2="145" stroke="${goldColor}" stroke-width="1" />
+      <rect x="126" y="118" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="139" y="127" opacity="1">
+          Do<animate attributeName="opacity" values="1;0;0;1" dur="${t(51)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="139" y="127" opacity="0">
+          動<animate attributeName="opacity" values="0;1;0;0" dur="${t(51)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="139" y="127" opacity="0">
+          土<animate attributeName="opacity" values="0;0;1;0" dur="${t(51)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== RIGHT GROUP (山, San, 産) ==================== -->
+  
+  <!-- 6. Tall Right Tower (Back-Midground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(19)}" keyTimes="0;0.05;0.14;0.78;0.88;1" repeatCount="indefinite" begin="${t(2)}"/>
+    <rect x="148" y="90" width="24" height="120" rx="1" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(19)}" keyTimes="0;0.14;0.24;0.78;0.88;1" repeatCount="indefinite" begin="${t(2)}"/>
+    </rect>
+    <rect x="148" y="90" width="24" height="120" rx="1" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <rect x="153" y="100" width="14" height="100" fill="#0f172a"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(38)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="160" y1="75" x2="160" y2="90" stroke="${goldColor}" stroke-width="1" />
+      <rect x="147" y="63" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="160" y="72" opacity="1">
+          山<animate attributeName="opacity" values="1;0;0;1" dur="${t(57)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="160" y="72" opacity="0">
+          San<animate attributeName="opacity" values="0;1;0;0" dur="${t(57)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="160" y="72" opacity="0">
+          産<animate attributeName="opacity" values="0;0;1;0" dur="${t(57)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 7. Future Quantum Lab (Midground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(15)}" keyTimes="0;0.07;0.2;0.72;0.85;1" repeatCount="indefinite" begin="${t(8)}"/>
+    <path d="M 172 210 L 172 165 C 172 153 183 143 195 143 C 207 143 218 153 218 165 L 218 210 Z" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(15)}" keyTimes="0;0.2;0.3;0.72;0.85;1" repeatCount="indefinite" begin="${t(8)}"/>
+    </path>
+    <path d="M 172 210 L 172 165 C 172 153 183 143 195 143 C 207 143 218 153 218 165 L 218 210 Z" fill="#6d28d9" stroke="#4c1d95" stroke-width="1"/>
+
+    <!-- Signboard Controller (Cycle 1 Hidden, Cycle 2 Active) -->
+    <g>
+      <animate attributeName="display" values="none;inline;none" dur="${t(30)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="195" y1="128" x2="195" y2="143" stroke="${goldColor}" stroke-width="1" />
+      <rect x="182" y="116" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="195" y="125" opacity="1">
+          産<animate attributeName="opacity" values="1;0;0;1" dur="${t(45)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="195" y="125" opacity="0">
+          山<animate attributeName="opacity" values="0;1;0;0" dur="${t(45)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="195" y="125" opacity="0">
+          San<animate attributeName="opacity" values="0;0;1;0" dur="${t(45)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- 8. Front-Right Residential House (Foreground Layer) -->
+  <g opacity="0">
+    <animate attributeName="opacity" values="0;0;1;1;0;0" dur="${t(13)}" keyTimes="0;0.09;0.22;0.75;0.88;1" repeatCount="indefinite" begin="${t(5)}"/>
+    <polygon points="190,175 205,155 220,175" fill="none" stroke="${holoColor}" stroke-width="1.5" filter="url(#holoGlow)">
+      <animate attributeName="stroke-opacity" values="1;1;0;0;1;1" dur="${t(13)}" keyTimes="0;0.22;0.32;0.75;0.88;1" repeatCount="indefinite" begin="${t(5)}"/>
+    </polygon>
+    <polygon points="190,175 205,155 220,175" fill="#f43f5e"/>
+    <rect x="195" y="175" width="20" height="35" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+
+    <!-- Signboard Controller (Cycle 1 Active, Cycle 2 Hidden) -->
+    <g>
+      <animate attributeName="display" values="inline;none;inline" dur="${t(26)}" keyTimes="0;0.5;1" repeatCount="indefinite" />
+      <line x1="205" y1="140" x2="205" y2="155" stroke="${goldColor}" stroke-width="1" />
+      <rect x="192" y="128" width="26" height="12" rx="2" fill="#151d30" stroke="${goldColor}" stroke-width="0.8" />
+      <g text-anchor="middle" font-family="'Noto Sans JP', sans-serif" font-size="8.5" font-weight="bold" fill="${goldColor}">
+        <text x="205" y="137" opacity="1">
+          San<animate attributeName="opacity" values="1;0;0;1" dur="${t(39)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="205" y="137" opacity="0">
+          産<animate attributeName="opacity" values="0;1;0;0" dur="${t(39)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+        <text x="205" y="137" opacity="0">
+          山<animate attributeName="opacity" values="0;0;1;0" dur="${t(39)}" keyTimes="0;0.333;0.666;1" repeatCount="indefinite" />
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>`;
+        }
+
+        function updateFujiColors() {
+            const svgContent = buildFujiSVG();
+            
+            // Mount directly inside preview window
+            document.getElementById('svg-preview-mount').innerHTML = svgContent;
+            
+            // Sync current export code box
+            updateExportCodeBox();
+        }
+
+        function switchExportTab(tabName) {
+            currentExportTab = tabName;
+            document.getElementById('tab-svg').className = tabName === 'svg' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200';
+            document.getElementById('tab-html').className = tabName === 'html' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-slate-400 hover:text-slate-200';
+            updateExportCodeBox();
+        }
+
+        function updateExportCodeBox() {
+            const codeBox = document.getElementById('exporter-code-box');
+            const svgContent = buildFujiSVG();
+            if (currentExportTab === 'svg') {
+                codeBox.textContent = svgContent;
+            } else {
+                // Return clean HTML embedded block with responsive SVG wrapping
+                codeBox.textContent = `<!-- Fuji Clockwork Symbol Mark (Pseudo-Random SMIL Edition) -->
+<div class="fuji-clockwork-wrapper" style="width: 240px; height: 240px; aspect-ratio: 1/1; display: inline-block;">
+  ${svgContent}
+</div>`;
+            }
+        }
+
+        function copyGeneratedCode() {
+            const codeText = document.getElementById('exporter-code-box').textContent;
+            const tempArea = document.createElement('textarea');
+            tempArea.value = codeText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempArea);
+            showToastMessage("Copied to Clipboard! (クリップボードにコピーしたわ！)");
+        }
+
+        function downloadAsSvgFile() {
+            const svgContent = buildFujiSVG();
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `fuji_clockwork_symbol.svg`;
+            link.click();
+            showToastMessage("SVG Download Initiated! (SVGのダウンロードを開始したわ！)");
+        }
+
+        // Initialize Studio on Load
+        window.onload = function() {
+            updateFujiColors();
+        }
+    </script>
+</body>
+</html>
