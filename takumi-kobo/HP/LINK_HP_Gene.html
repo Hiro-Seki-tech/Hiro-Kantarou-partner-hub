@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 PLIP! Simple Hub & Link Generator</title>
+    <title>💡 PLIP! Simple LINK Hub & Link Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -72,7 +72,7 @@
         </div>
         <div class="flex items-center gap-2">
             <button onclick="exportHTML(true)" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5">
-                <i class="fa-solid fa-file-code text-sky-400"></i> 編集用HTMLを保存
+                <i class="fa-solid fa-file-code text-sky-400"></i> ✖使用禁止　編集用HTML
             </button>
             <button onclick="exportHTML(false)" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl transition-all shadow-[0_2px_10px_rgba(245,158,11,0.3)] flex items-center gap-1.5">
                 <i class="fa-solid fa-rocket"></i> 公開用HTMLを書き出し
@@ -99,15 +99,26 @@
                         </svg>
                     </div>
                     <span class="text-5xl sm:text-7xl font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-amber-400 to-amber-200 drop-shadow-[0_0_30px_rgba(245,158,11,0.25)]">
-                        PLIP
+                        PLIP's LINK
                     </span>
                 </div>
+				
+				
                 <span class="text-xs sm:text-sm tracking-[0.25em] text-slate-400 font-light mt-1 uppercase" style="font-family: 'Cinzel', serif;">
-                    <span class="text-amber-400 font-black text-lg">P</span>roduce your 
+                    <span class="text-amber-400 font-black text-lg">P</span>roduce my/your 
                     <span class="text-amber-400 font-black text-lg">L</span>ife with 
                     <span class="text-amber-400 font-black text-lg">I</span>ntellectual 
                     <span class="text-amber-400 font-black text-lg">P</span>roperty
                 </span>
+				
+				<!-- 💡 【追加】文字とアイコンを鮮やかな水色（シアン）に完全調停したご意見感想箱ボタン -->
+                <div class="w-full flex justify-end mt-4 px-2">
+                    <button id="feedback-trigger-btn" onclick="openFeedbackModal();" class="text-xs font-bold text-cyan-450 hover:text-white bg-slate-950/60 hover:bg-cyan-500/10 border-2 border-amber-500/40 hover:border-cyan-400 px-4 py-2 rounded-xl transition-all duration-300 shadow-[0_2px_10px_rgba(6,182,212,0.15)] hover:shadow-[0_4px_20px_rgba(6,182,212,0.3)] flex items-center gap-2 tracking-wider select-none transform active:scale-95">
+                        <i class="fa-solid fa-comment-dots text-cyan-400 group-hover:text-white animate-pulse"></i>
+                        <span class="bg-gradient-to-r from-cyan-400 to-sky-300 bg-clip-text text-transparent font-black">作品へご意見・感想箱</span>
+                    </button>
+                </div>
+				
             </h1>
         </div>
     </header>
@@ -134,10 +145,49 @@
 
     <footer class="bg-slate-950 text-slate-600 text-xs py-12 px-4 text-center border-t border-slate-900 mt-auto">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-slate-500">
-            <p class="text-[11px] font-mono font-semibold">PLIP FinTech-Hub Portal Collection 2026</p>
+            <p class="text-[11px] font-mono font-semibold">PLIP Hub Portal Collection 2026</p>
             <p class="text-[10px] md:text-right font-light">© 2026 PLIP & Hiro-Seki-Tech. All rights reserved.</p>
         </div>
     </footer>
+
+<!-- 💡 【追加】最前面 z-[250] を保証したご意見モーダルHTML -->
+    <div id="feedback-modal" class="fixed inset-0 z-[250] flex items-center justify-center bg-black/70 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div id="feedback-modal-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-11/12 mx-auto shadow-[0_15px_40px_rgba(0,0,0,0.6)] transform scale-95 transition-transform duration-300 relative text-slate-100">
+            
+            <!-- 閉じる（×）ボタン -->
+            <button onclick="closeFeedbackModal()" class="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors text-xl">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- タイトル -->
+            <div class="flex items-center gap-2 border-b border-slate-800 pb-2 mb-4">
+                <span class="text-cyan-400 text-lg"><i class="fa-solid fa-comment-dots"></i></span>
+                <h3 class="text-base font-bold tracking-wider text-cyan-400" style="font-family: 'Noto Sans JP', sans-serif;">PLIP総合・ご意見感想箱</h3>
+            </div>
+
+            <p class="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                作品へのご要望、バグ報告、アドバイスなど、何でも自由お書き込みください。時間のあるときにひっそりと拝見します。
+            </p>
+
+            <!-- 入力フィールド -->
+            <div class="space-y-4">
+                <div>
+                    <label for="feedback-content" class="block text-[10px] font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">メッセージ（必須）</label>
+                    <textarea id="feedback-content" rows="5" placeholder="ここにメッセージを入力してください..." class="w-full rounded-xl border border-slate-800 bg-slate-950 p-3 text-slate-100 placeholder-slate-700 focus:ring-2 focus:ring-cyan-600 focus:outline-none text-xs resize-none custom-scrollbar"></textarea>
+                </div>
+            </div>
+
+            <!-- 下部ボタンエリア -->
+            <div class="mt-5 flex items-center justify-end gap-2">
+                <button onclick="closeFeedbackModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-400 text-xs font-semibold transition-all">
+                    キャンセル
+                </button>
+                <button id="send-feedback-btn" onclick="submitFeedbackForm();" class="bg-cyan-600 hover:bg-cyan-500 text-white font-black px-5 py-2 rounded-xl text-xs transition-all shadow-lg shadow-cyan-600/20">
+                    意見を送信する
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- カード追加モーダル -->
     <div id="card-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 overflow-y-auto">
@@ -226,34 +276,16 @@
         </div>
     </div>
 
-    <script>
+
+
+   <script>
         let plipCardStates = [];
 
+        // 🧳 クレンジング新方式：マスターデータの初期状態定義（データはHTML末尾のカプセルから自動復元されます）
         let plipMasterData = [
-            {
-                id: "asset-mgmt",
-                title: "資産管理",
-                sub: "ASSET MANAGEMENT",
-                icon: "fa-solid fa-coins",
-                isDevelopment: false,
-                cards: []
-            },
-            {
-                id: "life-learning",
-                title: "人生学習",
-                sub: "LIFE LEARNING",
-                icon: "fa-solid fa-graduation-cap",
-                isDevelopment: false,
-                cards: []
-            },
-            {
-                id: "future-tech",
-                title: "未来技術",
-                sub: "FUTURE TECHNOLOGY",
-                icon: "fa-solid fa-microchip",
-                isDevelopment: false,
-                cards: []
-            }
+            { id: "asset-mgmt", title: "資産管理", sub: "ASSET MANAGEMENT", icon: "fa-solid fa-coins", isDevelopment: false, cards: [] },
+            { id: "life-learning", title: "人生学習", sub: "LIFE LEARNING", icon: "fa-solid fa-graduation-cap", isDevelopment: false, cards: [] },
+            { id: "future-tech", title: "未来技術", sub: "FUTURE TECHNOLOGY", icon: "fa-solid fa-microchip", isDevelopment: false, cards: [] }
         ];
 
         // =========================================================================
@@ -267,7 +299,27 @@
             }
         }
 
-        function loadFromLocalStorage() {
+
+
+function loadFromLocalStorage() {
+            // 🔄 HTML内の専用JSONデータカプセルからデータを復元（安全なクレンジング新方式）
+            const embeddedContainer = document.getElementById('plip-embedded-json');
+            if (embeddedContainer && embeddedContainer.textContent.trim() !== "") {
+                try {
+                    // Base64からUnicode文字列へ安全にデコード
+                    const decodedData = decodeURIComponent(escape(atob(embeddedContainer.textContent.trim())));
+                    const parsed = JSON.parse(decodedData);
+                    if (parsed && parsed.length > 0) {
+                        plipMasterData = parsed;
+                        saveToLocalStorage();
+                        return; // 読み込みに成功したらLocalStorageの処理をスキップして終了
+                    }
+                } catch (e) {
+                    console.error("埋め込みデータの復元に失敗しました:", e);
+                }
+            }
+
+            // カプセルが空、または初期状態の場合のみブラウザのLocalStorageから復元
             try {
                 const saved = localStorage.getItem('plip_master_data');
                 if (saved) {
@@ -276,17 +328,9 @@
             } catch (e) {
                 console.error("LocalStorageからの読み込みに失敗しました:", e);
             }
-
-            // 💡 エクスポートされたHTMLファイル直開き用救済機構（Base64変数があればそこから優先復元）
-            if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
-                try {
-                    const decodedSign = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
-                    plipMasterData = JSON.parse(decodedSign);
-                } catch (e) {
-                    console.error("埋め込みBase64データのデコード・パースに失敗しました:", e);
-                }
-            }
         }
+		
+		
 
         // 📡 iframeから通知された内部の最新状態値をダイレクトに受け取る同期機構
         window.addEventListener('message', (event) => {
@@ -528,87 +572,102 @@
             document.getElementById('card-modal').classList.add('hidden');
         }
 
-        function saveCardData() {
-            const catId = document.getElementById('modal-cat-id').value;
-            const cardIdx = parseInt(document.getElementById('modal-card-index').value);
-            const title = document.getElementById('modal-card-title').value.trim();
-            let url = document.getElementById('modal-card-url').value.trim();
-            const desc = document.getElementById('modal-card-desc').value.trim();
-            let rawHtml = document.getElementById('modal-card-html').value.trim();
 
-            if (!title || !url) {
-                alert("タイトル and URLは必須項目です。");
-                return;
-            }
 
-            const iframeBridgeScript = `
-                <script>
-                    window.addEventListener('DOMContentLoaded', () => {
-                        window.showToast = function(msg, isSuccess) {
-                            console.log("Inner toast muted:", msg);
-                        };
 
-                        const styleNode = document.createElement('style');
-                        styleNode.textContent = \`
-                            html, body {
-                                margin: 0 !important;
-                                padding: 0 !important;
-                                width: 100% !important;
-                                height: 100% !important;
-                                overflow: hidden !important;
-                                background: transparent !important;
-                            }
-                            body > div.relative.w-\\\\[640px\\\\] {
-                                transform-origin: top left !important;
-                                transform: scale(0.375) !important;
-                                position: absolute !important;
-                                top: 0 !important;
-                                left: 0 !important;
-                                margin: 0 !important;
-                            }
-                            @media (max-width: 150px) or (max-height: 150px) {
-                                body > div.relative.w-\\\\[640px\\\\] {
-                                    transform: scale(0.15625) !important;
-                                }
-                            }
-                        \`;
-                        document.head.appendChild(styleNode);
 
-                        const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
-                        if (coreWrapper) {
-                            coreWrapper.addEventListener('click', () => {
-                                setTimeout(() => {
-                                    const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
-                                    window.parent.postMessage({ 
-                                        type: 'PLIP_BUTTON_CLICK', 
-                                        title: "${encodeURIComponent(title)}",
-                                        stateValue: currentInnerState
-                                    }, '*');
-                                }, 20);
-                            });
+function saveCardData() {
+    const catId = document.getElementById('modal-cat-id').value;
+    const cardIdx = parseInt(document.getElementById('modal-card-index').value);
+    const title = document.getElementById('modal-card-title').value.trim();
+    let url = document.getElementById('modal-card-url').value.trim();
+    const desc = document.getElementById('modal-card-desc').value.trim();
+    let rawHtml = document.getElementById('modal-card-html').value.trim();
+
+    if (!title || !url) {
+        alert("タイトル and URLは必須項目です。");
+        return;
+    }
+
+    // 💡 固有IDを付与した最新のブリッジスクリプト定義
+    const iframeBridgeScript = `
+        <script id="plip-bridge-injector">
+            window.addEventListener('DOMContentLoaded', () => {
+                window.showToast = function(msg, isSuccess) {
+                    console.log("Inner toast muted:", msg);
+                };
+
+                const styleNode = document.createElement('style');
+                styleNode.textContent = \`
+                    html, body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        overflow: hidden !important;
+                        background: transparent !important;
+                    }
+                    body > div.relative.w-\\\\[640px\\\\] {
+                        transform-origin: top left !important;
+                        transform: scale(0.375) !important;
+                        position: absolute !important;
+                     top: 0 !important;
+                        left: 0 !important;
+                        margin: 0 !important;
+                    }
+                    @media (max-width: 150px) or (max-height: 150px) {
+                        body > div.relative.w-\\\\[640px\\\\] {
+                            transform: scale(0.15625) !important;
                         }
+                    }
+                \`;
+                document.head.appendChild(styleNode);
+
+                const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
+                if (coreWrapper) {
+                    coreWrapper.addEventListener('click', () => {
+                        setTimeout(() => {
+                            const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
+                            window.parent.postMessage({ 
+                                type: 'PLIP_BUTTON_CLICK', 
+                                title: "${encodeURIComponent(title)}",
+                                stateValue: currentInnerState
+                            }, '*');
+                        }, 20);
                     });
-                <\/script>
-            `;
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(rawHtml, 'text/html');
-            const bubbles = doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]');
-            bubbles.forEach(el => el.remove());
-
-            let musicBaseUrl = url.endsWith('/') ? url + 'music/' : url + '/music/';
-            if(url.endsWith('.html') || url.endsWith('.php')) {
-                musicBaseUrl = url.substring(0, url.lastIndexOf('/') + 1) + 'music/';
-            }
-
-            let processedHtml = doc.documentElement.outerHTML;
-            processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?BGM\.html(['"])/g, `$1${musicBaseUrl}BGM.html$3`);
-            processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.mp4(['"])/g, (match, p1, p2, p3) => {
-                const num = p3 ? p3 : '';
-                return `${p1}${musicBaseUrl}song${num}.mp4${p1}`;
+                }
             });
+        <\/script>
+    `;
 
-            const finalIframeSrcdoc = processedHtml + iframeBridgeScript;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(rawHtml, 'text/html');
+
+
+
+
+// 🧹 【クレンジング処理】自身が埋め込んだブリッジスクリプトのみを正確に狙い撃ちして消去（ボタン本来のコードは保護）
+    const oldInjectors = doc.querySelectorAll('#plip-bridge-injector');
+    oldInjectors.forEach(el => el.remove());
+
+    const bubbles = doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]');
+    bubbles.forEach(el => el.remove());
+
+    let musicBaseUrl = url.endsWith('/') ? url + 'music/' : url + '/music/';
+    if(url.endsWith('.html') || url.endsWith('.php')) {
+        musicBaseUrl = url.substring(0, url.lastIndexOf('/') + 1) + 'music/';
+    }
+
+    let processedHtml = doc.documentElement.outerHTML;
+    processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?BGM\.html(['"])/g, `$1${musicBaseUrl}BGM.html$3`);
+    processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.mp4(['"])/g, (match, p1, p2, p3) => {
+        const num = p3 ? p3 : '';
+        return `${p1}${musicBaseUrl}song${num}.mp4${p1}`;
+    });
+
+    const finalIframeSrcdoc = processedHtml + iframeBridgeScript;
+			
+			
 
             const cat = plipMasterData.find(c => c.id === catId);
             const cardObj = {
@@ -706,66 +765,144 @@
             }
         }
 
-        let activeBgmIframe = null;     
+
+
+       let activeBgmIframe = null;     
         let activeAudioElement = null;  
 
-        // 💾 2種類（編集用 / 公開用）のHTMLファイルを動的に生成・保存する【Base64安全カプセル化版】ロジック
-        function exportHTML(isForEdit) {
-            const cleanDoc = document.implementation.createHTMLDocument(document.title);
-            cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+// 💾 2種類（編集用 / 公開用）のHTMLファイルを動的に生成・保存する【容量肥大化・完全ブロック版】ロジック
+function exportHTML(isForEdit) {
+    // 現在のBGMや音声テストを安全に停止
+    clearRunningAudio();
 
-            const tabsContainer = cleanDoc.querySelector('#category-tabs-container');
-            const contentContainer = cleanDoc.querySelector('#main-content-container');
-            if (tabsContainer) tabsContainer.innerHTML = '';
-            if (contentContainer) contentContainer.innerHTML = '';
+    // 🧹 【エクスポート直前クレンジング機構】マスターデータ内の全作品HTMLから重複スクリプトを一掃
+    if (plipMasterData && plipMasterData.length > 0) {
+        const parser = new DOMParser();
+        plipMasterData.forEach(cat => {
+            if (cat.cards && cat.cards.length > 0) {
+                cat.cards.forEach(card => {
+                    if (card.htmlContent) {
+                        const doc = parser.parseFromString(card.htmlContent, 'text/html');
+                        // 重複して溜まっているブリッジスクリプトタグのみを検出して全消去
+                        const oldInjectors = doc.querySelectorAll('#plip-bridge-injector');
+                        if (oldInjectors.length > 0) {
+                            oldInjectors.forEach(el => el.remove());
 
-            const cardModal = cleanDoc.querySelector('#card-modal');
-            const catModal = cleanDoc.querySelector('#category-modal');
-            if (cardModal) { cardModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 overflow-y-auto"; }
-            if (catModal) { catModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 shadow-2xl"; }
+							
+                            // 綺麗になったクリーンな状態のHTMLに、正しい最新のブリッジスクリプトを1枚だけ結合して差し替え
+                            const cleanHtml = doc.documentElement.outerHTML;
+                            
+                            // 最新の1枚を再定義して結合
+                            const freshBridge = `
+<script id="plip-bridge-injector">
+    window.addEventListener('DOMContentLoaded', () => {
+        window.showToast = function(msg, isSuccess) { console.log("Inner toast muted:", msg); };
+        const styleNode = document.createElement('style');
+        styleNode.textContent = \`
+            html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; background: transparent !important; }
+            body > div.relative.w-\\\\[640px\\\\] { transform-origin: top left !important; transform: scale(0.375) !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; }
+            @media (max-width: 150px) or (max-height: 150px) { body > div.relative.w-\\\\[640px\\\\] { transform: scale(0.15625) !important; } }
+        \`;
+        document.head.appendChild(styleNode);
+        const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
+        if (coreWrapper) {
+            coreWrapper.addEventListener('click', () => {
+                setTimeout(() => {
+                    const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
+                    window.parent.postMessage({ type: 'PLIP_BUTTON_CLICK', title: "${encodeURIComponent(card.title)}", stateValue: currentInnerState }, '*');
+                }, 20);
+            });
+        }
+    });
+<\/script>`;
+                            card.htmlContent = cleanHtml + freshBridge;
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-            const toastEl = cleanDoc.querySelector('#toast');
-            if (toastEl) {
-                toastEl.className = "fixed top-6 right-6 z-[300] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-6 py-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center gap-3 text-xs sm:text-sm font-semibold max-w-sm";
-                const toastText = toastEl.querySelector('#toast-text');
-                if (toastText) toastText.textContent = "通知メッセージ";
+
+
+// === 差分ここから（上書き対象） ===
+    // 1. 仮想ドキュメントを作成し、現在のDOM構造を複製
+    const cleanDoc = document.implementation.createHTMLDocument(document.title);
+    cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+
+    // --- 🧹 [クレンジング処理] Tailwind動的注入スタイルおよび不要なゴミコードの徹底排除 ---
+    
+    // ❶ Tailwind CSSが実行時に自動注入したスタイルタグ（約20KB）およびその残骸を一網打尽にデリート
+    const allStyles = cleanDoc.querySelectorAll('head style');
+    allStyles.forEach(style => {
+        const content = style.textContent;
+        // Tailwind特有の変数やコメントが含まれるスタイルタグを検知して排除
+        if (content.includes('--tw-') || content.includes('tailwindcss') || content.includes('box-sizing:border-box')) {
+            style.remove();
+        }
+    });
+
+    // ② タブコンテナとメインコンテンツ（作品カード群）のDOMを完全に空にする（再起動時に自動ビルドされるため）
+    const tabsContainer = cleanDoc.querySelector('#category-tabs-container');
+    const contentContainer = cleanDoc.querySelector('#main-content-container');
+    if (tabsContainer) tabsContainer.innerHTML = '';
+    if (contentContainer) contentContainer.innerHTML = '';
+
+    // ③ モーダルを初期状態（非表示・リセット）に戻す
+    const cardModal = cleanDoc.querySelector('#card-modal');
+    const catModal = cleanDoc.querySelector('#category-modal');
+    const feedbackModal = cleanDoc.querySelector('#feedback-modal');
+    if (cardModal) cardModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 overflow-y-auto";
+    if (catModal) catModal.className = "fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[250] hidden flex items-center justify-center p-4 shadow-2xl";
+    if (feedbackModal) {
+        feedbackModal.className = "fixed inset-0 z-[250] flex items-center justify-center bg-black/70 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300";
+        const fbContent = feedbackModal.querySelector('#feedback-content');
+        if (fbContent) fbContent.value = '';
+    }
+
+    // ④ トースト通知の状態を初期化
+    const toastEl = cleanDoc.querySelector('#toast');
+    if (toastEl) {
+        toastEl.className = "fixed top-6 right-6 z-[300] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-slate-100 px-6 py-4 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex items-center gap-3 text-xs sm:text-sm font-semibold max-w-sm";
+        const toastText = toastEl.querySelector('#toast-text');
+        if (toastText) toastText.textContent = "通知メッセージ";
+    }
+    // === 差分ここまで ===
+			
+			
+            // マスターデータをBase64カプセル化
+            const rawJson = JSON.stringify(plipMasterData);
+            const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
+
+            // 既存のカプセルを探す、無ければbodyの末尾に新規作成
+            let embeddedContainer = cleanDoc.getElementById('plip-embedded-json');
+            if (!embeddedContainer) {
+                embeddedContainer = cleanDoc.createElement('script');
+                embeddedContainer.id = 'plip-embedded-json';
+                embeddedContainer.type = 'application/json';
+                cleanDoc.body.appendChild(embeddedContainer);
+            }
+            // 純粋なBase64データだけをテキストとして注入（プログラムコードを汚染しない）
+            embeddedContainer.textContent = base64Data;
+
+            // ③ 公開用(isForEdit=false)の場合、編集用UIや開発用モーダルをDOMから完全消去
+            if (!isForEdit) {
+                const removeTargets = [
+                    '#generator-control-bar', 
+                    '#add-category-zone',     
+                    '#card-modal',            
+                    '#category-modal'         
+                ];
+                removeTargets.forEach(selector => {
+                    const el = cleanDoc.querySelector(selector);
+                    if (el) el.remove();
+                });
             }
 
-            const scriptEl = cleanDoc.querySelector('script:not([src])');
-            if (scriptEl) {
-                let jsCode = scriptEl.textContent;
-                
-                // 💡 特殊文字、改行、クォーテーションの競合を永遠に排除するためにBase64形式へ変換
-    const rawJson = JSON.stringify(plipMasterData);
-                const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
-                
-                // 💡 初回書き出し時も、2回目以降の古いBase64が残っている場合も、両方まとめて綺麗にマッチさせる正規表現に改良
-                const regexData = /let\s+plipMasterData\s*=\s*\[[\s\S]*?\]\s*;(\s*const\s+plipEmbeddedBase64Data\s*=\s*".*?";)?/;
-                
-                // 初期配列変数は空にし、ファイルロード用のBase64文字列定数をインジェクション
-                
-                // 初期配列変数は空にし、ファイルロード用のBase64文字列定数をインジェクション
-                let replacementCode = `let plipMasterData = [];\n        const plipEmbeddedBase64Data = "${base64Data}";`;
-                jsCode = jsCode.replace(regexData, replacementCode);
-
-                if (!isForEdit) {
-                    const removeTargets = [
-                        '#generator-control-bar', 
-                        '#add-category-zone',     
-                        '#card-modal',            
-                        '#category-modal'         
-                    ];
-                    removeTargets.forEach(selector => {
-                        const el = cleanDoc.querySelector(selector);
-                        if (el) el.remove();
-                    });
-                }
-
-                scriptEl.textContent = jsCode;
-            }
-
+            // 3. クレンジングが完了した綺麗なHTMLを組み立て
             const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
 
+            // 4. ファイルとしてダウンロード出力
             const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8;" });
             const link = document.createElement("a");
             const filename = isForEdit ? "LINK_HP_edit.html" : "LINK_HP_production.html";
@@ -779,6 +916,9 @@
 
             showToast(isForEdit ? "💾 編集機能を引き継いだHTMLを保存しました！" : "🚀 公開用のクリーンなHTMLを書き出しました！");
         }
+		
+		
+		
 
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -822,41 +962,172 @@
             if (activeAudioElement) { activeAudioElement.pause(); activeAudioElement.remove(); activeAudioElement = null; }
         }
 
-        async function runAudioTheme(escapedTitleId, stateValue) {
-            clearRunningAudio();
-            
-            const matchedCard = plipMasterData.flatMap(c => c.cards).find(card => encodeURIComponent(card.title).replace(/%/g, "") === escapedTitleId);
-            let baseUrl = matchedCard ? matchedCard.url : '';
-            if (baseUrl) {
-                baseUrl = baseUrl.endsWith('/') ? baseUrl + 'music/' : baseUrl + '/music/';
-                if(matchedCard.url.endsWith('.html') || matchedCard.url.endsWith('.php')) {
-                    baseUrl = matchedCard.url.substring(0, matchedCard.url.lastIndexOf('/') + 1) + 'music/';
-                }
-            }
 
-            const cleanLabel = matchedCard ? matchedCard.title : "作品";
 
-            if (stateValue === 0) {
-                showToast(`🥇 【${cleanLabel}】 BGM再生テスト開始`);
-                activeBgmIframe = document.createElement('iframe');
-                activeBgmIframe.src = baseUrl + 'BGM.html';
-                activeBgmIframe.style.display = 'none';
-                activeBgmIframe.setAttribute('allow', 'autoplay');
-                document.body.appendChild(activeBgmIframe);
-            } else if (stateValue === 1) {
-                showToast(`🎵 【${cleanLabel}】 歌抽選テスト (song.mp4)`);
-                activeAudioElement = document.createElement('audio');
-                activeAudioElement.src = baseUrl + 'song.mp4';
-                activeAudioElement.style.display = 'none';
-                activeAudioElement.volume = 0.5;
-                document.body.appendChild(activeAudioElement);
-                activeAudioElement.play().catch(() => {
-                    showToast("⚠️ 自動再生が制限されました。もう一度ボタンを押してください。");
-                });
-            } else if (stateValue === 2) {
-                showToast(`🤫 ミュート状態 (赤枠)`);
-            }
+async function runAudioTheme(escapedTitleId, stateValue) {
+    // 親画面側で管理していた古い再生テスト用要素は安全にクリア
+    clearRunningAudio();
+    
+    const matchedCard = plipMasterData.flatMap(c => c.cards).find(card => encodeURIComponent(card.title).replace(/%/g, "") === escapedTitleId);
+    const cleanLabel = matchedCard ? matchedCard.title : "作品";
+
+    // --- 枠色のビジュアル変更ロジックの調停 ---
+    const btnFrame = document.getElementById(`btn-frame-${escapedTitleId}`);
+    if (btnFrame) {
+        // 一度すべての枠色クラスをリセット
+        btnFrame.className = "relative select-none w-[100px] h-[100px] sm:w-[240px] sm:h-[240px] aspect-square flex items-center justify-center overflow-hidden rounded-2xl border-2";
+        if (stateValue === 0) {
+            btnFrame.classList.add('border-amber-400', 'shadow-[0_0_15px_rgba(245,158,11,0.5)]'); // 金枠
+            showToast(`🥇 【${cleanLabel}】 金枠 (BGMテスト再生)`);
+        } else if (stateValue === 1) {
+            btnFrame.classList.add('border-slate-300', 'shadow-[0_0_15px_rgba(203,213,225,0.5)]'); // 銀枠
+            showToast(`🎵 【${cleanLabel}】 銀枠 (歌抽選テスト再生)`);
+        } else if (stateValue === 2) {
+            btnFrame.classList.add('border-rose-600', 'shadow-[0_0_15px_rgba(225,29,72,0.5)]'); // 赤枠
+            showToast(`🤫 【${cleanLabel}】 赤枠 (ミュート中)`);
         }
+    }
+
+    // --- 親画面側での音声テスト再生ロジック（擬似オーディオスプラッシュ） ---
+    try {
+        if (stateValue === 0) {
+            // 金枠：シンセBGM風（低めの心地よいサイン波ループ）
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(330, ctx.currentTime); // E4
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.4);
+            activeAudioElement = { pause: () => { osc.stop(); }, remove: () => {} };
+        } else if (stateValue === 1) {
+            // 銀枠：歌抽選風（きらきらした高音のアルペジオ）
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            const now = ctx.currentTime;
+            [523.25, 659.25, 783.99].forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now + (i * 0.08));
+                gain.gain.setValueAtTime(0.05, now + (i * 0.08));
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + (i * 0.08) + 0.3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now + (i * 0.08));
+                osc.stop(now + (i * 0.08) + 0.3);
+            });
+        } else if (stateValue === 2) {
+            // 赤枠：ミュート（無音、または閉じるノイズ）
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(120, ctx.currentTime);
+            gain.gain.setValueAtTime(0.05, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.05);
+        }
+    } catch (e) {
+        console.error("音声テスト再生に失敗しました:", e);
+    }
+}
+		
+		
+		
+		
+		// 💡 【追加】ご意見モーダルの開閉・外側クリックで閉じるJavaScript
+        
+        // ご意見モーダルを開く
+        function openFeedbackModal() {
+            playMechanicalClick();
+            const modal = document.getElementById('feedback-modal');
+            const content = document.getElementById('feedback-modal-content');
+            document.getElementById('feedback-content').value = ''; // フォーム初期化
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        // ご意見モーダルを閉じる
+        function closeFeedbackModal() {
+            const modal = document.getElementById('feedback-modal');
+            const content = document.getElementById('feedback-modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // スプレッドシートへ送信する通信ロジック（CORSチェック完全回避版）
+        function submitFeedbackForm() {
+            const msg = document.getElementById('feedback-content').value.trim();
+            if (!msg) {
+                showToast('メッセージ内容が空です。');
+                return;
+            }
+
+            // 送信ボタンの連打を防ぐため一時的にロック
+            const sendBtn = document.getElementById('send-feedback-btn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = '転送中...';
+            sendBtn.className = 'bg-slate-800 text-slate-500 px-5 py-2 rounded-xl text-xs font-bold cursor-not-allowed';
+
+            // 画面サイズを取得
+            const screenSize = `${window.innerWidth}x${window.innerHeight}`;
+
+            // GAS（Google Apps Script）のウェブアプリURL
+            const googleGasUrl = 'https://script.google.com/macros/s/AKfycbyfeSVzcBb8BeZgzXwFgN5iA8iFautRGB3R4TYYGzfBSZXW3HoGqJpss-P2TbCzOcVsSQ/exec';
+
+            // mode: 'no-cors' と Content-Type: 'text/plain' によりセキュリティチェックを回避
+            fetch(googleGasUrl, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain' }, 
+                body: JSON.stringify({ message: msg, screenSize: screenSize })
+            })
+            .then(response => {
+                // no-corsモードではレスポンス内容がブラウザに隠蔽されるため、疎通完了＝成功として処理
+                showToast("🚀 ご意見を転送しました！");
+                closeFeedbackModal();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("🚀 お疲れさまでした。");
+            })
+            .finally(() => {
+                // ボタンの状態を元に戻す
+                sendBtn.disabled = false;
+                sendBtn.textContent = '意見を送信する';
+                sendBtn.className = 'bg-cyan-600 hover:bg-cyan-500 text-white font-black px-5 py-2 rounded-xl text-xs transition-all shadow-lg shadow-cyan-600/20';
+            });
+        }
+
+        // 📱 モーダルの外側（暗い背景）をタップ・クリックした時にもポップアップを閉じる処理
+        document.addEventListener('click', (event) => {
+            const modal = document.getElementById('feedback-modal');
+            if (modal && !modal.classList.contains('hidden') && event.target === modal) {
+                closeFeedbackModal();
+            }
+        });
+		
     </script>
 </body>
 </html>
