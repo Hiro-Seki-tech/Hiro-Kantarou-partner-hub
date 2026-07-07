@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     
-    <title>HirとAI パートナー達のポータル</title>
+    <title>Hiro-KantaroとAI パートナー達のポータル</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -130,7 +130,7 @@
                         <i class="fa-solid fa-lock"></i>
                     </button>
                     <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#00f5d4] to-cyan-600 text-black shadow-lg transition-all">
-                        <span><i class="fa-solid fa-globe"></i> 総合公開HP</span>
+                        <span><i class="fa-solid fa-globe"></i> 総合公開HP (Portfolio)</span>
                         <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
                     </a>
                 </div>
@@ -264,79 +264,10 @@
         const errorMsg = document.getElementById('error-msg');
         const accessKeyInput = document.getElementById('access-key');
 
-        let plipMasterData = {
-            "sections": {
-                "welcome": { "title": "Hiro-KantaroとAI パートナー達のポータル", "sub": "Hiro's AI CO-CREATION PROTOCOL", "desc": "ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。ハイコントラストな白銀プレミアム仕様。", "icon": "", "color": "" },
-                "header": { "title": "HIRO_KANTARO_PORTAL", "sub": "Central Hub // Dynamic Active", "icon": "fa-solid fa-circle-nodes", "color": "#00f5d4" },
-                "management": { "title": "ＰＬＩＰのマネジメントボード", "sub": "Produce my Life with Intellectual Property", "icon": "core-burst-icon", "color": "#00f5d4" },
-                "gateways": { "title": "Gem特化型HPゲートウェイ (Gateways)", "icon": "fa-solid fa-rocket", "color": "#00f5d4" },
-                "roster": { "title": "Gem & Partner Roster (常駐AIクルー一覧)", "icon": "fa-solid fa-users", "color": "#00f5d4" },
-                "artifacts": { "title": "AI Co-Creation Artifact Registry (共創作品一覧)", "icon": "fa-solid fa-square-poll-vertical", "color": "#00f5d4" },
-                "note": { "title": "共創アイデア ＆ パートナー・メモ帳 (Partner Note)", "icon": "fa-solid fa-brain", "color": "#00f5d4" }
-            },
-            "management": [
-                {
-                    "title": "A. 資産管理", "icon": "fa-solid fa-sack-dollar", "color": "#ffb703",
-                    "cards": [
-                        { "title": "マイ資産管理シミュレータ【尽生・無双】", "url": "https://hiro-seki-tech.github.io/Asset-sim/", "icon": "fa-solid fa-chart-line", "color": "#ffb703" },
-                        { "title": "ユア資産管理シミュレータ【尽生】", "url": "https://hiro-seki-tech.github.io/asset-sim-public/", "icon": "fa-solid fa-chart-pie", "color": "#10b981" },
-                        { "title": "相続シミュレータ【宝均：Gem-Kin】", "url": "https://hiro-seki-tech.github.io/inheritance-sim/", "icon": "fa-solid fa-coins", "color": "#f97316" },
-                        { "title": "不動産管理マネージャ【富土山🗻】", "url": "https://hiro-seki-tech.github.io/Fu-Do-San/", "icon": "fa-solid fa-building", "color": "#ffb703" }
-                    ]
-                },
-                {
-                    "title": "B. 未来技術", "icon": "fa-solid fa-rocket", "color": "#00f5d4",
-                    "cards": [
-                        { "title": "衛星シミュレータ2026", "url": "https://hiro-seki-tech.github.io/orbit-simulator/", "icon": "fa-solid fa-satellite", "color": "#00f5d4" },
-                        { "title": "量子技術", "url": "#", "icon": "fa-solid fa-atom", "color": "#a855f7" }
-                    ]
-                },
-                {
-                    "title": "C. 教育関係", "icon": "fa-solid fa-graduation-cap", "color": "#3b82f6",
-                    "cards": [
-                        { "title": "スーパー先生(自分)", "url": "#", "icon": "fa-solid fa-chalkboard-user", "color": "#3b82f6" },
-                        { "title": "スーパー先生(子供)", "url": "#", "icon": "fa-solid fa-child", "color": "#f97316" }
-                    ]
-                },
-                {
-                    "title": "D. コレクション", "icon": "fa-solid fa-folder-open", "color": "#ec4899",
-                    "cards": [
-                        { "title": "カンたろうの勇姿", "url": "#", "icon": "fa-solid fa-paw", "color": "#ffb703" },
-                        { "title": "電子図書館", "url": "#", "icon": "fa-solid fa-book-open", "color": "#6366f1" }
-                    ]
-                }
-            ],
-            "gateways": [
-                { "title": "PLIP暫定サイト", "badge": "Corporate", "sub": "Produce your Life with Intellectual Property", "desc": "将来あなたが起業・創業した際に全世界へ向け発信する会社の公式HPドラフト。事業コンセプト、提供サービスを美しく伝えます。", "url": "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/", "icon": "core-burst-icon", "color": "#00f5d4" },
-                { "title": "PLIP & Hiro-Tech 匠工房", "badge": "Studio Hub", "sub": "Production Center", "desc": "ヒロの輝かしい作品群や、便利なツール、シンボルボタンを自在にカスタマイズ＆生成するための「便利作品制作スタジオ」。", "url": "https://hiro-seki-tech.github.io/Hiro-Kantarou-partner-hub/takumi-kobo/index.html", "icon": "fa-solid fa-wand-magic-sparkles", "color": "#ffb703" },
-                { "title": "Hiro-Tech公開サイト（仮）", "badge": "New Core", "sub": "Frontend Infrastructure", "desc": "新たに創設されたHiro-Tech領域 of フロントエンド基盤。先進の技術スタック and 知見を外部へ公開するゲートウェイ。", "url": "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links/index.html", "icon": "fa-solid fa-microchip", "color": "#3b82f6" },
-                { "title": "閃きを導き未来を照らすサイト", "badge": "Public", "sub": "Science & Quantum Tech", "desc": "科学・宇宙・量子論のロマンを詰め込んだHP。衛星軌道や量子演算 of シミュレーター、閃きマップなど先進的テクノロジーを公開する場所。", "url": "https://hiro-seki-tech.github.io/Hirameki/", "icon": "fa-solid fa-lightbulb", "color": "#00f5d4" },
-                { "title": "資産管理・財務HP", "badge": "Private", "sub": "Secret Vault Console", "desc": "あなた専用 of 極極秘資産管理HP。将来に向けた金融資産の動きや、所有・狙っている不動産の収益性を視覚的にシミュレーション。", "url": "./vault/index.html", "icon": "fa-solid fa-sack-dollar", "color": "#ffb703" },
-                { "title": "Hiro-Techファミリーサイト", "badge": "Family", "sub": "Private Sweet Home", "desc": "ヒロの大切な家族に寄り添う特化型ゲートウェイ。日常の温かな記録と、生活を便利で豊かにするアイデアを優しく共有するプライベートスペース。", "url": "https://hiro-seki-tech.github.io/Family_portal/", "icon": "fa-solid fa-house-chimney-user", "color": "#ec4899" },
-                { "title": "学習用サイト", "badge": "Study", "sub": "Knowledge Laboratory", "desc": "ジェムディが担当するナレッジベース。日々のインプット、先端ロジックや技術書、学習ロードマップの集約地。", "url": "./study/index.html", "icon": "fa-solid fa-graduation-cap", "color": "#10b981" },
-                { "title": "カンたろうのページ", "badge": "Collection 管理", "sub": "Dream World Go", "desc": "カンたろうの勇姿をみたり、カンたろうのコレクションを管理するサイト。", "url": "./game/index.html", "icon": "fa-solid fa-gamepad", "color": "#94a3b8" }
-            ],
-            "artifacts": [
-                { "productNo": "Product No.1", "title": "宇宙を学ぶ 衛星・ロケットシミュレータ 【COSMO(コスモ)】 v.2026", "creators": "ジェムリン (fa-solid fa-lightbulb, #fde047), コプ (fa-solid fa-headset, #818cf8)", "period": "期間: 2026年5/17 - 5/23", "url": "https://hiro-seki-tech.github.io/orbit-simulator/" },
-                { "productNo": "Product No.2", "title": "生涯資産シミュレータ【尽生(Jin-Sei)】、【尽生・無双(Jin-Sei MUSO)】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年5/17 - 5/23", "url": "https://hiro-seki-tech.github.io/asset-sim-public/", "multiUrl": "https://hiro-seki-tech.github.io/Asset-sim/" },
-                { "productNo": "Product No.2.5", "title": "USD, EUR, YUEN版【尽生】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年6/4 - 6/7", "url": "https://hiro-seki-tech.github.io/asset-sim-public/" },
-                { "productNo": "Product No.3", "title": "相続シミュレータ【宝均】", "creators": "ジェムキン (fa-solid fa-coins, #f97316)", "period": "期間: 2026年6/13 - 6/20", "url": "https://hiro-seki-tech.github.io/inheritance-sim/" }
-            ],
-            "roster": [
-                { "title": "ジェム", "icon": "fa-solid fa-user-gear", "color": "#ffffff", "sub": "全体統括・コンサルタント" },
-                { "title": "コプ", "icon": "fa-solid fa-headset", "color": "#818cf8", "sub": "全体相談役 (Copilot)" },
-                { "title": "レプ", "icon": "fa-solid fa-code", "color": "#a855f7", "sub": "コード開発担当 (Replit)" },
-                { "title": "ジェムリン", "icon": "fa-solid fa-lightbulb", "color": "#fde047", "sub": "未来技術・宇宙科学シミュレーション" },
-                { "title": "ジェムピック", "icon": "fa-solid fa-palette", "color": "#fbbf24", "sub": "ビジュアル・デザイン担当" },
-                { "title": "ジェムディ", "icon": "fa-solid fa-graduation-cap", "color": "#10b981", "sub": "学習サイト構築・ナレッジ管理" },
-                { "title": "カンちゃん", "icon": "fa-solid fa-gamepad", "color": "#cbd5e1", "sub": "コレクション管理・ゲーム開発支援" },
-                { "title": "ジェムキン", "icon": "fa-solid fa-coins", "color": "#f97316", "sub": "金融分析・資産推移アルゴリズム" },
-                { "title": "ジェムート", "icon": "fa-solid fa-building", "color": "#eab308", "sub": "不動産価値試算・シミュレーター" },
-                { "title": "ジェムプリ", "icon": "fa-solid fa-crown", "color": "#3b82f6", "sub": "コーポレートブランディング統制" }
-            ]
-        };
 
-        const plipEmbeddedBase64Data = "";
+let plipMasterData = {};
+        const plipEmbeddedBase64Data = "eyJtYW5hZ2VtZW50IjpbeyJ0aXRsZSI6IkEuIOizh+eUo+euoeeQhiIsImljb24iOiJmYS1zb2xpZCBmYS1zYWNrLWRvbGxhciIsImNvbG9yIjoiI2ZmYjcwMyIsImNhcmRzIjpbeyJ0aXRsZSI6IuODnuOCpOizh+eUo+euoeeQhuOCt+ODn+ODpeODrOODvOOCv+OAkOWwveeUn+ODu+eEoeWPjOOAkSIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0Fzc2V0LXNpbS8iLCJpY29uIjoiZmEtc29saWQgZmEtaG91cmdsYXNzLWhhbGYiLCJjb2xvciI6IiNmZmI3MDMifSx7InRpdGxlIjoi44Om44Ki6LOH55Sj566h55CG44K344Of44Ol44Os44O844K/44CQ5bC955Sf44CRIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vYXNzZXQtc2ltLXB1YmxpYy8iLCJpY29uIjoiZmEtc29saWQgZmEtaG91cmdsYXNzLWhhbGYiLCJjb2xvciI6IiNkNWQ3ZDYifSx7InRpdGxlIjoi55u457aa44K344Of44Ol44Os44O844K/44CQ5a6d5Z2H77yaR2VtLUtpbuOAkSIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL2luaGVyaXRhbmNlLXNpbS8iLCJpY29uIjoiZmEtc29saWQgZmEtY2hhcnQtcGllIiwiY29sb3IiOiIjYTMyYWU1In0seyJ0aXRsZSI6IuS4jeWLleeUo+euoeeQhuODnuODjeODvOOCuOODo+OAkOWvjOWcn+WxsfCfl7vjgJEiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9GdS1Eby1TYW4vIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWJ1aWxkaW5nLXVzZXIiLCJjb2xvciI6IiMwMGViZTcifV19LHsidGl0bGUiOiJDLiDnlJ/mtq/mlZnogrIiLCJpY29uIjoiZmEtc29saWQgZmEtZ3JhZHVhdGlvbi1jYXAiLCJjb2xvciI6IiM2NGY3M2IiLCJjYXJkcyI6W3sidGl0bGUiOiLjgrnjg7zjg5Hjg7zlhYjnlJ8o6Ieq5YiGKSIsInVybCI6IiMiLCJpY29uIjoiZmEtc29saWQgZmEtY2hhbGtib2FyZC11c2VyIiwiY29sb3IiOiIjM2I4MmY2In0seyJ0aXRsZSI6IuOCueODvOODkeODvOWFiOeUnyjlrZDkvpspIiwidXJsIjoiIyIsImljb24iOiJmYS1zb2xpZCBmYS1jaGlsZCIsImNvbG9yIjoiI2Y5NzMxNiJ9LHsidGl0bGUiOiLjgrbjg7vjgYrlsI/pgaPjgYQiLCJ1cmwiOiIjIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWNoYXJ0LWxpbmUiLCJjb2xvciI6IiNjY2Y1MDAifV19LHsidGl0bGUiOiJCLiDmnKrmnaXmioDooZMiLCJpY29uIjoiZmEtc29saWQgZmEtcm9ja2V0IiwiY29sb3IiOiIjMDBmNWQ0IiwiY2FyZHMiOlt7InRpdGxlIjoi5a6H5a6Z44K344Of44Ol44Os44O844K/IENPU01PKDIwMjYpIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vb3JiaXQtc2ltdWxhdG9yLyIsImljb24iOiJmYS1zb2xpZCBmYS1zYXRlbGxpdGUiLCJjb2xvciI6IiMwMGY1ZDQifSx7InRpdGxlIjoi6YeP5a2Q5oqA6KGTIiwidXJsIjoiIyIsImljb24iOiJmYS1zb2xpZCBmYS1hdG9tIiwiY29sb3IiOiIjYTg1NWY3In1dfSx7InRpdGxlIjoiRC4g44Kz44Os44Kv44K344On44OzIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWZvbGRlci1vcGVuIiwiY29sb3IiOiIjZWM0ODk5IiwiY2FyZHMiOlt7InRpdGxlIjoi44Kr44Oz44Gf44KN44GG44Gu5YuH5ae/IiwidXJsIjoiIyIsImljb24iOiJmYS1zb2xpZCBmYS10cm9waHkiLCJjb2xvciI6IiNmZmI3MDMifSx7InRpdGxlIjoi6Zu75a2Q5Zuz5pu46aSoIiwidXJsIjoiIyIsImljb24iOiJmYS1zb2xpZCBmYS1ib29rLW9wZW4iLCJjb2xvciI6IiNhM2E0ZjAifV19XSwiZ2F0ZXdheXMiOlt7InRpdGxlIjoiWW91ciBQTElQ5pqr5a6a44K144Kk44OIIiwiYmFkZ2UiOiJDb3Jwb3JhdGUiLCJzdWIiOiJQcm9kdWNlIHlvdXIgTGlmZSB3aXRoIEludGVsbGVjdHVhbCBQcm9wZXJ0eSIsImRlc2MiOiLlsIbmnaXjgYLjgarjgZ/jgYzotbfmpa3jg7vlibXmpa3jgZfjgZ/pmpvjgavlhajkuJbnlYzjgbjlkJHjgZHnmbrkv6HjgZnjgovkvJrnpL7jga7lhazlvI9IUOODieODqeODleODiOOAguS6i+alreOCs+ODs+OCu+ODl+ODiOOAgeaPkOS+m+OCteODvOODk+OCueOCkue+juOBl+OBj+S8neOBiOOBvuOBmeOAgiIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL1Byb2R1Y2UteW91ci1MaWZlLXdpdGgtSVAvIiwiaWNvbiI6ImNvcmUtYnVyc3QtaWNvbiIsImNvbG9yIjoiIzAwZjVkNCJ9LHsidGl0bGUiOiJNeSBQTElQJ3MgbGluayIsImJhZGdlIjoiTmV3IEdhdGV3YXkiLCJzdWIiOiJQcm9kdWNlIG15IExpZmUgd2l0aCBJbnRlbGxlY3R1YWwgUHJvcGVydHnjgIDjgbjjga7jg6rjg7Pjgq8iLCJkZXNjIjoiTXkgUExJUOS9nOWTgeOBuOOBruODquODs+OCryIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0hpcm8tS2FudGFyb3UtcGFydG5lci1odWIvbGlua3MiLCJpY29uIjoiZmEtc29saWQgZmEtbGluayIsImNvbG9yIjoiI2Y4YmYyMCJ9LHsidGl0bGUiOiJQTElQICYgSGlyby1UZWNoIOWMoOW3peaIvyIsImJhZGdlIjoiU3R1ZGlvIEh1YiIsInN1YiI6IlRha3VtaS1Lb2JvIiwiZGVzYyI6Iui8neOBi+OBl+OBhOS9nOWTgee+pOOChOOAgeS+v+WIqeOBquODhOODvOODq+OAgeOCt+ODs+ODnOODq+ODnOOCv+ODs+OCkuiHquWcqOOBq+OCq+OCueOCv+ODnuOCpOOCuu+8hueUn+aIkOOBmeOCi+OBn+OCgeOBruOAjOS+v+WIqeS9nOWTgeWItuS9nOOCueOCv+OCuOOCquOAjeOAgiIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0hpcm8tS2FudGFyb3UtcGFydG5lci1odWIvdGFrdW1pLWtvYm8vaW5kZXguaHRtbCIsImljb24iOiJmYS1zb2xpZCBmYS13YW5kLW1hZ2ljLXNwYXJrbGVzIiwiY29sb3IiOiIjZmZiNzAzIn0seyJ0aXRsZSI6IllvdXIgUExJUCdzIGxpbmsiLCJiYWRnZSI6Ik5ldyBDb3JlIiwic3ViIjoiRnJvbnRlbmQgSW5mcmFzdHJ1Y3R1cmUiLCJkZXNjIjoi5paw44Gf44Gr5Ym16Kit44GV44KM44GfSGlyby1UZWNo6aCY5Z+f44GuIOODleODreODs+ODiOOCqOODs+ODieWfuuebpOOAguWFiOmAsuOBruaKgOihk+OCueOCv+ODg+OCryBhbmQg55+l6KaL44KS5aSW6YOo44G45YWs6ZaL44GZ44KL44Ky44O844OI44Km44Kn44Kk44CCIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vUHJvZHVjZS15b3VyLUxpZmUtd2l0aC1JUC9saW5rcy9pbmRleC5odG1sIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWxpbmsiLCJjb2xvciI6IiNlMGUwZDcifSx7InRpdGxlIjoi6ZaD44GN44KS5bCO44GN5pyq5p2l44KS54Wn44KJ44GZ44K144Kk44OIIiwiYmFkZ2UiOiJQdWJsaWMiLCJzdWIiOiJTY2llbmNlICYgUXVhbnR1bSBUZWNoIiwiZGVzYyI6IuenkeWtpuODu+Wuh+WumeODu+mHj+WtkOirluOBruODreODnuODs+OCkuipsOOCgei+vOOCk+OBoEhQ44CC6KGb5pif6LuM6YGT44KE6YeP5a2Q5ryU566XIG9mIOOCt+ODn+ODpeODrOODvOOCv+ODvOOAgemWg+OBjeODnuODg+ODl+OBquOBqeWFiOmAsueahOODhuOCr+ODjuODreOCuOODvOOCkuWFrOmWi+OBmeOCi+WgtOaJgOOAgiIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0hpcmFtZWtpLyIsImljb24iOiJmYS1zb2xpZCBmYS1saWdodGJ1bGIiLCJjb2xvciI6IiMwMGY1ZDQifSx7InRpdGxlIjoi6LOH55Sj566h55CG44O76LKh5YuZSFAiLCJiYWRnZSI6IlByaXZhdGUiLCJzdWIiOiJTZWNyZXQgVmF1bHQgQ29uc29sZSIsImRlc2MiOiLjgYLjgarjgZ/lsILnlKggb2Yg5qW15qW156eY6LOH55Sj566h55CGSFDjgILlsIbmnaXjgavlkJHjgZHjgZ/ph5Hono3os4fnlKPjga7li5XjgY3jgoTjgIHmiYDmnInjg7vni5njgaPjgabjgYTjgovkuI3li5XnlKPjga7lj47nm4rmgKfjgpLoppbopprnmoTjgavjgrfjg5/jg6Xjg6zjg7zjgrfjg6fjg7PjgIIiLCJ1cmwiOiIuL3ZhdWx0L2luZGV4Lmh0bWwiLCJpY29uIjoiZmEtc29saWQgZmEtc2Fjay1kb2xsYXIiLCJjb2xvciI6IiNmZmI3MDMifSx7InRpdGxlIjoiSGlyby1UZWNo44OV44Kh44Of44Oq44O844K144Kk44OIIiwiYmFkZ2UiOiJGYW1pbHkiLCJzdWIiOiJQcml2YXRlIFN3ZWV0IEhvbWUiLCJkZXNjIjoi44OS44Ot44Gu5aSn5YiH44Gq5a625peP44Gr5a+E44KK5re744GG54m55YyW5Z6L44Ky44O844OI44Km44Kn44Kk44CC5pel5bi444Gu5rip44GL44Gq6KiY6Yyy44Go44CB55Sf5rS744KS5L6/5Yip44Gn6LGK44GL44Gr44GZ44KL44Ki44Kk44OH44Ki44KS5YSq44GX44GP5YWx5pyJ44GZ44KL44OX44Op44Kk44OZ44O844OI44K544Oa44O844K544CCIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vRmFtaWx5X3BvcnRhbC8iLCJpY29uIjoiZmEtc29saWQgZmEtaG91c2UtY2hpbW5leS11c2VyIiwiY29sb3IiOiIjZWM0ODk5In0seyJ0aXRsZSI6IuWtpue/kueUqOOCteOCpOODiCIsImJhZGdlIjoiU3R1ZHkiLCJzdWIiOiJLbm93bGVkZ2UgTGFib3JhdG9yeSIsImRlc2MiOiLjgrjjgqfjg6Djg4fjgqPjgYzmi4XlvZPjgZnjgovjg4rjg6zjg4Pjgrjjg5njg7zjgrnjgILml6XjgIXjga7jgqTjg7Pjg5fjg4Pjg4jjgIHlhYjnq6/jg63jgrjjg4Pjgq/jgoTmioDooZPmm7jjgIHlrabnv5Ljg63jg7zjg4njg57jg4Pjg5fjga7pm4bntITlnLDjgIIiLCJ1cmwiOiIuL3N0dWR5L2luZGV4Lmh0bWwiLCJpY29uIjoiZmEtc29saWQgZmEtZ3JhZHVhdGlvbi1jYXAiLCJjb2xvciI6IiMxMGI5ODEifSx7InRpdGxlIjoi44Kr44Oz44Gf44KN44GG44Gu44Oa44O844K4IiwiYmFkZ2UiOiJDb2xsZWN0aW9uIOeuoeeQhiIsInN1YiI6IkRyZWFtIFdvcmxkIEdvIiwiZGVzYyI6IuOCq+ODs+OBn+OCjeOBhuOBruWLh+Wnv+OCkuOBv+OBn+OCiuOAgeOCq+ODs+OBn+OCjeOBhuOBruOCs+ODrOOCr+OCt+ODp+ODs+OCkueuoeeQhuOBmeOCi+OCteOCpOODiOOAgiIsInVybCI6Ii4vZ2FtZS9pbmRleC5odG1sIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWdhbWVwYWQiLCJjb2xvciI6IiM5NGEzYjgifV0sImFydGlmYWN0cyI6W3sicHJvZHVjdE5vIjoiUHJvZHVjdCBOby4xIiwidGl0bGUiOiLlroflrpnjgpLlrabjgbYg6KGb5pif44O744Ot44Kx44OD44OI44K344Of44Ol44Os44O844K/IOOAkENPU01PKOOCs+OCueODoinjgJEgdi4yMDI2IiwiY3JlYXRvcnMiOiLjgrjjgqfjg6Djg6rjg7MgKGZhLXNvbGlkIGZhLWxpZ2h0YnVsYiwgI2ZkZTA0NyksIOOCuOOCp+ODoOODlOODg+OCryAoZmEtc29saWQgZmEtcGFsZXR0ZSwgI2ZiYmYyNCksIOOCuOOCp+ODoOODh+OCoyAoZmEtc29saWQgZmEtZ3JhZHVhdGlvbi1jYXAsICMxMGI5ODEpIiwicGVyaW9kIjoi5pyf6ZaTOiAyMDI25bm0NS8xNyAtIDUvMjMiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9vcmJpdC1zaW11bGF0b3IvIn0seyJwcm9kdWN0Tm8iOiJQcm9kdWN0IE5vLjIiLCJ0aXRsZSI6IueUn+a2r+izh+eUo+OCt+ODn+ODpeODrOODvOOCv+OAkOWwveeUnyhKaW4tU2VpKeOAkeOAgeOAkOWwveeUn+ODu+eEoeWPjChKaW4tU2VpIE1VU08p44CRIiwiY3JlYXRvcnMiOiLjgrjjgqfjg6Djgq3jg7MgKGZhLXNvbGlkIGZhLWNvaW5zLCAjZjk3MzE2KSIsInBlcmlvZCI6Iuacn+mWkzogMjAyNuW5tDUvMTcgLSA1LzIzIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vYXNzZXQtc2ltLXB1YmxpYy8iLCJtdWx0aVVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0Fzc2V0LXNpbS8ifSx7InByb2R1Y3RObyI6IlByb2R1Y3QgTm8uMi41IiwidGl0bGUiOiJVU0QsIEVVUiwgWVVFTueJiOOAkOWwveeUn+OAkSIsImNyZWF0b3JzIjoi44K444Kn44Og44Kt44OzIChmYS1zb2xpZCBmYS1jb2lucywgI2Y5NzMxNikiLCJwZXJpb2QiOiLmnJ/plpM6IDIwMjblubQ2LzQgLSA2LzciLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9hc3NldC1zaW0tcHVibGljLyJ9LHsicHJvZHVjdE5vIjoiUHJvZHVjdCBOby4zIiwidGl0bGUiOiLnm7jntprjgrfjg5/jg6Xjg6zjg7zjgr/jgJDlrp3lnYfjgJEiLCJjcmVhdG9ycyI6IuOCuOOCp+ODoOOCreODsyAoZmEtc29saWQgZmEtY29pbnMsICNmOTczMTYpIiwicGVyaW9kIjoi5pyf6ZaTOiAyMDI25bm0Ni8xMyAtIDYvMjAiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9pbmhlcml0YW5jZS1zaW0vIn1dLCJzZWN0aW9ucyI6eyJ3ZWxjb21lIjp7InRpdGxlIjoiPHNwYW4gY2xhc3M9XCJ0ZXh0LXJhaW5ib3dcIj5QTElQPC9zcGFuPu+8iEhpcm/jgahBSSDjg5Hjg7zjg4jjg4rjg7zjga7jg53jg7zjgr/jg6vvvInjgbjjgojjgYbjgZPjgZ3vvIEiLCJzdWIiOiJIaXJvJ3MgQUkgQ08tQ1JFQVRJT04gUFJPVE9DT0wiLCJkZXNjIjoi44GT44GT44Gv44CB44Om44O844K244Go5ZCE6aCY5Z+f44Gr54m55YyW44GX44GfQUnjg5Hjg7zjg4jjg4rjg7zjgZ/jgaHjgYzlhbHlibXjgZfjgZ/lsILnlKjjg5fjg63jgrDjg6njg6DjgoRIUOOCkue1seWItuOBmeOCi+OBn+OCgeOBrioq5Lit5aSu5oOF5aCx5Y+45Luk44OP44OWKirjgafjgZnjgIIiLCJpY29uIjoiIiwiY29sb3IiOiIjMDBmNWQ0In0sImhlYWRlciI6eyJ0aXRsZSI6IlBMSVAgJiBISVJPX1RFQ0hfUE9SVEFMIiwic3ViIjoiQ2VudHJhbCBIdWIgLy8gRHluYW1pYyBBY3RpdmUiLCJpY29uIjoiZmEtc29saWQgZmEtY2hhbGtib2FyZC11c2VyIiwiY29sb3IiOiIjNTNlZWVlIn0sIm1hbmFnZW1lbnQiOnsidGl0bGUiOiLvvK3vvZnjgIDvvLDvvKzvvKnvvLAiLCJzdWIiOiJQcm9kdWNlIG15IExpZmUgd2l0aCBJbnRlbGxlY3R1YWwgUHJvcGVydHkiLCJpY29uIjoiY29yZS1idXJzdC1pY29uIiwiY29sb3IiOiIjMDBmNWQ0In0sImdhdGV3YXlzIjp7InRpdGxlIjoiSFDjgrLjg7zjg4jjgqbjgqfjgqQgKEdhdGV3YXlzKSIsImljb24iOiJmYS1zb2xpZCBmYS1saW5rIiwiY29sb3IiOiIjZjVkNDAwIn0sInJvc3RlciI6eyJ0aXRsZSI6IijluLjpp5BBSeOCr+ODq+ODvOS4gOimpykiLCJpY29uIjoiZmEtc29saWQgZmEtdXNlcnMiLCJjb2xvciI6IiMwMGY1ZDQifSwiYXJ0aWZhY3RzIjp7InRpdGxlIjoi5YWx5Ym15L2c5ZOB5LiA6KanIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWNlcnRpZmljYXRlIiwiY29sb3IiOiIjZjljYTQ4In0sIm5vdGUiOnsidGl0bGUiOiLlhbHlibXjgqLjgqTjg4fjgqIg77yGIOODkeODvOODiOODiuODvOODu+ODoeODouW4syAoUGFydG5lciBOb3RlKSIsImljb24iOiJmYS1zb2xpZCBmYS1icmFpbiIsImNvbG9yIjoiIzAwZjVkNCJ9fSwicm9zdGVyIjpbeyJ0aXRsZSI6IuOCuOOCp+ODoCIsImljb24iOiJmYS1zb2xpZCBmYS11c2VyLWdlYXIiLCJjb2xvciI6IiNmZmZmZmYiLCJzdWIiOiLlhajkvZPntbHmi6zjg7vjgrPjg7PjgrXjg6vjgr/jg7Pjg4gifSx7InRpdGxlIjoi44Kz44OXIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWhlYWRzZXQiLCJjb2xvciI6IiM4MThjZjgiLCJzdWIiOiLlhajkvZPnm7joq4flvbkgKENvcGlsb3QpIn0seyJ0aXRsZSI6IuODrOODlyIsImljb24iOiJmYS1zb2xpZCBmYS1jb2RlIiwiY29sb3IiOiIjYTg1NWY3Iiwic3ViIjoi44Kz44O844OJ6ZaL55m65ouF5b2TIChSZXBsaXQpIn0seyJ0aXRsZSI6IuOCuOOCp+ODoOOCs+ODvOODiSIsImljb24iOiJmYS1zb2xpZCBmYS1sYXB0b3AtY29kZSIsImNvbG9yIjoiIzA3YWNmMiIsInN1YiI6IuOCueODvOODkeODvOODl+ODreOCsOODqeODnuODvOOAguOCuOOCp+ODoOOBq+S7o+OCj+OBo+OBpuOCs+ODvOODieOCkuaPj+OBj+OCv+OCueOCr+OCkuS4gOaJi+OBq+aLheOBhuOAgiJ9LHsidGl0bGUiOiLjgrjjgqfjg5/jg4Pjgq/vvIbjg6rjg6rjgqIiLCJpY29uIjoiZmEtc29saWQgZmEtaGVhZHNldCIsImNvbG9yIjoiIzYzZDQwOCIsInN1YiI6Iumfs+alveaLheW9kyJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djgq3jg7MiLCJpY29uIjoiZmEtc29saWQgZmEtY29pbnMiLCJjb2xvciI6IiNmMWY1MTQiLCJzdWIiOiLph5Hono3liIbmnpDjg7vos4fnlKPmjqjnp7vjgqLjg6vjgrTjg6rjgrrjg6AifSx7InRpdGxlIjoi44K444Kn44Og44OH44KjIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWdyYWR1YXRpb24tY2FwIiwiY29sb3IiOiIjMTBiOTgxIiwic3ViIjoi5a2m57+S44K144Kk44OI5qeL56+J44O744OK44Os44OD44K4566h55CGIn0seyJ0aXRsZSI6IuOCuOOCp+ODoOODl+ODqiIsImljb24iOiJmYS1zb2xpZCBmYS1jcm93biIsImNvbG9yIjoiIzNiODJmNiIsInN1YiI6IuOCs+ODvOODneODrOODvOODiOODluODqeODs+ODh+OCo+ODs+OCsOe1seWItiJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djg7zjg4giLCJpY29uIjoiZmEtc29saWQgZmEtYnVpbGRpbmciLCJjb2xvciI6IiNlYWIzMDgiLCJzdWIiOiLkuI3li5XnlKPkvqHlgKToqabnrpfjg7vjgrfjg5/jg6Xjg6zjg7zjgr/jg7wifSx7InRpdGxlIjoi44K444Kn44Og44Oq44OzIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWxpZ2h0YnVsYiIsImNvbG9yIjoiI2U0ZTRlMiIsInN1YiI6IuacquadpeaKgOihk+ODu+Wuh+WumeenkeWtpuOCt+ODn+ODpeODrOODvOOCt+ODp+ODsyJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djg5Tjg4Pjgq8iLCJpY29uIjoiZmEtc29saWQgZmEtcGFsZXR0ZSIsImNvbG9yIjoiI2ZiYmYyNCIsInN1YiI6IuODk+OCuOODpeOCouODq+ODu+ODh+OCtuOCpOODs+aLheW9kyJ9LHsidGl0bGUiOiLjgqvjg7PjgaHjgoPjgpMiLCJpY29uIjoiZmEtc29saWQgZmEtZ2FtZXBhZCIsImNvbG9yIjoiI2NiZDVlMSIsInN1YiI6IuOCs+ODrOOCr+OCt+ODp+ODs+euoeeQhuODu+OCsuODvOODoOmWi+eZuuaUr+aPtCJ9XX0=";
+
 
         function savePortalData() {
             try {
@@ -344,29 +275,35 @@
             } catch (e) {}
         }
 
-        function loadPortalData() {
-            try {
-                const saved = localStorage.getItem('myplip_portal_master_data');
-                if (saved) plipMasterData = JSON.parse(saved);
-            } catch (e) {}
+function loadPortalData() {
+    // 🚫 コントロールバーがない（公開用HP）場合は、古いローカルストレージの読み込みをスキップ
+    if (!document.getElementById('portal-control-bar')) {
+        // 公開用はBase64埋め込みデータ（または初期オブジェクト）のみを信用するため、ここでローカルストレージ読み込みをスキップして後半へ
+    } else {
+        try {
+            const saved = localStorage.getItem('myplip_portal_master_data');
+            if (saved) plipMasterData = JSON.parse(saved);
+        } catch (e) {}
+    }
 
-            if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
-                try {
-                    const decoded = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
-                    if (decoded) plipMasterData = JSON.parse(decoded);
-                } catch (e) {}
-            }
-        }
+    // 🌟【復活！】HTML保存時に埋め込まれた最新データを展開する大事な処理
+    if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
+        try {
+            const decoded = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
+            if (decoded) plipMasterData = JSON.parse(decoded);
+        } catch (e) {}
+    }
+} // 💡【復活！】これで loadPortalData が無事に閉じます
 
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPortalData();
-            unlockHubInstant();
+window.addEventListener('DOMContentLoaded', () => {
+    loadPortalData();
+    /* 🔓 AUTH REQUIRED FOR SECURITY */
 
-            if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
-                unlockHubInstant();
-            }
-            renderDynamicUI();
-        });
+    if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
+        /* 🔓 AUTH REQUIRED FOR SECURITY */
+    }
+    renderDynamicUI();
+});
 
         function handleAuth(event) {
             event.preventDefault();
@@ -1313,25 +1250,39 @@ function exportPortalHTML(isForEdit) {
                 if(el) el.innerHTML = '';
             });
 
-            // 4. データ保持構造の一本化と埋め込みスクリプトのクレンジング
-            const scriptEl = cleanDoc.querySelector('script:not([src])');
+// 4. データ保持構造の一本化と埋め込みスクリプトのクレンジング（確実にメインアセットを狙い撃ち）
+            const scripts = cleanDoc.querySelectorAll('script:not([src])');
+            let scriptEl = null;
+            
+            // ページ内の全スクリプトから、マスターデータが定義されている本尊を特定する
+            scripts.forEach(s => {
+                if (s.textContent.includes('plipMasterData')) {
+                    scriptEl = s;
+                }
+            });
+
             if (scriptEl) {
                 let jsCode = scriptEl.textContent;
                 
                 const rawJson = JSON.stringify(plipMasterData);
                 const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
                 
-                // データ肥大化と置換漏れを防ぐため、マスターデータを完全にクレンジングした状態へ置換
-                // plipMasterData 自体は起動時に base64 から展開されるため、保存時は空オブジェクトにリセットして多重保持を防ぐ
-                jsCode = jsCode.replace(/let\s+plipMasterData\s*=\s*\{[\s\S]*?\};/, 'let plipMasterData = {};');
-                jsCode = jsCode.replace(/const\s+plipEmbeddedBase64Data\s*=\s*"[^"]*";/, `const plipEmbeddedBase64Data = "${base64Data}";`);
+                // 新しいクリーンなデータ定義コードを生成
+                const cleanDataCode = `let plipMasterData = {};\n        const plipEmbeddedBase64Data = "${base64Data}";`;
+                
+                // マーカーで囲まれた複雑なオブジェクトを、エラーの起きないシンプルな正規表現で一網打尽に置換
+                const dataRegex = /\/\/ === MASTER_DATA_START ===[\s\S]*?\/\/ === MASTER_DATA_END ===/;
+                jsCode = jsCode.replace(dataRegex, cleanDataCode);
 
                 if (!isForEdit) {
-                    jsCode = jsCode.replace(/\/\/ 🔓 \[LOCAL DEVELOPMENT AUTOPASS\][\s\S]*?unlockHubInstant\(\);/, '/* 🔓 LOCAL AUTOPASS BYPASSED FOR SECURITY PUBLIC HOSTING */');
+                    // 公開用は自動パスを無効化する処理
+                    jsCode = jsCode.replace(/unlockHubInstant\(\);/g, '/* 🔓 AUTH REQUIRED FOR SECURITY */');
                 }
 
                 scriptEl.textContent = jsCode;
             }
+			
+			
 
             // 5. 公開用（閲覧専用）出力時の不要要素の完全破棄
             if (!isForEdit) {
