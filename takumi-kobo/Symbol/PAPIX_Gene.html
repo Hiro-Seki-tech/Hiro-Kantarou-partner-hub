@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 PAPIX Blazing Symbol Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;800;900&family=Noto+Sans+JP:wght=400;700;900&family=Cinzel:wght=700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+            background: #080303;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Dark fiery cosmic background */
+        .magma-bg {
+            background: radial-gradient(circle at 50% 50%, #1e0907 0%, #050101 100%);
+        }
+
+        /* Glowing text effects */
+        .fire-glow {
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Custom scrollbar for beautiful UI */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f0504;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ef444450;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #ef444480;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col magma-bg selection:bg-red-600/40 selection:text-white">
+
+    <!-- Toast Notification for copying/saving actions -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 ease-out bg-stone-950 text-white px-5 py-3 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.3)] border border-red-500/30 flex items-center gap-3">
+        <span class="text-red-500 text-lg"><i class="fa-solid fa-fire-flame-curved animate-pulse"></i></span>
+        <span id="toast-text" class="text-xs font-bold tracking-wider">エクスポートしました！</span>
+    </div>
+
+    <!-- Header Area representing Gempick's Tech Studio -->
+    <header class="border-b border-red-950/40 bg-stone-950/80 backdrop-blur-md sticky top-0 z-40 py-4 px-6 sm:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-orange-400 flex items-center justify-center shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/30">
+                    <i class="fa-solid fa-fire text-stone-950 text-xl animate-bounce"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black text-white flex items-center gap-2" style="font-family: 'Cinzel', sans-serif; letter-spacing: 0.05em;">
+                        PAPIX <span class="text-red-500 fire-glow">Blazing Symbol Studio v5</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-stone-400 font-light">
+                        極太コントラスト境界線 & 3種の特殊芸術炎 ＋ 3大カスタムブランド切替（PAPIX / MAMIX / FENIX）
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-stone-900 border border-stone-800 p-1.5 rounded-xl">
+                <span class="text-xs font-semibold text-stone-400 px-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-glasses text-red-500"></i>
+                    <span>Designer: Gempick</span>
+                    <span class="text-[10px] text-orange-400 px-1.5 py-0.2 bg-orange-500/10 rounded font-mono font-bold">メガネ装着中</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Control Panel (Left Side: 5 Columns) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-stone-950/90 border border-red-950/50 rounded-2xl p-6 shadow-2xl flex flex-col gap-5">
+                <h2 class="text-sm font-bold tracking-widest text-stone-200 border-b border-stone-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-sliders text-red-500 mr-2"></i>SYMBOL CONFIG (ロゴ・演出調整)</span>
+                    <span class="text-[9px] text-red-400 px-2 py-0.5 bg-red-500/10 rounded font-mono font-bold">LIVE UPDATE</span>
+                </h2>
+
+                <!-- NEW: Brand Identity Selector -->
+                <div class="flex flex-col gap-1.5 bg-stone-900/60 p-3 rounded-xl border border-stone-850">
+                    <label class="text-[11px] font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags text-xs"></i> ターゲット・ブランド名選択
+                    </label>
+                    <select id="brand-select" onchange="updateBrandSelection()" class="w-full rounded-xl bg-stone-950 border border-stone-800 p-2.5 text-xs text-white focus:ring-2 focus:ring-red-500/50 focus:border-red-500 focus:outline-none font-bold">
+                        <option value="papix" selected>🔥 PAPIX (パピックス) - 王道知的ブランド</option>
+                        <option value="mamix">🧬 MAMIX (マミックス) - 先進AI科学ブランド</option>
+                        <option value="fenix">🦅 FENIX (フェニックス) - 高貴なる不死鳥ブランド</option>
+                    </select>
+                </div>
+
+                <!-- 1. Text Customization (Sub-text can still be fine-tuned) -->
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">ルビ・サブテキスト（小さなカタカナ）</label>
+                        <input type="text" id="sub-text" value="パピックス" oninput="updateLogo()" class="w-full rounded-xl bg-stone-900 border border-stone-800 p-2.5 text-white font-bold focus:ring-2 focus:ring-red-500/50 focus:border-red-500 focus:outline-none text-xs">
+                    </div>
+                </div>
+
+                <!-- 2. Flame Shape Selection (Multi-pattern Flame System + Flameless Option) -->
+                <div class="flex flex-col gap-1.5 border-t border-stone-900 pt-3">
+                    <label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">炎の芸術形状（3種のパターン ＋ 炎なし）</label>
+                    <select id="flame-style" onchange="updateLogo()" class="w-full rounded-xl bg-stone-900 border border-stone-800 p-2.5 text-xs text-white focus:ring-2 focus:ring-red-500/50 focus:border-red-500 focus:outline-none font-bold">
+                        <option value="phoenix" selected>🦅 不死鳥の飛翔 (Rising Phoenix Wings)</option>
+                        <option value="peaks">🏔️ 連なる連山火峰 (Burning Mountain Ranges)</option>
+                        <option value="vortex">🌪️ 激動の大渦炎 (Raging Swirling Vortex)</option>
+                        <option value="none">❌ 炎なし (No Flame - Premium Solid)</option>
+                    </select>
+                </div>
+
+                <!-- 3. Flame Turbulence Parameters -->
+                <div class="flex flex-col gap-3 border-t border-stone-900 pt-3">
+                    <span class="text-[11px] font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-wind text-xs"></i> 炎のゆらぎ・歪み微調整
+                    </span>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-stone-400 font-bold">横ゆらぎ周期 (Freq X)</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="range" id="fire-freq-x" min="0.005" max="0.08" step="0.001" value="0.015" oninput="updateLogo()" class="w-full accent-red-500">
+                                <span id="fire-freq-x-val" class="text-[10px] text-stone-300 font-mono font-bold w-12 text-right">0.015</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-stone-400 font-bold">縦ゆらぎ周期 (Freq Y)</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="range" id="fire-freq-y" min="0.01" max="0.15" step="0.005" value="0.05" oninput="updateLogo()" class="w-full accent-red-500">
+                                <span id="fire-freq-y-val" class="text-[10px] text-stone-300 font-mono font-bold w-12 text-right">0.05</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-stone-400 font-bold">メラメラゆらぎ速度</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="range" id="fire-speed" min="0.3" max="4.0" step="0.1" value="1.2" oninput="updateLogo()" class="w-full accent-red-500">
+                                <span id="fire-speed-val" class="text-[10px] text-stone-300 font-mono font-bold w-12 text-right">1.2s</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-[10px] text-stone-400 font-bold">うねりの激しさ (Scale)</label>
+                            <div class="flex items-center gap-1.5">
+                                <input type="range" id="fire-scale" min="5" max="80" step="1" value="28" oninput="updateLogo()" class="w-full accent-red-500">
+                                <span id="fire-scale-val" class="text-[10px] text-stone-300 font-mono font-bold w-12 text-right">28px</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Contrast Plate style -->
+                <div class="flex flex-col gap-1.5 border-t border-stone-900 pt-3">
+                    <label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">文字用バックプレート（くっきり超強コントラスト加工）</label>
+                    <select id="plate-style" onchange="updateLogo()" class="w-full rounded-xl bg-stone-900 border border-stone-800 p-2.5 text-xs text-white focus:ring-2 focus:ring-red-500/50 focus:border-red-500 focus:outline-none font-bold font-mono">
+                        <option value="porcelain" selected>🤍 白磁ポルセラーノ【極太 12px 境界線】(超ハイコントラスト)</option>
+                        <option value="darkglass">🖤 サイバーダーク・すりガラス【極太 10px 境界線】(重厚ダーク)</option>
+                        <option value="none">❌ プレートなし（背後の炎がそのままダイレクトに透ける）</option>
+                    </select>
+                </div>
+
+                <!-- 5. Coloring Setup -->
+                <div class="grid grid-cols-2 gap-3 border-t border-stone-900 pt-3">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">文字描画色</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="text-color" value="#0a2540" oninput="updateLogo()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="text-color-hex" value="#0a2540" oninput="syncColorInput('text-color', this.value)" class="w-full text-center rounded-lg bg-stone-900 border border-stone-800 p-1.5 text-stone-300 font-mono text-xs">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-bold text-stone-400 uppercase tracking-wider">炎のコアカラー</label>
+                        <div class="flex items-center gap-2">
+                            <input type="color" id="fire-color" value="#ea580c" oninput="updateLogo()" class="w-8 h-8 rounded border-none bg-transparent cursor-pointer">
+                            <input type="text" id="fire-color-hex" value="#ea580c" oninput="syncColorInput('fire-color', this.value)" class="w-full text-center rounded-lg bg-stone-900 border border-stone-800 p-1.5 text-stone-300 font-mono text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Interactive Button Actions -->
+                <div class="flex flex-col gap-1.5 border-t border-stone-900 pt-3">
+                    <label class="text-[11px] font-bold text-stone-400 tracking-wider">ボタンのホバー演出</label>
+                    <div class="grid grid-cols-3 gap-2 mt-1">
+                        <button onclick="setHoverAction('pulse')" id="hover-pulse-btn" class="hover-btn py-2 px-1.5 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-heartbeat text-xs"></i><span>脈動 (Pulse)</span>
+                        </button>
+                        <button onclick="setHoverAction('spin')" id="hover-spin-btn" class="hover-btn py-2 px-1.5 rounded-xl border border-stone-800 bg-stone-900 text-stone-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-arrows-spin text-xs"></i><span>燃える回転</span>
+                        </button>
+                        <button onclick="setHoverAction('float')" id="hover-float-btn" class="hover-btn py-2 px-1.5 rounded-xl border border-stone-800 bg-stone-900 text-stone-400 text-[10px] font-black tracking-widest transition-all active:scale-95 flex flex-col items-center justify-center gap-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-xs"></i><span>浮遊 (Float)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Presets selection -->
+                <div class="flex flex-col gap-1 border-t border-stone-900 pt-3">
+                    <label class="text-[11px] font-bold text-stone-400 tracking-wider">プレミアムプリセット（ワンタッチ最適化）</label>
+                    <div class="grid grid-cols-3 gap-1.5 mt-1.5">
+                        <button onclick="applyPreset('#0a2540', '#ea580c', 'phoenix', 'porcelain')" class="py-1.5 rounded bg-blue-950 hover:bg-blue-900 text-[10px] border border-blue-900 font-bold text-blue-400">鳳凰・王道SAPIX</button>
+                        <button onclick="applyPreset('#ffffff', '#dc2626', 'vortex', 'darkglass')" class="py-1.5 rounded bg-amber-950 hover:bg-amber-900 text-[10px] border border-amber-900 font-bold text-amber-400">暗闇の激流火</button>
+                        <button onclick="applyPreset('#0f172a', '#10b981', 'peaks', 'porcelain')" class="py-1.5 rounded bg-emerald-950 hover:bg-emerald-900 text-[10px] border border-emerald-900 font-bold text-emerald-400">連峰サイバー知</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Preview & Export Area (Right Side: 7 Columns) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- Real-time Interactive SVG Screen (Centered 640x640 preview, scaled responsively) -->
+            <div class="bg-stone-950/90 border border-stone-800 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+                <h2 class="text-sm font-bold tracking-widest text-stone-200 border-b border-stone-800 pb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-eye text-red-500 mr-2"></i>PREVIEW IN VIRTUAL CANVAS (640x640)</span>
+                    <span class="text-[9px] text-stone-400">くっきり浮き立つ極太境界プレートと、芸術的な炎のシェイプを楽しんでください</span>
+                </h2>
+
+                <!-- 640x640 aspect ratio container -->
+                <div class="relative w-full aspect-square max-w-[500px] mx-auto rounded-2xl border border-stone-800 bg-[#0c0303] flex items-center justify-center overflow-hidden shadow-inner group">
+                    <!-- Grid Lines Overlay for aesthetic engineering look -->
+                    <div class="absolute inset-0 bg-[linear-gradient(to_right,#ef44440a_1px,transparent_1px),linear-gradient(to_bottom,#ef44440a_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+                    
+                    <!-- Real Mounted Live SVG -->
+                    <div id="svg-mount" class="w-full h-full flex items-center justify-center transition-transform duration-300">
+                        <!-- Generative SVG loads here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Output & Export Panel -->
+            <div class="bg-stone-950/90 border border-stone-800 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+                <div class="flex items-center justify-between border-b border-stone-800 pb-3">
+                    <h2 class="text-sm font-bold tracking-widest text-stone-200 flex items-center gap-2">
+                        <i class="fa-solid fa-code text-orange-500"></i> SOURCE EXPORTER (コード出力)
+                    </h2>
+                    
+                    <div class="flex bg-stone-900 p-1 rounded-xl border border-stone-850">
+                        <button id="tab-svg" onclick="switchTab('svg')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-red-500/10 text-red-400 border border-red-500/20">
+                            PURE SVG
+                        </button>
+                        <button id="tab-html" onclick="switchTab('html')" class="px-3 py-1.5 text-[10px] font-bold rounded-lg text-stone-400 hover:text-stone-200">
+                            HTML EMBED
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Textarea Code Display box -->
+                <div class="relative">
+                    <pre class="bg-stone-900 rounded-xl p-4 text-[10px] sm:text-[11px] font-mono overflow-x-auto border border-stone-850 text-orange-400 max-h-[180px] custom-scrollbar"><code id="code-box">生成中...</code></pre>
+                </div>
+
+                <!-- Download & Copy Actions -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="copyCode()" class="bg-stone-800 hover:bg-stone-700 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-stone-700 active:scale-95">
+                        <i class="fa-solid fa-copy text-red-400"></i> クリップボードにコピー
+                    </button>
+                    <button onclick="downloadAsSVG()" class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-stone-950 font-black py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 active:scale-95 shadow-[0_4px_15px_rgba(245,158,11,0.2)]">
+                        <i class="fa-solid fa-download"></i> SVGファイルをダウンロード
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="bg-stone-950 text-stone-600 text-xs py-6 px-4 text-center border-t border-red-950/30 mt-auto">
+        <p>© 2026 PAPIX Educational AI Lab & Hiro-Seki-Tech. Produced by Gempick FinTech & Creative Lab.</p>
+    </footer>
+
+    <script>
+        let currentTab = 'svg';
+        let currentHoverAction = 'pulse';
+
+        // Precise brand letter formulas drawn inside standard 1.35x slanted coordinates
+        const brandLetters = {
+            papix: {
+                title: "PAPIX",
+                sub: "パピックス",
+                nodes: `
+                    <!-- P (First Letter) -->
+                    <path class="papix-letter" d="M -115,-35 H -85 C -65,-35 -53,-22 -53,2 C -53,24 -65,35 -85,35 H -97 V 55 H -115 Z M -97,-15 V 15 H -84 C -74,15 -69,10 -69,2 C -69,-7 -74,-15 -84,-15 Z" />
+                    <!-- A (Geometrical slanted A) -->
+                    <path class="papix-letter" d="M -45,55 L -14,-35 H 14 L 45,55 H 23 L 15,30 H -15 L -23,55 Z M -11,15 H 11 L 0,-20 Z" />
+                    <!-- P (Third Letter) -->
+                    <path class="papix-letter" d="M 52,-35 H 82 C 102,-35 114,-22 114,2 C 114,24 -102,35 82,35 H 70 V 55 H 52 Z M 70,-15 V 15 H 83 C 93,15 98,10 98,2 C 98,-7 -93,-15 83,-15 Z" transform="translate(5, 0)" />
+                    <!-- I (Fourth Letter) -->
+                    <rect class="papix-letter" x="132" y="-35" width="18" height="90" rx="3" />
+                    <!-- X (Fifth Letter) -->
+                    <path class="papix-letter" d="M 160,-35 H 180 L 196,5 L 212,-35 H 232 L 208,10 L 232,55 H 212 L 196,20 L 180,55 H 160 L 184,10 Z" />
+                `
+            },
+            mamix: {
+                title: "MAMIX",
+                sub: "マミックス",
+                nodes: `
+                    <!-- M (First Letter: Bold dual column with sharp drop) -->
+                    <path class="papix-letter" d="M -115,-35 H -95 L -84,10 L -73,-35 H -53 V 55 H -71 V 10 L -81,35 H -87 L -97,10 V 55 H -115 Z" />
+                    <!-- A (Slanted A) -->
+                    <path class="papix-letter" d="M -45,55 L -14,-35 H 14 L 45,55 H 23 L 15,30 H -15 L -23,55 Z M -11,15 H 11 L 0,-20 Z" />
+                    <!-- M (Third Letter: Identical symmetrical M) -->
+                    <path class="papix-letter" d="M 52,-35 H 72 L 83,10 L 94,-35 H 114 V 55 H 96 V 10 L 86,35 H 80 L 70,10 V 55 H 52 Z" transform="translate(5, 0)" />
+                    <!-- I (Fourth Letter) -->
+                    <rect class="papix-letter" x="132" y="-35" width="18" height="90" rx="3" />
+                    <!-- X (Fifth Letter) -->
+                    <path class="papix-letter" d="M 160,-35 H 180 L 196,5 L 212,-35 H 232 L 208,10 L 232,55 H 212 L 196,20 L 180,55 H 160 L 184,10 Z" />
+                `
+            },
+            fenix: {
+                title: "FENIX",
+                sub: "フェニックス",
+                nodes: `
+                    <!-- F (First Letter: Double horizontal bars) -->
+                    <path class="papix-letter" d="M -115,-35 H -55 V -15 H -97 V 5 H -65 V 25 H -97 V 55 H -115 Z" />
+                    <!-- E (Second Letter: Triple horizontal bars) -->
+                    <path class="papix-letter" d="M -45,-35 H 25 V -15 H -25 V 0 H 10 V 18 H -25 V 35 H 25 V 55 H -45 Z" />
+                    <!-- N (Third Letter: Bold diagonal connection) -->
+                    <path class="papix-letter" d="M 52,-35 H 72 L 96,22 V -35 H 114 V 55 H 94 L 70,-2 V 55 H 52 Z" transform="translate(5, 0)" />
+                    <!-- I (Fourth Letter) -->
+                    <rect class="papix-letter" x="132" y="-35" width="18" height="90" rx="3" />
+                    <!-- X (Fifth Letter) -->
+                    <path class="papix-letter" d="M 160,-35 H 180 L 196,5 L 212,-35 H 232 L 208,10 L 232,55 H 212 L 196,20 L 180,55 H 160 L 184,10 Z" />
+                `
+            }
+        };
+
+        // High precision vector shapes supporting 3 complex and gorgeous flame profiles, and a flat flameless style
+        const flamePaths = {
+            // Pattern 1: Rising Phoenix Wings (不死鳥の飛翔 - majestic wing silhouettes sweeping upward elegantly)
+            phoenix: [
+                "M 320,60 L 300,120 C 210,90 100,100 -20,180 C -50,230 -60,320 -40,380 C 10,340 70,320 110,280 C 60,370 10,480 10,560 C 100,520 180,440 220,340 C 210,460 220,580 260,650 C 290,560 300,460 310,360 C 315,310 320,290 320,290 C 320,290 325,310 330,360 C 340,460 350,560 380,650 C 420,580 430,460 420,340 C 460,440 540,520 630,560 C 630,480 580,370 530,280 C 570,320 630,340 680,380 C 700,320 690,230 660,180 C 540,100 430,90 340,120 Z",
+                "M 320,100 L 305,150 C 230,120 130,130 30,210 C 10,250 0,310 20,360 C 50,330 90,310 130,280 C 90,350 50,440 50,510 C 130,480 190,410 230,330 C 220,430 230,520 265,580 C 290,510 300,430 310,340 L 320,280 L 330,340 C 340,430 350,510 375,580 C 410,520 420,430 410,330 C 450,410 510,480 590,510 C 590,440 550,350 510,280 C 550,310 590,330 620,360 C 640,310 630,250 610,210 C 510,130 410,120 335,150 Z",
+                "M 320,140 L 310,180 C 250,160 170,170 80,240 C 60,270 50,310 70,340 C 100,320 130,300 160,280 C 120,340 90,410 90,470 C 150,450 210,390 240,320 C 230,400 240,470 270,520 C 290,460 300,390 310,310 L 320,270 L 330,310 C 340,390 350,460 370,520 C 400,470 410,400 400,320 C 430,390 490,450 550,470 C 550,410 520,340 480,280 C 510,300 540,320 570,340 C 590,310 580,270 560,240 C 470,170 390,160 330,180 Z"
+            ],
+            // Pattern 2: Burning Mountain Ranges (連なる連山火峰 - gorgeous sharp layered chain of fire mountain peaks)
+            peaks: [
+                "M -50,650 Q 50,300 150,450 T 350,350 T 550,480 Q 620,350 690,650 Z",
+                "M 10,650 Q 100,350 220,480 T 420,380 T 530,480 Q 580,350 630,650 Z",
+                "M 70,650 Q 160,380 250,500 T 390,400 T 490,500 Q 530,380 570,650 Z"
+            ],
+            // Pattern 3: Raging Swirling Vortex (激動の大渦炎 - powerful asymmetrical swirling furnace flow)
+            vortex: [
+                "M -50,650 C 200,600 50,200 300,80 C 450,-10 500,200 490,380 C 480,500 590,550 690,650 Z",
+                "M 10,650 C 220,600 100,250 310,130 C 420,30 460,220 450,380 C 440,480 530,550 630,650 Z",
+                "M 70,650 C 240,600 150,300 320,180 C 390,80 420,240 410,380 C 400,460 480,550 570,650 Z"
+            ],
+            // Pattern 4: No Flame (炎なし - clean elegant solid void backdrop)
+            none: [
+                "M 0,0 L 0,0 Z",
+                "M 0,0 L 0,0 Z",
+                "M 0,0 L 0,0 Z"
+            ]
+        };
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
+            }, 2500);
+        }
+
+        // Synchronize selected Brand text to the subtitle automatically
+        function updateBrandSelection() {
+            const selectVal = document.getElementById('brand-select').value;
+            const subInput = document.getElementById('sub-text');
+            subInput.value = brandLetters[selectVal].sub;
+            updateLogo();
+            showToast(`✨ ブランドを【${brandLetters[selectVal].title}】に切り替えました！`);
+        }
+
+        function syncColorInput(inputId, hexValue) {
+            const colorInput = document.getElementById(inputId);
+            if (colorInput && /^#[0-9A-F]{6}$/i.test(hexValue)) {
+                colorInput.value = hexValue;
+                updateLogo();
+            }
+        }
+
+        function setHoverAction(action) {
+            currentHoverAction = action;
+            document.querySelectorAll('.hover-btn').forEach(btn => {
+                btn.classList.remove('border-red-500/40', 'bg-red-500/10', 'text-red-400');
+                btn.classList.add('border-stone-800', 'bg-stone-900', 'text-stone-400');
+            });
+            const activeBtn = document.getElementById(`hover-${action}-btn`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-stone-800', 'bg-stone-900', 'text-stone-400');
+                activeBtn.classList.add('border-red-500/40', 'bg-red-500/10', 'text-red-400');
+            }
+            updateLogo();
+            showToast(`🔥 ホバー演出を【${action === 'pulse' ? '脈動' : action === 'spin' ? '燃える回転' : '浮遊'}】に更新しました！`);
+        }
+
+        function applyPreset(textCol, fireCol, fStyle, plate) {
+            document.getElementById('text-color').value = textCol;
+            document.getElementById('text-color-hex').value = textCol;
+            document.getElementById('fire-color').value = fireCol;
+            document.getElementById('fire-color-hex').value = fireCol;
+            document.getElementById('flame-style').value = fStyle;
+            document.getElementById('plate-style').value = plate;
+            updateLogo();
+            showToast("🎨 プレミアムプリセットを適用！完璧なデザインバランスに即時最適化しました。");
+        }
+
+        // Dynamic procedural creation of the pure SVG 640x640 logo
+        function generateSVG() {
+            const selectedBrandKey = document.getElementById('brand-select').value;
+            const brandInfo = brandLetters[selectedBrandKey] || brandLetters['papix'];
+            const subText = document.getElementById('sub-text').value || brandInfo.sub;
+            
+            const flameStyle = document.getElementById('flame-style').value;
+            const plateStyle = document.getElementById('plate-style').value;
+            
+            const fireSpeed = parseFloat(document.getElementById('fire-speed').value) || 1.2;
+            const fireScale = parseInt(document.getElementById('fire-scale').value) || 28;
+            const fireFreqX = parseFloat(document.getElementById('fire-freq-x').value) || 0.015;
+            const fireFreqY = parseFloat(document.getElementById('fire-freq-y').value) || 0.05;
+            
+            const textColor = document.getElementById('text-color').value;
+            const fireColor = document.getElementById('fire-color').value;
+
+            // Update numerical text displays
+            document.getElementById('fire-speed-val').textContent = fireSpeed.toFixed(1) + 's';
+            document.getElementById('fire-scale-val').textContent = fireScale + 'px';
+            document.getElementById('fire-freq-x-val').textContent = fireFreqX.toFixed(3);
+            document.getElementById('fire-freq-y-val').textContent = fireFreqY.toFixed(3);
+            
+            document.getElementById('text-color-hex').value = textColor;
+            document.getElementById('fire-color-hex').value = fireColor;
+
+            // Define the contrast plate element with ultra bold border requested by the user
+            // Automatically adjust opacity when phoenix style is active so the majestic wings shine through!
+            const isPhoenix = flameStyle === 'phoenix';
+            const plateOpacity = isPhoenix ? "0.75" : "1.0"; 
+            const glassOpacity = isPhoenix ? "0.65" : "0.9";
+
+            let plateNode = "";
+            if (plateStyle === 'porcelain') {
+                plateNode = `<!-- White Porcelain Plate (High Contrast Ultra-Bold Border) with Clipped Sparkle Sheen -->
+    <g filter="drop-shadow(0 20px 40px rgba(0,0,0,0.75))" opacity="${plateOpacity}">
+      <!-- Outer black protective glow shadow to isolate text contrast completely from the flame base -->
+      <rect x="66" y="196" width="508" height="238" rx="32" fill="#000000" fill-opacity="0.4" />
+      <!-- Thick Authority Border (12px Width) -->
+      <rect x="70" y="200" width="500" height="230" rx="28" fill="#f8fafc" stroke="${fireColor}" stroke-opacity="1.0" stroke-width="12" />
+      
+      <!-- 'Kira-riin' (きらりーん) Sparkly Sweeping Gloss overlay inside clip-path -->
+      <g clip-path="url(#plateClip)">
+        <rect class="sheen-rect" x="0" y="190" width="130" height="250" fill="url(#sheenGrad)" pointer-events="none" />
+      </g>
+
+      <!-- Elegant high-contrast internal inset border line -->
+      <rect x="82" y="212" width="476" height="206" rx="18" fill="none" stroke="#0a2540" stroke-opacity="0.15" stroke-width="4" />
+    </g>`;
+            } else if (plateStyle === 'darkglass') {
+                plateNode = `<!-- Deep Space Dark Glass Plate with Massive Borders with Clipped Sparkle Sheen -->
+    <g filter="drop-shadow(0 20px 45px rgba(0,0,0,0.9))" opacity="${glassOpacity}">
+      <!-- 10px Thick Border -->
+      <rect x="70" y="200" width="500" height="230" rx="28" fill="#0c0a09" fill-opacity="0.9" stroke="${textColor}" stroke-opacity="0.9" stroke-width="10" />
+      
+      <!-- 'Kira-riin' (きらりーん) Sparkly Sweeping Gloss overlay inside clip-path -->
+      <g clip-path="url(#plateClip)">
+        <rect class="sheen-rect" x="0" y="190" width="130" height="250" fill="url(#sheenGrad)" pointer-events="none" />
+      </g>
+
+      <rect x="80" y="210" width="480" height="210" rx="18" fill="none" stroke="#f97316" stroke-opacity="0.4" stroke-width="3" />
+    </g>`;
+            } else {
+                plateNode = `<!-- Bare style (No Plate) -->
+    <g opacity="0"></g>`;
+            }
+
+            // CSS Interactions inside exported SVG
+            let hoverAnimations = "";
+            if (currentHoverAction === 'pulse') {
+                hoverAnimations = `
+      .interactive-svg-btn:hover {
+        transform: scale(1.025);
+        filter: brightness(1.1) drop-shadow(0 25px 45px rgba(239, 68, 68, 0.45));
+      }
+      .interactive-svg-btn:active {
+        transform: scale(0.98);
+      }`;
+            } else if (currentHoverAction === 'spin') {
+                hoverAnimations = `
+      .interactive-svg-btn:hover {
+        transform: scale(1.02);
+      }
+      .interactive-svg-btn:hover .fire-turb-layer {
+        animation: spinBlaze 12s linear infinite;
+      }
+      @keyframes spinBlaze {
+        100% { transform: rotate(360deg); }
+      }
+      .interactive-svg-btn:active {
+        transform: scale(0.98);
+      }`;
+            } else if (currentHoverAction === 'float') {
+                hoverAnimations = `
+      .interactive-svg-btn:hover {
+        transform: translateY(-8px) scale(1.015);
+        filter: drop-shadow(0 30px 50px rgba(249, 115, 22, 0.5));
+      }
+      .interactive-svg-btn:active {
+        transform: translateY(2px) scale(0.98);
+      }`;
+            }
+
+            // Compensates to center horizontally beautifully
+            const centeringTranslation = "-58.5";
+
+            // Load chosen flame geometry
+            const selectedPaths = flamePaths[flameStyle] || flamePaths['phoenix'];
+
+            // SAPIX-style stylized geometry path definition
+            const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="100%" height="100%">
+  <defs>
+    <!-- Magmatic procedural fire displacement system with real-time frequency control -->
+    <filter id="blazingFireFilter" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="${fireFreqX} ${fireFreqY}" numOctaves="3" result="noise">
+        <animate attributeName="baseFrequency" dur="${fireSpeed}s" values="${fireFreqX} ${fireFreqY}; ${fireFreqX * 1.1} ${fireFreqY * 1.5}; ${fireFreqX} ${fireFreqY}" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="${fireScale}" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Linear gradients for realistic fire gradient tones -->
+    <linearGradient id="fireBaseGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1c0301" />
+      <stop offset="45%" stop-color="${fireColor}" />
+      <stop offset="78%" stop-color="#f97316" />
+      <stop offset="95%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- 'Kira-riin' (きらりーん) Sparkly Reflector Multi-Band Linear Gradient -->
+    <linearGradient id="sheenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="25%" stop-color="#ffffff" stop-opacity="0" />
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#ffffff" stop-opacity="0" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="logoGlossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
+    </linearGradient>
+
+    <!-- Clip path matching signboard shape perfectly to lock sparkle within boundaries -->
+    <clipPath id="plateClip">
+      <rect x="70" y="200" width="500" height="230" rx="28" />
+    </clipPath>
+
+    <style>
+      .interactive-svg-btn {
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.2, 1, 0.3, 1), filter 0.3s ease;
+        transform-origin: center;
+      }
+      .papix-letter {
+        fill: ${textColor};
+      }
+      .japanese-sub {
+        font-family: 'Noto Sans JP', system-ui, sans-serif;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        fill: ${textColor};
+        opacity: 0.9;
+      }
+
+      /* 'Kira-riin' reflection sweep animation loop running every 4 seconds --> */
+      @keyframes kirariinSheen {
+        0% { transform: translate3d(-350px, 0, 0) skewX(-25deg); }
+        22% { transform: translate3d(600px, 0, 0) skewX(-25deg); }
+        100% { transform: translate3d(600px, 0, 0) skewX(-25deg); }
+      }
+      .sheen-rect {
+        animation: kirariinSheen 4.2s infinite cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      /* Sparkle Star synchronizations to make Kira-riin look extraordinarily glamorous */
+      @keyframes sparkleLeftAnim {
+        0%, 2% { transform: translate(95px, 215px) scale(0) rotate(0deg); opacity: 0; }
+        6% { transform: translate(95px, 215px) scale(1.6) rotate(45deg); opacity: 1; }
+        11% { transform: translate(95px, 215px) scale(0) rotate(90deg); opacity: 0; }
+        100% { transform: translate(95px, 215px) scale(0); opacity: 0; }
+      }
+      @keyframes sparkleRightAnim {
+        0%, 14% { transform: translate(545px, 415px) scale(0) rotate(0deg); opacity: 0; }
+        19% { transform: translate(545px, 415px) scale(1.6) rotate(-45deg); opacity: 1; }
+        24% { transform: translate(545px, 415px) scale(0) rotate(-90deg); opacity: 0; }
+        100% { transform: translate(545px, 415px) scale(0); opacity: 0; }
+      }
+      .sparkle-left {
+        animation: sparkleLeftAnim 4.2s infinite ease-out;
+        transform-origin: center;
+      }
+      .sparkle-right {
+        animation: sparkleRightAnim 4.2s infinite ease-out;
+        transform-origin: center;
+      }
+
+      ${hoverAnimations}
+    </style>
+  </defs>
+
+  <!-- Interactive Wrapped Button Frame -->
+  <g class="interactive-svg-btn">
+    
+    <!-- Outer Button Card Frame - Strict Sharp Square (No Rounded Corners & Perfect Fit) -->
+    <rect x="0" y="0" width="640" height="640" fill="#080101" stroke="#ef4444" stroke-opacity="0.4" stroke-width="4" />
+    <rect x="4" y="4" width="632" height="632" fill="#0c0201" />
+
+    <!-- Beautiful, realistic roaring fire flames in background (customized dynamically) -->
+    <!-- When flameStyle is 'none', paths evaluate to an invisible point to remove all fire graphics! -->
+    <g filter="url(#blazingFireFilter)">
+      <!-- Base Layer Dark Flames -->
+      <path class="fire-turb-layer" d="${selectedPaths[0]}" fill="url(#fireBaseGrad)" opacity="0.6" />
+      <!-- Mid Layer Hot Flames -->
+      <path class="fire-turb-layer" d="${selectedPaths[1]}" fill="url(#fireBaseGrad)" opacity="0.85" />
+      <!-- Top Intense Flames rising from boundaries -->
+      <path class="fire-turb-layer" d="${selectedPaths[2]}" fill="url(#fireBaseGrad)" opacity="0.95" />
+    </g>
+
+    <!-- Dark magma smoke vignetting overlay to draw attention to center text -->
+    <rect x="0" y="0" width="640" height="640" fill="#000000" fill-opacity="0.25" pointer-events="none" />
+
+    <!-- Display the Bold High-Contrast Plate Container -->
+    ${plateNode}
+
+    <!-- Synchronized sparkling flares on corners for dramatic flash effect -->
+    <g class="sparkle-left" pointer-events="none">
+      <path d="M 0,-18 Q 0,0 18,0 Q 0,0 0,18 Q 0,0 -18,0 Q 0,0 0,-18 Z" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff)" />
+    </g>
+    <g class="sparkle-right" pointer-events="none">
+      <path d="M 0,-18 Q 0,0 18,0 Q 0,0 0,18 Q 0,0 -18,0 Q 0,0 0,-18 Z" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff)" />
+    </g>
+
+    <!-- SAPIX Parody Typography: Perfectly centered using a compensatory translate coordinate! -->
+    <!-- The transform below tilts the text by SAPIX slanted angle skewX(-12) and scales it up to 1.35 -->
+    <g transform="translate(320, 305) skewX(-12) scale(1.35)" text-anchor="middle">
+      
+      <!-- Offset the group by -58.5 to bring the 347-unit total width into dead-center alignment! -->
+      <g transform="translate(${centeringTranslation}, 0)">
+        
+        <!-- Inject dynamic geometric vector letters of chosen Brand Selection! -->
+        ${brandInfo.nodes}
+        
+        <!-- Premium Japanese small subtitles centered matching SAPIX specs -->
+        <text class="japanese-sub" x="65" y="80" font-size="11.5" font-weight="900" text-anchor="end" transform="skewX(12)">${subText}</text>
+      </g>
+    </g>
+
+    <!-- Glossy edge shine to make the entire button look like a beautiful tactile device -->
+    <rect x="0" y="0" width="640" height="640" fill="url(#logoGlossGrad)" pointer-events="none" />
+    <rect x="0" y="0" width="640" height="640" fill="none" stroke="#f97316" stroke-opacity="0.25" stroke-width="8" pointer-events="none" />
+
+  </g>
+</svg>`;
+            return svgContent;
+        }
+
+        // Generate pure clean HTML Embed output to support rapid deployment
+        function generateHTMLEmbed() {
+            const svgContent = generateSVG();
+            return `<!-- PAPIX Blazing Parody Button (Engineered by Gempick) -->
+<div class="papix-button-container" style="width: 100%; max-width: 640px; aspect-ratio: 1/1; margin: 0 auto;">
+  ${svgContent}
+</div>`;
+        }
+
+        function updateLogo() {
+            const svgContent = generateSVG();
+            document.getElementById('svg-mount').innerHTML = svgContent;
+            updateCodeBox();
+        }
+
+        function updateCodeBox() {
+            const box = document.getElementById('code-box');
+            if (currentTab === 'svg') {
+                box.textContent = generateSVG();
+            } else {
+                box.textContent = generateHTMLEmbed();
+            }
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('tab-svg').className = tabName === 'svg' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-red-500/10 text-red-400 border border-red-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-stone-400 hover:text-stone-200';
+            document.getElementById('tab-html').className = tabName === 'html' ? 'px-3 py-1.5 text-[10px] font-bold rounded-lg bg-red-500/10 text-red-400 border border-red-500/20' : 'px-3 py-1.5 text-[10px] font-bold rounded-lg text-stone-400 hover:text-stone-200';
+            updateCodeBox();
+        }
+
+        function copyCode() {
+            const codeText = document.getElementById('code-box').textContent;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            showToast("📋 調整された完璧なコードをクリップボードに焼き付けました！");
+        }
+
+        function downloadAsSVG() {
+            const svgContent = generateSVG();
+            const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "papix_perfect_custom_blaze.svg";
+            link.click();
+            showToast("📥 修正された美しいSVGをダウンロードしました！");
+        }
+
+        // Initialize Studio on window load
+        window.onload = function() {
+            updateLogo();
+        }
+    </script>
+</body>
+</html>
