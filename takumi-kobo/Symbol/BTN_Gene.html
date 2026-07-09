@@ -218,7 +218,21 @@
             }, 2500);
         }
 
-        function triggerCoreBurstInterlocking() {
+
+
+
+
+function triggerCoreBurstInterlocking() {
+            // 🚨 【調停】親のホームページ全体からすべての音楽・iframe要素を検索して一斉破棄
+            const targetDoc = window.parent ? window.parent.document : document;
+            targetDoc.querySelectorAll('audio').forEach(el => {
+                try { el.pause(); } catch(e){}
+                el.remove();
+            });
+            targetDoc.querySelectorAll('iframe').forEach(el => {
+                el.remove();
+            });
+
             playClickClickSound();
             currentCoreStyleState = (currentCoreStyleState + 1) % 3;
             applyCoreBurstStyleAndMusic();
