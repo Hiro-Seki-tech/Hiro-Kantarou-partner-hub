@@ -1,340 +1,1530 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 シンボルマーク連動ボタン生成ツール【尽生直系】</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;600;700&family=Noto+Sans+JP:wght=400;500;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLIPボタンビルダー v4 最終版</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #020617;
+  --panel: #0f172a;
+  --panel-soft: #111c31;
+  --line: #263449;
+  --line-light: #334155;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --amber: #fbbf24;
+  --amber-deep: #f59e0b;
+  --green: #34d399;
+  --cyan: #22d3ee;
+  --violet: #a78bfa;
+  --danger: #fb7185;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+}
+body {
+  padding: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Yu Gothic UI", "Meiryo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+code {
+  color: #e2e8f0;
+  background: rgba(2, 6, 23, .7);
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+.builder {
+  width: min(1400px, 100%);
+  margin: 0 auto;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 4px 0 18px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.header h1 {
+  margin: 0;
+  color: var(--amber);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+.header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.version {
+  flex: none;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #64748b;
+  font-size: 11px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(420px, .92fr) minmax(520px, 1.08fr);
+  gap: 24px;
+  align-items: start;
+}
+.card {
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15,23,42,.98), rgba(9,16,31,.98));
+  box-shadow: 0 18px 45px rgba(0,0,0,.28);
+}
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 15px;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 900;
+}
+.field-label {
+  display: block;
+  margin-bottom: 7px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 800;
+}
+.input, .select, .textarea {
+  width: 100%;
+  border: 1px solid var(--line-light);
+  border-radius: 11px;
+  outline: none;
+  color: #e2e8f0;
+  background: #020617;
+  transition: border-color .18s, box-shadow .18s;
+}
+.input, .select {
+  min-height: 42px;
+  padding: 9px 11px;
+}
+.textarea {
+  height: 245px;
+  padding: 12px;
+  resize: vertical;
+  font: 12px/1.55 Consolas, Monaco, monospace;
+}
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--amber-deep);
+  box-shadow: 0 0 0 3px rgba(245,158,11,.12);
+}
+.grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.tab, .preview-state {
+  padding: 10px 7px;
+  border: 1px solid var(--line-light);
+  border-radius: 11px;
+  background: #020617;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 900;
+  transition: .18s;
+}
+.tab.active, .preview-state.active {
+  border-color: #fde68a;
+  color: #111827;
+  background: linear-gradient(135deg, #f59e0b, #facc15);
+  box-shadow: 0 8px 22px rgba(245,158,11,.18);
+}
+.state-panel[hidden] { display: none; }
+.drop-zone {
+  margin-bottom: 10px;
+  padding: 14px;
+  border: 1.5px dashed #475569;
+  border-radius: 13px;
+  background: rgba(2,6,23,.6);
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  transition: .18s;
+}
+.drop-zone.drag-over {
+  border-color: var(--amber);
+  background: rgba(245,158,11,.08);
+  color: #fde68a;
+}
+.file-button, .listen-button {
+  border: 1px solid #475569;
+  border-radius: 9px;
+  background: #172033;
+  color: #e2e8f0;
+  font-weight: 800;
+}
+.file-button {
+  margin-top: 8px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+.file-input { display: none; }
+.color-row {
+  display: grid;
+  grid-template-columns: 1fr 56px;
+  gap: 10px;
+  align-items: end;
+  margin-top: 11px;
+}
+.color-picker {
+  width: 56px;
+  height: 42px;
+  padding: 3px;
+  border: 1px solid var(--line-light);
+  border-radius: 11px;
+  background: #020617;
+}
+.transition-block {
+  margin-top: 10px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: rgba(2,6,23,.43);
+}
+.transition-heading {
+  margin-bottom: 9px;
+  color: #dbeafe;
+  font-size: 12px;
+  font-weight: 900;
+}
+.sound-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 9px;
+}
+.listen-button {
+  min-width: 78px;
+  padding: 0 11px;
+}
+.listen-button:active, .file-button:active { transform: scale(.97); }
+.speech-settings {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #020617;
+}
+.speech-settings.visible { display: block; }
+.range-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 9px;
+}
+.range-grid label {
+  color: var(--muted);
+  font-size: 10px;
+}
+.range-grid input { width: 100%; }
+.primary-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  color: #111827;
+  background: linear-gradient(90deg, #f59e0b, #facc15);
+  box-shadow: 0 12px 28px rgba(245,158,11,.15);
+  font-weight: 950;
+}
+.primary-button:active { transform: scale(.985); }
+.note {
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(15,23,42,.56);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.preview-header-label {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+.preview-state-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.preview-state {
+  padding: 8px 11px;
+  font-size: 11px;
+}
+.preview-shell {
+  position: relative;
+  width: min(100%, 640px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+#preview-button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid #FFD700;
+  border-radius: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #475569, #1e293b, #0f172a);
+  box-shadow: 0 0 28px rgba(255,215,0,.33), 0 20px 50px rgba(0,0,0,.45);
+  touch-action: manipulation;
+}
+#preview-stage, #preview-stage > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  color: #64748b;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.preview-status {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 640px;
+  margin: 48px auto 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0f172a;
+  color: var(--muted);
+  font-size: 12px;
+}
+.plip-bubble {
+  position: absolute;
+  top: calc(100% - 5px);
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  padding: 0 1px;
+  pointer-events: none;
+}
+.plip-bubble svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+@keyframes plipNobleFloatSVG {
+  0%, 100% { transform: translate3d(0,0,0) rotate(.001deg); }
+  50% { transform: translate3d(0,2px,0) rotate(.001deg); }
+}
+@keyframes plipRainbowTextSVG {
+  0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+  14% { fill: #ff5500; }
+  28% { fill: #ffcc00; }
+  42% { fill: #00ff66; }
+  56% { fill: #00ccff; }
+  70% { fill: #3333ff; }
+  84% { fill: #9900ff; }
+  100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+}
+@keyframes plipBoltFlashSVG {
+  0%, 100% { opacity: .85; filter: drop-shadow(0 0 1px #fde047); }
+  50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); }
+}
+.animated-bubble-container-svg {
+  animation: plipNobleFloatSVG 3s infinite ease-in-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
+.flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
+.effect-press { animation: effectPress .26s ease-out; }
+.effect-pulse { animation: effectPulse .42s ease-out; }
+.effect-glow { animation: effectGlow .55s ease-out; }
+.effect-shake { animation: effectShake .42s ease-out; }
+.effect-flash { animation: effectFlash .42s ease-out; }
+@keyframes effectPress {
+  0% { transform: scale(1) translateY(0); }
+  45% { transform: scale(.94) translateY(8px); filter: brightness(1.25); }
+  100% { transform: scale(1) translateY(0); }
+}
+@keyframes effectPulse {
+  0% { transform: scale(1); }
+  42% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes effectGlow {
+  0% { filter: brightness(1); }
+  45% { filter: brightness(1.8) saturate(1.35); }
+  100% { filter: brightness(1); }
+}
+@keyframes effectShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px) rotate(-1deg); }
+  40% { transform: translateX(9px) rotate(1deg); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes effectFlash {
+  0% { opacity: 1; }
+  35% { opacity: .18; filter: brightness(2.5); }
+  100% { opacity: 1; }
+}
+#builder-toast {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1000;
+  max-width: min(390px, calc(100vw - 36px));
+  padding: 12px 15px;
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  box-shadow: 0 14px 35px rgba(0,0,0,.45);
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+  transition: .25s;
+  font-size: 13px;
+}
+#builder-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .header { flex-direction: column; }
+  .grid-two { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  body { padding: 10px; }
+  .card { padding: 14px; }
+  .range-grid { grid-template-columns: 1fr; }
+  .tabs { gap: 5px; }
+  .tab { padding: 9px 3px; font-size: 11px; }
+}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col p-4 sm:p-8 antialiased">
-
-    <div class="max-w-6xl w-full mx-auto flex flex-col gap-6">
-        
-        <header class="border-b border-slate-800 pb-4">
-            <h1 class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> <span>シンボルマーク連動ボタン生成ツール</span>
-            </h1>
-            <p class="text-xs text-slate-400 mt-1">
-                任意のSVGコードをペーストするだけで、640px × 640pxの「金・銀・赤3色変転＋BGM/SE完全調停＋PLIP吹き出し」ボタンHTMLを出力します。
-            </p>
-        </header>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            <section class="lg:col-span-5 flex flex-col gap-4">
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-xl">
-                    <label class="text-xs font-bold text-slate-300 tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-code text-blue-400"></i> 1. SVGコードをペースト
-                    </label>
-                    <textarea id="svg-input" placeholder="<svg ...> ... </svg>" class="w-full h-80 bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-slate-300 focus:outline-none focus:border-amber-500 custom-scrollbar resize-none"></textarea>
-                    
-                    <button onclick="generateAndDownloadButtonHtml()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3.5 rounded-xl text-xs transition-all transform active:scale-95 shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download text-sm"></i> 2. 連動ボタンHTMLを生成して保存
-                    </button>
-                </div>
-
-                <div class="bg-slate-900/50 border border-slate-800/60 rounded-xl p-4 text-xs text-slate-400 leading-relaxed space-y-2">
-                    <div class="font-bold text-slate-300 text-[11px] flex items-center gap-1"><i class="fa-solid fa-circle-info text-amber-400"></i> 生成されるHTMLの配置仕様</div>
-                    <p>• 出力されるHTMLは、それ単体でローカル動作するファイルです。</p>
-                    <p>• 音源パスは『尽生』と全く同じ相対パス（<code class="text-slate-200">./music/BGM.html</code>、<code class="text-slate-200">./music/song*.mp4</code>）で出力されます。</p>
-                </div>
-            </section>
-
-            <section class="lg:col-span-7 flex flex-col gap-3 items-center">
-                <div class="text-xs font-bold text-slate-400 self-start tracking-wider flex items-center gap-1">
-                    <i class="fa-solid fa-eye text-emerald-400"></i> リアルタイムプレビュー枠 (640px × 640px)
-                </div>
-
-                <div class="relative select-none w-[640px] h-[640px] group/core bg-slate-900/30 rounded-2xl border border-slate-800/80 flex items-center justify-center overflow-visible">
-                    
-                    <div id="preview-border-box" class="absolute inset-0 rounded-2xl border-2 border-amber-400 flex items-center justify-center overflow-hidden bg-slate-900/60 transition-all duration-200">
-                        <div id="preview-svg-placeholder" class="w-full h-full flex items-center justify-center text-slate-600 text-xs font-mono text-center leading-normal">
-                            左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。
-                        </div>
-                    </div>
-
-                    <div class="absolute top-[calc(100%-5px)] left-0 w-full pointer-events-none select-none z-50 px-[1px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35" class="w-full h-auto">
-                            <defs>
-                                <style>
-                                    @keyframes plipNobleFloatSVG { 0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 50% { transform: translate3d(0, 2px, 0) rotate(0.001deg); } 100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } }
-                                    @keyframes plipRainbowTextSVG { 0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 14% { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); } 28% { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); } 42% { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); } 50% { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); } 70% { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); } 84% { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); } 100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } }
-                                    @keyframes plipBoltFlashSVG { 0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px #fde047); } 50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); } }
-                                    .animated-bubble-container-svg { animation: plipNobleFloatSVG 3s infinite ease-in-out; will-change: transform; backface-visibility: hidden; }
-                                    .rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
-                                    .flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
-                                </style>
-                            </defs>
-                            <g class="animated-bubble-container-svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z" fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))" />
-                                <g transform="translate(6, 11) scale(0.85)">
-                                    <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="8" y1="1" x2="8" y2="3" /><line x1="3" y1="3" x2="4.5" y2="4.5" /><line x1="1" y1="8" x2="3" y2="8" /><line x1="3" y1="13" x2="4.5" y2="11.5" /><line x1="13" y1="11.5" x2="11.5" y2="10" /><line x1="15" y1="8" x2="13" y2="8" /><line x1="13" y1="3" x2="11.5" y2="4.5" /></g>
-                                    <path class="rainbow-bulb-svg" d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z" fill="#94a3b8" />
-                                    <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 1px #ffffff);" />
-                                    <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
-                                    <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z" fill="#475569" />
-                                    <line x1="5" y1="14.8" stroke="#334155" stroke-width="0.8" x2="11" y2="14.8" /><line x1="5.3" y1="15.8" stroke="#334155" stroke-width="0.8" x2="10.7" y2="15.8" />
-                                    <polygon class="flashing-bolt-svg" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047" />
-                                </g>
-                                <text x="58" y="24" fill="#fbbf24" font-family="'Plus Jakarta Sans', 'Noto Sans JP', sans-serif" font-size="11" font-weight="900" letter-spacing="0.03em" text-anchor="middle">PLIP !!</text>
-                            </g>
-                        </svg>
-                    </div>
-
-                </div>
-            </section>
-
-        </div>
+<body>
+<div class="builder">
+  <header class="header">
+    <div>
+      <h1>✨ PLIPボタンビルダー v4</h1>
+      <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、音楽連動をまとめて設定し、完成HTMLを保存します。</p>
     </div>
+    <div class="version">Version 4.0 Final · 2026.07</div>
+  </header>
 
-    <script>
-        // 🧼 内部のグラフィック構造（rectやpath等）を決して破壊せず、最外殻の<svg>タグのサイズ属性のみをクレンジングする安全な関数
-        function cleanAndOptimizeSvg(rawSvg) {
-            let svgCode = rawSvg.trim();
-            if (!svgCode) return "";
+  <div class="layout">
+    <section>
+      <div class="card">
+        <h2 class="card-title"><span style="color:var(--cyan)">⚙</span> 基本設定</h2>
 
-            // 最初に現れる <svg ...> タグの開始部分（最外殻）だけを正確に特定して抽出
-            const svgTagMatch = svgCode.match(/<svg[^>]*>/i);
-            if (!svgTagMatch) return svgCode;
+        <label class="field-label" for="filename-input">保存ファイル名</label>
+        <input id="filename-input" class="input" type="text" value="plip_button">
 
-            let svgTag = svgTagMatch[0];
+        <div class="grid-two" style="margin-top:12px">
+          <label>
+            <span class="field-label">ボタン押下演出</span>
+            <select id="effect-select" class="select">
+              <option value="press">押し込み</option>
+              <option value="pulse">パルス</option>
+              <option value="glow">発光</option>
+              <option value="shake">シェイク</option>
+              <option value="flash">フラッシュ</option>
+              <option value="none">演出なし</option>
+            </select>
+          </label>
 
-            // 最外殻タグの中からのみ width, height, class 属性をクレンジング（大文字小文字対応）
-            svgTag = svgTag.replace(/\bwidth\s*=\s*['"][^'"]*['"]/gi, '');
-            svgTag = svgTag.replace(/\bheight\s*=\s*['"][^'"]*['"]/gi, '');
-            svgTag = svgTag.replace(/\bclass\s*=\s*['"][^'"]*['"]/gi, '');
+          <div>
+            <span class="field-label">音楽の役割</span>
+            <div class="note" style="padding:9px 11px">
+              状態1：静かな環境音<br>
+              状態2：作品の主題歌<br>
+              状態3：音声オフ
+            </div>
+          </div>
+        </div>
+      </div>
 
-            // 新たに余白なしでぴったり100%フィットさせるTailwind CSSクラスを安全に付与
-            svgTag = svgTag.replace(/<svg/i, '<svg class="w-full h-full object-contain"');
+      <div class="card">
+        <h2 class="card-title"><span style="color:var(--violet)">▣</span> 3段階SVG設定</h2>
 
-            // 元のコードの最外殻部分だけをクレンジング済みのタグに差し替え（内部要素には一切干渉しない）
-            svgCode = svgCode.replace(/<svg[^>]*>/i, svgTag);
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" data-editor-tab="0">状態1</button>
+          <button type="button" class="tab" data-editor-tab="1">状態2</button>
+          <button type="button" class="tab" data-editor-tab="2">状態3</button>
+        </div>
 
-            return svgCode;
-        }
+        <div id="state-panels"></div>
 
-        // 入力時のリアルタイムプレビュー同期
-        document.getElementById('svg-input').addEventListener('input', function(e) {
-            const val = e.target.value.trim();
-            const placeholder = document.getElementById('preview-svg-placeholder');
-            if(val) {
-                placeholder.innerHTML = cleanAndOptimizeSvg(val);
-            } else {
-                placeholder.innerHTML = `左側のテキストエリアに<br>SVGコードを入力すると、<br>ここに640pxサイズでフィット表示されます。`;
-            }
-        });
+        <h2 class="card-title" style="margin-top:19px;margin-bottom:8px">
+          <span style="color:var(--green)">♪</span> 遷移ごとのクリック音
+        </h2>
+        <div id="transition-settings"></div>
 
-        // 🌟 連動完成品HTMLの文字列を動的生成してダウンロードさせる関数
-        function generateAndDownloadButtonHtml() {
-            const svgRawSource = document.getElementById('svg-input').value.trim();
-            if(!svgRawSource) {
-                alert('先にSVGコードをペーストしてください。');
-                return;
-            }
+        <button id="generate-button" type="button" class="primary-button">
+          ⬇ 完成HTMLを生成して保存
+        </button>
+      </div>
 
-            const svgOptimized = cleanAndOptimizeSvg(svgRawSource);
+      <div class="note">
+        <strong style="color:#cbd5e1">音楽ファイル：</strong>
+        完成HTMLと同じ場所に <code>music</code> フォルダを置き、
+        <code>bgm.mp3</code> と <code>song.mp4～song4.mp4</code> を入れてください。
+        主題歌は、実際に読み込めた曲だけを抽選対象にします。
+      </div>
+    </section>
 
-            // 出力用HTMLソースコードの組み立て（p-6を完全に排除し、枠線いっぱいに密着させる構造）
-            const outputHtml = `<!DOCTYPE html>
+    <section>
+      <div class="preview-header">
+        <div class="preview-header-label">👁 リアルタイムプレビュー</div>
+        <div class="preview-state-buttons">
+          <button type="button" class="preview-state active" data-preview-state="0">状態1</button>
+          <button type="button" class="preview-state" data-preview-state="1">状態2</button>
+          <button type="button" class="preview-state" data-preview-state="2">状態3</button>
+        </div>
+      </div>
+
+      <div class="preview-shell">
+        <button id="preview-button" type="button" aria-label="プレビューボタン">
+          <span id="preview-stage">
+            <span class="placeholder">
+              SVGコードを貼り付けるか、SVG／HTMLファイルをドロップしてください。<br>
+              このボタンを押すと状態が切り替わります。
+            </span>
+          </span>
+        </button>
+
+        <div class="plip-bubble" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35">
+            <g class="animated-bubble-container-svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+              <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z"
+                    fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85"
+                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))"/>
+              <g transform="translate(6, 11) scale(0.85)">
+                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55">
+                  <line x1="8" y1="1" x2="8" y2="3"/>
+                  <line x1="3" y1="3" x2="4.5" y2="4.5"/>
+                  <line x1="1" y1="8" x2="3" y2="8"/>
+                  <line x1="3" y1="13" x2="4.5" y2="11.5"/>
+                  <line x1="13" y1="11.5" x2="11.5" y2="10"/>
+                  <line x1="15" y1="8" x2="13" y2="8"/>
+                  <line x1="13" y1="3" x2="11.5" y2="4.5"/>
+                </g>
+                <path class="rainbow-bulb-svg"
+                      d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z"
+                      fill="#94a3b8"/>
+                <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5"
+                      fill="none" stroke="#fff" stroke-width="1.2"
+                      stroke-linecap="round" stroke-linejoin="round"
+                      opacity="0.95" style="filter:drop-shadow(0 0 1px #fff)"/>
+                <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z"
+                      fill="#94a3b8" stroke="#334155" stroke-width="0.5"/>
+                <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z"
+                      fill="#475569"/>
+                <line x1="5" y1="14.8" x2="11" y2="14.8" stroke="#334155" stroke-width="0.8"/>
+                <line x1="5.3" y1="15.8" x2="10.7" y2="15.8" stroke="#334155" stroke-width="0.8"/>
+                <polygon class="flashing-bolt-svg"
+                         points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5"
+                         fill="#fde047"/>
+              </g>
+              <text x="58" y="24" fill="#fbbf24"
+                    font-family="Arial,'Yu Gothic UI',Meiryo,sans-serif"
+                    font-size="11" font-weight="900"
+                    letter-spacing="0.03em" text-anchor="middle">PLIP !!</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="preview-status">
+        <span id="preview-status-label">現在：状態1</span>
+        <span>プレビューでは音楽を再生しません</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="builder-toast" role="status"></div>
+
+<script>
+(() => {
+  const DEFAULT_COLORS = ["#FFD700", "#E2E8F0", "#EF4444"];
+  const TRANSITION_NAMES = ["状態1 → 状態2", "状態2 → 状態3", "状態3 → 状態1"];
+  const SPEECH_DEFAULTS = ["主題歌を再生", "音声をオフ", "静かな環境音"];
+  const SOUND_OPTIONS = [
+    ["click", "軽いクリック"],
+    ["digital", "電子音"],
+    ["confirm", "決定音"],
+    ["metallic", "金属音"],
+    ["impact", "低い衝撃音"],
+    ["sparkle", "キラキラ音"],
+    ["speech", "音声読み上げ"],
+    ["none", "なし"]
+  ];
+
+  let previewState = 0;
+  let toastTimer = null;
+  let previewAudioContext = null;
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+  const bubbleMarkup = $(".plip-bubble").outerHTML;
+
+  function showToast(message) {
+    const toast = $("#builder-toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+
+  function buildStatePanel(index) {
+    const descriptions = [
+      "最初に表示するSVG",
+      "1回押した後に表示するSVG",
+      "2回押した後に表示するSVG"
+    ];
+    const placeholder = index === 0
+      ? "<svg ...> ... </svg>"
+      : "未入力なら状態1のSVGを使用";
+
+    return `
+      <div class="state-panel" data-state-panel="${index}" ${index === 0 ? "" : "hidden"}>
+        <span class="field-label">${descriptions[index]}</span>
+
+        <div class="drop-zone" data-drop-zone="${index}">
+          SVGまたはHTMLをここへドラッグ＆ドロップ<br>
+          HTMLの場合は、最初に見つかったSVGを取り込みます。<br>
+          <button class="file-button" type="button" data-file-button="${index}">ファイルを選ぶ</button>
+          <input class="file-input" data-file-input="${index}" type="file"
+                 accept=".svg,.html,.htm,image/svg+xml,text/html">
+        </div>
+
+        <textarea id="svg-input-${index}" class="textarea" placeholder="${placeholder}"></textarea>
+
+        <div class="color-row">
+          <label>
+            <span class="field-label">枠色</span>
+            <input id="color-text-${index}" class="input" type="text" value="${DEFAULT_COLORS[index]}">
+          </label>
+          <input id="color-picker-${index}" class="color-picker" type="color"
+                 value="${DEFAULT_COLORS[index].toLowerCase()}" aria-label="状態${index + 1}の枠色">
+        </div>
+      </div>
+    `;
+  }
+
+  function buildTransitionBlock(index) {
+    const options = SOUND_OPTIONS.map(([value, label]) =>
+      `<option value="${value}">${label}</option>`
+    ).join("");
+
+    return `
+      <div class="transition-block">
+        <div class="transition-heading">${TRANSITION_NAMES[index]}</div>
+
+        <div class="sound-row">
+          <select class="select" data-sound-select="${index}">
+            ${options}
+          </select>
+          <button class="listen-button" type="button" data-listen-button="${index}">▶ 試聴</button>
+        </div>
+
+        <div class="speech-settings" data-speech-settings="${index}">
+          <label>
+            <span class="field-label" style="margin-top:2px">読み上げる言葉</span>
+            <input class="input" data-speech-text="${index}" type="text"
+                   value="${SPEECH_DEFAULTS[index]}">
+          </label>
+
+          <div class="range-grid">
+            <label>速さ
+              <input data-speech-rate="${index}" type="range"
+                     min="0.5" max="2" step="0.1" value="1">
+            </label>
+            <label>高さ
+              <input data-speech-pitch="${index}" type="range"
+                     min="0" max="2" step="0.1" value="1.4">
+            </label>
+            <label>音量
+              <input data-speech-volume="${index}" type="range"
+                     min="0" max="1" step="0.1" value="1">
+            </label>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  $("#state-panels").innerHTML = [0, 1, 2].map(buildStatePanel).join("");
+  $("#transition-settings").innerHTML = [0, 1, 2].map(buildTransitionBlock).join("");
+
+  function extractFirstSvg(sourceText) {
+    const source = String(sourceText || "").trim();
+    if (!source) return "";
+
+    const direct = source.match(/<svg\b[\s\S]*?<\/svg>/i);
+    if (direct) return direct[0];
+
+    const parsed = new DOMParser().parseFromString(source, "text/html");
+    const svg = parsed.querySelector("svg");
+    return svg ? svg.outerHTML : "";
+  }
+
+  function cleanAndOptimizeSvg(rawSvg) {
+    let svgCode = String(rawSvg || "").trim();
+    if (!svgCode) return "";
+
+    const svgTagMatch = svgCode.match(/<svg\b[^>]*>/i);
+    if (!svgTagMatch) return svgCode;
+
+    let svgTag = svgTagMatch[0]
+      .replace(/\bwidth\s*=\s*(['"]).*?\1/gi, "")
+      .replace(/\bheight\s*=\s*(['"]).*?\1/gi, "")
+      .replace(/\bclass\s*=\s*(['"]).*?\1/gi, "");
+
+    if (!/\bpreserveAspectRatio\s*=/i.test(svgTag)) {
+      svgTag = svgTag.replace(/<svg/i, '<svg preserveAspectRatio="xMidYMid meet"');
+    }
+
+    const existingStyle = svgTag.match(/\bstyle\s*=\s*(['"])(.*?)\1/i);
+    if (existingStyle) {
+      const merged = `${existingStyle[2]};width:100%;height:100%;display:block`;
+      svgTag = svgTag.replace(existingStyle[0], `style="${merged}"`);
+    } else {
+      svgTag = svgTag.replace(/<svg/i, '<svg style="width:100%;height:100%;display:block"');
+    }
+
+    return svgCode.replace(/<svg\b[^>]*>/i, svgTag);
+  }
+
+  function getRawSvgs() {
+    const raw = [0, 1, 2].map(index =>
+      $(`#svg-input-${index}`).value.trim()
+    );
+    return [raw[0], raw[1] || raw[0], raw[2] || raw[0]];
+  }
+
+  function getColors() {
+    return [0, 1, 2].map(index => {
+      const value = $(`#color-text-${index}`).value.trim();
+      return /^#[0-9a-f]{6}$/i.test(value)
+        ? value.toUpperCase()
+        : DEFAULT_COLORS[index];
+    });
+  }
+
+  function switchEditorTab(index) {
+    $$("[data-editor-tab]").forEach((button, buttonIndex) => {
+      button.classList.toggle("active", buttonIndex === index);
+    });
+    $$("[data-state-panel]").forEach((panel, panelIndex) => {
+      panel.hidden = panelIndex !== index;
+    });
+    setPreviewState(index, false);
+  }
+
+  function runPreviewEffect() {
+    const effect = $("#effect-select").value;
+    if (effect === "none") return;
+
+    const button = $("#preview-button");
+    const className = `effect-${effect}`;
+    button.classList.remove(className);
+    void button.offsetWidth;
+    button.classList.add(className);
+    button.addEventListener("animationend", () => {
+      button.classList.remove(className);
+    }, { once: true });
+  }
+
+  function setPreviewState(index, animate = true) {
+    previewState = index;
+
+    const svg = cleanAndOptimizeSvg(getRawSvgs()[index]);
+    const color = getColors()[index];
+    const stage = $("#preview-stage");
+    const button = $("#preview-button");
+
+    stage.innerHTML = svg || `
+      <span class="placeholder">
+        この状態のSVGは未入力です。<br>
+        状態1が入力済みなら、そのSVGを代わりに使用します。
+      </span>
+    `;
+
+    button.style.borderColor = color;
+    button.style.boxShadow =
+      `0 0 28px ${color}55, 0 20px 50px rgba(0,0,0,.45)`;
+
+    $$("[data-preview-state]").forEach((stateButton, stateIndex) => {
+      stateButton.classList.toggle("active", stateIndex === index);
+    });
+
+    $("#preview-status-label").textContent = `現在：状態${index + 1}`;
+
+    if (animate) runPreviewEffect();
+  }
+
+  function syncColor(index, fromPicker) {
+    const textInput = $(`#color-text-${index}`);
+    const picker = $(`#color-picker-${index}`);
+
+    if (fromPicker) {
+      textInput.value = picker.value.toUpperCase();
+    } else if (/^#[0-9a-f]{6}$/i.test(textInput.value.trim())) {
+      picker.value = textInput.value.trim();
+    }
+
+    setPreviewState(previewState, false);
+  }
+
+  async function importFile(index, file) {
+    if (!file) return;
+
+    if (!/\.(svg|html?|htm)$/i.test(file.name)) {
+      showToast("SVGまたはHTMLファイルを選んでください");
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const svg = extractFirstSvg(text);
+      if (!svg) throw new Error("SVGが見つかりません");
+
+      $(`#svg-input-${index}`).value = svg;
+      setPreviewState(index, false);
+      showToast(`${file.name} を状態${index + 1}へ読み込みました`);
+    } catch (error) {
+      showToast(`読み込み失敗：${error.message}`);
+    }
+  }
+
+  function getAudioContext() {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return null;
+
+    if (!previewAudioContext ||
+        previewAudioContext.state === "closed") {
+      previewAudioContext = new AudioContextClass();
+    }
+    return previewAudioContext;
+  }
+
+  function playTone(context, frequency, start, duration,
+                    type = "sine", volume = .1) {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(volume, start);
+    gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
+
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(start);
+    oscillator.stop(start + duration);
+  }
+
+  function getTransitionSetting(index) {
+    return {
+      sound: $(`[data-sound-select="${index}"]`).value,
+      speech: {
+        text: $(`[data-speech-text="${index}"]`).value || "PLIP!",
+        rate: Number($(`[data-speech-rate="${index}"]`).value),
+        pitch: Number($(`[data-speech-pitch="${index}"]`).value),
+        volume: Number($(`[data-speech-volume="${index}"]`).value)
+      }
+    };
+  }
+
+  function previewClickSound(index) {
+    const setting = getTransitionSetting(index);
+
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+    }
+
+    if (setting.sound === "none") {
+      showToast(`${TRANSITION_NAMES[index]}：クリック音なし`);
+      return;
+    }
+
+    if (setting.sound === "speech") {
+      if (!("speechSynthesis" in window)) {
+        showToast("このブラウザは音声読み上げに対応していません");
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(setting.speech.text);
+      utterance.lang = "ja-JP";
+      utterance.rate = setting.speech.rate;
+      utterance.pitch = setting.speech.pitch;
+      utterance.volume = setting.speech.volume;
+      speechSynthesis.speak(utterance);
+      return;
+    }
+
+    const context = getAudioContext();
+    if (!context) {
+      showToast("このブラウザではクリック音を再生できません");
+      return;
+    }
+
+    if (context.state === "suspended") {
+      context.resume();
+    }
+
+    const time = context.currentTime;
+
+    if (setting.sound === "click") {
+      playTone(context, 850, time, .035, "sine", .12);
+    } else if (setting.sound === "digital") {
+      playTone(context, 620, time, .07, "square", .08);
+      playTone(context, 980, time + .07, .09, "square", .07);
+    } else if (setting.sound === "confirm") {
+      playTone(context, 523.25, time, .10, "sine", .10);
+      playTone(context, 783.99, time + .09, .16, "sine", .10);
+    } else if (setting.sound === "metallic") {
+      playTone(context, 1300, time, .07, "triangle", .07);
+      playTone(context, 1780, time + .018, .11, "triangle", .05);
+    } else if (setting.sound === "impact") {
+      playTone(context, 120, time, .16, "sine", .18);
+      playTone(context, 65, time + .03, .22, "triangle", .09);
+    } else if (setting.sound === "sparkle") {
+      [880, 1174, 1568, 2093].forEach((frequency, toneIndex) => {
+        playTone(context, frequency, time + toneIndex * .055,
+                 .16, "sine", .06);
+      });
+    }
+  }
+
+  function getAllTransitionSettings() {
+    return [0, 1, 2].map(getTransitionSetting);
+  }
+
+  function sanitizeFilename(filename) {
+    const cleaned = String(filename || "")
+      .replace(/[\\/:*?"<>|]/g, "_")
+      .replace(/\s+/g, "_")
+      .replace(/_+/g, "_")
+      .replace(/^_+|_+$/g, "");
+
+    return cleaned || "plip_button";
+  }
+
+  function buildOutputHtml() {
+    const rawSvgs = getRawSvgs();
+    if (!rawSvgs[0]) {
+      throw new Error("状態1のSVGコードを入力してください");
+    }
+
+    const svgs = rawSvgs.map(cleanAndOptimizeSvg);
+    const colors = getColors();
+    const transitions = getAllTransitionSettings();
+    const effect = $("#effect-select").value;
+
+    const states = [
+      { svg: svgs[0], color: colors[0], musicMode: "ambient" },
+      { svg: svgs[1], color: colors[1], musicMode: "theme" },
+      { svg: svgs[2], color: colors[2], musicMode: "silent" }
+    ];
+
+    const serializedStates =
+      JSON.stringify(states).replace(/</g, "\\u003c");
+    const serializedTransitions =
+      JSON.stringify(transitions).replace(/</g, "\\u003c");
+    const serializedEffect =
+      JSON.stringify(effect).replace(/</g, "\\u003c");
+
+    const outputCss = `
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #020617;
+  color: #f8fafc;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Yu Gothic UI", "Meiryo", sans-serif;
+}
+.plip-wrap {
+  position: relative;
+  width: min(640px, calc(100vw - 32px));
+  aspect-ratio: 1 / 1;
+  user-select: none;
+}
+#plip-core-button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid ${colors[0]};
+  border-radius: 18px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #475569, #1e293b, #0f172a);
+  box-shadow: 0 0 28px ${colors[0]}55, 0 18px 45px rgba(0,0,0,.5);
+  transition: border-color .2s, box-shadow .2s;
+  touch-action: manipulation;
+}
+#plip-stage, #plip-stage > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.plip-bubble {
+  position: absolute;
+  top: calc(100% - 5px);
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  padding: 0 1px;
+  pointer-events: none;
+}
+.plip-bubble svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+@keyframes plipNobleFloatSVG {
+  0%, 100% { transform: translate3d(0,0,0) rotate(.001deg); }
+  50% { transform: translate3d(0,2px,0) rotate(.001deg); }
+}
+@keyframes plipRainbowTextSVG {
+  0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+  14% { fill: #ff5500; }
+  28% { fill: #ffcc00; }
+  42% { fill: #00ff66; }
+  56% { fill: #00ccff; }
+  70% { fill: #3333ff; }
+  84% { fill: #9900ff; }
+  100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+}
+@keyframes plipBoltFlashSVG {
+  0%, 100% { opacity: .85; filter: drop-shadow(0 0 1px #fde047); }
+  50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); }
+}
+.animated-bubble-container-svg {
+  animation: plipNobleFloatSVG 3s infinite ease-in-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
+.flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
+.effect-press { animation: effectPress .26s ease-out; }
+.effect-pulse { animation: effectPulse .42s ease-out; }
+.effect-glow { animation: effectGlow .55s ease-out; }
+.effect-shake { animation: effectShake .42s ease-out; }
+.effect-flash { animation: effectFlash .42s ease-out; }
+@keyframes effectPress {
+  0% { transform: scale(1) translateY(0); }
+  45% { transform: scale(.94) translateY(8px); filter: brightness(1.25); }
+  100% { transform: scale(1) translateY(0); }
+}
+@keyframes effectPulse {
+  0% { transform: scale(1); }
+  42% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+@keyframes effectGlow {
+  0% { filter: brightness(1); }
+  45% { filter: brightness(1.8) saturate(1.35); }
+  100% { filter: brightness(1); }
+}
+@keyframes effectShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px) rotate(-1deg); }
+  40% { transform: translateX(9px) rotate(1deg); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes effectFlash {
+  0% { opacity: 1; }
+  35% { opacity: .18; filter: brightness(2.5); }
+  100% { opacity: 1; }
+}
+#plip-toast {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1000;
+  max-width: min(390px, calc(100vw - 36px));
+  padding: 12px 15px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #0f172a;
+  color: #f8fafc;
+  box-shadow: 0 14px 35px rgba(0,0,0,.45);
+  opacity: 0;
+  transform: translateY(-16px);
+  pointer-events: none;
+  transition: .25s;
+  font-size: 14px;
+}
+#plip-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+`;
+
+    const outputScript = `
+(() => {
+  const STATES = ${serializedStates};
+  const TRANSITIONS = ${serializedTransitions};
+  const EFFECT = ${serializedEffect};
+
+  let currentState = 0;
+  let managedAudio = null;
+  let toastTimer = null;
+  let sharedAudioContext = null;
+
+  const button = document.getElementById("plip-core-button");
+  const stage = document.getElementById("plip-stage");
+  const toast = document.getElementById("plip-toast");
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+  }
+
+  function stopMediaInDocument(targetDocument) {
+    try {
+      targetDocument.querySelectorAll("audio, video").forEach(media => {
+        try {
+          media.pause();
+          media.currentTime = 0;
+        } catch (_) {}
+      });
+
+      targetDocument.querySelectorAll("[data-plip-managed-audio='true']")
+        .forEach(element => element.remove());
+
+      targetDocument.querySelectorAll("iframe").forEach(frame => {
+        try {
+          frame.contentWindow.postMessage({ type: "PLIP_STOP_AUDIO" }, "*");
+        } catch (_) {}
+      });
+    } catch (_) {}
+  }
+
+  function stopAllPageSound() {
+    if (managedAudio) {
+      try { managedAudio.pause(); } catch (_) {}
+      managedAudio.remove();
+      managedAudio = null;
+    }
+
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+    }
+
+    stopMediaInDocument(document);
+
+    try {
+      if (window.parent && window.parent !== window) {
+        stopMediaInDocument(window.parent.document);
+      }
+    } catch (_) {}
+  }
+
+  function getAudioContext() {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return null;
+
+    if (!sharedAudioContext || sharedAudioContext.state === "closed") {
+      sharedAudioContext = new AudioContextClass();
+    }
+    return sharedAudioContext;
+  }
+
+  function tone(context, frequency, start, duration,
+                type = "sine", volume = .1) {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(volume, start);
+    gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
+
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(start);
+    oscillator.stop(start + duration);
+  }
+
+  function playClickSound(setting) {
+    if (setting.sound === "none") return;
+
+    if (setting.sound === "speech") {
+      if (!("speechSynthesis" in window)) return;
+
+      const utterance = new SpeechSynthesisUtterance(setting.speech.text);
+      utterance.lang = "ja-JP";
+      utterance.rate = setting.speech.rate;
+      utterance.pitch = setting.speech.pitch;
+      utterance.volume = setting.speech.volume;
+      speechSynthesis.speak(utterance);
+      return;
+    }
+
+    const context = getAudioContext();
+    if (!context) return;
+
+    if (context.state === "suspended") {
+      context.resume();
+    }
+
+    const time = context.currentTime;
+
+    if (setting.sound === "click") {
+      tone(context, 850, time, .035, "sine", .12);
+    } else if (setting.sound === "digital") {
+      tone(context, 620, time, .07, "square", .08);
+      tone(context, 980, time + .07, .09, "square", .07);
+    } else if (setting.sound === "confirm") {
+      tone(context, 523.25, time, .10, "sine", .10);
+      tone(context, 783.99, time + .09, .16, "sine", .10);
+    } else if (setting.sound === "metallic") {
+      tone(context, 1300, time, .07, "triangle", .07);
+      tone(context, 1780, time + .018, .11, "triangle", .05);
+    } else if (setting.sound === "impact") {
+      tone(context, 120, time, .16, "sine", .18);
+      tone(context, 65, time + .03, .22, "triangle", .09);
+    } else if (setting.sound === "sparkle") {
+      [880, 1174, 1568, 2093].forEach((frequency, index) => {
+        tone(context, frequency, time + index * .055,
+             .16, "sine", .06);
+      });
+    }
+  }
+
+  function runEffect() {
+    if (EFFECT === "none") return;
+
+    const className = "effect-" + EFFECT;
+    button.classList.remove(className);
+    void button.offsetWidth;
+    button.classList.add(className);
+    button.addEventListener("animationend", () => {
+      button.classList.remove(className);
+    }, { once: true });
+  }
+
+  function createManagedAudio(source, loop = false) {
+    const audio = document.createElement("audio");
+    audio.src = source;
+    audio.loop = loop;
+    audio.volume = .5;
+    audio.preload = "auto";
+    audio.dataset.plipManagedAudio = "true";
+    audio.style.display = "none";
+    document.body.appendChild(audio);
+    managedAudio = audio;
+    return audio;
+  }
+
+  function probeAudio(source, timeout = 2600) {
+    return new Promise(resolve => {
+      const audio = document.createElement("audio");
+      let finished = false;
+
+      const finish = result => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        audio.removeAttribute("src");
+        try { audio.load(); } catch (_) {}
+        resolve(result);
+      };
+
+      audio.preload = "metadata";
+      audio.addEventListener("loadedmetadata", () => finish(true), { once: true });
+      audio.addEventListener("canplay", () => finish(true), { once: true });
+      audio.addEventListener("error", () => finish(false), { once: true });
+
+      const timer = setTimeout(() => finish(false), timeout);
+      audio.src = source;
+      audio.load();
+    });
+  }
+
+  async function playMusicForState(state) {
+    if (state.musicMode === "silent") {
+      showToast("🔇 音声をオフにしました");
+      return;
+    }
+
+    if (state.musicMode === "ambient") {
+      const audio = createManagedAudio("./music/bgm.mp3", true);
+
+      try {
+        await audio.play();
+        showToast("🌿 静かな環境音を再生します");
+      } catch (_) {
+        showToast("⚠️ 環境音ファイル bgm.mp3 を再生できません");
+      }
+      return;
+    }
+
+    const candidates = [
+      "./music/song.mp4",
+      "./music/song1.mp4",
+      "./music/song2.mp4",
+      "./music/song3.mp4",
+      "./music/song4.mp4"
+    ];
+
+    const results = await Promise.all(
+      candidates.map(async source => ({
+        source,
+        available: await probeAudio(source)
+      }))
+    );
+
+    const availableSongs = results
+      .filter(result => result.available)
+      .map(result => result.source);
+
+    if (availableSongs.length === 0) {
+      showToast("⚠️ 再生できる主題歌が見つかりません");
+      return;
+    }
+
+    const chosen =
+      availableSongs[Math.floor(Math.random() * availableSongs.length)];
+
+    const audio = createManagedAudio(chosen, false);
+    audio.addEventListener("ended", () => {
+      currentState = 0;
+      applyState(false, 0);
+    }, { once: true });
+
+    try {
+      await audio.play();
+      showToast("🎵 作品の主題歌を再生：" + chosen.split("/").pop());
+    } catch (_) {
+      showToast("⚠️ 主題歌を再生できません");
+    }
+  }
+
+  async function applyState(withSound = true, transitionIndex = 0) {
+    const state = STATES[currentState];
+
+    stage.innerHTML = state.svg;
+    button.style.borderColor = state.color;
+    button.style.boxShadow =
+      "0 0 28px " + state.color +
+      "55, 0 18px 45px rgba(0,0,0,.5)";
+
+    runEffect();
+
+    if (withSound) {
+      stopAllPageSound();
+      playClickSound(TRANSITIONS[transitionIndex]);
+      await playMusicForState(state);
+    }
+  }
+
+  button.addEventListener("click", () => {
+    const transitionIndex = currentState;
+    currentState = (currentState + 1) % STATES.length;
+    applyState(true, transitionIndex);
+  });
+
+  window.addEventListener("message", event => {
+    if (event.data && event.data.type === "PLIP_STOP_AUDIO") {
+      stopAllPageSound();
+    }
+  });
+
+  applyState(false, 0);
+})();
+`;
+
+    return `<!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 3色変転・連動シンボルマークコンポーネント</title>
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=700;900&family=Noto+Sans+JP:wght=700;900&display=swap');
-        body { font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; }
-        
-        /* 👑 吹き出し全体の静かな浮遊挙動定義（尽生完全移植） */
-        @keyframes plipNobleFloatSVG { 0% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } 50% { transform: translate3d(0, 2px, 0) rotate(0.001deg); } 100% { transform: translate3d(0, 0px, 0) rotate(0.001deg); } }
-        @keyframes plipRainbowTextSVG { 0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } 14% { fill: #ff5500; filter: drop-shadow(0 0 3px rgba(255, 85, 0, 0.5)); } 28% { fill: #ffcc00; filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5)); } 42% { fill: #00ff66; filter: drop-shadow(0 0 3px rgba(0, 255, 102, 0.5)); } 50% { fill: #00ccff; filter: drop-shadow(0 0 3px rgba(0, 204, 255, 0.5)); } 70% { fill: #3333ff; filter: drop-shadow(0 0 3px rgba(51, 51, 255, 0.5)); } 84% { fill: #9900ff; filter: drop-shadow(0 0 3px rgba(153, 0, 255, 0.5)); } 100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255, 0, 85, 0.5)); } }
-        @keyframes plipBoltFlashSVG { 0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 1px #fde047); } 50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); } }
-        .animated-bubble-container-svg { animation: plipNobleFloatSVG 3s infinite ease-in-out; will-change: transform; backface-visibility: hidden; }
-        .rainbow-bulb-svg { animation: plipRainbowTextSVG 7s linear infinite; }
-        .flashing-bolt-svg { animation: plipBoltFlashSVG 1.5s infinite ease-in-out; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLIP 3段階連動ボタン</title>
+<style>${outputCss}</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-8 antialiased select-none">
-
-    <div class="relative shrink-0 select-none w-[640px] h-[640px] group/core">
-
-        <div id="jinsei-core-btn" onclick="triggerCoreBurstInterlocking();" class="absolute inset-0 cursor-pointer group flex items-center justify-center rounded-2xl bg-gradient-to-br from-slate-600 via-slate-700 to-slate-800 border-2 border-amber-400 overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.5)] transition-all duration-200 ease-out active:scale-95 active:translate-y-1 active:shadow-[0_2px_5px_rgba(0,0,0,0.3)] active:brightness-125 active:duration-75">             
-            
-            <div class="w-full h-full flex items-center justify-center">
-                ${svgOptimized}
-            </div>
-
-        </div>
-
-        <div class="absolute top-[calc(100%-5px)] left-0 w-full pointer-events-none select-none z-50 px-[1px]">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35" class="w-full h-auto">
-                <g class="animated-bubble-container-svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                    <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z" fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85" filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))" />
-                    <g transform="translate(6, 11) scale(0.85)">
-                        <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="8" y1="1" x2="8" y2="3" /><line x1="3" y1="3" x2="4.5" y2="4.5" /><line x1="1" y1="8" x2="3" y2="8" /><line x1="3" y1="13" x2="4.5" y2="11.5" /><line x1="13" y1="11.5" x2="11.5" y2="10" /><line x1="15" y1="8" x2="13" y2="8" /><line x1="13" y1="3" x2="11.5" y2="4.5" /></g>
-                        <path class="rainbow-bulb-svg" d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z" fill="#94a3b8" />
-                        <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 1px #ffffff);" />
-                        <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
-                        <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z" fill="#475569" />
-                        <line x1="5" y1="14.8" stroke="#334155" stroke-width="0.8" x2="11" y2="14.8" /><line x1="5.3" y1="15.8" stroke="#334155" stroke-width="0.8" x2="10.7" y2="15.8" />
-                        <polygon class="flashing-bolt-svg" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047" />
-                    </g>
-                    <text x="58" y="24" fill="#fbbf24" font-family="'Plus Jakarta Sans', 'Noto Sans JP', sans-serif" font-size="11" font-weight="900" letter-spacing="0.03em" text-anchor="middle">PLIP !!</text>
-                </g>
-            </svg>
-        </div>
-
-    </div>
-
-    <div id="toast" class="fixed top-5 right-5 z-[100] transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 border border-slate-800 text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-medium">
-        <span id="toast-icon" class="text-emerald-400"><i class="fa-solid fa-circle-check"></i></span>
-        <span id="toast-text">通知</span>
-    </div>
-
-    <script>
-        let currentCoreStyleState = 0; // 0:金枠, 1:銀枠, 2:赤枠
-        let audioBgmIframe = null;     // 金枠用（BGM.html）
-        let audioMediaElement = null;  // 銀枠用（song*.mp4）
-
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').textContent = message;
-            const icon = document.getElementById('toast-icon');
-            icon.innerHTML = isSuccess ? '<i class="fa-solid fa-circle-check"><\/i>' : '<i class="fa-solid fa-volume-xmark"><\/i>';
-            icon.className = isSuccess ? 'text-emerald-400' : 'text-rose-400';
-            
-            toast.classList.remove('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-[-20px]', 'pointer-events-none');
-            }, 2500);
-        }
-
-
-
-
-
-function triggerCoreBurstInterlocking() {
-            // 🚨 【調停】親のホームページ全体からすべての音楽・iframe要素を検索して一斉破棄
-            const targetDoc = window.parent ? window.parent.document : document;
-            targetDoc.querySelectorAll('audio').forEach(el => {
-                try { el.pause(); } catch(e){}
-                el.remove();
-            });
-            targetDoc.querySelectorAll('iframe').forEach(el => {
-                el.remove();
-            });
-
-            playClickClickSound();
-            currentCoreStyleState = (currentCoreStyleState + 1) % 3;
-            applyCoreBurstStyleAndMusic();
-        }
-
-        function playClickClickSound() {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(850, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.03);
-                
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
-                
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                
-                osc.start();
-                osc.stop(ctx.currentTime + 0.03);
-            } catch (e) {
-                console.warn("SE生成失敗:", e);
-            }
-        }
-
-        async function applyCoreBurstStyleAndMusic() {
-            const btn = document.getElementById('jinsei-core-btn');
-            if (!btn) return;
-
-            if (audioBgmIframe) { audioBgmIframe.remove(); audioBgmIframe = null; }
-            if (audioMediaElement) { audioMediaElement.pause(); audioMediaElement.remove(); audioMediaElement = null; }
-
-            if (currentCoreStyleState === 0) {
-                btn.style.borderColor = '#FFD700';
-                btn.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4)';
-                showToast('⚡️ 金枠の陣：テーマ曲を起動 (BGM on!)');
-
-                audioBgmIframe = document.createElement('iframe');
-                audioBgmIframe.src = './music/BGM.html';
-                audioBgmIframe.style.display = 'none';
-                audioBgmIframe.setAttribute('allow', 'autoplay');
-                document.body.appendChild(audioBgmIframe);
-
-            } else if (currentCoreStyleState === 1) {
-                btn.style.borderColor = '#E2E8F0';
-                btn.style.boxShadow = '0 0 20px rgba(226, 232, 240, 0.4)';
-
-                const songCandidates = [
-                    './music/song.mp4', './music/song1.mp4', './music/song2.mp4', './music/song3.mp4', './music/song4.mp4'
-                ];
-                const availableSongs = [];
-
-                await Promise.all(songCandidates.map(async (url) => {
-                    try {
-                        const response = await fetch(url, { method: 'HEAD' });
-                        if (response.ok) availableSongs.push(url);
-                    } catch (e) {}
-                }));
-
-                if (availableSongs.length === 0) availableSongs.push('./music/song.mp4');
-
-                const chosenSong = availableSongs[Math.floor(Math.random() * availableSongs.length)];
-                const songFileName = chosenSong.substring(chosenSong.lastIndexOf('/') + 1);
-                showToast('🎵 銀枠の陣：抽選曲 [' + songFileName + '] を爆音再生！');
-
-                audioMediaElement = document.createElement('audio');
-                audioMediaElement.src = chosenSong;
-                audioMediaElement.style.display = 'none';
-                audioMediaElement.volume = 0.5;
-                audioMediaElement.loop = false;
-                
-                audioMediaElement.addEventListener('ended', () => {
-                    currentCoreStyleState = 0;
-                    applyCoreBurstStyleAndMusic();
-                });
-
-                document.body.appendChild(audioMediaElement);
-                audioMediaElement.play().catch(e => console.warn("自動再生制限制限:", e));
-
-            } else if (currentCoreStyleState === 2) {
-                btn.style.borderColor = '#EF4444';
-                btn.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.4)';
-                showToast('🤫 赤枠の陣：静寂の世界 (音声 off!)', false);
-            }
-        }
-    <\/script>
+<body>
+<div class="plip-wrap">
+  <button id="plip-core-button" type="button" aria-label="PLIP 3段階連動ボタン">
+    <span id="plip-stage"></span>
+  </button>
+  ${bubbleMarkup}
+</div>
+<div id="plip-toast" role="status"></div>
+<script>${outputScript.replace(/<\/script>/gi, "<\\/script>")}<\/script>
 </body>
 </html>`;
+  }
 
-            const blob = new Blob([outputHtml], { type: 'text/html;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.setAttribute("href", URL.createObjectURL(blob));
-            link.setAttribute("download", "interlocking_symbol_button.html");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+  function downloadOutput() {
+    try {
+      const outputHtml = buildOutputHtml();
+      const filename =
+        sanitizeFilename($("#filename-input").value) + ".html";
+
+      const blob = new Blob([outputHtml], {
+        type: "text/html;charset=utf-8"
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast("完成HTMLを保存しました");
+    } catch (error) {
+      alert(error.message || "生成に失敗しました");
+    }
+  }
+
+  $$("[data-editor-tab]").forEach(button => {
+    button.addEventListener("click", () => {
+      switchEditorTab(Number(button.dataset.editorTab));
+    });
+  });
+
+  $$("[data-preview-state]").forEach(button => {
+    button.addEventListener("click", () => {
+      setPreviewState(Number(button.dataset.previewState));
+    });
+  });
+
+  $("#preview-button").addEventListener("click", () => {
+    setPreviewState((previewState + 1) % 3, true);
+  });
+
+  $("#effect-select").addEventListener("change", runPreviewEffect);
+
+  [0, 1, 2].forEach(index => {
+    $(`#svg-input-${index}`).addEventListener("input", () => {
+      setPreviewState(previewState, false);
+    });
+
+    $(`#color-text-${index}`).addEventListener("input", () => {
+      syncColor(index, false);
+    });
+
+    $(`#color-picker-${index}`).addEventListener("input", () => {
+      syncColor(index, true);
+    });
+
+    $(`[data-file-button="${index}"]`).addEventListener("click", () => {
+      $(`[data-file-input="${index}"]`).click();
+    });
+
+    $(`[data-file-input="${index}"]`).addEventListener("change", event => {
+      importFile(index, event.target.files[0]);
+      event.target.value = "";
+    });
+
+    const dropZone = $(`[data-drop-zone="${index}"]`);
+
+    ["dragenter", "dragover"].forEach(eventName => {
+      dropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropZone.classList.add("drag-over");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+      dropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropZone.classList.remove("drag-over");
+      });
+    });
+
+    dropZone.addEventListener("drop", event => {
+      importFile(index, event.dataTransfer.files[0]);
+    });
+
+    const soundSelect = $(`[data-sound-select="${index}"]`);
+    const speechSettings = $(`[data-speech-settings="${index}"]`);
+
+    soundSelect.addEventListener("change", () => {
+      speechSettings.classList.toggle(
+        "visible",
+        soundSelect.value === "speech"
+      );
+      previewClickSound(index);
+    });
+
+    $(`[data-listen-button="${index}"]`).addEventListener("click", () => {
+      previewClickSound(index);
+    });
+  });
+
+  $("#generate-button").addEventListener("click", downloadOutput);
+
+  setPreviewState(0, false);
+})();
+</script>
 </body>
 </html>
