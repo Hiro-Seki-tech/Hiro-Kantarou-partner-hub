@@ -576,6 +576,163 @@ function loadFromLocalStorage() {
 
 
 
+// =========================================================================
+// 🎵 PLIP 音楽最適化：旧型・v4.5型ボタンを安全に案B＋C対応へ変換
+// =========================================================================
+function getPlipMusicBaseUrl(url) {
+    let musicBaseUrl = url.endsWith('/') ? url + 'music/' : url + '/music/';
+    if (url.endsWith('.html') || url.endsWith('.php')) {
+        musicBaseUrl = url.substring(0, url.lastIndexOf('/') + 1) + 'music/';
+    }
+    return musicBaseUrl;
+}
+
+function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
+    let optimized = String(buttonHtml || '');
+
+    // 共通：音楽URLをリンク先作品の music フォルダへ統一
+    optimized = optimized.replace(
+        /(['"])([^'"]*?\/music\/)?(?:BGM\.html|bgm\.mp3)(['"])/gi,
+        `$1${musicBaseUrl}bgm.mp3$3`
+    );
+    optimized = optimized.replace(
+        /(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.mp4(['"])/gi,
+        (match, quote, oldBase, number) =>
+            `${quote}${musicBaseUrl}song${number || ''}.mp4${quote}`
+    );
+
+    // ---------------------------------------------------------------------
+    // 旧型：applyCoreBurstStyleAndMusic + songCandidates + HEAD 検査
+    // ---------------------------------------------------------------------
+    const isLegacyType =
+        optimized.includes('async function applyCoreBurstStyleAndMusic') &&
+        optimized.includes('const songCandidates') &&
+        optimized.includes("method: 'HEAD'");
+
+    if (isLegacyType && !optimized.includes('PLIP_AUDIO_STABILIZER_LEGACY_V1')) {
+        optimized = optimized.replace(
+            /(let audioMediaElement = null;[^\n]*\n)/,
+            `$1        // PLIP_AUDIO_STABILIZER_LEGACY_V1\n` +
+            `        let silverSongCache = null;\n` +
+            `        let audioRequestSerial = 0;\n`
+        );
+
+        optimized = optimized.replace(
+            /(async function applyCoreBurstStyleAndMusic\(\) \{)/,
+            `$1\n            const currentAudioRequest = ++audioRequestSerial;`
+        );
+
+        const candidatesMatch = optimized.match(
+            /const songCandidates = \[\s*([\s\S]*?)\s*\];/
+        );
+        const fallbackMatch = optimized.match(
+            /if \(availableSongs\.length === 0\) availableSongs\.push\((['"][^'"]+['"])\);/
+        );
+
+        if (candidatesMatch && fallbackMatch) {
+            const startMarker = 'const songCandidates = [';
+            const endMarker = 'const songFileName = chosenSong.substring';
+            const start = optimized.indexOf(startMarker);
+            const end = optimized.indexOf(endMarker, start);
+
+            if (start !== -1 && end !== -1) {
+                const candidatesBody = candidatesMatch[1].trim();
+                const fallbackUrl = fallbackMatch[1];
+
+                const replacement =
+`const songCandidates = [
+                    ${candidatesBody}
+                ];
+
+                // 案C：最初の銀枠時だけ曲の存在を調べ、ページ滞在中は再利用
+                if (!silverSongCache) {
+                    silverSongCache = Promise.all(songCandidates.map(async (url) => {
+                        try {
+                            const response = await fetch(url, { method: 'HEAD' });
+                            return response.ok ? url : null;
+                        } catch (e) {
+                            return null;
+                        }
+                    })).then(results => {
+                        const foundSongs = results.filter(Boolean);
+                        return foundSongs.length > 0 ? foundSongs : [${fallbackUrl}];
+                    });
+                }
+
+                const availableSongs = await silverSongCache;
+
+                // 案B：待機中に別操作が入った古い処理は再生しない
+                if (currentAudioRequest !== audioRequestSerial ||
+                    currentCoreStyleState !== 1) return;
+
+                const chosenSong =
+                    availableSongs[Math.floor(Math.random() * availableSongs.length)];
+                `;
+
+                optimized =
+                    optimized.slice(0, start) +
+                    replacement +
+                    optimized.slice(end);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------------
+    // v4.5型：playMusicForState + probeAudio + createManagedAudio
+    // ---------------------------------------------------------------------
+    const isV45Type =
+        optimized.includes('async function playMusicForState') &&
+        optimized.includes('function probeAudio') &&
+        optimized.includes('function createManagedAudio');
+
+    if (isV45Type && !optimized.includes('PLIP_AUDIO_STABILIZER_V45_V1')) {
+        optimized = optimized.replace(
+            /(let managedAudio = null;)/,
+            `$1\n  // PLIP_AUDIO_STABILIZER_V45_V1\n` +
+            `  let availableSongCache = null;\n` +
+            `  let musicRequestSerial = 0;`
+        );
+
+        optimized = optimized.replace(
+            /(async function playMusicForState\(state\) \{)/,
+            `$1\n    const currentMusicRequest = ++musicRequestSerial;`
+        );
+
+        const oldV45Block =
+/const results = await Promise\.all\(\s*candidates\.map\(async source => \(\{\s*source,\s*available: await probeAudio\(source\)\s*\}\)\)\s*\);\s*const availableSongs = results\s*\.filter\(result => result\.available\)\s*\.map\(result => result\.source\);\s*if \(availableSongs\.length === 0\) \{\s*showToast\("⚠️ 再生できる主題歌が見つかりません"\);\s*return;\s*\}/;
+
+        const newV45Block =
+`// 案C：最初の主題歌状態時だけ調査し、ページ滞在中は再利用
+    if (!availableSongCache) {
+      availableSongCache = Promise.all(
+        candidates.map(async source => ({
+          source,
+          available: await probeAudio(source)
+        }))
+      ).then(results =>
+        results
+          .filter(result => result.available)
+          .map(result => result.source)
+      );
+    }
+
+    const availableSongs = await availableSongCache;
+
+    // 案B：調査中に別操作が入った古い処理は再生しない
+    if (currentMusicRequest !== musicRequestSerial) return;
+
+    if (availableSongs.length === 0) {
+      showToast("⚠️ 再生できる主題歌が見つかりません");
+      return;
+    }`;
+
+        optimized = optimized.replace(oldV45Block, newV45Block);
+    }
+
+    return optimized;
+}
+
+
 function saveCardData() {
     const catId = document.getElementById('modal-cat-id').value;
     const cardIdx = parseInt(document.getElementById('modal-card-index').value);
@@ -653,17 +810,10 @@ function saveCardData() {
     const bubbles = doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]');
     bubbles.forEach(el => el.remove());
 
-    let musicBaseUrl = url.endsWith('/') ? url + 'music/' : url + '/music/';
-    if(url.endsWith('.html') || url.endsWith('.php')) {
-        musicBaseUrl = url.substring(0, url.lastIndexOf('/') + 1) + 'music/';
-    }
+    const musicBaseUrl = getPlipMusicBaseUrl(url);
 
     let processedHtml = doc.documentElement.outerHTML;
-    processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?BGM\.html(['"])/g, `$1${musicBaseUrl}BGM.html$3`);
-    processedHtml = processedHtml.replace(/(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.mp4(['"])/g, (match, p1, p2, p3) => {
-        const num = p3 ? p3 : '';
-        return `${p1}${musicBaseUrl}song${num}.mp4${p1}`;
-    });
+    processedHtml = optimizeButtonAudio(processedHtml, musicBaseUrl);
 
     const finalIframeSrcdoc = processedHtml + iframeBridgeScript;
 			
@@ -782,6 +932,13 @@ function exportHTML(isForEdit) {
             if (cat.cards && cat.cards.length > 0) {
                 cat.cards.forEach(card => {
                     if (card.htmlContent) {
+                        // 保存済みの古いカードも、書き出し直前に案B＋Cへ再検査
+                        const cardMusicBaseUrl = getPlipMusicBaseUrl(card.url || '');
+                        card.htmlContent = optimizeButtonAudio(
+                            card.htmlContent,
+                            cardMusicBaseUrl
+                        );
+
                         const doc = parser.parseFromString(card.htmlContent, 'text/html');
                         // 重複して溜まっているブリッジスクリプトタグのみを検出して全消去
                         const oldInjectors = doc.querySelectorAll('#plip-bridge-injector');
