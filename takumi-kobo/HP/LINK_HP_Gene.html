@@ -601,6 +601,58 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
             `${quote}${musicBaseUrl}song${number || ''}.mp4${quote}`
     );
 
+    // =========================================================================
+    // 再発防止クレンジング
+    // 過去版・途中版で同じ補助コードが重複していても、必ず1組へ正規化する。
+    // 「目印コメントがあるか」だけに依存しないため、再保存・再書き出しを繰り返しても増殖しない。
+    // =========================================================================
+    function keepOnlyFirstExactLine(source, linePattern) {
+        let found = false;
+        return source.replace(linePattern, (line) => {
+            if (found) return '';
+            found = true;
+            return line;
+        });
+    }
+
+    // 旧型の補助変数・リクエスト番号取得行を最大1個に整理
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let silverSongCache = null;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let audioRequestSerial = 0;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*const currentAudioRequest = \+\+audioRequestSerial;[^\r\n]*\r?\n/gm
+    );
+
+    // v4.5型の補助変数・リクエスト番号取得行を最大1個に整理
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let availableSongCache = null;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let musicRequestSerial = 0;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*const currentMusicRequest = \+\+musicRequestSerial;[^\r\n]*\r?\n/gm
+    );
+
+    // 重複した識別コメントも1個へ整理
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*\/\/ PLIP_AUDIO_STABILIZER_LEGACY_V1[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*\/\/ PLIP_AUDIO_STABILIZER_V45_V1[^\r\n]*\r?\n/gm
+    );
+
     // ---------------------------------------------------------------------
     // 旧型：applyCoreBurstStyleAndMusic + songCandidates + HEAD 検査
     // ---------------------------------------------------------------------
@@ -609,18 +661,33 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
         optimized.includes('const songCandidates') &&
         optimized.includes("method: 'HEAD'");
 
-    if (isLegacyType && !optimized.includes('PLIP_AUDIO_STABILIZER_LEGACY_V1')) {
-        optimized = optimized.replace(
-            /(let audioMediaElement = null;[^\n]*\n)/,
-            `$1        // PLIP_AUDIO_STABILIZER_LEGACY_V1\n` +
-            `        let silverSongCache = null;\n` +
-            `        let audioRequestSerial = 0;\n`
-        );
+    if (isLegacyType) {
+        const hasLegacyCache = /\blet\s+silverSongCache\s*=\s*null\s*;/.test(optimized);
+        const hasLegacySerial = /\blet\s+audioRequestSerial\s*=\s*0\s*;/.test(optimized);
+        const hasLegacyRequest =
+            /\bconst\s+currentAudioRequest\s*=\s*\+\+audioRequestSerial\s*;/.test(optimized);
 
-        optimized = optimized.replace(
-            /(async function applyCoreBurstStyleAndMusic\(\) \{)/,
-            `$1\n            const currentAudioRequest = ++audioRequestSerial;`
-        );
+        // 実在コードを確認し、不足しているものだけを追加
+        if (!hasLegacyCache || !hasLegacySerial) {
+            optimized = optimized.replace(
+                /(let audioMediaElement = null;[^\n]*\n)/,
+                `$1        // PLIP_AUDIO_STABILIZER_LEGACY_V1\n` +
+                `${hasLegacyCache ? '' : '        let silverSongCache = null;\n'}` +
+                `${hasLegacySerial ? '' : '        let audioRequestSerial = 0;\n'}`
+            );
+        } else if (!optimized.includes('PLIP_AUDIO_STABILIZER_LEGACY_V1')) {
+            optimized = optimized.replace(
+                /(let silverSongCache = null;[^\n]*\n)/,
+                `        // PLIP_AUDIO_STABILIZER_LEGACY_V1\n$1`
+            );
+        }
+
+        if (!hasLegacyRequest) {
+            optimized = optimized.replace(
+                /(async function applyCoreBurstStyleAndMusic\(\) \{)/,
+                `$1\n            const currentAudioRequest = ++audioRequestSerial;`
+            );
+        }
 
         const candidatesMatch = optimized.match(
             /const songCandidates = \[\s*([\s\S]*?)\s*\];/
@@ -629,13 +696,18 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
             /if \(availableSongs\.length === 0\) availableSongs\.push\((['"][^'"]+['"])\);/
         );
 
-        if (candidatesMatch && fallbackMatch) {
+        // 古い未変換ブロックが存在するときだけ、キャッシュ方式へ置換
+        if (
+            candidatesMatch &&
+            fallbackMatch &&
+            !optimized.includes('if (!silverSongCache)')
+        ) {
             const startMarker = 'const songCandidates = [';
             const endMarker = 'const songFileName = chosenSong.substring';
-            const start = optimized.indexOf(startMarker);
-            const end = optimized.indexOf(endMarker, start);
+            const blockStart = optimized.indexOf(startMarker);
+            const blockEnd = optimized.indexOf(endMarker, blockStart);
 
-            if (start !== -1 && end !== -1) {
+            if (blockStart !== -1 && blockEnd !== -1) {
                 const candidatesBody = candidatesMatch[1].trim();
                 const fallbackUrl = fallbackMatch[1];
 
@@ -670,9 +742,9 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
                 `;
 
                 optimized =
-                    optimized.slice(0, start) +
+                    optimized.slice(0, blockStart) +
                     replacement +
-                    optimized.slice(end);
+                    optimized.slice(blockEnd);
             }
         }
     }
@@ -685,18 +757,35 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
         optimized.includes('function probeAudio') &&
         optimized.includes('function createManagedAudio');
 
-    if (isV45Type && !optimized.includes('PLIP_AUDIO_STABILIZER_V45_V1')) {
-        optimized = optimized.replace(
-            /(let managedAudio = null;)/,
-            `$1\n  // PLIP_AUDIO_STABILIZER_V45_V1\n` +
-            `  let availableSongCache = null;\n` +
-            `  let musicRequestSerial = 0;`
-        );
+    if (isV45Type) {
+        const hasV45Cache =
+            /\blet\s+availableSongCache\s*=\s*null\s*;/.test(optimized);
+        const hasV45Serial =
+            /\blet\s+musicRequestSerial\s*=\s*0\s*;/.test(optimized);
+        const hasV45Request =
+            /\bconst\s+currentMusicRequest\s*=\s*\+\+musicRequestSerial\s*;/.test(optimized);
 
-        optimized = optimized.replace(
-            /(async function playMusicForState\(state\) \{)/,
-            `$1\n    const currentMusicRequest = ++musicRequestSerial;`
-        );
+        // 実在コードを確認し、不足しているものだけを追加
+        if (!hasV45Cache || !hasV45Serial) {
+            optimized = optimized.replace(
+                /(let managedAudio = null;)/,
+                `$1\n  // PLIP_AUDIO_STABILIZER_V45_V1\n` +
+                `${hasV45Cache ? '' : '  let availableSongCache = null;\n'}` +
+                `${hasV45Serial ? '' : '  let musicRequestSerial = 0;'}`
+            );
+        } else if (!optimized.includes('PLIP_AUDIO_STABILIZER_V45_V1')) {
+            optimized = optimized.replace(
+                /(let availableSongCache = null;[^\n]*\n)/,
+                `  // PLIP_AUDIO_STABILIZER_V45_V1\n$1`
+            );
+        }
+
+        if (!hasV45Request) {
+            optimized = optimized.replace(
+                /(async function playMusicForState\(state\) \{)/,
+                `$1\n    const currentMusicRequest = ++musicRequestSerial;`
+            );
+        }
 
         const oldV45Block =
 /const results = await Promise\.all\(\s*candidates\.map\(async source => \(\{\s*source,\s*available: await probeAudio\(source\)\s*\}\)\)\s*\);\s*const availableSongs = results\s*\.filter\(result => result\.available\)\s*\.map\(result => result\.source\);\s*if \(availableSongs\.length === 0\) \{\s*showToast\("⚠️ 再生できる主題歌が見つかりません"\);\s*return;\s*\}/;
@@ -726,12 +815,40 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
       return;
     }`;
 
-        optimized = optimized.replace(oldV45Block, newV45Block);
+        // 未変換の旧ブロックが存在するときだけ置換
+        if (!optimized.includes('if (!availableSongCache)')) {
+            optimized = optimized.replace(oldV45Block, newV45Block);
+        }
     }
+
+    // 最終安全確認：変換後にも同じ宣言が増えていれば再度1個へ正規化
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let silverSongCache = null;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let audioRequestSerial = 0;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*const currentAudioRequest = \+\+audioRequestSerial;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let availableSongCache = null;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*let musicRequestSerial = 0;[^\r\n]*\r?\n/gm
+    );
+    optimized = keepOnlyFirstExactLine(
+        optimized,
+        /^[ \t]*const currentMusicRequest = \+\+musicRequestSerial;[^\r\n]*\r?\n/gm
+    );
 
     return optimized;
 }
-
 
 function saveCardData() {
     const catId = document.getElementById('modal-cat-id').value;
