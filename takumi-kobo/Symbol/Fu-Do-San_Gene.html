@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗻 Fuji Symbol Mark Design Studio (富土山シンボルマーク・デザインスタジオ)</title>
+    <title>🗻 Fuji Symbol Mark Design Studio v2 (富土山シンボルマーク・デザインスタジオ)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -44,6 +44,25 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #d4af37;
+        }
+
+        details.config-section {
+            border-top: 1px solid rgba(51,65,85,.6);
+            padding-top: 1rem;
+        }
+        details.config-section > summary {
+            list-style: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        details.config-section > summary::-webkit-details-marker { display:none; }
+        .mini-control {
+            background:#020617;
+            border:1px solid #1e293b;
+            border-radius:.65rem;
+            padding:.45rem .55rem;
+            font-size:10px;
+            color:#cbd5e1;
         }
     </style>
 </head>
@@ -160,13 +179,40 @@
                     <span class="text-[9px] text-slate-500">Speeds up or slows down the SMIL timeline logic in the preview.</span>
                 </div>
 
-                <!-- 5. Presets Selector -->
+                <!-- 5. Celestial & Foreground Effects -->
+                <details class="config-section flex flex-col gap-3" open>
+                    <summary class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                        <span>🌄 天空・前景演出</span><span class="text-yellow-400">▼</span>
+                    </summary>
+                    <div class="grid grid-cols-2 gap-3 mt-3">
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="sun-enabled" onchange="updateFujiColors()"> ☀ 太陽</label>
+                        <select id="sun-style" onchange="updateFujiColors()" class="mini-control"><option value="normal">通常</option><option value="rising">旭日風</option><option value="halo">光輪</option></select>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="moon-enabled" onchange="updateFujiColors()"> ☾ 月</label>
+                        <select id="moon-style" onchange="updateFujiColors()" class="mini-control"><option value="full">満月</option><option value="half">半月</option><option value="crescent">三日月</option></select>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="stars-enabled" onchange="updateFujiColors()"> ⭐ 星</label>
+                        <select id="star-count" onchange="updateFujiColors()" class="mini-control"><option value="8">8</option><option value="16" selected>16</option><option value="28">28</option><option value="42">42</option></select>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="twinkle-enabled" checked onchange="updateFujiColors()"> ✨ 星を瞬かせる</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="shooting-enabled" onchange="updateFujiColors()"> ☄ 流れ星</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="clouds-enabled" onchange="updateFujiColors()"> ☁ 雲</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="aurora-enabled" onchange="updateFujiColors()"> 🌈 オーロラ</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="sakura-enabled" onchange="updateFujiColors()"> 🌸 桜</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="torii-enabled" onchange="updateFujiColors()"> ⛩ 鳥居</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="pine-enabled" onchange="updateFujiColors()"> 🌲 松</label>
+                        <label class="mini-control flex items-center gap-2"><input type="checkbox" id="lake-enabled" onchange="updateFujiColors()"> 🌊 湖</label>
+                        <label class="mini-control flex items-center gap-2 col-span-2"><input type="checkbox" id="sea-clouds-enabled" onchange="updateFujiColors()"> 🌫 雲海</label>
+                    </div>
+                </details>
+
+                <!-- 6. Presets Selector -->
                 <div class="flex flex-col gap-1.5 border-t border-slate-800/60 pt-4">
                     <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">🎨 Cosmic Presets</label>
                     <div class="grid grid-cols-3 gap-2">
                         <button onclick="applyPreset('#0b132b', '#3a506b', '#1e3a8a', '#1d4ed8', '#67e8f9', '#ffd700')" class="py-2 px-1 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-[10px] font-bold text-slate-300 transition-all">Classic Tokyo</button>
                         <button onclick="applyPreset('#020617', '#1e1b4b', '#311042', '#581c87', '#ec4899', '#facc15')" class="py-2 px-1 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 border border-purple-800/30 text-[10px] font-bold text-purple-300 transition-all">Neon Violet</button>
                         <button onclick="applyPreset('#022c22', '#064e3b', '#065f46', '#0f766e', '#22d3ee', '#10b981')" class="py-2 px-1 rounded-xl bg-teal-950/40 hover:bg-teal-900/40 border border-teal-800/30 text-[10px] font-bold text-teal-300 transition-all">Emerald Forest</button>
+                        <button onclick="applyScenePreset('sunrise')" class="py-2 px-1 rounded-xl bg-orange-950/40 hover:bg-orange-900/40 border border-orange-800/30 text-[10px] font-bold text-orange-300 transition-all">初日の出</button>
+                        <button onclick="applyScenePreset('moon')" class="py-2 px-1 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-700 text-[10px] font-bold text-slate-300 transition-all">満月</button>
+                        <button onclick="applyScenePreset('stars')" class="py-2 px-1 rounded-xl bg-indigo-950/40 hover:bg-indigo-900/40 border border-indigo-800/30 text-[10px] font-bold text-indigo-300 transition-all">星降る夜</button>
                     </div>
                 </div>
 
@@ -315,6 +361,64 @@
             showToastMessage("Preset Applied Successfully! (プリセットを適用したわ！)");
         }
 
+
+        function setChecked(id, value) { const el = document.getElementById(id); if (el) el.checked = value; }
+        function applyScenePreset(name) {
+            ['sun-enabled','moon-enabled','stars-enabled','shooting-enabled','clouds-enabled','aurora-enabled','sakura-enabled','torii-enabled','pine-enabled','lake-enabled','sea-clouds-enabled'].forEach(id=>setChecked(id,false));
+            if (name === 'sunrise') {
+                applyPreset('#7c2d12','#fb923c','#1e3a8a','#2563eb','#67e8f9','#ffd700');
+                setChecked('sun-enabled',true); setChecked('clouds-enabled',true); setChecked('torii-enabled',true); setChecked('lake-enabled',true);
+                document.getElementById('sun-style').value='rising';
+            } else if (name === 'moon') {
+                applyPreset('#020617','#1e293b','#172554','#1e3a8a','#93c5fd','#f8fafc');
+                setChecked('moon-enabled',true); setChecked('stars-enabled',true); setChecked('sea-clouds-enabled',true);
+                document.getElementById('moon-style').value='full';
+            } else {
+                applyPreset('#020617','#0f172a','#172554','#312e81','#a5b4fc','#facc15');
+                setChecked('stars-enabled',true); setChecked('shooting-enabled',true); setChecked('aurora-enabled',true);
+            }
+            updateFujiColors();
+        }
+
+        function buildCelestialLayer(t) {
+            const on = id => document.getElementById(id)?.checked;
+            let out = '';
+            if (on('stars-enabled')) {
+                const count = parseInt(document.getElementById('star-count').value,10);
+                const twinkle = on('twinkle-enabled');
+                for (let i=0;i<count;i++) {
+                    const x = 12 + ((i*47)%216), y = 12 + ((i*73)%112), r = 0.6 + (i%3)*0.35;
+                    out += `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff7cc" opacity="${0.45+(i%5)*0.1}">${twinkle?`<animate attributeName="opacity" values="0.2;1;0.35" dur="${t(2.5+(i%7)*0.6)}" begin="${t((i%9)*0.3)}" repeatCount="indefinite"/>`:''}</circle>`;
+                }
+            }
+            if (on('sun-enabled')) {
+                const style=document.getElementById('sun-style').value;
+                if (style==='rising') {
+                    out += `<g opacity=".9"><g stroke="#ffd166" stroke-width="2">${Array.from({length:16},(_,i)=>{const a=i*Math.PI/8,x1=120+28*Math.cos(a),y1=92+28*Math.sin(a),x2=120+85*Math.cos(a),y2=92+85*Math.sin(a);return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`}).join('')}</g><circle cx="120" cy="92" r="27" fill="#ff5a36"/></g>`;
+                } else if (style==='halo') out += `<circle cx="120" cy="72" r="30" fill="none" stroke="#ffe082" stroke-width="7" opacity=".75"><animate attributeName="opacity" values=".35;.9;.35" dur="${t(4)}" repeatCount="indefinite"/></circle>`;
+                else out += `<circle cx="120" cy="70" r="24" fill="#ffd54f"><animate attributeName="r" values="22;25;22" dur="${t(4)}" repeatCount="indefinite"/></circle>`;
+            }
+            if (on('moon-enabled')) {
+                const style=document.getElementById('moon-style').value;
+                out += `<g><circle cx="176" cy="55" r="21" fill="#fff8d6"/>${style==='crescent'?'<circle cx="184" cy="49" r="21" fill="#0b132b"/>':style==='half'?'<path d="M176 34 A21 21 0 0 1 176 76 Z" fill="#0b132b"/>':''}</g>`;
+            }
+            if (on('aurora-enabled')) out += `<path d="M5 55 Q45 20 90 55 T175 50 T235 58" fill="none" stroke="#5eead4" stroke-width="12" opacity=".16"><animate attributeName="d" values="M5 55 Q45 20 90 55 T175 50 T235 58;M5 45 Q45 70 90 40 T175 62 T235 42;M5 55 Q45 20 90 55 T175 50 T235 58" dur="${t(9)}" repeatCount="indefinite"/></path>`;
+            if (on('clouds-enabled')) out += `<g fill="#fff" opacity=".28"><ellipse cx="45" cy="70" rx="26" ry="9"><animate attributeName="cx" values="-20;260" dur="${t(30)}" repeatCount="indefinite"/></ellipse><ellipse cx="190" cy="95" rx="32" ry="11"><animate attributeName="cx" values="260;-30" dur="${t(38)}" repeatCount="indefinite"/></ellipse></g>`;
+            if (on('shooting-enabled')) out += `<g opacity="0"><line x1="20" y1="30" x2="48" y2="45" stroke="#fff" stroke-width="2"/><circle cx="48" cy="45" r="2" fill="#fff"/><animateTransform attributeName="transform" type="translate" values="0 0;170 80" dur="${t(2.2)}" begin="${t(3)}" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="${t(2.2)}" begin="${t(3)}" repeatCount="indefinite"/></g>`;
+            return out;
+        }
+
+        function buildForegroundLayer() {
+            const on = id => document.getElementById(id)?.checked;
+            let out='';
+            if(on('sea-clouds-enabled')) out += `<path d="M0 168 Q25 150 55 166 T110 165 T165 167 T240 162 L240 220 L0 220 Z" fill="#fff" opacity=".32"/>`;
+            if(on('lake-enabled')) out += `<path d="M8 212 Q120 198 232 212 L232 232 L8 232 Z" fill="#38bdf8" opacity=".45"/><path d="M30 218 Q120 206 210 218" fill="none" stroke="#e0f2fe" opacity=".55"/>`;
+            if(on('torii-enabled')) out += `<g fill="#b91c1c"><rect x="103" y="170" width="6" height="42"/><rect x="131" y="170" width="6" height="42"/><rect x="96" y="170" width="48" height="6"/><rect x="100" y="160" width="40" height="7"/></g>`;
+            if(on('pine-enabled')) out += `<g transform="translate(18 176)"><rect x="10" y="10" width="5" height="34" fill="#5b3a1a"/><path d="M12 0 L0 18 H24 Z M12 8 L-2 28 H26 Z" fill="#14532d"/></g>`;
+            if(on('sakura-enabled')) out += `<g fill="#f9a8d4" opacity=".9">${Array.from({length:14},(_,i)=>`<circle cx="${10+(i*17)%220}" cy="${170+(i*11)%55}" r="${1.5+(i%3)*.7}"><animateTransform attributeName="transform" type="translate" values="0 0;${(i%2?8:-8)} 18" dur="${4+(i%5)}s" repeatCount="indefinite"/></circle>`).join('')}</g>`;
+            return out;
+        }
+
         function buildFujiSVG() {
             // Read active color fields
             const skyTop = document.getElementById('sky-top').value;
@@ -361,6 +465,9 @@
 
   <!-- Ground Frame and Background Canvas -->
   <rect width="240" height="240" rx="24" fill="url(#skyGrad)" stroke="${goldColor}" stroke-width="2" />
+
+  <!-- Celestial background effects -->
+  ${buildCelestialLayer(t)}
 
   <!-- Mt. Fuji towering to edges with majestic power -->
   <g>
@@ -654,6 +761,9 @@
       </g>
     </g>
   </g>
+
+  <!-- Optional foreground effects -->
+  ${buildForegroundLayer()}
 </svg>`;
         }
 
