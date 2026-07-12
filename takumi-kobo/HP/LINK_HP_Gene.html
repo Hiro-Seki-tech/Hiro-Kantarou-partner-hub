@@ -329,14 +329,19 @@ function loadFromLocalStorage() {
                 console.error("LocalStorageからの読み込みに失敗しました:", e);
             }
         }
-		
-		
-
-        // 📡 iframeから通知された内部の最新状態値をダイレクトに受け取る同期機構
+        // 📡 iframeから通知された状態を受信。押された本人以外のボタンだけを停止する
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'PLIP_BUTTON_CLICK') {
+                document.querySelectorAll('[id^="btn-frame-"] iframe').forEach(frame => {
+                    if (frame.contentWindow && frame.contentWindow !== event.source) {
+                        try { frame.contentWindow.postMessage({ type: 'PLIP_STOP_AUDIO' }, '*'); } catch (_) {}
+                    }
+                });
+
                 const targetTitle = decodeURIComponent(event.data.title);
-                const innerState = parseInt(event.data.stateValue);
+                const innerState = Number.isFinite(Number(event.data.stateValue))
+                    ? Number(event.data.stateValue)
+                    : 0;
                 forceSyncUniversalBurst(targetTitle, innerState);
             }
         });
@@ -847,6 +852,13 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
         /^[ \t]*const currentMusicRequest = \+\+musicRequestSerial;[^\r\n]*\r?\n/gm
     );
 
+    // v5型をiframeへ埋め込む場合、子ボタン自身による親全iframe停止を無効化。
+    // 停止対象の選別はLINK親画面が「押された本人以外」に対して行う。
+    optimized = optimized.replace(
+        /\n\s*try\s*\{\s*if\s*\(window\.parent\s*&&\s*window\.parent\s*!==\s*window\)\s*\{\s*stopMediaInDocument\(window\.parent\.document\);\s*\}\s*\}\s*catch\s*\([^)]*\)\s*\{\s*\}\s*/gs,
+        "\n    // PLIP_LINK_EMBED: sibling audio is coordinated by the parent hub.\n"
+    );
+
     return optimized;
 }
 
@@ -862,8 +874,7 @@ function saveCardData() {
         alert("タイトル and URLは必須項目です。");
         return;
     }
-
-    // 💡 固有IDを付与した最新のブリッジスクリプト定義
+    // 💡 新旧ボタン共通：iframe内で枠へジャストフィットし、状態だけ親へ通知
     const iframeBridgeScript = `
         <script id="plip-bridge-injector">
             window.addEventListener('DOMContentLoaded', () => {
@@ -872,40 +883,31 @@ function saveCardData() {
                 };
 
                 const styleNode = document.createElement('style');
-                styleNode.textContent = \`
-                    html, body {
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                        overflow: hidden !important;
-                        background: transparent !important;
-                    }
-                    body > div.relative.w-\\\\[640px\\\\] {
-                        transform-origin: top left !important;
-                        transform: scale(0.375) !important;
-                        position: absolute !important;
-                     top: 0 !important;
-                        left: 0 !important;
-                        margin: 0 !important;
-                    }
-                    @media (max-width: 150px) or (max-height: 150px) {
-                        body > div.relative.w-\\\\[640px\\\\] {
-                            transform: scale(0.15625) !important;
-                        }
-                    }
-                \`;
+                styleNode.id = 'plip-iframe-fit-style';
+                styleNode.textContent =
+                    'html,body{margin:0!important;padding:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;background:transparent!important;}' +
+                    'body{display:flex!important;align-items:center!important;justify-content:center!important;}' +
+                    '.plip-wrap,.symbol-button-wrapper,#jinsei-core-btn{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;aspect-ratio:1/1!important;margin:0!important;padding:0!important;position:relative!important;inset:auto!important;transform:none!important;}' +
+                    '#plip-core-button,#jinsei-core-btn button,.symbol-button-wrapper button{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;}' +
+                    '#plip-toast,.plip-bubble,[class*="bubble"],[id*="bubble"]{display:none!important;}' +
+                    'body>div.relative{width:100%!important;height:100%!important;max-width:none!important;transform:none!important;position:relative!important;top:auto!important;left:auto!important;margin:0!important;}';
                 document.head.appendChild(styleNode);
 
-                const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
+                const coreWrapper = document.getElementById('plip-core-button') ||
+                    document.getElementById('jinsei-core-btn') ||
+                    document.body.querySelector('.symbol-button-wrapper') ||
+                    document.body.querySelector('.plip-wrap button') ||
+                    document.body.firstElementChild;
+
+                let bridgeState = 0;
                 if (coreWrapper) {
                     coreWrapper.addEventListener('click', () => {
+                        bridgeState = (bridgeState + 1) % 3;
                         setTimeout(() => {
-                            const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
-                            window.parent.postMessage({ 
-                                type: 'PLIP_BUTTON_CLICK', 
+                            window.parent.postMessage({
+                                type: 'PLIP_BUTTON_CLICK',
                                 title: "${encodeURIComponent(title)}",
-                                stateValue: currentInnerState
+                                stateValue: bridgeState
                             }, '*');
                         }, 20);
                     });
@@ -1070,20 +1072,37 @@ function exportHTML(isForEdit) {
                             const freshBridge = `
 <script id="plip-bridge-injector">
     window.addEventListener('DOMContentLoaded', () => {
-        window.showToast = function(msg, isSuccess) { console.log("Inner toast muted:", msg); };
+        window.showToast = function(msg, isSuccess) {
+            console.log("Inner toast muted:", msg);
+        };
+
         const styleNode = document.createElement('style');
-        styleNode.textContent = \`
-            html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; background: transparent !important; }
-            body > div.relative.w-\\\\[640px\\\\] { transform-origin: top left !important; transform: scale(0.375) !important; position: absolute !important; top: 0 !important; left: 0 !important; margin: 0 !important; }
-            @media (max-width: 150px) or (max-height: 150px) { body > div.relative.w-\\\\[640px\\\\] { transform: scale(0.15625) !important; } }
-        \`;
+        styleNode.id = 'plip-iframe-fit-style';
+        styleNode.textContent =
+            'html,body{margin:0!important;padding:0!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;background:transparent!important;}' +
+            'body{display:flex!important;align-items:center!important;justify-content:center!important;}' +
+            '.plip-wrap,.symbol-button-wrapper,#jinsei-core-btn{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;aspect-ratio:1/1!important;margin:0!important;padding:0!important;position:relative!important;inset:auto!important;transform:none!important;}' +
+            '#plip-core-button,#jinsei-core-btn button,.symbol-button-wrapper button{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;}' +
+            '#plip-toast,.plip-bubble,[class*="bubble"],[id*="bubble"]{display:none!important;}' +
+            'body>div.relative{width:100%!important;height:100%!important;max-width:none!important;transform:none!important;position:relative!important;top:auto!important;left:auto!important;margin:0!important;}';
         document.head.appendChild(styleNode);
-        const coreWrapper = document.getElementById('jinsei-core-btn') || document.body.querySelector('.symbol-button-wrapper') || document.body.firstElementChild;
+
+        const coreWrapper = document.getElementById('plip-core-button') ||
+            document.getElementById('jinsei-core-btn') ||
+            document.body.querySelector('.symbol-button-wrapper') ||
+            document.body.querySelector('.plip-wrap button') ||
+            document.body.firstElementChild;
+
+        let bridgeState = 0;
         if (coreWrapper) {
             coreWrapper.addEventListener('click', () => {
+                bridgeState = (bridgeState + 1) % 3;
                 setTimeout(() => {
-                    const currentInnerState = (typeof currentCoreStyleState !== 'undefined') ? currentCoreStyleState : 0;
-                    window.parent.postMessage({ type: 'PLIP_BUTTON_CLICK', title: "${encodeURIComponent(card.title)}", stateValue: currentInnerState }, '*');
+                    window.parent.postMessage({
+                        type: 'PLIP_BUTTON_CLICK',
+                        title: "${encodeURIComponent(card.title)}",
+                        stateValue: bridgeState
+                    }, '*');
                 }, 20);
             });
         }
@@ -1232,8 +1251,16 @@ function exportHTML(isForEdit) {
         }
 
         function clearRunningAudio() {
-            if (activeBgmIframe) { activeBgmIframe.remove(); activeBgmIframe = null; }
-            if (activeAudioElement) { activeAudioElement.pause(); activeAudioElement.remove(); activeAudioElement = null; }
+            if (activeBgmIframe) {
+                try { activeBgmIframe.remove(); } catch (_) {}
+                activeBgmIframe = null;
+            }
+            if (activeAudioElement) {
+                const oldAudio = activeAudioElement;
+                activeAudioElement = null;
+                try { oldAudio.pause(); } catch (_) {}
+                try { oldAudio.remove(); } catch (_) {}
+            }
         }
 
 
