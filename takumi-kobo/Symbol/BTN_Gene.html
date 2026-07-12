@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIPボタンビルダー v4 最終版</title>
+<title>PLIPボタンビルダー v5</title>
 <style>
 :root {
   color-scheme: dark;
@@ -450,10 +450,10 @@ code {
 <div class="builder">
   <header class="header">
     <div>
-      <h1>✨ PLIPボタンビルダー v4</h1>
-      <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、音楽連動をまとめて設定し、完成HTMLを保存します。</p>
+      <h1>✨ PLIPボタンビルダー v5</h1>
+      <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
     </div>
-    <div class="version">Version 4.0 Final · 2026.07</div>
+    <div class="version">Version 5.0 · 2026.07</div>
   </header>
 
   <div class="layout">
@@ -480,9 +480,9 @@ code {
           <div>
             <span class="field-label">音楽の役割</span>
             <div class="note" style="padding:9px 11px">
-              状態1：静かな環境音<br>
-              状態2：作品の主題歌<br>
-              状態3：音声オフ
+              状態1：BGMをランダム再生<br>
+              状態2：主題歌を連続ランダム再生<br>
+              状態3：音楽オフ
             </div>
           </div>
         </div>
@@ -512,8 +512,9 @@ code {
       <div class="note">
         <strong style="color:#cbd5e1">音楽ファイル：</strong>
         完成HTMLと同じ場所に <code>music</code> フォルダを置き、
-        <code>bgm.mp3</code> と <code>song.mp4～song4.mp4</code> を入れてください。
-        主題歌は、実際に読み込めた曲だけを抽選対象にします。
+        <code>bgm.mp3</code>、<code>bgm1.mp3</code> と
+        <code>song.mp4～song4.mp4</code> を入れてください。
+        抽選した曲を直接再生し、失敗した場合だけ標準ファイルへ切り替えます。
       </div>
     </section>
 
@@ -1131,6 +1132,8 @@ body {
   let managedAudio = null;
   let toastTimer = null;
   let sharedAudioContext = null;
+  let themeLoopTimer = null;
+  let musicSessionId = 0;
 
   const button = document.getElementById("plip-core-button");
   const stage = document.getElementById("plip-stage");
@@ -1163,15 +1166,18 @@ body {
     } catch (_) {}
   }
 
-  function stopAllPageSound() {
+  function stopManagedMusic() {
+    musicSessionId += 1;
+
+    if (themeLoopTimer) {
+      clearTimeout(themeLoopTimer);
+      themeLoopTimer = null;
+    }
+
     if (managedAudio) {
       try { managedAudio.pause(); } catch (_) {}
       managedAudio.remove();
       managedAudio = null;
-    }
-
-    if ("speechSynthesis" in window) {
-      speechSynthesis.cancel();
     }
 
     stopMediaInDocument(document);
@@ -1272,7 +1278,7 @@ body {
     const audio = document.createElement("audio");
     audio.src = source;
     audio.loop = loop;
-    audio.volume = .5;
+    audio.volume = .35;
     audio.preload = "auto";
     audio.dataset.plipManagedAudio = "true";
     audio.style.display = "none";
@@ -1281,50 +1287,74 @@ body {
     return audio;
   }
 
-  function probeAudio(source, timeout = 2600) {
-    return new Promise(resolve => {
-      const audio = document.createElement("audio");
-      let finished = false;
+  function randomChoice(items) {
+    return items[Math.floor(Math.random() * items.length)];
+  }
 
-      const finish = result => {
-        if (finished) return;
-        finished = true;
-        clearTimeout(timer);
-        audio.removeAttribute("src");
-        try { audio.load(); } catch (_) {}
-        resolve(result);
-      };
+  async function playSourceWithFallback(primarySource, fallbackSource, options = {}) {
+    const sessionId = options.sessionId;
+    const loop = Boolean(options.loop);
+    const onEnded = options.onEnded;
 
-      audio.preload = "metadata";
-      audio.addEventListener("loadedmetadata", () => finish(true), { once: true });
-      audio.addEventListener("canplay", () => finish(true), { once: true });
-      audio.addEventListener("error", () => finish(false), { once: true });
+    async function attempt(source, isFallback) {
+      if (sessionId !== musicSessionId) return false;
 
-      const timer = setTimeout(() => finish(false), timeout);
-      audio.src = source;
-      audio.load();
-    });
+      const audio = createManagedAudio(source, loop);
+
+      if (typeof onEnded === "function") {
+        audio.addEventListener("ended", () => {
+          if (sessionId !== musicSessionId) return;
+          onEnded();
+        }, { once: true });
+      }
+
+      try {
+        await audio.play();
+        return true;
+      } catch (_) {
+        if (managedAudio === audio) {
+          audio.remove();
+          managedAudio = null;
+        }
+
+        if (!isFallback && primarySource !== fallbackSource) {
+          return attempt(fallbackSource, true);
+        }
+        return false;
+      }
+    }
+
+    return attempt(primarySource, false);
   }
 
   async function playMusicForState(state) {
+    const sessionId = musicSessionId;
+
     if (state.musicMode === "silent") {
-      showToast("🔇 音声をオフにしました");
+      showToast("🔇 音楽をオフにしました");
       return;
     }
 
     if (state.musicMode === "ambient") {
-      const audio = createManagedAudio("./music/bgm.mp3", true);
+      const chosen = randomChoice([
+        "./music/bgm.mp3",
+        "./music/bgm1.mp3"
+      ]);
 
-      try {
-        await audio.play();
-        showToast("🌿 静かな環境音を再生します");
-      } catch (_) {
-        showToast("⚠️ 環境音ファイル bgm.mp3 を再生できません");
-      }
+      const played = await playSourceWithFallback(
+        chosen,
+        "./music/bgm.mp3",
+        { loop: true, sessionId }
+      );
+
+      if (sessionId !== musicSessionId) return;
+      showToast(played
+        ? "🌿 BGMを再生：" + chosen.split("/").pop()
+        : "⚠️ BGMを再生できません");
       return;
     }
 
-    const candidates = [
+    const themeSources = [
       "./music/song.mp4",
       "./music/song1.mp4",
       "./music/song2.mp4",
@@ -1332,37 +1362,33 @@ body {
       "./music/song4.mp4"
     ];
 
-    const results = await Promise.all(
-      candidates.map(async source => ({
-        source,
-        available: await probeAudio(source)
-      }))
-    );
+    const playNextTheme = async () => {
+      if (sessionId !== musicSessionId || currentState !== 1) return;
 
-    const availableSongs = results
-      .filter(result => result.available)
-      .map(result => result.source);
+      const chosen = randomChoice(themeSources);
+      const played = await playSourceWithFallback(
+        chosen,
+        "./music/song.mp4",
+        {
+          loop: false,
+          sessionId,
+          onEnded: () => {
+            if (sessionId !== musicSessionId || currentState !== 1) return;
+            themeLoopTimer = setTimeout(() => {
+              themeLoopTimer = null;
+              playNextTheme();
+            }, 3000);
+          }
+        }
+      );
 
-    if (availableSongs.length === 0) {
-      showToast("⚠️ 再生できる主題歌が見つかりません");
-      return;
-    }
+      if (sessionId !== musicSessionId || currentState !== 1) return;
+      showToast(played
+        ? "🎵 主題歌を再生：" + chosen.split("/").pop()
+        : "⚠️ 主題歌を再生できません");
+    };
 
-    const chosen =
-      availableSongs[Math.floor(Math.random() * availableSongs.length)];
-
-    const audio = createManagedAudio(chosen, false);
-    audio.addEventListener("ended", () => {
-      currentState = 0;
-      applyState(false, 0);
-    }, { once: true });
-
-    try {
-      await audio.play();
-      showToast("🎵 作品の主題歌を再生：" + chosen.split("/").pop());
-    } catch (_) {
-      showToast("⚠️ 主題歌を再生できません");
-    }
+    await playNextTheme();
   }
 
   async function applyState(withSound = true, transitionIndex = 0) {
@@ -1377,7 +1403,7 @@ body {
     runEffect();
 
     if (withSound) {
-      stopAllPageSound();
+      stopManagedMusic();
       playClickSound(TRANSITIONS[transitionIndex]);
       await playMusicForState(state);
     }
@@ -1391,7 +1417,7 @@ body {
 
   window.addEventListener("message", event => {
     if (event.data && event.data.type === "PLIP_STOP_AUDIO") {
-      stopAllPageSound();
+      stopManagedMusic();
     }
   });
 
@@ -1404,7 +1430,7 @@ body {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIP 3段階連動ボタン</title>
+<title>PLIP 3段階連動ボタン v5</title>
 <style>${outputCss}</style>
 </head>
 <body>
