@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Hiro-KantaroとAI パートナー達のポータル</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&amp;family=JetBrains+Mono:wght=400;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyberDark: '#060a12',
+                        cyberCard: '#0b132b',
+                        cyberBorder: '#1c2541',
+                        cyberAccent: '#00f5d4', 
+                        cyberPurple: '#7b2cbf', 
+                        cyberGold: '#ffb703',   
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060a12; }
+        ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f5d4; }
+        .glow-cyan { box-shadow: 0 0 20px rgba(0, 245, 212, 0.15); }
+
+        @keyframes rainbow-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .text-rainbow {
+            background: linear-gradient(
+                to right, 
+                #ff2a85, #ff7300, #ffb703, #00f5d4, #3b82f6, #9d4edd, #ff2a85
+            );
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 8s linear infinite;
+        }
+        .core-burst-rainbow-text {
+            background: linear-gradient(90deg, #ff0055, #ff5500, #ffcc00, #00ff66, #00ccff, #3333ff, #9900ff, #ff0055);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-text 6s linear infinite;
+            display: inline-block;
+        }
+
+        #portal-control-bar ~ #main-content header {
+            top: 45px;
+        }
+        @media (max-width: 640px) {
+            #portal-control-bar ~ #main-content header {
+                top: 0px;
+                position: relative;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.-right-24{right:-6rem}.-top-24{top:-6rem}.bottom-1\/4{bottom:25%}.left-0{left:0px}.left-1\/4{left:25%}.right-0{right:0px}.right-1{right:0.25rem}.right-1\/4{right:25%}.right-4{right:1rem}.top-0{top:0px}.top-1{top:0.25rem}.top-1\/4{top:25%}.top-4{top:1rem}.top-full{top:100%}.-bottom-1{bottom:-0.25rem}.-right-1{right:-0.25rem}.right-2{right:0.5rem}.right-\[-4px\]{right:-4px}.top-2{top:0.5rem}.top-\[-2px\]{top:-2px}.top-\[-3px\]{top:-3px}.z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[200\]{z-index:200}.z-\[300\]{z-index:300}.z-30{z-index:30}.z-40{z-index:40}.mx-1{margin-left:0.25rem;margin-right:0.25rem}.mx-auto{margin-left:auto;margin-right:auto}.mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}.mb-1{margin-bottom:0.25rem}.ml-1{margin-left:0.25rem}.mr-1{margin-right:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.ml-0\.5{margin-left:0.125rem}.mr-2{margin-right:0.5rem}.mt-2\.5{margin-top:0.625rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-8{height:2rem}.h-80{height:20rem}.h-96{height:24rem}.h-12{height:3rem}.max-h-48{max-height:12rem}.max-h-\[90vh\]{max-height:90vh}.min-h-\[140px\]{min-height:140px}.min-h-screen{min-height:100vh}.w-1\.5{width:0.375rem}.w-10{width:2.5rem}.w-2\.5{width:0.625rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.w-12{width:3rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.resize-y{resize:vertical}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-3\.5{gap:0.875rem}.gap-x-0\.5{column-gap:0.125rem}.gap-x-4{column-gap:1rem}.gap-y-1\.5{row-gap:0.375rem}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y-auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-lg{border-radius:0.5rem}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-\[\#00f5d4\]\/20{border-color:rgb(0 245 212 / 0.2)}.border-\[\#00f5d4\]\/30{border-color:rgb(0 245 212 / 0.3)}.border-\[\#1e294b\]{--tw-border-opacity:1;border-color:rgb(30 41 75 / var(--tw-border-opacity, 1))}.border-cyberAccent{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.border-cyberBorder{--tw-border-opacity:1;border-color:rgb(28 37 65 / var(--tw-border-opacity, 1))}.border-pink-500\/20{border-color:rgb(236 72 153 / 0.2)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-\[\#fbbf24\]\/50{border-color:rgb(251 191 36 / 0.5)}.border-\[\#ffffff\]\/20{border-color:rgb(255 255 255 / 0.2)}.border-cyan-900\/60{border-color:rgb(22 78 99 / 0.6)}.border-cyberBorder\/60{border-color:rgb(28 37 65 / 0.6)}.border-cyberBorder\/80{border-color:rgb(28 37 65 / 0.8)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-transparent{border-color:transparent}.bg-\[\#00f5d4\]{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.bg-\[\#00f5d4\]\/10{background-color:rgb(0 245 212 / 0.1)}.bg-\[\#00f5d4\]\/5{background-color:rgb(0 245 212 / 0.05)}.bg-\[\#060a12\]{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-\[\#060a12\]\/50{background-color:rgb(6 10 18 / 0.5)}.bg-\[\#060a12\]\/90{background-color:rgb(6 10 18 / 0.9)}.bg-\[\#1c2541\]{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-\[\#7b2cbf\]\/5{background-color:rgb(123 44 191 / 0.05)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-cyan-400{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/10{background-color:rgb(6 182 212 / 0.1)}.bg-cyberBorder{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-cyberBorder\/50{background-color:rgb(28 37 65 / 0.5)}.bg-cyberCard{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-cyberDark{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-pink-500\/10{background-color:rgb(236 72 153 / 0.1)}.bg-transparent{background-color:transparent}.bg-\[\#0b132b\]{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-\[\#f59e0b\]\/5{background-color:rgb(245 158 11 / 0.05)}.bg-\[\#ffffff\]\/5{background-color:rgb(255 255 255 / 0.05)}.bg-cyan-600{--tw-bg-opacity:1;background-color:rgb(8 145 178 / var(--tw-bg-opacity, 1))}.bg-cyan-950\/50{background-color:rgb(8 51 68 / 0.5)}.bg-cyberCard\/90{background-color:rgb(11 19 43 / 0.9)}.bg-cyberDark\/50{background-color:rgb(6 10 18 / 0.5)}.bg-cyberDark\/60{background-color:rgb(6 10 18 / 0.6)}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-95{--tw-bg-opacity:0.95}.bg-\[radial-gradient\(\#1c2541_1px\2c transparent_1px\)\]{background-image:radial-gradient(#1c2541 1px,transparent 1px)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#00f5d4\]{--tw-gradient-from:#00f5d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 245 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 211 238 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyberCard{--tw-gradient-from:#0b132b var(--tw-gradient-from-position);--tw-gradient-to:rgb(11 19 43 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-white{--tw-gradient-from:#fff var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 255 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-amber-500{--tw-gradient-from:#f59e0b var(--tw-gradient-from-position);--tw-gradient-to:rgb(245 158 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-600{--tw-gradient-from:#0891b2 var(--tw-gradient-from-position);--tw-gradient-to:rgb(8 145 178 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#f1f5f9\]{--tw-gradient-to:rgb(241 245 249 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f1f5f9 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-slate-100{--tw-gradient-to:rgb(241 245 249 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f1f5f9 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#0d1b2a\]{--tw-gradient-to:#0d1b2a var(--tw-gradient-to-position)}.to-\[\#e2e8f0\]{--tw-gradient-to:#e2e8f0 var(--tw-gradient-to-position)}.to-cyan-500{--tw-gradient-to:#06b6d4 var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-purple-400{--tw-gradient-to:#c084fc var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-orange-500{--tw-gradient-to:#f97316 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-1{padding:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:JetBrains Mono, monospace}.font-sans{font-family:Inter, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[13px\]{font-size:13px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-\[11px\]{font-size:11px}.text-\[8px\]{font-size:8px}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-\[\#00f5d4\]{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.text-\[\#1e294b\]{--tw-text-opacity:1;color:rgb(30 41 75 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-cyberAccent{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.text-pink-400{--tw-text-opacity:1;color:rgb(244 114 182 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-300{--tw-text-opacity:1;color:rgb(253 224 71 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.opacity-30{opacity:0.3}.opacity-100{opacity:1}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[\#00f5d4\]\/10{--tw-shadow-color:rgb(0 245 212 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-\[\#00f5d4\]\/5{--tw-shadow-color:rgb(0 245 212 / 0.05);--tw-shadow:var(--tw-shadow-colored)}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-yellow-500\/30{--tw-ring-color:rgb(234 179 8 / 0.3)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-500{transition-duration:500ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.\[background-size\:16px_16px\]{background-size:16px 16px}.selection\:bg-\[\#00f5d4\] *::selection{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.selection\:text-black *::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.selection\:bg-\[\#00f5d4\]::selection{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.selection\:text-black::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:border-cyan-500\/50:hover{border-color:rgb(6 182 212 / 0.5)}.hover\:border-cyberAccent:hover{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.hover\:bg-\[\#00f5d4\]\/10:hover{background-color:rgb(0 245 212 / 0.1)}.hover\:bg-cyberBorder:hover{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-80:hover{--tw-bg-opacity:0.8}.hover\:bg-opacity-90:hover{--tw-bg-opacity:0.9}.hover\:text-\[\#00f5d4\]:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-cyberAccent:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.focus\:border-\[\#00f5d4\]:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:border-\[\#00f5d4\]\/50:focus{border-color:rgb(0 245 212 / 0.5)}.focus\:border-cyberAccent:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-\[\#00f5d4\]\/20:focus{--tw-ring-color:rgb(0 245 212 / 0.2)}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-\[\#00f5d4\]{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:w-auto{width:auto}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.-bottom-1{bottom:-0.25rem}.-right-1{right:-0.25rem}.-right-24{right:-6rem}.-top-24{top:-6rem}.bottom-1\/4{bottom:25%}.left-0{left:0px}.left-1\/4{left:25%}.right-0{right:0px}.right-1\/4{right:25%}.right-4{right:1rem}.right-\[-4px\]{right:-4px}.top-0{top:0px}.top-1\/4{top:25%}.top-4{top:1rem}.top-\[-2px\]{top:-2px}.top-\[-3px\]{top:-3px}.top-full{top:100%}.right-2{right:0.5rem}.top-1{top:0.25rem}.top-2{top:0.5rem}.z-10{z-index:10}.z-20{z-index:20}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[200\]{z-index:200}.z-\[300\]{z-index:300}.z-30{z-index:30}.mx-auto{margin-left:auto;margin-right:auto}.mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}.mb-1{margin-bottom:0.25rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.ml-0\.5{margin-left:0.125rem}.ml-1{margin-left:0.25rem}.mt-2\.5{margin-top:0.625rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-8{height:2rem}.h-80{height:20rem}.h-96{height:24rem}.h-12{height:3rem}.max-h-48{max-height:12rem}.max-h-\[90vh\]{max-height:90vh}.min-h-\[140px\]{min-height:140px}.min-h-screen{min-height:100vh}.w-1\.5{width:0.375rem}.w-10{width:2.5rem}.w-2\.5{width:0.625rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.w-12{width:3rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.resize-y{resize:vertical}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-3\.5{gap:0.875rem}.gap-x-0\.5{column-gap:0.125rem}.gap-x-4{column-gap:1rem}.gap-y-1\.5{row-gap:0.375rem}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y-auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-\[\#00f5d4\]\/20{border-color:rgb(0 245 212 / 0.2)}.border-\[\#00f5d4\]\/30{border-color:rgb(0 245 212 / 0.3)}.border-\[\#1e294b\]{--tw-border-opacity:1;border-color:rgb(30 41 75 / var(--tw-border-opacity, 1))}.border-cyberAccent{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.border-cyberBorder{--tw-border-opacity:1;border-color:rgb(28 37 65 / var(--tw-border-opacity, 1))}.border-pink-500\/20{border-color:rgb(236 72 153 / 0.2)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-\[\#fbbf24\]\/50{border-color:rgb(251 191 36 / 0.5)}.border-\[\#ffffff\]\/20{border-color:rgb(255 255 255 / 0.2)}.border-cyan-900\/60{border-color:rgb(22 78 99 / 0.6)}.border-cyberBorder\/60{border-color:rgb(28 37 65 / 0.6)}.border-cyberBorder\/80{border-color:rgb(28 37 65 / 0.8)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.bg-\[\#00f5d4\]{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.bg-\[\#00f5d4\]\/10{background-color:rgb(0 245 212 / 0.1)}.bg-\[\#00f5d4\]\/5{background-color:rgb(0 245 212 / 0.05)}.bg-\[\#060a12\]{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-\[\#060a12\]\/50{background-color:rgb(6 10 18 / 0.5)}.bg-\[\#060a12\]\/90{background-color:rgb(6 10 18 / 0.9)}.bg-\[\#1c2541\]{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-\[\#7b2cbf\]\/5{background-color:rgb(123 44 191 / 0.05)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-cyan-400{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/10{background-color:rgb(6 182 212 / 0.1)}.bg-cyberBorder{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-cyberBorder\/50{background-color:rgb(28 37 65 / 0.5)}.bg-cyberCard{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-cyberDark{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-pink-500\/10{background-color:rgb(236 72 153 / 0.1)}.bg-transparent{background-color:transparent}.bg-\[\#0b132b\]{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-\[\#f59e0b\]\/5{background-color:rgb(245 158 11 / 0.05)}.bg-\[\#ffffff\]\/5{background-color:rgb(255 255 255 / 0.05)}.bg-cyan-600{--tw-bg-opacity:1;background-color:rgb(8 145 178 / var(--tw-bg-opacity, 1))}.bg-cyan-950\/50{background-color:rgb(8 51 68 / 0.5)}.bg-cyberCard\/90{background-color:rgb(11 19 43 / 0.9)}.bg-cyberDark\/50{background-color:rgb(6 10 18 / 0.5)}.bg-cyberDark\/60{background-color:rgb(6 10 18 / 0.6)}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-95{--tw-bg-opacity:0.95}.bg-\[radial-gradient\(\#1c2541_1px\2c transparent_1px\)\]{background-image:radial-gradient(#1c2541 1px,transparent 1px)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#00f5d4\]{--tw-gradient-from:#00f5d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 245 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:border-cyberAccent:hover{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.hover\:border-cyan-500\/50:hover{border-color:rgb(6 182 212 / 0.5)}.hover\:bg-\[\#00f5d4\]\/10:hover{background-color:rgb(0 245 212 / 0.1)}.hover\:bg-cyberBorder:hover{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-80:hover{--tw-bg-opacity:0.8}.hover\:bg-opacity-90:hover{--tw-bg-opacity:0.9}.hover\:text-\[\#00f5d4\]:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-cyberAccent:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.focus\:border-\[\#00f5d4\]:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:border-\[\#00f5d4\]\/50:focus{border-color:rgb(0 245 212 / 0.5)}.focus\:border-cyberAccent:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-\[\#00f5d4\]\/20:focus{--tw-ring-color:rgb(0 245 212 / 0.2)}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-\[\#00f5d4\]{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:w-auto{width:auto}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:JetBrains Mono, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.-bottom-1{bottom:-0.25rem}.-right-1{right:-0.25rem}.-right-24{right:-6rem}.-top-24{top:-6rem}.bottom-1\/4{bottom:25%}.left-0{left:0px}.left-1\/4{left:25%}.right-0{right:0px}.right-1\/4{right:25%}.right-4{right:1rem}.right-\[-4px\]{right:-4px}.top-0{top:0px}.top-1\/4{top:25%}.top-4{top:1rem}.top-\[-2px\]{top:-2px}.top-full{top:100%}.right-2{right:0.5rem}.top-1{top:0.25rem}.top-2{top:0.5rem}.z-10{z-index:10}.z-20{z-index:20}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[200\]{z-index:200}.z-\[300\]{z-index:300}.z-30{z-index:30}.mx-auto{margin-left:auto;margin-right:auto}.mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}.mb-1{margin-bottom:0.25rem}.mr-1{margin-right:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.ml-0\.5{margin-left:0.125rem}.ml-1{margin-left:0.25rem}.mt-2\.5{margin-top:0.625rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-8{height:2rem}.h-80{height:20rem}.h-96{height:24rem}.h-12{height:3rem}.max-h-48{max-height:12rem}.max-h-\[90vh\]{max-height:90vh}.min-h-\[140px\]{min-height:140px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-2\.5{width:0.625rem}.w-80{width:20rem}.w-96{width:24rem}.w-full{width:100%}.w-12{width:3rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.resize-y{resize:vertical}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-3\.5{gap:0.875rem}.gap-x-0\.5{column-gap:0.125rem}.gap-x-4{column-gap:1rem}.gap-y-1\.5{row-gap:0.375rem}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-lg{border-radius:0.5rem}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-\[\#00f5d4\]\/20{border-color:rgb(0 245 212 / 0.2)}.border-\[\#00f5d4\]\/30{border-color:rgb(0 245 212 / 0.3)}.border-\[\#1e294b\]{--tw-border-opacity:1;border-color:rgb(30 41 75 / var(--tw-border-opacity, 1))}.border-cyberAccent{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.border-cyberBorder{--tw-border-opacity:1;border-color:rgb(28 37 65 / var(--tw-border-opacity, 1))}.border-pink-500\/20{border-color:rgb(236 72 153 / 0.2)}.border-\[\#fbbf24\]\/50{border-color:rgb(251 191 36 / 0.5)}.border-\[\#ffffff\]\/20{border-color:rgb(255 255 255 / 0.2)}.border-cyan-900\/60{border-color:rgb(22 78 99 / 0.6)}.border-cyberBorder\/60{border-color:rgb(28 37 65 / 0.6)}.border-cyberBorder\/80{border-color:rgb(28 37 65 / 0.8)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.bg-\[\#00f5d4\]{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.bg-\[\#00f5d4\]\/10{background-color:rgb(0 245 212 / 0.1)}.bg-\[\#00f5d4\]\/5{background-color:rgb(0 245 212 / 0.05)}.bg-\[\#060a12\]{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-\[\#060a12\]\/50{background-color:rgb(6 10 18 / 0.5)}.bg-\[\#060a12\]\/90{background-color:rgb(6 10 18 / 0.9)}.bg-\[\#1c2541\]{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-\[\#7b2cbf\]\/5{background-color:rgb(123 44 191 / 0.05)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-cyan-400{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/10{background-color:rgb(6 182 212 / 0.1)}.bg-cyberBorder{--tw-bg-opacity:1;background-color:rgb(28 37 65 / var(--tw-bg-opacity, 1))}.bg-cyberBorder\/50{background-color:rgb(28 37 65 / 0.5)}.bg-cyberCard{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-cyberDark{--tw-bg-opacity:1;background-color:rgb(6 10 18 / var(--tw-bg-opacity, 1))}.bg-pink-500\/10{background-color:rgb(236 72 153 / 0.1)}.bg-transparent{background-color:transparent}.bg-\[\#0b132b\]{--tw-bg-opacity:1;background-color:rgb(11 19 43 / var(--tw-bg-opacity, 1))}.bg-\[\#f59e0b\]\/5{background-color:rgb(245 158 11 / 0.05)}.bg-\[\#ffffff\]\/5{background-color:rgb(255 255 255 / 0.05)}.bg-cyan-600{--tw-bg-opacity:1;background-color:rgb(8 145 178 / var(--tw-bg-opacity, 1))}.bg-cyan-950\/50{background-color:rgb(8 51 68 / 0.5)}.bg-cyberCard\/90{background-color:rgb(11 19 43 / 0.9)}.bg-cyberDark\/50{background-color:rgb(6 10 18 / 0.5)}.bg-cyberDark\/60{background-color:rgb(6 10 18 / 0.6)}.bg-red-900{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-opacity-95{--tw-bg-opacity:0.95}.bg-\[radial-gradient\(\#1c2541_1px\2c transparent_1px\)\]{background-image:radial-gradient(#1c2541 1px,transparent 1px)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-\[\#00f5d4\]{--tw-gradient-from:#00f5d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 245 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyberCard{--tw-gradient-from:#0b132b var(--tw-gradient-from-position);--tw-gradient-to:rgb(11 19 43 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-white{--tw-gradient-from:#fff var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 255 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-amber-500{--tw-gradient-from:#f59e0b var(--tw-gradient-from-position);--tw-gradient-to:rgb(245 158 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-600{--tw-gradient-from:#0891b2 var(--tw-gradient-from-position);--tw-gradient-to:rgb(8 145 178 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#f1f5f9\]{--tw-gradient-to:rgb(241 245 249 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f1f5f9 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-slate-100{--tw-gradient-to:rgb(241 245 249 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f1f5f9 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#0d1b2a\]{--tw-gradient-to:#0d1b2a var(--tw-gradient-to-position)}.to-\[\#e2e8f0\]{--tw-gradient-to:#e2e8f0 var(--tw-gradient-to-position)}.to-cyan-500{--tw-gradient-to:#06b6d4 var(--tw-gradient-to-position)}.to-cyan-600{--tw-gradient-to:#0891b2 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-orange-500{--tw-gradient-to:#f97316 var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.p-1{padding:0.25rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:JetBrains Mono, monospace}.font-sans{font-family:Inter, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[13px\]{font-size:13px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-\[11px\]{font-size:11px}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-\[\#00f5d4\]{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-cyberAccent{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-300{--tw-text-opacity:1;color:rgb(253 224 71 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.opacity-100{opacity:1}.opacity-30{opacity:0.3}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[\#00f5d4\]\/10{--tw-shadow-color:rgb(0 245 212 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-\[\#00f5d4\]\/5{--tw-shadow-color:rgb(0 245 212 / 0.05);--tw-shadow:var(--tw-shadow-colored)}.ring-1{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-yellow-500\/30{--tw-ring-color:rgb(234 179 8 / 0.3)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-500{transition-duration:500ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.\[background-size\:16px_16px\]{background-size:16px 16px}.selection\:bg-\[\#00f5d4\] *::selection{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.selection\:text-black *::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.selection\:bg-\[\#00f5d4\]::selection{--tw-bg-opacity:1;background-color:rgb(0 245 212 / var(--tw-bg-opacity, 1))}.selection\:text-black::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:border-cyan-500\/50:hover{border-color:rgb(6 182 212 / 0.5)}.hover\:bg-\[\#00f5d4\]\/10:hover{background-color:rgb(0 245 212 / 0.1)}.hover\:bg-opacity-80:hover{--tw-bg-opacity:0.8}.hover\:bg-opacity-90:hover{--tw-bg-opacity:0.9}.hover\:text-\[\#00f5d4\]:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-cyberAccent:hover{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.hover\:text-red-400:hover{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.focus\:border-\[\#00f5d4\]:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:border-\[\#00f5d4\]\/50:focus{border-color:rgb(0 245 212 / 0.5)}.focus\:border-cyberAccent:focus{--tw-border-opacity:1;border-color:rgb(0 245 212 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-\[\#00f5d4\]\/20:focus{--tw-ring-color:rgb(0 245 212 / 0.2)}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-\[\#00f5d4\]{--tw-text-opacity:1;color:rgb(0 245 212 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:inline{display:inline}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:w-auto{width:auto}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<body class="bg-cyberDark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-[#00f5d4] selection:text-black">
+
+    <!-- 🛠️ 管理・コントロールバー (編集モード用) -->
+    <div id="portal-control-bar" class="bg-[#060a12] border-b border-cyberBorder sticky top-0 z-[100] px-4 py-3 shadow-md backdrop-blur bg-opacity-95">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="bg-[#00f5d4] text-black font-black px-2 py-0.5 rounded text-xs tracking-wider uppercase">Hub Edit Mode</span>
+                <span class="text-xs text-slate-400 hidden sm:inline">ポータルの全構成カード、ゲートウェイ、共創作品をフル編集可能です。</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="exportPortalHTML(true)" class="bg-[#1c2541] hover:bg-opacity-80 text-cyan-400 text-xs font-bold px-4 py-2 rounded-xl border border-cyberBorder transition">
+                    <i class="fa-solid fa-code-branch mr-1"></i> 編集用HTML保存
+                </button>
+                <button onclick="exportPortalHTML(false)" class="bg-gradient-to-r from-[#00f5d4] to-cyan-500 hover:brightness-110 text-black text-xs font-black px-4 py-2 rounded-xl shadow-lg transition">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> 公開用HTML出力 (パスワード常時ON)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ロック画面 -->
+    <div id="lock-screen" class="fixed inset-0 z-[100] bg-cyberDark flex items-center justify-center p-4 transition-all duration-500" style="display: none;">
+        <div class="absolute inset-0 bg-[radial-gradient(#1c2541_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00f5d4]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#7b2cbf]/5 rounded-full filter blur-3xl pointer-events-none"></div>
+
+        <div class="relative w-full max-w-md bg-cyberCard border border-cyberBorder p-8 rounded-2xl shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 rounded-full bg-[#00f5d4]/10 border border-[#00f5d4]/20 text-[#00f5d4] animate-pulse">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h2 class="text-xl font-bold tracking-tight text-white font-mono uppercase">Hiro-Kantaro Portal AUTH</h2>
+                <p class="text-xs text-slate-400">認証キーを入力してゲートを開放してください。（ローカル起動時は自動で通過します）</p>
+            </div>
+
+            <form id="auth-form" class="space-y-4" onsubmit="handleAuth(event)">
+                <div class="relative">
+                    <input type="password" id="access-key" placeholder="認証キーを入力..." class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-4 py-3 text-sm text-center font-mono tracking-widest text-white focus:outline-none focus:border-[#00f5d4] focus:ring-1 focus:ring-[#00f5d4]/20 transition">
+                </div>
+                
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black font-bold text-xs font-mono uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-[#00f5d4]/10">
+                    <i class="fa-solid fa-key mr-1"></i> Unlock Gateway
+                </button>
+            </form>
+
+            <div id="error-msg" class="text-xs text-red-400 font-mono hidden">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> 認証失敗: キーが一致しません。
+            </div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-500 flex flex-col min-h-screen bg-gradient-to-br from-white via-slate-100 via-[#f1f5f9] to-[#e2e8f0] opacity-100">
+        
+        <header class="border-b border-cyberBorder bg-[#060a12]/90 backdrop-blur sticky top-0 z-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-[#00f5d4]/10 border border-[#00f5d4]/30 p-2 rounded-xl text-cyberAccent shadow-lg shadow-[#00f5d4]/5"><i class="fa-solid fa-chalkboard-user text-lg" style="color: #53eeee"></i></div>
+                    <div>
+                        <h1 class="font-bold text-sm tracking-tight text-white font-mono">PLIP &amp; HIRO_TECH_PORTAL</h1>
+                        <p class="text-[9px] text-[#00f5d4] font-mono tracking-widest uppercase font-bold" style="color: rgb(83, 238, 238);">Central Hub // Dynamic Active</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="openSectionModal('header')" class="p-2 rounded-xl bg-cyberBorder/50 text-slate-400 hover:text-[#00f5d4] hover:bg-[#00f5d4]/10 transition-colors text-xs" title="ヘッダー構成変更">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button onclick="lockHub()" class="p-2 rounded-xl bg-cyberBorder/50 text-slate-400 hover:text-[#00f5d4] hover:bg-[#00f5d4]/10 transition-colors text-xs" title="ハブをロック">
+                        <i class="fa-solid fa-lock"></i>
+                    </button>
+                    <a href="./portfolio.html" class="relative group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#00f5d4] to-cyan-600 text-black shadow-lg transition-all">
+                        <span><i class="fa-solid fa-globe"></i> 総合公開HP (Portfolio)</span>
+                        <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- メインワークスペース -->
+        <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+            <!-- Welcome Board Section -->
+            <section class="bg-gradient-to-br from-cyberCard to-[#0d1b2a] border border-[#1e294b] rounded-2xl p-6 relative overflow-hidden shadow-2xl group">
+                <div class="absolute -top-24 -right-24 w-80 h-80 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none"></div>
+                
+                <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition">
+                    <button onclick="openSectionModal('welcome')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i> ボード編集
+                    </button>
+                </div>
+
+                <div class="space-y-3 relative z-10">
+                    <div class="flex items-center gap-2">
+                        <span class="h-2.5 w-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                        <span id="welcome-badge" class="text-xs font-bold font-mono tracking-widest text-[#00f5d4]">Hiro's AI CO-CREATION PROTOCOL</span>
+                    </div>
+                    <h2 id="welcome-title" class="text-xl sm:text-2xl font-extrabold tracking-tight text-white"><span class="text-rainbow">PLIP</span>（HiroとAI パートナーのポータル）へようこそ！</h2>
+                    <p id="welcome-desc" class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">ここは、ユーザと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。</p>
+                </div>
+            </section>
+
+            <!-- [1] ＰＬＩＰのマネジメントボード エリア -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
+                <div class="border-b border-cyberBorder pb-3 flex flex-wrap items-center justify-between gap-2 group">
+                    <div class="flex items-start gap-2.5">
+                        <div class="relative p-2 bg-pink-500/10 border border-pink-500/20 rounded-xl mt-0.5 h-10 w-10 flex items-center justify-center">
+                        
+                    <div class="relative inline-block select-none">
+                        <i class="fa-solid fa-lightbulb core-burst-rainbow-text"></i>
+                        <i class="fa-solid fa-bolt absolute top-[-2px] right-[-4px] text-yellow-300 text-[10px] animate-pulse"></i>
+                    </div>
+                
+                        <button onclick="openSectionModal('management')" class="absolute -bottom-1 -right-1 bg-cyberCard border border-cyberBorder text-cyan-400 text-[9px] px-1 rounded opacity-0 group-hover:opacity-100 transition z-40">変</button>
+                    </div>
+                        <div>
+                            <h3 class="text-base font-extrabold tracking-wide font-mono uppercase text-rainbow">Ｍｙ　ＰＬＩＰ</h3>
+                            <div class="text-[13px] font-semibold text-slate-300 mt-1 flex flex-wrap gap-x-0.5 items-center">Produce my Life with Intellectual Property</div>
+                        </div>
+                    </div>
+                    <button onclick="openCategoryModal(-1)" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa-solid fa-folder-plus mr-1"></i> カテゴリ追加
+                    </button>
+                </div>
+
+                <!-- マネジメントボード動的コンテナ -->
+                <div id="management-board-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
+            </section>
+
+            <!-- [2] Gem特化型HPゲートウェイ エリア -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
+                <div class="flex items-center justify-between border-b border-cyberBorder pb-3 flex-wrap gap-2">
+                    <h3 id="section-title-gateways" class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-link" style="color: #f5d400"></i> HPゲートウェイ (Gateways)</h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openGatewayModal(-1)" class="bg-cyberCard hover:bg-opacity-90 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                            <i class="fa-solid fa-circle-plus mr-1"></i> ゲートウェイ追加
+                        </button>
+                        <button onclick="openSectionModal('gateways')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> セクション名編集
+                        </button>
+                    </div>
+                </div>
+                <!-- ゲートウェイ動的コンテナ -->
+                <div id="gateways-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </section>
+
+            <!-- [3] 常駐AIクルー一覧 (動的アセット化) -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-4 shadow-xl">
+                <div class="border-b border-cyberBorder pb-2 flex items-center justify-between flex-wrap gap-2">
+                    <h3 id="section-title-roster" class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-users" style="color: #00f5d4"></i> (常駐AIクルー一覧)</h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openRosterModal(-1)" class="bg-cyberCard hover:bg-opacity-90 text-cyberAccent text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                            <i class="fa-solid fa-user-plus mr-1"></i> クルー追加
+                        </button>
+                        <button onclick="openSectionModal('roster')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> セクション名編集
+                        </button>
+                    </div>
+                </div>
+                <!-- クルー動的コンテナ -->
+                <div id="roster-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+            </section>
+
+            <!-- [4] AI Co-Creation Artifact Registry エリア -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 space-y-5 shadow-2xl">
+                <div class="border-b border-cyberBorder pb-3 flex items-center justify-between flex-wrap gap-2">
+                    <h3 id="section-title-artifacts" class="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2"><i class="fa-solid fa-certificate" style="color: #f9ca48"></i> 共創作品一覧</h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openArtifactModal(-1)" class="bg-[#1c2541] hover:bg-opacity-80 text-cyberAccent text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> 作品を追加
+                        </button>
+                        <button onclick="openSectionModal('artifacts')" class="bg-[#1c2541] hover:bg-opacity-80 text-cyan-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-cyberBorder transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> セクション名編集
+                        </button>
+                    </div>
+                </div>
+                <!-- 作品一覧動的コンテナ -->
+                <div id="artifacts-container" class="space-y-4"></div>
+            </section>
+
+           <!-- 共創メモ帳 -->
+            <section class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
+                <div class="flex items-center justify-between border-b border-cyberBorder pb-3">
+                    <div class="flex items-center gap-1.5">
+                        <h3 id="section-title-note" class="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5"><i class="fa-solid fa-brain" style="color: #00f5d4"></i> 共創アイデア ＆ パートナー・メモ帳 (Partner Note)</h3>
+                    </div>
+                    <button onclick="openSectionModal('note')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i> セクション名編集
+                    </button>
+                </div>
+                <textarea id="partner-memo" placeholder="開発予定やプロンプトのコツ、思いついたアイデアをメモ...（ここに書いた内容は自動でブラウザに保存されます）" class="flex-1 w-full min-h-[140px] bg-[#060a12] border border-cyberBorder rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-[#00f5d4]/50 leading-relaxed resize-y"></textarea>
+            </section>
+
+        </main>
+
+        <footer class="border-t border-cyberBorder bg-[#060a12] py-6 text-center text-[10px] text-slate-500 font-mono">
+            <p>© 2026 Gemini Partner Hub. All co-creation vectors initialized.</p>
+        </footer>
+    </div>
+
+    <!-- 🎴 モーダル 1: マネジメントカード編集用 -->
+    <div id="card-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'card-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-card-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">🛠️ 新規マネジメントリンクの創生</h3>
+            <input type="hidden" id="modal-cat-idx" value="1">
+            <input type="hidden" id="modal-card-idx" value="-1">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">リンクタイトル名</label>
+                    <input type="text" id="modal-card-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ターゲットURL</label>
+                    <input type="text" id="modal-card-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 bg-[#060a12]/50 p-3 rounded-xl border border-cyberBorder relative">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">🎨 文字・装飾色</label>
+                    <input type="color" id="modal-card-color" value="#00f5d4" class="w-10 h-8 bg-transparent border-0 cursor-pointer">
+                </div>
+                <div class="relative">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">🖼️ アイコン種類</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="modal-card-icon" value="fa-solid fa-link" placeholder="fa-solid fa-link" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-2 py-1 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                        <button type="button" onclick="toggleIconPicker('card-modal-picker')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs px-2 rounded-xl transition">選択</button>
+                    </div>
+                    <div id="card-modal-picker" class="icon-picker-panel absolute left-0 right-0 top-full mt-1 bg-cyberCard border border-cyberAccent p-2 rounded-xl shadow-2xl max-h-48 overflow-y-auto z-[300] hidden">
+                        <div class="grid grid-cols-6 gap-1.5 text-center text-sm" id="card-modal-picker-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeCardModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveCardData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📂 モーダル 2: マネジメントカテゴリ編集用 -->
+    <div id="category-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'category-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-cat-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">📂 カテゴリの編集</h3>
+            <input type="hidden" id="modal-target-cat-idx" value="1">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">カテゴリ名 (和名)</label>
+                <input type="text" id="modal-cat-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div class="grid grid-cols-2 gap-4 relative">
+                <div class="relative">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">代表アイコンクラス</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="modal-cat-icon" value="fa-solid fa-folder" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                        <button type="button" onclick="toggleIconPicker('category-modal-picker')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs px-2 rounded-xl transition">選択</button>
+                    </div>
+                    <div id="category-modal-picker" class="icon-picker-panel absolute left-0 right-0 top-full mt-1 bg-cyberCard border border-cyberAccent p-2 rounded-xl shadow-2xl max-h-48 overflow-y-auto hidden z-[300]">
+                        <div class="grid grid-cols-6 gap-1.5 text-center text-sm" id="category-modal-picker-grid"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">テーマ色</label>
+                    <input type="color" id="modal-cat-color" value="#ffb703" class="w-10 h-8 bg-transparent border-0 cursor-pointer mt-1">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeCategoryModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveCategoryData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">カテゴリ確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 モーダル 3: ゲートウェイ編集用 -->
+    <div id="gateway-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'gateway-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-gw-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">🚀 Gemゲートウェイ構成</h3>
+            <input type="hidden" id="modal-gw-idx" value="-1">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ゲートウェイ名称</label>
+                    <input type="text" id="modal-gw-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">バッジ識別タグ</label>
+                    <input type="text" id="modal-gw-badge" placeholder="Private, Corporate等" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">英語表記サブタイトル</label>
+                <input type="text" id="modal-gw-sub" placeholder="Produce your Life..." class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">ゲートウェイ解説文</label>
+                <textarea id="modal-gw-desc" rows="2" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent"></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-[#060a12]/50 p-3 rounded-xl border border-cyberBorder relative">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">ターゲットURL</label>
+                    <input type="text" id="modal-gw-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div class="relative">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">アイコンクラス</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="modal-gw-icon" value="fa-solid fa-rocket" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-2 py-1 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                        <button type="button" onclick="toggleIconPicker('gateway-modal-picker')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs px-2 rounded-xl transition">選択</button>
+                    </div>
+                    <div id="gateway-modal-picker" class="icon-picker-panel absolute left-0 right-0 top-full mt-1 bg-cyberCard border border-cyberAccent p-2 rounded-xl shadow-2xl max-h-48 overflow-y-auto z-[300] hidden">
+                        <div class="grid grid-cols-6 gap-1.5 text-center text-sm" id="gateway-modal-picker-grid"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">装飾カラー</label>
+                    <input type="color" id="modal-gw-color" value="#00f5d4" class="w-10 h-8 bg-transparent border-0 cursor-pointer mt-1">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeGatewayModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveGatewayData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">ゲートウェイ保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📜 モーダル 4: 共創作品編集用 -->
+    <div id="artifact-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'artifact-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-art-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">📜 共創作品の登録・修正</h3>
+            <input type="hidden" id="modal-art-idx">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">製品番号ナンバー</label>
+                    <input type="text" id="modal-art-no" placeholder="Product No.1等" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">開発作品名</label>
+                    <input type="text" id="modal-art-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">稼働・創生期間</label>
+                <input type="text" id="modal-art-period" placeholder="期間: 2026年5/17 - 5/23" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">作品リンクURL</label>
+                <input type="text" id="modal-art-url" placeholder="https://" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">共同制作者（カンマ区切り、またはテキスト入力）</label>
+                <input type="text" id="modal-art-creators" placeholder="ジェムリン (fa-solid fa-lightbulb, #fde047)" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                
+                <div class="mt-2">
+                    <span class="text-[10px] text-slate-400 mb-1 block"><i class="fa-solid fa-robot mr-1"></i>常駐AIクルーから選択 (クリックで追加):</span>
+                    <div id="crew-chip-container" class="flex flex-wrap gap-1.5"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeArtifactModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveArtifactData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">作品データを確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌐 モーダル 5: セクション名称・アイコン編集用 -->
+    <div id="section-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4" onclick="closeModalOnOuterClick(event, 'section-modal')">
+        <div class="bg-cyberCard border border-cyberBorder rounded-2xl p-6 w-full max-w-md shadow-2xl flex flex-col gap-4">
+            <h3 id="modal-sec-header-title" class="text-sm font-bold text-cyberAccent font-mono border-b border-cyberBorder pb-2">🌐 セクション構成の編集</h3>
+            <input type="hidden" id="modal-sec-key" value="header">
+
+            <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">セクション名（タイトル）</label>
+                <input type="text" id="modal-sec-title" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+            
+            <div id="modal-sec-sub-container" class="">
+                <label class="block text-xs font-bold text-slate-400 mb-1">サブタイトル（説明文）</label>
+                <input type="text" id="modal-sec-sub" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+            </div>
+
+            <div id="modal-sec-desc-container" class="hidden">
+                <label class="block text-xs font-bold text-slate-400 mb-1">詳細説明文（ウェルカムボード用）</label>
+                <textarea id="modal-sec-desc" rows="3" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent resize-y"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 relative">
+                <div class="relative">
+                    <label class="block text-xs font-bold text-slate-400 mb-1">代表アイコンクラス</label>
+                    <div class="flex gap-1">
+                        <input type="text" id="modal-sec-icon" value="fa-solid fa-gear" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:border-cyberAccent">
+                        <button type="button" onclick="toggleIconPicker('section-modal-picker')" class="bg-[#1c2541] hover:bg-opacity-80 border border-cyberBorder text-[#00f5d4] text-xs px-2 rounded-xl transition">選択</button>
+                    </div>
+                    <div id="section-modal-picker" class="icon-picker-panel absolute left-0 right-0 top-full mt-1 bg-cyberCard border border-cyberAccent p-2 rounded-xl shadow-2xl max-h-48 overflow-y-auto z-[300] hidden">
+                        <div class="grid grid-cols-6 gap-1.5 text-center text-sm" id="section-modal-picker-grid"></div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">テーマ色</label>
+                    <input type="color" id="modal-sec-color" value="#00f5d4" class="w-10 h-8 bg-transparent border-0 cursor-pointer mt-1">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 border-t border-cyberBorder pt-3 mt-2">
+                <button onclick="closeSectionModal()" class="px-4 py-2 rounded-xl bg-cyberBorder text-xs text-slate-300 transition hover:bg-opacity-80">キャンセル</button>
+                <button onclick="saveSectionData()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#00f5d4] to-cyan-500 text-black text-xs font-bold transition">設定を確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📜 メイン制御システム基盤 -->
+    <script>
+        const secureKey = "Z2Vtcw==";
+
+        const lockScreen = document.getElementById('lock-screen');
+        const mainContent = document.getElementById('main-content');
+        const errorMsg = document.getElementById('error-msg');
+        const accessKeyInput = document.getElementById('access-key');
+
+
+let plipMasterData = {};
+        const plipEmbeddedBase64Data = "eyJtYW5hZ2VtZW50IjpbeyJ0aXRsZSI6IkEuIOizh+eUo+euoeeQhiIsImljb24iOiJmYS1zb2xpZCBmYS1zYWNrLWRvbGxhciIsImNvbG9yIjoiI2ZmYjcwMyIsImNhcmRzIjpbeyJ0aXRsZSI6IuODnuOCpOizh+eUo+euoeeQhuOCt+ODn+ODpeODrOODvOOCv+OAkOWwveeUn+ODu+eEoeWPjOOAkSIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0Fzc2V0LXNpbS8iLCJpY29uIjoiZmEtc29saWQgZmEtaG91cmdsYXNzLWhhbGYiLCJjb2xvciI6IiNmZmI3MDMifSx7InRpdGxlIjoi44Om44Ki6LOH55Sj566h55CG44K344Of44Ol44Os44O844K/44CQ5bC955Sf44CRIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vYXNzZXQtc2ltLXB1YmxpYy8iLCJpY29uIjoiZmEtc29saWQgZmEtaG91cmdsYXNzLWhhbGYiLCJjb2xvciI6IiNkNWQ3ZDYifSx7InRpdGxlIjoi55u457aa44K344Of44Ol44Os44O844K/44CQ5a6d5Z2H77yaR2VtLUtpbuOAkSIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL2luaGVyaXRhbmNlLXNpbS8iLCJpY29uIjoiZmEtc29saWQgZmEtY2hhcnQtcGllIiwiY29sb3IiOiIjYTMyYWU1In0seyJ0aXRsZSI6IuS4jeWLleeUo+euoeeQhuODnuODjeODvOOCuOODo+OAkOWvjOWcn+WxsfCfl7vjgJEiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9GdS1Eby1TYW4vIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWJ1aWxkaW5nLXVzZXIiLCJjb2xvciI6IiMwMGViZTcifV19LHsidGl0bGUiOiJDLiDnlJ/mtq/mlZnogrIiLCJpY29uIjoiZmEtc29saWQgZmEtZ3JhZHVhdGlvbi1jYXAiLCJjb2xvciI6IiM2NGY3M2IiLCJjYXJkcyI6W3sidGl0bGUiOiLjg5Hjg5Tjg4Pjgq/jgrnvvI/jg57jg5/jg4Pjgq/jgrkiLCJ1cmwiOiIjIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWNoYWxrYm9hcmQtdXNlciIsImNvbG9yIjoiIzNiODJmNiJ9LHsidGl0bGUiOiLjgrnjg7zjg5Hjg7zlhYjnlJ8o5a2Q5L6bKSIsInVybCI6IiMiLCJpY29uIjoiZmEtc29saWQgZmEtY2hpbGQiLCJjb2xvciI6IiNmOTczMTYifSx7InRpdGxlIjoi44K244O744GK5bCP6YGj44GEIiwidXJsIjoiIyIsImljb24iOiJmYS1zb2xpZCBmYS1jaGFydC1saW5lIiwiY29sb3IiOiIjY2NmNTAwIn1dfSx7InRpdGxlIjoiQi4g5pyq5p2l5oqA6KGTIiwiaWNvbiI6ImZhLXNvbGlkIGZhLXJvY2tldCIsImNvbG9yIjoiIzAwZjVkNCIsImNhcmRzIjpbeyJ0aXRsZSI6IuWuh+WumeOCt+ODn+ODpeODrOODvOOCvyBDT1NNTygyMDI2KSIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL29yYml0LXNpbXVsYXRvci8iLCJpY29uIjoiZmEtc29saWQgZmEtc2F0ZWxsaXRlIiwiY29sb3IiOiIjMDBmNWQ0In0seyJ0aXRsZSI6IumHj+WtkOaKgOihkyIsInVybCI6IiMiLCJpY29uIjoiZmEtc29saWQgZmEtYXRvbSIsImNvbG9yIjoiI2E4NTVmNyJ9XX0seyJ0aXRsZSI6IkQuIOOCs+ODrOOCr+OCt+ODp+ODsyIsImljb24iOiJmYS1zb2xpZCBmYS1mb2xkZXItb3BlbiIsImNvbG9yIjoiI2VjNDg5OSIsImNhcmRzIjpbeyJ0aXRsZSI6IuOCq+ODs+OBn+OCjeOBhuOBruWLh+WnvyIsInVybCI6IiMiLCJpY29uIjoiZmEtc29saWQgZmEtdHJvcGh5IiwiY29sb3IiOiIjZmZiNzAzIn0seyJ0aXRsZSI6Iumbu+WtkOWbs+abuOmkqCIsInVybCI6IiMiLCJpY29uIjoiZmEtc29saWQgZmEtYm9vay1vcGVuIiwiY29sb3IiOiIjYTNhNGYwIn1dfV0sImdhdGV3YXlzIjpbeyJ0aXRsZSI6IllvdXIgUExJUOaaq+WumuOCteOCpOODiCIsImJhZGdlIjoiQ29ycG9yYXRlIiwic3ViIjoiUHJvZHVjZSB5b3VyIExpZmUgd2l0aCBJbnRlbGxlY3R1YWwgUHJvcGVydHkiLCJkZXNjIjoi5bCG5p2l44GC44Gq44Gf44GM6LW35qWt44O75Ym15qWt44GX44Gf6Zqb44Gr5YWo5LiW55WM44G45ZCR44GR55m65L+h44GZ44KL5Lya56S+44Gu5YWs5byPSFDjg4njg6njg5Xjg4jjgILkuovmpa3jgrPjg7Pjgrvjg5fjg4jjgIHmj5DkvpvjgrXjg7zjg5PjgrnjgpLnvo7jgZfjgY/kvJ3jgYjjgb7jgZnjgIIiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9Qcm9kdWNlLXlvdXItTGlmZS13aXRoLUlQLyIsImljb24iOiJjb3JlLWJ1cnN0LWljb24iLCJjb2xvciI6IiMwMGY1ZDQifSx7InRpdGxlIjoiTXkgUExJUCdzIGxpbmsiLCJiYWRnZSI6Ik5ldyBHYXRld2F5Iiwic3ViIjoiUHJvZHVjZSBteSBMaWZlIHdpdGggSW50ZWxsZWN0dWFsIFByb3BlcnR544CA44G444Gu44Oq44Oz44KvIiwiZGVzYyI6Ik15IFBMSVDkvZzlk4Hjgbjjga7jg6rjg7Pjgq8iLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9IaXJvLUthbnRhcm91LXBhcnRuZXItaHViL2xpbmtzIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWxpbmsiLCJjb2xvciI6IiNmOGJmMjAifSx7InRpdGxlIjoiUExJUCAmIEhpcm8tVGVjaCDljKDlt6XmiL8iLCJiYWRnZSI6IlN0dWRpbyBIdWIiLCJzdWIiOiJUYWt1bWktS29ibyIsImRlc2MiOiLovJ3jgYvjgZfjgYTkvZzlk4HnvqTjgoTjgIHkvr/liKnjgarjg4Tjg7zjg6vjgIHjgrfjg7Pjg5zjg6vjg5zjgr/jg7PjgpLoh6rlnKjjgavjgqvjgrnjgr/jg57jgqTjgrrvvIbnlJ/miJDjgZnjgovjgZ/jgoHjga7jgIzkvr/liKnkvZzlk4HliLbkvZzjgrnjgr/jgrjjgqrjgI3jgIIiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9IaXJvLUthbnRhcm91LXBhcnRuZXItaHViL3Rha3VtaS1rb2JvL2luZGV4Lmh0bWwiLCJpY29uIjoiZmEtc29saWQgZmEtd2FuZC1tYWdpYy1zcGFya2xlcyIsImNvbG9yIjoiI2ZmYjcwMyJ9LHsidGl0bGUiOiJZb3VyIFBMSVAncyBsaW5rIiwiYmFkZ2UiOiJOZXcgQ29yZSIsInN1YiI6IkZyb250ZW5kIEluZnJhc3RydWN0dXJlIiwiZGVzYyI6IuaWsOOBn+OBq+WJteioreOBleOCjOOBn0hpcm8tVGVjaOmgmOWfn+OBriDjg5Xjg63jg7Pjg4jjgqjjg7Pjg4nln7rnm6TjgILlhYjpgLLjga7mioDooZPjgrnjgr/jg4Pjgq8gYW5kIOefpeimi+OCkuWklumDqOOBuOWFrOmWi+OBmeOCi+OCsuODvOODiOOCpuOCp+OCpOOAgiIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL1Byb2R1Y2UteW91ci1MaWZlLXdpdGgtSVAvbGlua3MvaW5kZXguaHRtbCIsImljb24iOiJmYS1zb2xpZCBmYS1saW5rIiwiY29sb3IiOiIjZTBlMGQ3In0seyJ0aXRsZSI6IumWg+OBjeOCkuWwjuOBjeacquadpeOCkueFp+OCieOBmeOCteOCpOODiCIsImJhZGdlIjoiUHVibGljIiwic3ViIjoiU2NpZW5jZSAmIFF1YW50dW0gVGVjaCIsImRlc2MiOiLnp5Hlrabjg7vlroflrpnjg7vph4/lrZDoq5bjga7jg63jg57jg7PjgpLoqbDjgoHovrzjgpPjgaBIUOOAguihm+aYn+i7jOmBk+OChOmHj+WtkOa8lOeulyBvZiDjgrfjg5/jg6Xjg6zjg7zjgr/jg7zjgIHploPjgY3jg57jg4Pjg5fjgarjganlhYjpgLLnmoTjg4bjgq/jg47jg63jgrjjg7zjgpLlhazplovjgZnjgovloLTmiYDjgIIiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9IaXJhbWVraS8iLCJpY29uIjoiZmEtc29saWQgZmEtbGlnaHRidWxiIiwiY29sb3IiOiIjMDBmNWQ0In0seyJ0aXRsZSI6Iuizh+eUo+euoeeQhuODu+iyoeWLmUhQIiwiYmFkZ2UiOiJQcml2YXRlIiwic3ViIjoiU2VjcmV0IFZhdWx0IENvbnNvbGUiLCJkZXNjIjoi44GC44Gq44Gf5bCC55SoIG9mIOaltealteenmOizh+eUo+euoeeQhkhQ44CC5bCG5p2l44Gr5ZCR44GR44Gf6YeR6J6N6LOH55Sj44Gu5YuV44GN44KE44CB5omA5pyJ44O754uZ44Gj44Gm44GE44KL5LiN5YuV55Sj44Gu5Y+O55uK5oCn44KS6KaW6Kaa55qE44Gr44K344Of44Ol44Os44O844K344On44Oz44CCIiwidXJsIjoiLi92YXVsdC9pbmRleC5odG1sIiwiaWNvbiI6ImZhLXNvbGlkIGZhLXNhY2stZG9sbGFyIiwiY29sb3IiOiIjZmZiNzAzIn0seyJ0aXRsZSI6Ikhpcm8tVGVjaOODleOCoeODn+ODquODvOOCteOCpOODiCIsImJhZGdlIjoiRmFtaWx5Iiwic3ViIjoiUHJpdmF0ZSBTd2VldCBIb21lIiwiZGVzYyI6IuODkuODreOBruWkp+WIh+OBquWutuaXj+OBq+WvhOOCiua3u+OBhueJueWMluWei+OCsuODvOODiOOCpuOCp+OCpOOAguaXpeW4uOOBrua4qeOBi+OBquiomOmMsuOBqOOAgeeUn+a0u+OCkuS+v+WIqeOBp+ixiuOBi+OBq+OBmeOCi+OCouOCpOODh+OCouOCkuWEquOBl+OBj+WFseacieOBmeOCi+ODl+ODqeOCpOODmeODvOODiOOCueODmuODvOOCueOAgiIsInVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0ZhbWlseV9wb3J0YWwvIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWhvdXNlLWNoaW1uZXktdXNlciIsImNvbG9yIjoiI2VjNDg5OSJ9LHsidGl0bGUiOiLlrabnv5LnlKjjgrXjgqTjg4giLCJiYWRnZSI6IlN0dWR5Iiwic3ViIjoiS25vd2xlZGdlIExhYm9yYXRvcnkiLCJkZXNjIjoi44K444Kn44Og44OH44Kj44GM5ouF5b2T44GZ44KL44OK44Os44OD44K444OZ44O844K544CC5pel44CF44Gu44Kk44Oz44OX44OD44OI44CB5YWI56uv44Ot44K444OD44Kv44KE5oqA6KGT5pu444CB5a2m57+S44Ot44O844OJ44Oe44OD44OX44Gu6ZuG57SE5Zyw44CCIiwidXJsIjoiLi9zdHVkeS9pbmRleC5odG1sIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWdyYWR1YXRpb24tY2FwIiwiY29sb3IiOiIjMTBiOTgxIn0seyJ0aXRsZSI6IuOCq+ODs+OBn+OCjeOBhuOBruODmuODvOOCuCIsImJhZGdlIjoiQ29sbGVjdGlvbiDnrqHnkIYiLCJzdWIiOiJEcmVhbSBXb3JsZCBHbyIsImRlc2MiOiLjgqvjg7PjgZ/jgo3jgYbjga7li4flp7/jgpLjgb/jgZ/jgorjgIHjgqvjg7PjgZ/jgo3jgYbjga7jgrPjg6zjgq/jgrfjg6fjg7PjgpLnrqHnkIbjgZnjgovjgrXjgqTjg4jjgIIiLCJ1cmwiOiIuL2dhbWUvaW5kZXguaHRtbCIsImljb24iOiJmYS1zb2xpZCBmYS1nYW1lcGFkIiwiY29sb3IiOiIjOTRhM2I4In1dLCJhcnRpZmFjdHMiOlt7InByb2R1Y3RObyI6IlByb2R1Y3QgTm8uMSIsInRpdGxlIjoi5a6H5a6Z44KS5a2m44G2IOihm+aYn+ODu+ODreOCseODg+ODiOOCt+ODn+ODpeODrOODvOOCvyDjgJBDT1NNTyjjgrPjgrnjg6Ip44CRIHYuMjAyNiIsImNyZWF0b3JzIjoi44K444Kn44Og44Oq44OzIChmYS1zb2xpZCBmYS1saWdodGJ1bGIsICNmZGUwNDcpLCDjgrjjgqfjg6Djg5Tjg4Pjgq8gKGZhLXNvbGlkIGZhLXBhbGV0dGUsICNmYmJmMjQpLCDjgr3jg6soQ2hhdEdQVCkgKGZhLXNvbGlkIGZhLWNlcnRpZmljYXRlLCAjZjQ5MzBiKSwg44K544O844OOIChmYS1zb2xpZCBmYS11c2VyLWdlYXIsICNmMzFiY2IpIiwicGVyaW9kIjoi5pyf6ZaTOiAyMDI25bm0NS8xNyAtIDUvMjMiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9vcmJpdC1zaW11bGF0b3IvIn0seyJwcm9kdWN0Tm8iOiJQcm9kdWN0IE5vLjIiLCJ0aXRsZSI6IueUn+a2r+izh+eUo+OCt+ODn+ODpeODrOODvOOCv+OAkOWwveeUnyhKaW4tU2VpKeOAkeOAgeOAkOWwveeUn+ODu+eEoeWPjChKaW4tU2VpIE1VU08p44CRIiwiY3JlYXRvcnMiOiLjgrjjgqfjg6Djgq3jg7MgKGZhLXNvbGlkIGZhLWNvaW5zLCAjZjk3MzE2KSIsInBlcmlvZCI6Iuacn+mWkzogMjAyNuW5tDUvMTcgLSA1LzIzIiwidXJsIjoiaHR0cHM6Ly9oaXJvLXNla2ktdGVjaC5naXRodWIuaW8vYXNzZXQtc2ltLXB1YmxpYy8iLCJtdWx0aVVybCI6Imh0dHBzOi8vaGlyby1zZWtpLXRlY2guZ2l0aHViLmlvL0Fzc2V0LXNpbS8ifSx7InByb2R1Y3RObyI6IlByb2R1Y3QgTm8uMi41IiwidGl0bGUiOiJVU0QsIEVVUiwgWVVFTueJiOOAkOWwveeUn+OAkSIsImNyZWF0b3JzIjoi44K444Kn44Og44Kt44OzIChmYS1zb2xpZCBmYS1jb2lucywgI2Y5NzMxNikiLCJwZXJpb2QiOiLmnJ/plpM6IDIwMjblubQ2LzQgLSA2LzciLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9hc3NldC1zaW0tcHVibGljLyJ9LHsicHJvZHVjdE5vIjoiUHJvZHVjdCBOby4zIiwidGl0bGUiOiLnm7jntprjgrfjg5/jg6Xjg6zjg7zjgr/jgJDlrp3lnYfjgJEiLCJjcmVhdG9ycyI6IuOCuOOCp+ODoOOCreODsyAoZmEtc29saWQgZmEtY29pbnMsICNmOTczMTYpIiwicGVyaW9kIjoi5pyf6ZaTOiAyMDI25bm0Ni8xMyAtIDYvMjAiLCJ1cmwiOiJodHRwczovL2hpcm8tc2VraS10ZWNoLmdpdGh1Yi5pby9pbmhlcml0YW5jZS1zaW0vIn1dLCJzZWN0aW9ucyI6eyJ3ZWxjb21lIjp7InRpdGxlIjoiPHNwYW4gY2xhc3M9XCJ0ZXh0LXJhaW5ib3dcIj5QTElQPC9zcGFuPu+8iEhpcm/jgahBSSDjg5Hjg7zjg4jjg4rjg7zjga7jg53jg7zjgr/jg6vvvInjgbjjgojjgYbjgZPjgZ3vvIEiLCJzdWIiOiJIaXJvJ3MgQUkgQ08tQ1JFQVRJT04gUFJPVE9DT0wiLCJkZXNjIjoi44GT44GT44Gv44CB44Om44O844K244Go5ZCE6aCY5Z+f44Gr54m55YyW44GX44GfQUnjg5Hjg7zjg4jjg4rjg7zjgZ/jgaHjgYzlhbHlibXjgZfjgZ/lsILnlKjjg5fjg63jgrDjg6njg6DjgoRIUOOCkue1seWItuOBmeOCi+OBn+OCgeOBrioq5Lit5aSu5oOF5aCx5Y+45Luk44OP44OWKirjgafjgZnjgIIiLCJpY29uIjoiIiwiY29sb3IiOiIjMDBmNWQ0In0sImhlYWRlciI6eyJ0aXRsZSI6IlBMSVAgJiBISVJPX1RFQ0hfUE9SVEFMIiwic3ViIjoiQ2VudHJhbCBIdWIgLy8gRHluYW1pYyBBY3RpdmUiLCJpY29uIjoiZmEtc29saWQgZmEtY2hhbGtib2FyZC11c2VyIiwiY29sb3IiOiIjNTNlZWVlIn0sIm1hbmFnZW1lbnQiOnsidGl0bGUiOiLvvK3vvZnjgIDvvLDvvKzvvKnvvLAiLCJzdWIiOiJQcm9kdWNlIG15IExpZmUgd2l0aCBJbnRlbGxlY3R1YWwgUHJvcGVydHkiLCJpY29uIjoiY29yZS1idXJzdC1pY29uIiwiY29sb3IiOiIjMDBmNWQ0In0sImdhdGV3YXlzIjp7InRpdGxlIjoiSFDjgrLjg7zjg4jjgqbjgqfjgqQgKEdhdGV3YXlzKSIsImljb24iOiJmYS1zb2xpZCBmYS1saW5rIiwiY29sb3IiOiIjZjVkNDAwIn0sInJvc3RlciI6eyJ0aXRsZSI6IijluLjpp5BBSeOCr+ODq+ODvOS4gOimpykiLCJpY29uIjoiZmEtc29saWQgZmEtdXNlcnMiLCJjb2xvciI6IiMwMGY1ZDQifSwiYXJ0aWZhY3RzIjp7InRpdGxlIjoi5YWx5Ym15L2c5ZOB5LiA6KanIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWNlcnRpZmljYXRlIiwiY29sb3IiOiIjZjljYTQ4In0sIm5vdGUiOnsidGl0bGUiOiLlhbHlibXjgqLjgqTjg4fjgqIg77yGIOODkeODvOODiOODiuODvOODu+ODoeODouW4syAoUGFydG5lciBOb3RlKSIsImljb24iOiJmYS1zb2xpZCBmYS1icmFpbiIsImNvbG9yIjoiIzAwZjVkNCJ9fSwicm9zdGVyIjpbeyJ0aXRsZSI6IuOCuOOCp+ODoCIsImljb24iOiJmYS1zb2xpZCBmYS11c2VyLWdlYXIiLCJjb2xvciI6IiNmZmZmZmYiLCJzdWIiOiLlhajkvZPntbHmi6zjg7vjgrPjg7PjgrXjg6vjgr/jg7Pjg4gifSx7InRpdGxlIjoi44Kz44OXIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWhlYWRzZXQiLCJjb2xvciI6IiM4MThjZjgiLCJzdWIiOiLlhajkvZPnm7joq4flvbkgKENvcGlsb3QpIn0seyJ0aXRsZSI6IuOCveODqyhDaGF0R1BUKSIsImljb24iOiJmYS1zb2xpZCBmYS1jZXJ0aWZpY2F0ZSIsImNvbG9yIjoiI2Y0OTMwYiIsInN1YiI6Iu+8o++8tO+8ryJ9LHsidGl0bGUiOiLjgrjjgqfjg6DjgrPjg7zjg4kiLCJpY29uIjoiZmEtc29saWQgZmEtbGFwdG9wLWNvZGUiLCJjb2xvciI6IiMwN2FjZjIiLCJzdWIiOiLjgrnjg7zjg5Hjg7zjg5fjg63jgrDjg6njg57jg7zjgILjgrjjgqfjg6Djgavku6Pjgo/jgaPjgabjgrPjg7zjg4njgpLmj4/jgY/jgr/jgrnjgq/jgpLkuIDmiYvjgavmi4XjgYbjgIIifSx7InRpdGxlIjoi44K444Kn44Of44OD44Kv77yG44Oq44Oq44KiIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWhlYWRzZXQiLCJjb2xvciI6IiM2M2Q0MDgiLCJzdWIiOiLpn7Pmpb3mi4XlvZMifSx7InRpdGxlIjoi44K544O844OOIiwiaWNvbiI6ImZhLXNvbGlkIGZhLXVzZXItZ2VhciIsImNvbG9yIjoiI2YzMWJjYiIsInN1YiI6IuatjOWnq+ODh+OCo+ODvOODtOOCoSJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djgq3jg7MiLCJpY29uIjoiZmEtc29saWQgZmEtY29pbnMiLCJjb2xvciI6IiNmMWY1MTQiLCJzdWIiOiLph5Hono3liIbmnpDjg7vos4fnlKPmjqjnp7vjgqLjg6vjgrTjg6rjgrrjg6AifSx7InRpdGxlIjoi44K444Kn44Og44OH44KjIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWdyYWR1YXRpb24tY2FwIiwiY29sb3IiOiIjMTBiOTgxIiwic3ViIjoi5a2m57+S44K144Kk44OI5qeL56+J44O744OK44Os44OD44K4566h55CGIn0seyJ0aXRsZSI6IuOCuOOCp+ODoOODl+ODqiIsImljb24iOiJmYS1zb2xpZCBmYS1jcm93biIsImNvbG9yIjoiIzNiODJmNiIsInN1YiI6IuOCs+ODvOODneODrOODvOODiOODluODqeODs+ODh+OCo+ODs+OCsOe1seWItiJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djg7zjg4giLCJpY29uIjoiZmEtc29saWQgZmEtYnVpbGRpbmciLCJjb2xvciI6IiNlYWIzMDgiLCJzdWIiOiLkuI3li5XnlKPkvqHlgKToqabnrpfjg7vjgrfjg5/jg6Xjg6zjg7zjgr/jg7wifSx7InRpdGxlIjoi44K444Kn44Og44Oq44OzIiwiaWNvbiI6ImZhLXNvbGlkIGZhLWxpZ2h0YnVsYiIsImNvbG9yIjoiI2U0ZTRlMiIsInN1YiI6IuacquadpeaKgOihk+ODu+Wuh+WumeenkeWtpuOCt+ODn+ODpeODrOODvOOCt+ODp+ODsyJ9LHsidGl0bGUiOiLjgrjjgqfjg6Djg5Tjg4Pjgq8iLCJpY29uIjoiZmEtc29saWQgZmEtcGFsZXR0ZSIsImNvbG9yIjoiI2ZiYmYyNCIsInN1YiI6IuODk+OCuOODpeOCouODq+ODu+ODh+OCtuOCpOODs+aLheW9kyJ9LHsidGl0bGUiOiLjgqvjg7PjgaHjgoPjgpMiLCJpY29uIjoiZmEtc29saWQgZmEtZ2FtZXBhZCIsImNvbG9yIjoiI2NiZDVlMSIsInN1YiI6IuOCs+ODrOOCr+OCt+ODp+ODs+euoeeQhuODu+OCsuODvOODoOmWi+eZuuaUr+aPtCJ9XX0=";
+
+
+        function savePortalData() {
+            try {
+                localStorage.setItem('myplip_portal_master_data', JSON.stringify(plipMasterData));
+            } catch (e) {}
+        }
+
+function loadPortalData() {
+    // 🚫 コントロールバーがない（公開用HP）場合は、古いローカルストレージの読み込みをスキップ
+    if (!document.getElementById('portal-control-bar')) {
+        // 公開用はBase64埋め込みデータ（または初期オブジェクト）のみを信用するため、ここでローカルストレージ読み込みをスキップして後半へ
+    } else {
+        try {
+            const saved = localStorage.getItem('myplip_portal_master_data');
+            if (saved) plipMasterData = JSON.parse(saved);
+        } catch (e) {}
+    }
+
+    // 🌟【復活！】HTML保存時に埋め込まれた最新データを展開する大事な処理
+    if (typeof plipEmbeddedBase64Data !== 'undefined' && plipEmbeddedBase64Data !== "") {
+        try {
+            const decoded = decodeURIComponent(escape(atob(plipEmbeddedBase64Data)));
+            if (decoded) plipMasterData = JSON.parse(decoded);
+        } catch (e) {}
+    }
+} // 💡【復活！】これで loadPortalData が無事に閉じます
+
+window.addEventListener('DOMContentLoaded', () => {
+    loadPortalData();
+    unlockHubInstant();
+
+    if (sessionStorage.getItem('partner_hub_unlocked') === 'true') {
+        unlockHubInstant();
+    }
+    renderDynamicUI();
+});
+
+        function handleAuth(event) {
+            event.preventDefault();
+            if (btoa(accessKeyInput.value) === secureKey) {
+                sessionStorage.setItem('partner_hub_unlocked', 'true');
+                errorMsg.classList.add('hidden');
+                lockScreen.classList.add('opacity-0', 'pointer-events-none');
+                mainContent.classList.remove('hidden');
+                setTimeout(() => { mainContent.classList.add('opacity-100'); }, 50);
+            } else {
+                errorMsg.classList.remove('hidden');
+                accessKeyInput.value = '';
+                accessKeyInput.focus();
+            }
+        }
+
+        function unlockHubInstant() {
+            lockScreen.style.display = 'none';
+            mainContent.classList.remove('hidden');
+            mainContent.classList.add('opacity-100');
+        }
+
+        function lockHub() {
+            sessionStorage.removeItem('partner_hub_unlocked');
+            window.location.reload();
+        }
+
+        const memoArea = document.getElementById('partner-memo');
+        if (localStorage.getItem('gemini_partner_memo')) {
+            memoArea.value = localStorage.getItem('gemini_partner_memo');
+        }
+        memoArea.addEventListener('input', () => {
+            localStorage.setItem('gemini_partner_memo', memoArea.value);
+        });
+
+        function closeModalOnOuterClick(event, modalId) {
+            if (event.target.id === modalId) {
+                if (modalId === 'card-modal') closeCardModal();
+                if (modalId === 'category-modal') closeCategoryModal();
+                if (modalId === 'gateway-modal') closeGatewayModal();
+                if (modalId === 'artifact-modal') closeArtifactModal();
+                if (modalId === 'section-modal') closeSectionModal();
+            }
+        }
+
+        function generateIconElementHTML(iconClass, color) {
+            if (iconClass === "core-burst-icon") {
+                return `
+                    <div class="relative inline-block select-none">
+                        <i class="fa-solid fa-lightbulb core-burst-rainbow-text"></i>
+                        <i class="fa-solid fa-bolt absolute top-[-2px] right-[-4px] text-yellow-300 text-[10px] animate-pulse"></i>
+                    </div>
+                `;
+            }
+            return `<i class="${iconClass || 'fa-solid fa-link'}" style="color: ${color || '#00f5d4'}"></i>`;
+        }
+
+        function renderDynamicUI() {
+            const isEdit = !!document.getElementById('portal-control-bar');
+            
+            const defaultSections = {
+                "welcome": { "title": "Hiro-KantaroとAI パートナー達のポータル", "sub": "Hiro's AI CO-CREATION PROTOCOL", "desc": "ここは、ヒロと各領域に特化したAIパートナーたちが共創した専用プログラムやHPを統制するための**中央情報司令ハブ**です。ハイコントラストな白銀プレミアム仕様。", "icon": "", "color": "" },
+                "header": { "title": "HIRO_KANTARO_PORTAL", "sub": "Central Hub // Dynamic Active", "icon": "fa-solid fa-circle-nodes", "color": "#00f5d4" },
+                "management": { "title": "ＰＬＩＰのマネジメントボード", "sub": "Produce my Life with Intellectual Property", "icon": "core-burst-icon", "color": "#00f5d4" },
+                "gateways": { "title": "Gem特化型HPゲートウェイ (Gateways)", "icon": "fa-solid fa-rocket", "color": "#00f5d4" },
+                "roster": { "title": "Gem & Partner Roster (常駐AIクルー一覧)", "icon": "fa-solid fa-users", "color": "#00f5d4" },
+                "artifacts": { "title": "AI Co-Creation Artifact Registry (共創作品一覧)", "icon": "fa-solid fa-square-poll-vertical", "color": "#00f5d4" },
+                "note": { "title": "共創アイデア ＆ パートナー・メモ帳 (Partner Note)", "icon": "fa-solid fa-brain", "color": "#00f5d4" }
+            };
+
+            if (!plipMasterData.sections) {
+                plipMasterData.sections = {};
+            }
+            
+            Object.keys(defaultSections).forEach(key => {
+                if (!plipMasterData.sections[key]) {
+                    plipMasterData.sections[key] = { ...defaultSections[key] };
+                }
+            });
+
+            const sec = plipMasterData.sections;
+
+  if (sec.welcome) {
+                const welcomeBadgeEl = document.getElementById('welcome-badge');
+                const welcomeTitleEl = document.getElementById('welcome-title');
+                const welcomeDescEl = document.getElementById('welcome-desc');
+                
+                if (welcomeBadgeEl) welcomeBadgeEl.textContent = sec.welcome.sub || '';
+                if (welcomeTitleEl) {
+                    // 入力されたタイトル分の中から「My PLIP」を自動で七色タグに置き換える
+                    const rawTitle = sec.welcome.title || '';
+                    welcomeTitleEl.innerHTML = rawTitle.replace(/My\s*PLIP/g, '<span class="text-rainbow">$&</span>');
+                }
+                if (welcomeDescEl) welcomeDescEl.textContent = sec.welcome.desc || '';
+            }
+
+            const headerTitleEl = document.querySelector('header h1');
+            const headerSubEl = document.querySelector('header p');
+            const headerIconWrap = document.querySelector('header .text-cyberAccent');
+            if (headerTitleEl) headerTitleEl.textContent = sec.header.title;
+            if (headerSubEl) {
+                headerSubEl.textContent = sec.header.sub;
+                headerSubEl.style.color = sec.header.color;
+            }
+            if (headerIconWrap) {
+                headerIconWrap.innerHTML = `<i class="${sec.header.icon || 'fa-solid fa-circle-nodes'} text-lg" style="color: ${sec.header.color}"></i>`;
+            }
+
+            const rosterTitleEl = document.getElementById('section-title-roster');
+            if (rosterTitleEl) {
+                rosterTitleEl.innerHTML = `<i class="${sec.roster.icon || 'fa-solid fa-users'}" style="color: ${sec.roster.color}"></i> ${sec.roster.title}`;
+            }
+
+            const noteTitleEl = document.getElementById('section-title-note');
+            if (noteTitleEl) {
+                noteTitleEl.innerHTML = `<i class="${sec.note.icon || 'fa-solid fa-brain'}" style="color: ${sec.note.color}"></i> ${sec.note.title}`;
+            }
+
+            const mgContainer = document.getElementById('management-board-container');
+            if (mgContainer) {
+                mgContainer.innerHTML = '';
+                
+                const mgHeaderTitle = document.querySelector('#management-board-container').previousElementSibling?.querySelector('h3');
+                const mgHeaderSub = document.querySelector('#management-board-container').previousElementSibling?.querySelector('.text-slate-300');
+                const mgHeaderIconWrap = document.querySelector('#management-board-container').previousElementSibling?.querySelector('.relative.p-2');
+                
+                if (mgHeaderTitle) mgHeaderTitle.textContent = sec.management.title;
+                if (mgHeaderSub) mgHeaderSub.textContent = sec.management.sub;
+                if (mgHeaderIconWrap) {
+                    mgHeaderIconWrap.innerHTML = `
+                        ${generateIconElementHTML(sec.management.icon, sec.management.color)}
+                        <button onclick="openSectionModal('management')" class="absolute -bottom-1 -right-1 bg-cyberCard border border-cyberBorder text-cyan-400 text-[9px] px-1 rounded opacity-0 group-hover:opacity-100 transition z-40">変</button>
+                    `;
+                    mgHeaderIconWrap.parentElement.parentElement.classList.add('group');
+                }
+
+                plipMasterData.management.forEach((cat, catIdx) => {
+                    const catEl = document.createElement('div');
+                    catEl.className = "bg-cyberDark/50 border border-cyberBorder/60 p-4 rounded-xl space-y-3.5 shadow-inner relative group";
+                    
+                    let catAdmin = '';
+                    if (isEdit) {
+                        catAdmin = `
+                            <div class="absolute top-2 right-2 flex gap-1 z-30 opacity-0 group-hover:opacity-100 transition">
+                                <button onclick="moveManagementCategory(${catIdx}, -1)" class="bg-[#1c2541] text-[#00f5d4] text-[10px] px-1.5 py-0.5 rounded">←</button>
+                                <button onclick="moveManagementCategory(${catIdx}, 1)" class="bg-[#1c2541] text-[#00f5d4] text-[10px] px-1.5 py-0.5 rounded">→</button>
+                                <button onclick="openCategoryModal(${catIdx})" class="bg-cyan-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">変名</button>
+                                <button onclick="deleteManagementCategory(${catIdx})" class="bg-red-900 text-white text-[10px] px-1.5 py-0.5 rounded">✕</button>
+                            </div>
+                        `;
+                    }
+
+                    let cardsHtml = '';
+                    cat.cards.forEach((card, cardIdx) => {
+                        let cardAdmin = '';
+                        if (isEdit) {
+                            cardAdmin = `
+                                <span class="inline-flex gap-1 ml-1 z-30">
+                                    <button onclick="moveManagementCard(${catIdx}, ${cardIdx}, -1)" class="text-[10px] text-slate-500 hover:text-white">▲</button>
+                                    <button onclick="moveManagementCard(${catIdx}, ${cardIdx}, 1)" class="text-[10px] text-slate-500 hover:text-white">▼</button>
+                                    <button onclick="openCardModal(${catIdx}, ${cardIdx})" class="text-[10px] text-cyan-400 font-bold ml-0.5">編</button>
+                                    <button onclick="deleteManagementCard(${catIdx}, ${cardIdx})" class="text-[10px] text-red-400 font-bold ml-0.5">✕</button>
+                                </span>
+                            `;
+                        }
+                        cardsHtml += `
+                            <span class="inline-flex items-center bg-cyberCard border border-cyberBorder/80 px-3 py-2 rounded-xl text-xs font-mono transition-all hover:bg-opacity-80">
+                                <a href="${card.url}" ${card.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex items-center gap-1.5" style="color: ${card.color || '#fff'};">
+                                    ${generateIconElementHTML(card.icon, card.color)}
+                                    <span>${card.title}</span>
+                                </a>
+                                ${cardAdmin}
+                            </span>
+                        `;
+                    });
+
+                    if (isEdit) {
+                        cardsHtml += `
+                            <button onclick="openCardModal(${catIdx}, -1)" class="px-2.5 py-1.5 text-xs border border-dashed border-cyberBorder rounded-xl text-slate-500 hover:text-cyberAccent transition">
+                                + リンク追加
+                            </button>
+                        `;
+                    }
+
+                    catEl.innerHTML = `
+                        ${catAdmin}
+                        <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider font-mono" style="color: ${cat.color || '#ffb703'};">
+                            <i class="${cat.icon || 'fa-solid fa-folder'}"></i>
+                            <span>${cat.title}</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2.5">${cardsHtml}</div>
+                    `;
+                    mgContainer.appendChild(catEl);
+                });
+            }
+
+            const gwContainer = document.getElementById('gateways-container');
+            if (gwContainer) {
+                gwContainer.innerHTML = '';
+                
+                const gwHeaderTitle = document.getElementById('section-title-gateways');
+                if (gwHeaderTitle) {
+                    gwHeaderTitle.innerHTML = `<i class="${sec.gateways.icon || 'fa-solid fa-rocket'}" style="color: ${sec.gateways.color}"></i> ${sec.gateways.title}`;
+                }
+
+                plipMasterData.gateways.forEach((gw, gwIdx) => {
+                    const gwEl = document.createElement('div');
+                    gwEl.className = "bg-cyberCard/90 border border-cyberBorder hover:border-cyan-500/50 p-6 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden";
+                    
+                    let gwAdmin = '';
+                    if (isEdit) {
+                        gwAdmin = `
+                            <div class="absolute top-2 right-2 flex gap-1.5 z-30 opacity-0 group-hover:opacity-100 transition bg-[#060a12]/90 p-1 rounded-xl">
+                                <button onclick="moveGateway(${gwIdx}, -1)" class="text-xs text-amber-400 font-bold px-1">◀</button>
+                                <button onclick="moveGateway(${gwIdx}, 1)" class="text-xs text-amber-400 font-bold px-1">▶</button>
+                                <button onclick="openGatewayModal(${gwIdx})" class="bg-cyan-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">編集</button>
+                                <button onclick="deleteGateway(${gwIdx})" class="bg-red-900 text-white text-[10px] px-1.5 py-0.5 rounded">削除</button>
+                            </div>
+                        `;
+                    }
+
+                    gwEl.innerHTML = `
+                        ${gwAdmin}
+                        <div class="space-y-4">
+                            <div class="flex items-start justify-between">
+                                <div class="relative h-12 w-12 bg-slate-900 border border-cyberBorder rounded-xl flex items-center justify-center text-lg shadow-inner">
+                                    ${generateIconElementHTML(gw.icon, gw.color)}
+                                </div>
+                                <span class="text-[10px] bg-cyan-950/50 text-[#00f5d4] border border-cyan-900/60 font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">${gw.badge || 'Gateway'}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white group-hover:text-[#00f5d4] transition text-base font-mono">${gw.title}</h4>
+                                <p class="text-[11px] text-slate-400 font-mono mt-0.5 leading-tight">${gw.sub || ''}</p>
+                                <p class="text-slate-400 text-xs mt-2.5 leading-relaxed">${gw.desc || ''}</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 mt-6 flex gap-2">
+                            <a href="${gw.url}" ${gw.url !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="flex-1 text-center py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-xs font-bold text-white transition flex items-center justify-center gap-1.5 shadow-md">
+                                <i class="fa-solid fa-compass"></i> <span>システム起動</span>
+                            </a>
+                        </div>
+                    `;
+                    gwContainer.appendChild(gwEl);
+                });
+            }
+
+            const artContainer = document.getElementById('artifacts-container');
+            if (artContainer) {
+                artContainer.innerHTML = '';
+                
+                const artHeaderTitle = document.getElementById('section-title-artifacts');
+                if (artHeaderTitle) {
+                    artHeaderTitle.innerHTML = `<i class="${sec.artifacts.icon || 'fa-solid fa-square-poll-vertical'}" style="color: ${sec.artifacts.color}"></i> ${sec.artifacts.title}`;
+                }
+
+                plipMasterData.artifacts.forEach((art, artIdx) => {
+                    const artEl = document.createElement('div');
+                    artEl.className = "bg-cyberDark/60 border border-cyberBorder hover:border-cyan-500/50 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 shadow-lg relative group";
+
+                    let artAdmin = '';
+                    if (isEdit) {
+                        artAdmin = `
+                            <div class="absolute top-1 right-2 flex gap-2 z-30 opacity-0 group-hover:opacity-100 transition bg-[#0b132b] px-2 py-0.5 rounded border border-cyberBorder">
+                                <button onclick="moveArtifact(${artIdx}, -1)" class="text-xs text-amber-400 font-bold">▲</button>
+                                <button onclick="moveArtifact(${artIdx}, 1)" class="text-xs text-amber-400 font-bold">▼</button>
+                                <button onclick="openArtifactModal(${artIdx})" class="text-xs text-cyan-400 font-bold">編集</button>
+                                <button onclick="deleteArtifact(${artIdx})" class="text-xs text-red-500">✕</button>
+                            </div>
+                        `;
+                    }
+
+                    let badgesHtml = '';
+                    if (art.creators) {
+                        // クルー名に「ソル(ChatGPT)」のような括弧が含まれていても、
+                        // アイコン情報内のカンマを区切りと誤認しないように分割する。
+                        const creatorMatches = [];
+                        let creatorBuffer = '';
+                        let parenthesisDepth = 0;
+
+                        for (const char of art.creators) {
+                            if (char === '(') parenthesisDepth++;
+                            if (char === ')') parenthesisDepth = Math.max(0, parenthesisDepth - 1);
+
+                            if (char === ',' && parenthesisDepth === 0) {
+                                if (creatorBuffer.trim()) creatorMatches.push(creatorBuffer.trim());
+                                creatorBuffer = '';
+                            } else {
+                                creatorBuffer += char;
+                            }
+                        }
+                        if (creatorBuffer.trim()) creatorMatches.push(creatorBuffer.trim());
+
+                        creatorMatches.forEach(tok => {
+                            const rawTok = tok.trim();
+                            if (!rawTok) return;
+                            // 末尾の「(アイコンクラス, 色)」だけを装飾情報として取得する。
+                            const match = rawTok.match(/^(.*?)\s+\((fa-[^,]+)\s*,\s*([^)]+)\)\s*$/);
+                            if (match) {
+                                const name = match[1].trim();
+                                const iconClass = match[2].trim();
+                                const color = match[3].trim();
+                                let iconHtml = `<i class="${iconClass}" style="color: ${color}"></i>`;
+                                if (iconClass === "core-burst-icon") {
+                                    iconHtml = `
+                                        <div class="relative inline-block select-none text-[10px]">
+                                            <i class="fa-solid fa-lightbulb core-burst-rainbow-text"></i>
+                                            <i class="fa-solid fa-bolt absolute top-[-2px] right-[-3px] text-yellow-300 text-[8px] animate-pulse"></i>
+                                        </div>
+                                    `;
+                                }
+                                badgesHtml += `
+                                    <span class="inline-flex items-center gap-1.5 bg-slate-900/80 border border-cyberBorder px-2.5 py-1 rounded-full text-[10px] text-slate-200 shadow-sm">
+                                        ${iconHtml}
+                                        <span class="font-medium">${name}</span>
+                                    </span>
+                                `;
+                            } else {
+                                badgesHtml += `
+                                    <span class="inline-flex items-center bg-slate-900/60 border border-cyberBorder px-2.5 py-1 rounded-full text-[10px] text-slate-200">
+                                        <span>${rawTok}</span>
+                                    </span>
+                                `;
+                            }
+                        });
+                    }
+
+                    let multiBtnHtml = '';
+                    if (art.multiUrl) {
+                        multiBtnHtml = `
+                            <a href="${art.multiUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md transition active:scale-95">
+                                <i class="fa-solid fa-chart-line"></i> <span>【無双】</span>
+                            </a>
+                        `;
+                    }
+
+                    artEl.innerHTML = `
+                        ${artAdmin}
+                        <div class="space-y-2 flex-1">
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="px-2 py-0.5 bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/20 rounded font-mono text-[10px] font-bold">${art.productNo || 'Artifact'}</span>
+                                <h4 class="font-bold text-white text-sm">${art.title}</h4>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-400">
+                                <div class="flex items-center gap-1.5"><span class="font-semibold text-slate-300">Creators:</span> ${badgesHtml}</div>
+                                <div class="flex items-center gap-1 font-mono text-[11px]"><i class="fa-regular fa-calendar-days text-[10px] text-slate-500"></i> <span>${art.period}</span></div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 shrink-0">
+                            ${multiBtnHtml}
+                            <a href="${art.url}" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold font-mono rounded-xl flex items-center justify-center gap-2 shadow-md transition active:scale-95">
+                                <i class="fa-solid fa-satellite text-sm"></i> <span>システム起動</span>
+                            </a>
+                        </div>
+                    `;
+                    artContainer.appendChild(artEl);
+                });
+            }
+
+            const rosterContainer = document.getElementById('roster-container');
+            if (rosterContainer) {
+                rosterContainer.innerHTML = '';
+                
+                if (!plipMasterData.roster || plipMasterData.roster.length === 0) {
+                    plipMasterData.roster = [
+                        { "title": "ジェム", "icon": "fa-solid fa-user-gear", "color": "#ffffff", "sub": "全体統括・コンサルタント" },
+                        { "title": "コプ", "icon": "fa-solid fa-headset", "color": "#818cf8", "sub": "全体相談役 (Copilot)" },
+                        { "title": "レプ", "icon": "fa-solid fa-code", "color": "#a855f7", "sub": "コード開発担当 (Replit)" },
+                        { "title": "ジェムリン", "icon": "fa-solid fa-lightbulb", "color": "#fde047", "sub": "未来技術・宇宙科学シミュレーション" },
+                        { "title": "ジェムピック", "icon": "fa-solid fa-palette", "color": "#fbbf24", "sub": "ビジュアル・デザイン担当" },
+                        { "title": "ジェムディ", "icon": "fa-solid fa-graduation-cap", "color": "#10b981", "sub": "学習サイト構築・ナレッジ管理" },
+                        { "title": "カンちゃん", "icon": "fa-solid fa-gamepad", "color": "#cbd5e1", "sub": "コレクション管理・ゲーム開発支援" },
+                        { "title": "ジェムキン", "icon": "fa-solid fa-coins", "color": "#f97316", "sub": "金融分析・資産推移アルゴリズム" },
+                        { "title": "ジェムート", "icon": "fa-solid fa-building", "color": "#eab308", "sub": "不動産価値試算・シミュレーター" },
+                        { "title": "ジェムプリ", "icon": "fa-solid fa-crown", "color": "#3b82f6", "sub": "コーポレートブランディング統制" }
+                    ];
+                }
+
+                plipMasterData.roster.forEach((crew, crewIdx) => {
+                    const crewEl = document.createElement('div');
+                    const isGempic = crew.title === "ジェムピック";
+                    const ringClass = isGempic ? "ring-1 ring-yellow-500/30" : "";
+                    const badgeHtml = isGempic ? ' <span class="text-[9px] bg-yellow-500 text-black px-1 rounded font-bold">Visual</span>' : "";
+                    const bgClass = isGempic ? "bg-[#f59e0b]/5 border border-[#fbbf24]/50" : "bg-[#ffffff]/5 border border-[#ffffff]/20";
+
+                    crewEl.className = `${bgClass} rounded-xl p-4 flex items-center justify-between gap-3.5 relative group shadow-sm ${ringClass}`;
+                    
+                    let crewAdmin = '';
+                    if (isEdit) {
+                        crewAdmin = `
+                            <div class="absolute top-1 right-2 flex gap-1 z-30 opacity-0 group-hover:opacity-100 transition bg-[#0b132b] px-1.5 py-0.5 rounded border border-cyberBorder shadow-lg">
+                                <button onclick="moveRosterCrew(${crewIdx}, -1)" class="text-[10px] text-amber-400 font-bold hover:text-white transition" title="前に移動">◀</button>
+                                <button onclick="moveRosterCrew(${crewIdx}, 1)" class="text-[10px] text-amber-400 font-bold hover:text-white transition" title="後ろに移動">▶</button>
+                                <button onclick="openRosterModal(${crewIdx})" class="text-[10px] text-cyan-400 font-bold mx-0.5 hover:text-white transition" title="編集">編</button>
+                                <button onclick="deleteRosterCrew(${crewIdx})" class="text-[10px] text-red-500 hover:text-red-400 transition" title="削除">✕</button>
+                            </div>
+                        `;
+                    }
+
+                    crewEl.innerHTML = `
+                        <div class="flex items-center gap-3.5">
+                            <div class="h-10 w-10 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center text-base" style="color: ${crew.color || '#fff'}">
+                                <i class="${crew.icon || 'fa-solid fa-user-gear'}"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold font-mono text-white flex items-center gap-1">
+                                    <span style="color: ${crew.color || '#fff'}">${crew.title}</span>${badgeHtml}
+                                </div>
+                                <span class="text-[10px] text-slate-300 block mt-0.5">${crew.sub || ''}</span>
+                            </div>
+                        </div>
+                        ${crewAdmin}
+                    `;
+                    rosterContainer.appendChild(crewEl);
+                });
+            }
+        }
+
+        function openCardModal(catIdx, cardIdx) {
+            document.getElementById('modal-cat-idx').value = catIdx;
+            document.getElementById('modal-card-idx').value = cardIdx;
+            
+            toggleIconPicker('card-modal-picker');
+            document.getElementById('card-modal-picker').classList.add('hidden');
+
+            if (cardIdx === -1) {
+                document.getElementById('modal-card-title').value = '';
+                document.getElementById('modal-card-url').value = '';
+                document.getElementById('modal-card-icon').value = 'fa-solid fa-link';
+                document.getElementById('modal-card-color').value = '#00f5d4';
+                document.getElementById('modal-card-header-title').textContent = "🛠️ 新規マネジメントリンクの創生";
+            } else {
+                const card = plipMasterData.management[catIdx].cards[cardIdx];
+                document.getElementById('modal-card-title').value = card.title;
+                document.getElementById('modal-card-url').value = card.url;
+                document.getElementById('modal-card-icon').value = card.icon || 'fa-solid fa-link';
+                document.getElementById('modal-card-color').value = card.color || '#00f5d4';
+                document.getElementById('modal-card-header-title').textContent = "🛠️ マネジメントリンク構成変更";
+            }
+            document.getElementById('card-modal').classList.remove('hidden');
+        }
+        function closeCardModal() { document.getElementById('card-modal').classList.add('hidden'); }
+        function saveCardData() {
+            const catIdx = parseInt(document.getElementById('modal-cat-idx').value);
+            const cardIdx = parseInt(document.getElementById('modal-card-idx').value);
+            const title = document.getElementById('modal-card-title').value.trim();
+            const url = document.getElementById('modal-card-url').value.trim();
+            const icon = document.getElementById('modal-card-icon').value.trim();
+            const color = document.getElementById('modal-card-color').value;
+
+            if(!title) return alert("タイトルを入力してください。");
+            const targetArray = plipMasterData.management[catIdx].cards;
+            const obj = { title, url: url || '#', icon, color };
+            if (cardIdx === -1) targetArray.push(obj); else targetArray[cardIdx] = obj;
+            
+            closeCardModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteManagementCard(catIdx, cardIdx) {
+            if (confirm("このリンクアセットを削除しますか？")) {
+                plipMasterData.management[catIdx].cards.splice(cardIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveManagementCard(catIdx, cardIdx, direction) {
+            const arr = plipMasterData.management[catIdx].cards;
+            const target = cardIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[cardIdx], arr[target]] = [arr[target], arr[cardIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        function openCategoryModal(catIdx) {
+            document.getElementById('modal-target-cat-idx').value = catIdx;
+            
+            toggleIconPicker('category-modal-picker');
+            document.getElementById('category-modal-picker').classList.add('hidden');
+
+            if(catIdx === -1) {
+                document.getElementById('modal-cat-title').value = '';
+                document.getElementById('modal-cat-icon').value = 'fa-solid fa-folder';
+                document.getElementById('modal-cat-color').value = '#ffb703';
+                document.getElementById('modal-cat-header-title').textContent = "📂 新規カテゴリの創設";
+            } else {
+                const cat = plipMasterData.management[catIdx];
+                document.getElementById('modal-cat-title').value = cat.title;
+                document.getElementById('modal-cat-icon').value = cat.icon || 'fa-solid fa-folder';
+                document.getElementById('modal-cat-color').value = cat.color || '#ffb703';
+                document.getElementById('modal-cat-header-title').textContent = "📂 工房カテゴリ構成の編集";
+            }
+            document.getElementById('category-modal').classList.remove('hidden');
+        }
+        function closeCategoryModal() { document.getElementById('category-modal').classList.add('hidden'); }
+        function saveCategoryData() {
+            const title = document.getElementById('modal-cat-title').value.trim();
+            const icon = document.getElementById('modal-cat-icon').value.trim();
+            const color = document.getElementById('modal-cat-color').value;
+
+            if (isCrewEditMode) {
+                const sub = document.getElementById('modal-crew-sub').value.trim();
+                if (!title) return alert("クルー名を入力してください。");
+                const obj = { title, icon, color, sub };
+                if (currentEditingCrewIdx === -1) {
+                    if (!plipMasterData.roster) plipMasterData.roster = [];
+                    plipMasterData.roster.push(obj);
+                } else {
+                    plipMasterData.roster[currentEditingCrewIdx] = obj;
+                }
+            } else {
+                const catIdx = parseInt(document.getElementById('modal-target-cat-idx').value);
+                if (!title) return alert("カテゴリ名を入力してください。");
+                if (catIdx === -1) {
+                    plipMasterData.management.push({ title, icon, color, cards: [] });
+                } else {
+                    plipMasterData.management[catIdx].title = title;
+                    plipMasterData.management[catIdx].icon = icon;
+                    plipMasterData.management[catIdx].color = color;
+                }
+            }
+            
+            closeCategoryModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteManagementCategory(catIdx) {
+            if(confirm("カテゴリを削除すると内包する全アセットリンクが消失します。実行しますか？")) {
+                plipMasterData.management.splice(catIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveManagementCategory(catIdx, direction) {
+            const arr = plipMasterData.management;
+            const target = catIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[catIdx], arr[target]] = [arr[target], arr[catIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        function openGatewayModal(gwIdx) {
+            document.getElementById('modal-gw-idx').value = gwIdx;
+            
+            toggleIconPicker('gateway-modal-picker');
+            document.getElementById('gateway-modal-picker').classList.add('hidden');
+
+            if(gwIdx === -1) {
+                document.getElementById('modal-gw-title').value = '';
+                document.getElementById('modal-gw-badge').value = 'New Gateway';
+                document.getElementById('modal-gw-sub').value = '';
+                document.getElementById('modal-gw-desc').value = '';
+                document.getElementById('modal-gw-url').value = '';
+                document.getElementById('modal-gw-icon').value = 'fa-solid fa-rocket';
+                document.getElementById('modal-gw-color').value = '#00f5d4';
+            } else {
+                const gw = plipMasterData.gateways[gwIdx];
+                document.getElementById('modal-gw-title').value = gw.title;
+                document.getElementById('modal-gw-badge').value = gw.badge;
+                document.getElementById('modal-gw-sub').value = gw.sub || '';
+                document.getElementById('modal-gw-desc').value = gw.desc || '';
+                document.getElementById('modal-gw-url').value = gw.url;
+                document.getElementById('modal-gw-icon').value = gw.icon || 'fa-solid fa-rocket';
+                document.getElementById('modal-gw-color').value = gw.color || '#00f5d4';
+            }
+            document.getElementById('gateway-modal').classList.remove('hidden');
+        }
+        function closeGatewayModal() { document.getElementById('gateway-modal').classList.add('hidden'); }
+        function saveGatewayData() {
+            const gwIdx = parseInt(document.getElementById('modal-gw-idx').value);
+            const title = document.getElementById('modal-gw-title').value.trim();
+            const badge = document.getElementById('modal-gw-badge').value.trim();
+            const sub = document.getElementById('modal-gw-sub').value.trim();
+            const desc = document.getElementById('modal-gw-desc').value.trim();
+            const url = document.getElementById('modal-gw-url').value.trim();
+            const icon = document.getElementById('modal-gw-icon').value.trim();
+            const color = document.getElementById('modal-gw-color').value;
+
+            if(!title) return alert("タイトルは必須です。");
+            const obj = { title, badge, sub, desc, url: url || '#', icon, color };
+            if(gwIdx === -1) plipMasterData.gateways.push(obj); else plipMasterData.gateways[gwIdx] = obj;
+            
+            closeGatewayModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteGateway(gwIdx) {
+            if(confirm("このゲートウェイを完全に撤去しますか？")) {
+                plipMasterData.gateways.splice(gwIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveGateway(gwIdx, direction) {
+            const arr = plipMasterData.gateways;
+            const target = gwIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[gwIdx], arr[target]] = [arr[target], arr[gwIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        function openArtifactModal(artIdx) {
+            document.getElementById('modal-art-idx').value = artIdx;
+            if(artIdx === -1) {
+                document.getElementById('modal-art-no').value = 'Product No.' + (plipMasterData.artifacts.length + 1);
+                document.getElementById('modal-art-title').value = '';
+                document.getElementById('modal-art-period').value = '期間: 2026年';
+                document.getElementById('modal-art-url').value = '';
+                document.getElementById('modal-art-creators').value = '';
+            } else {
+                const art = plipMasterData.artifacts[artIdx];
+                document.getElementById('modal-art-no').value = art.productNo;
+                document.getElementById('modal-art-title').value = art.title;
+                document.getElementById('modal-art-period').value = art.period;
+                document.getElementById('modal-art-url').value = art.url;
+                document.getElementById('modal-art-creators').value = art.creators || '';
+            }
+            renderCrewChips();
+            document.getElementById('artifact-modal').classList.remove('hidden');
+        }
+        function closeArtifactModal() { document.getElementById('artifact-modal').classList.add('hidden'); }
+        function saveArtifactData() {
+            const artIdx = parseInt(document.getElementById('modal-art-idx').value);
+            const productNo = document.getElementById('modal-art-no').value.trim();
+            const title = document.getElementById('modal-art-title').value.trim();
+            const period = document.getElementById('modal-art-period').value.trim();
+            const url = document.getElementById('modal-art-url').value.trim();
+            const creators = document.getElementById('modal-art-creators').value.trim();
+
+            if(!title) return alert("作品名は必須です。");
+            const obj = plipMasterData.artifacts[artIdx] || {};
+            obj.productNo = productNo;
+            obj.title = title;
+            obj.period = period;
+            obj.url = url || '#';
+            obj.creators = creators;
+
+            if(artIdx === -1) plipMasterData.artifacts.push(obj); else plipMasterData.artifacts[artIdx] = obj;
+            closeArtifactModal(); renderDynamicUI(); savePortalData();
+        }
+        function deleteArtifact(artIdx) {
+            if(confirm("この作品データをレジストリから抹消しますか？")) {
+                plipMasterData.artifacts.splice(artIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+        function moveArtifact(artIdx, direction) {
+            const arr = plipMasterData.artifacts;
+            const target = artIdx + direction;
+            if(target < 0 || target >= arr.length) return;
+            [arr[artIdx], arr[target]] = [arr[target], arr[artIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+        function openSectionModal(secKey) {
+            document.getElementById('modal-sec-key').value = secKey;
+            const sec = plipMasterData.sections[secKey];
+            
+            toggleIconPicker('section-modal-picker');
+            document.getElementById('section-modal-picker').classList.add('hidden');
+
+            document.getElementById('modal-sec-title').value = sec.title;
+            document.getElementById('modal-sec-icon').value = sec.icon || '';
+            document.getElementById('modal-sec-color').value = sec.color || '#00f5d4';
+
+            const subContainer = document.getElementById('modal-sec-sub-container');
+            const descContainer = document.getElementById('modal-sec-desc-container');
+            
+            if (secKey === 'welcome') {
+                subContainer.classList.remove('hidden');
+                descContainer.classList.remove('hidden');
+                document.getElementById('modal-sec-sub').value = sec.sub || '';
+                document.getElementById('modal-sec-desc').value = sec.desc || '';
+            } else if (secKey === 'header' || secKey === 'management') {
+                subContainer.classList.remove('hidden');
+                descContainer.classList.add('hidden');
+                document.getElementById('modal-sec-sub').value = sec.sub || '';
+            } else {
+                subContainer.classList.add('hidden');
+                descContainer.classList.add('hidden');
+            }
+
+            document.getElementById('modal-sec-header-title').textContent = `🌐 セクション構成の編集 [${secKey.toUpperCase()}]`;
+            document.getElementById('section-modal').classList.remove('hidden');
+        }
+        
+        function closeSectionModal() { document.getElementById('section-modal').classList.add('hidden'); }
+        
+function saveSectionData() {
+            const secKey = document.getElementById('modal-sec-key').value;
+            let title = document.getElementById('modal-sec-title').value.trim();
+            const icon = document.getElementById('modal-sec-icon').value.trim();
+            const color = document.getElementById('modal-sec-color').value;
+
+            if (!title) return alert("セクションタイトルを入力してください。");
+
+            // ★ここに挿入：ウェルカムボードの編集時、My PLIPという文字があれば最初から七色タグで囲んで保存する
+            if (secKey === 'welcome' && !title.includes('text-rainbow')) {
+                title = title.replace(/My\s*PLIP/g, '<span class="text-rainbow">$&</span>');
+            }
+
+            plipMasterData.sections[secKey].title = title;
+            plipMasterData.sections[secKey].icon = icon;
+            plipMasterData.sections[secKey].color = color;
+
+            if (secKey === 'welcome') {
+                plipMasterData.sections[secKey].sub = document.getElementById('modal-sec-sub').value.trim();
+                plipMasterData.sections[secKey].desc = document.getElementById('modal-sec-desc').value.trim();
+            } else if (secKey === 'header' || secKey === 'management') {
+                plipMasterData.sections[secKey].sub = document.getElementById('modal-sec-sub').value.trim();
+            }
+
+            closeSectionModal(); renderDynamicUI(); savePortalData();
+        }
+
+        let currentEditingCrewIdx = -1;
+        let isCrewEditMode = false;
+
+        function openRosterModal(crewIdx) {
+            currentEditingCrewIdx = crewIdx;
+            isCrewEditMode = true;
+            
+            toggleIconPicker('category-modal-picker');
+            document.getElementById('category-modal-picker').classList.add('hidden');
+
+            document.getElementById('modal-cat-header-title').textContent = crewIdx === -1 ? "👤 新規AIクルーの登録" : "👤 AIクルー構成の編集";
+            
+            const labelEl = document.getElementById('modal-cat-title').previousElementSibling;
+            if (labelEl) labelEl.textContent = "AIクルー名（名前）";
+
+            const submitBtn = document.querySelector('#category-modal button[onclick="saveCategoryData()"]');
+            if (submitBtn) submitBtn.textContent = "クルーデータを確定";
+
+            let subInput = document.getElementById('modal-crew-sub');
+            if (!subInput) {
+                const div = document.createElement('div');
+                div.className = "mt-2";
+                div.innerHTML = `
+                    <label class="block text-xs font-bold text-slate-400 mb-1">担当領域・役割説明</label>
+                    <input type="text" id="modal-crew-sub" class="w-full bg-[#060a12] border border-cyberBorder rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyberAccent">
+                `;
+                document.getElementById('modal-cat-title').parentElement.insertAdjacentElement('afterend', div);
+                subInput = document.getElementById('modal-crew-sub');
+            }
+            subInput.parentElement.classList.remove('hidden');
+
+            if (crewIdx === -1) {
+                document.getElementById('modal-cat-title').value = '';
+                document.getElementById('modal-cat-icon').value = 'fa-solid fa-user-gear';
+                document.getElementById('modal-cat-color').value = '#ffffff';
+                subInput.value = '';
+            } else {
+                const crew = plipMasterData.roster[crewIdx];
+                document.getElementById('modal-cat-title').value = crew.title;
+                document.getElementById('modal-cat-icon').value = crew.icon || 'fa-solid fa-user-gear';
+                document.getElementById('modal-cat-color').value = crew.color || '#ffffff';
+                subInput.value = crew.sub || '';
+            }
+
+            document.getElementById('category-modal').classList.remove('hidden');
+        }
+
+        const originalCloseCategoryModal = closeCategoryModal;
+        closeCategoryModal = function() {
+            document.getElementById('category-modal').classList.add('hidden');
+            isCrewEditMode = false;
+            const labelEl = document.getElementById('modal-cat-title').previousElementSibling;
+            if (labelEl) labelEl.textContent = "カテゴリ名 (和名)";
+            const submitBtn = document.querySelector('#category-modal button[onclick="saveCategoryData()"]');
+            if (submitBtn) submitBtn.textContent = "カテゴリ確定";
+            const subInput = document.getElementById('modal-crew-sub');
+            if (subInput) subInput.parentElement.classList.add('hidden');
+        };
+
+        function deleteRosterCrew(crewIdx) {
+            if (confirm("このAIクルーを常駐リストから抹消しますか？")) {
+                plipMasterData.roster.splice(crewIdx, 1);
+                renderDynamicUI(); savePortalData();
+            }
+        }
+
+        function moveRosterCrew(crewIdx, direction) {
+            const arr = plipMasterData.roster;
+            const target = crewIdx + direction;
+            if (target < 0 || target >= arr.length) return;
+            [arr[crewIdx], arr[target]] = [arr[target], arr[crewIdx]];
+            renderDynamicUI(); savePortalData();
+        }
+
+const fontAwesomeIconList = [
+            "core-burst-icon",
+            "fa-solid fa-link", "fa-solid fa-rocket", "fa-solid fa-lightbulb", "fa-solid fa-bolt", 
+            "fa-solid fa-sack-dollar", "fa-solid fa-chart-line", "fa-solid fa-chart-pie", "fa-solid fa-coins", 
+            "fa-solid fa-building", "fa-solid fa-satellite", "fa-solid fa-atom", "fa-solid fa-graduation-cap", 
+            "fa-solid fa-chalkboard-user", "fa-solid fa-child", "fa-solid fa-folder-open", "fa-solid fa-paw", 
+            "fa-solid fa-book-open", "fa-solid fa-wand-magic-sparkles", "fa-solid fa-microchip", "fa-solid fa-house-chimney-user", 
+            "fa-solid fa-gamepad", "fa-solid fa-shield-halved", "fa-solid fa-circle-nodes", "fa-solid fa-globe",
+            "fa-solid fa-server", "fa-solid fa-database", "fa-solid fa-terminal", "fa-solid fa-laptop-code", "fa-solid fa-gear",
+            "fa-solid fa-key", "fa-solid fa-lock", "fa-solid fa-unlock-keyhole", "fa-solid fa-user-shield", "fa-solid fa-wallet",
+            "fa-solid fa-vault", "fa-solid fa-gem", "fa-solid fa-crown", "fa-solid fa-trophy", "fa-solid fa-star",
+            "fa-solid fa-fire", "fa-solid fa-compass", "fa-solid fa-map-location-dot", "fa-solid fa-dna", "fa-solid fa-flask",
+            "fa-solid fa-brain", "fa-solid fa-robot", "fa-solid fa-vr-cardboard", "fa-solid fa-user-gear", "fa-solid fa-users",
+            "fa-solid fa-headset", "fa-solid fa-code", "fa-solid fa-palette", "fa-solid fa-briefcase", "fa-solid fa-chart-bar",
+            "fa-solid fa-piggy-bank", "fa-solid fa-credit-card", "fa-solid fa-landmark", "fa-solid fa-store", "fa-solid fa-cart-shopping",
+            "fa-solid fa-wrench", "fa-solid fa-hammer", "fa-solid fa-screwdriver-wrench", "fa-solid fa-compass-drafting", "fa-solid fa-pen-to-square",
+            "fa-solid fa-file-code", "fa-solid fa-square-rss", "fa-solid fa-network-wired", "fa-solid fa-cloud", "fa-solid fa-wifi",
+            "fa-solid fa-display", "fa-solid fa-mobile-screen-button", "fa-solid fa-print", "fa-solid fa-memory", "fa-solid fa-hard-drive",
+            "fa-solid fa-gavel", "fa-solid fa-signature", "fa-solid fa-certificate", "fa-solid fa-passport", "fa-solid fa-hourglass-half",
+            "fa-solid fa-calendar-days", "fa-solid fa-bell", "fa-solid fa-envelope", "fa-solid fa-bullhorn", "fa-solid fa-comments",
+            "fa-solid fa-eye", "fa-solid fa-magnifying-glass", "fa-solid fa-filter", "fa-solid fa-arrow-up-right-from-square", "fa-solid fa-share-nodes",
+            "fa-solid fa-square-plus", "fa-solid fa-circle-plus", "fa-solid fa-floppy-disk", "fa-solid fa-trash-can", "fa-solid fa-pen-nib",
+            "fa-solid fa-cubes", "fa-solid fa-layer-group", "fa-solid fa-diagram-project", "fa-solid fa-bezier-curve", "fa-solid fa-arrows-spin",
+            
+			           // 🎷 音楽関係 (Music & Sound)
+            "fa-solid fa-music", "fa-solid fa-guitar", "fa-solid fa-drum", "fa-solid fa-compact-disc", "fa-solid fa-headphones", 
+            "fa-solid fa-microphone-lines", "fa-solid fa-sliders", "fa-solid fa-volume-high", "fa-solid fa-radio", "fa-solid fa-wave-square",
+            
+            // 🎮 ゲーム・遊び関係 (Gaming & Hobby)
+            "fa-solid fa-ghost", "fa-solid fa-dice", "fa-solid fa-chess", "fa-solid fa-puzzle-piece", "fa-solid fa-trophy", 
+            "fa-solid fa-clapperboard", "fa-solid fa-masks-theater", "fa-solid fa-hat-wizard", "fa-solid fa-dragon", "fa-solid fa-raygun",
+            
+            // ⛰️ 不動産・富土山・建物関係 (Mountain, Buildings & Land)
+            "fa-solid fa-mountain", "fa-solid fa-mountain-sun", "fa-solid fa-tree", "fa-solid fa-campground", "fa-solid fa-city", 
+            "fa-solid fa-building-user", "fa-solid fa-warehouse", "fa-solid fa-hotel", "fa-solid fa-archway", "fa-solid fa-map",
+ 
+// 🥋 武道・カンフー・格闘技関係 (Martial Arts & Action)
+            "fa-solid fa-user-ninja",       // 🥷 忍者・達人・カンフーマスター
+            "fa-solid fa-fist-raised",      // ✊ 突き・正拳突き・レイズドフィスト
+            "fa-solid fa-hand-fist",        // 👊 パンチ・ジャブ・一撃
+            "fa-solid fa-mitten",           // 🥊 オープンフィンガーグローブ・格闘手袋の代用
+            "fa-solid fa-dumbbell",         // 🏋️ 鍛錬・肉体鍛錬・トレーニング
+            "fa-solid fa-shield",           // 🛡️ 防御・受け・ガードの構え
+            "fa-solid fa-swords",           // ⚔️ 武器術・演武・クロスソード
+            "fa-solid fa-person-running",   // 🏃 瞬歩・フットワーク・スピード
+            "fa-solid fa-shoe-prints",      // 👣 足跡・ステップ・蹴りの軌跡
+            "fa-solid fa-fire-flame-curved" // 🔥 闘気・オーラ・覇気
+			
+			
+	
+        ];
+
+        // 共創作品のクルー選択は、常駐AIクルー一覧（plipMasterData.roster）を直接参照します。
+        // 固定名簿を別に持たないため、追加・編集・削除が自動で連動します。
+
+        function toggleIconPicker(pickerId) {
+            document.querySelectorAll('.icon-picker-panel').forEach(panel => {
+                if (panel.id !== pickerId) panel.classList.add('hidden');
+            });
+            const targetPanel = document.getElementById(pickerId);
+            if (targetPanel) {
+                targetPanel.classList.toggle('hidden');
+                if (!targetPanel.classList.contains('hidden')) {
+                    renderPickerIcons(pickerId + '-grid', pickerId);
+                }
+            }
+        }
+
+        function renderPickerIcons(gridId, panelId) {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            fontAwesomeIconList.forEach(iconClass => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'p-2 bg-[#060a12] hover:bg-cyberBorder border border-transparent hover:border-cyberAccent rounded-lg flex items-center justify-center transition text-slate-200';
+                btn.title = iconClass;
+                
+                if (iconClass === "core-burst-icon") {
+                    btn.innerHTML = `
+                        <div class="relative inline-block scale-110">
+                            <i class="fa-solid fa-lightbulb core-burst-rainbow-text"></i>
+                            <i class="fa-solid fa-bolt absolute top-[-3px] right-[-4px] text-yellow-300 text-[8px]"></i>
+                        </div>
+                    `;
+                } else {
+                    btn.innerHTML = `<i class="${iconClass}"></i>`;
+                }
+
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    let inputId = '';
+                    if (panelId === 'card-modal-picker') inputId = 'modal-card-icon';
+                    if (panelId === 'category-modal-picker') inputId = 'modal-cat-icon';
+                    if (panelId === 'gateway-modal-picker') inputId = 'modal-gw-icon';
+                    if (panelId === 'section-modal-picker') inputId = 'modal-sec-icon';
+
+                    if (inputId) document.getElementById(inputId).value = iconClass;
+                    document.getElementById(panelId).classList.add('hidden');
+                };
+				
+                grid.appendChild(btn);
+            });
+        }
+
+        function renderCrewChips() {
+            const container = document.getElementById('crew-chip-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const currentRoster = Array.isArray(plipMasterData.roster) ? plipMasterData.roster : [];
+
+            currentRoster.forEach(crew => {
+                const crewName = crew.title || '';
+                if (!crewName) return;
+
+                const crewIcon = crew.icon || 'fa-solid fa-user-gear';
+                const crewColor = crew.color || '#ffffff';
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'inline-flex items-center gap-1 bg-[#060a12] hover:bg-cyberBorder border border-cyberBorder hover:border-cyberAccent px-2.5 py-1 rounded-xl text-[10px] font-mono text-slate-200 transition active:scale-95';
+                btn.innerHTML = `<i class="${crewIcon}" style="color: ${crewColor}"></i> <span>${crewName}</span>`;
+                
+                btn.onclick = () => {
+                    const input = document.getElementById('modal-art-creators');
+                    const formattedValue = `${crewName} (${crewIcon}, ${crewColor})`;
+                    
+                    if (!input.value.trim()) {
+                        input.value = formattedValue;
+                    } else if (!input.value.includes(`${crewName} (`)) {
+                        input.value = input.value.trim().replace(/,$/, '') + ', ' + formattedValue;
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.relative')) {
+                document.querySelectorAll('.icon-picker-panel').forEach(panel => {
+                    panel.classList.add('hidden');
+                });
+            }
+        });
+
+
+
+function exportPortalHTML(isForEdit) {
+            const cleanDoc = document.implementation.createHTMLDocument(document.title);
+            cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+
+            // ==========================================
+            // ⭐ ルール6適用：出力HTMLのクレンジング処理
+            // ==========================================
+            
+            // 1. 重複するインラインCSS (<style> タグ) のクレンジング
+            const styles = cleanDoc.head.querySelectorAll('style');
+            const seenStyles = new Set();
+            styles.forEach(style => {
+                const content = style.textContent.trim();
+                // 中身が空、または既に全く同じ内容のスタイルが存在する場合は削除して膨張を防ぐ
+                if (!content || seenStyles.has(content)) {
+                    style.remove();
+                } else {
+                    seenStyles.add(content);
+                }
+            });
+
+            // 2. モーダル画面のクラス初期化
+            ['#card-modal', '#category-modal', '#gateway-modal', '#artifact-modal', '#section-modal'].forEach(sel => {
+                const el = cleanDoc.querySelector(sel);
+                if(el) el.className = "fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4";
+            });
+
+            // 3. 動的コンテナの初期化
+            ['#management-board-container', '#gateways-container', '#artifacts-container', '#roster-container'].forEach(sel => {
+                const el = cleanDoc.querySelector(sel);
+                if(el) el.innerHTML = '';
+            });
+
+// 4. データ保持構造の一本化と埋め込みスクリプトのクレンジング（確実にメインアセットを狙い撃ち）
+            const scripts = cleanDoc.querySelectorAll('script:not([src])');
+            let scriptEl = null;
+            
+            // ページ内の全スクリプトから、マスターデータが定義されている本尊を特定する
+            scripts.forEach(s => {
+                if (s.textContent.includes('plipMasterData')) {
+                    scriptEl = s;
+                }
+            });
+
+            if (scriptEl) {
+                let jsCode = scriptEl.textContent;
+                
+                const rawJson = JSON.stringify(plipMasterData);
+                const base64Data = btoa(unescape(encodeURIComponent(rawJson)));
+                
+                // 新しいクリーンなデータ定義コードを生成
+                const cleanDataCode = `let plipMasterData = {};\n        const plipEmbeddedBase64Data = "${base64Data}";`;
+                
+                // マーカーで囲まれた複雑なオブジェクトを、エラーの起きないシンプルな正規表現で一網打尽に置換
+                const dataRegex = /\/\/ === MASTER_DATA_START ===[\s\S]*?\/\/ === MASTER_DATA_END ===/;
+                jsCode = jsCode.replace(dataRegex, cleanDataCode);
+
+                if (!isForEdit) {
+                    // 公開用は自動パスを無効化する処理
+                    jsCode = jsCode.replace(/unlockHubInstant\(\);/g, '/* 🔓 AUTH REQUIRED FOR SECURITY */');
+                }
+
+                scriptEl.textContent = jsCode;
+            }
+			
+			
+
+            // 5. 公開用（閲覧専用）出力時の不要要素の完全破棄
+            if (!isForEdit) {
+                const removeSelectors = ['#portal-control-bar', 'button[onclick*="Modal"]', '#card-modal', '#category-modal', '#gateway-modal', '#artifact-modal', '#section-modal'];
+                removeSelectors.forEach(sel => {
+                    cleanDoc.querySelectorAll(sel).forEach(el => el.remove());
+                });
+            }
+
+            // HTMLの生成とダウンロード処理
+            const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
+            const blob = new Blob([finalHtml], { type: "text/html;charset=utf-8;" });
+            const link = document.createElement("a");
+            
+            link.href = URL.createObjectURL(blob);
+            // 保存するファイル名も現在の正である「v.13」ベースに最適化
+            link.setAttribute("download", isForEdit ? "myPLIP_portal_EDIT (v.13).html" : "myPLIP_portal_PRODUCTION.html");
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert(isForEdit ? "💾 重複コードをクレンジングし、編集機能を維持した管理用ファイル(v.13)をエクスポートしました。" : "🚀 不要コードを完全クレンジングした、外部公開用セキュリティ防衛版HTMLを出力しました！");
+        }
+    </script>
+
+</body></html>
