@@ -484,6 +484,14 @@ code {
               状態2：主題歌を連続ランダム再生<br>
               状態3：音楽オフ
             </div>
+
+            <label style="display:block;margin-top:12px">
+              <span class="field-label">主題歌（song系）のファイル形式</span>
+              <select id="theme-format-select" class="select">
+                <option value="mp3" selected>MP3（Suno向け）</option>
+                <option value="mp4">MP4（旧作品・Lyria向け）</option>
+              </select>
+            </label>
           </div>
         </div>
       </div>
@@ -512,9 +520,10 @@ code {
       <div class="note">
         <strong style="color:#cbd5e1">音楽ファイル：</strong>
         完成HTMLと同じ場所に <code>music</code> フォルダを置き、
-        <code>bgm.mp3</code>、<code>bgm1.mp3</code> と
+        <code>bgm.mp3</code>、<code>bgm1.mp3</code> と、
+        上で選んだ形式の <code>song.mp3～song4.mp3</code> または
         <code>song.mp4～song4.mp4</code> を入れてください。
-        抽選した曲を直接再生し、失敗した場合だけ標準ファイルへ切り替えます。
+        抽選した曲を直接再生し、失敗した場合だけ同じ形式の標準ファイルへ切り替えます。
       </div>
     </section>
 
@@ -970,6 +979,7 @@ code {
     const colors = getColors();
     const transitions = getAllTransitionSettings();
     const effect = $("#effect-select").value;
+    const themeFormat = $("#theme-format-select").value === "mp4" ? "mp4" : "mp3";
 
     const states = [
       { svg: svgs[0], color: colors[0], musicMode: "ambient" },
@@ -983,6 +993,8 @@ code {
       JSON.stringify(transitions).replace(/</g, "\\u003c");
     const serializedEffect =
       JSON.stringify(effect).replace(/</g, "\\u003c");
+    const serializedThemeFormat =
+      JSON.stringify(themeFormat).replace(/</g, "\\u003c");
 
     const outputCss = `
 * { box-sizing: border-box; }
@@ -1127,6 +1139,7 @@ body {
   const STATES = ${serializedStates};
   const TRANSITIONS = ${serializedTransitions};
   const EFFECT = ${serializedEffect};
+  const THEME_FORMAT = ${serializedThemeFormat};
 
   let currentState = 0;
   let managedAudio = null;
@@ -1355,11 +1368,11 @@ body {
     }
 
     const themeSources = [
-      "./music/song.mp4",
-      "./music/song1.mp4",
-      "./music/song2.mp4",
-      "./music/song3.mp4",
-      "./music/song4.mp4"
+      "./music/song." + THEME_FORMAT,
+      "./music/song1." + THEME_FORMAT,
+      "./music/song2." + THEME_FORMAT,
+      "./music/song3." + THEME_FORMAT,
+      "./music/song4." + THEME_FORMAT
     ];
 
     const playNextTheme = async () => {
@@ -1368,7 +1381,7 @@ body {
       const chosen = randomChoice(themeSources);
       const played = await playSourceWithFallback(
         chosen,
-        "./music/song.mp4",
+        "./music/song." + THEME_FORMAT,
         {
           loop: false,
           sessionId,
