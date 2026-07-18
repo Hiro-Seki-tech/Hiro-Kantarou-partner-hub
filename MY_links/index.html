@@ -564,7 +564,7 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
     let optimized = String(buttonHtml || '');
 
     // 共通：音楽URLをリンク先作品の music フォルダへ統一
-    // BGM.html は bgm.mp3 へ、bgm.mp3 / bgm1.mp3 は元のファイル名を維持して変換
+    // BGM.html・bgm.mp3・bgm1.mp3を、リンク先作品のmusicフォルダへ統一
     optimized = optimized.replace(
         /(['"])([^'"]*?\/music\/)?BGM\.html(['"])/gi,
         `$1${musicBaseUrl}bgm.mp3$3`
@@ -575,7 +575,7 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
             `${quote}${musicBaseUrl}bgm${number || ''}.mp3${quote}`
     );
 
-    // 主題歌は新旧両対応：song.mp3～song4.mp3 / song.mp4～song4.mp4
+    // 主題歌は旧作mp4・新作mp3の両方をリンク先作品のmusicフォルダへ統一
     optimized = optimized.replace(
         /(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.(mp3|mp4)(['"])/gi,
         (match, quote, oldBase, number, extension, closingQuote) =>
