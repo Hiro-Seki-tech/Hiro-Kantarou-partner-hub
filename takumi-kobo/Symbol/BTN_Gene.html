@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIPボタンビルダー v5</title>
+<title>PLIPボタンビルダー v6</title>
 <style>
 :root {
   color-scheme: dark;
@@ -257,6 +257,18 @@ code {
   font-weight: 950;
 }
 .primary-button:active { transform: scale(.985); }
+.link-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 14px;
+  border: 1px solid #22d3ee;
+  border-radius: 12px;
+  color: #cffafe;
+  background: linear-gradient(90deg, #0e7490, #0369a1);
+  box-shadow: 0 12px 28px rgba(6,182,212,.14);
+  font-weight: 950;
+}
+.link-button:active { transform: scale(.985); }
 .note {
   padding: 13px;
   border: 1px solid var(--line);
@@ -450,10 +462,10 @@ code {
 <div class="builder">
   <header class="header">
     <div>
-      <h1>✨ PLIPボタンビルダー v5</h1>
+      <h1>✨ PLIPボタンビルダー v6</h1>
       <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
     </div>
-    <div class="version">Version 5.0 · 2026.07</div>
+    <div class="version">Version 6.0 · 2026.07</div>
   </header>
 
   <div class="layout">
@@ -513,13 +525,18 @@ code {
         <div id="transition-settings"></div>
 
         <button id="generate-button" type="button" class="primary-button">
-          ⬇ 完成HTMLを生成して保存
+          ⬇ 通常版HTMLを生成して保存
+        </button>
+        <button id="generate-link-button" type="button" class="link-button">
+          🔗 LINK HP対応版HTMLを生成して保存
         </button>
       </div>
 
       <div class="note">
+        <strong style="color:#cbd5e1">2種類の出力：</strong>
+        通常版は作品本体への組み込み用です。LINK HP対応版は、リンクHPから外部ファイルとして参照し、状態・曲名を親ページへ通知します。<br><br>
         <strong style="color:#cbd5e1">音楽ファイル：</strong>
-        完成HTMLと同じ場所に <code>music</code> フォルダを置き、
+        通常版HTMLと同じ場所に <code>music</code> フォルダを置き、
         <code>bgm.mp3</code>、<code>bgm1.mp3</code> と、
         上で選んだ形式の <code>song.mp3～song4.mp3</code> または
         <code>song.mp4～song4.mp4</code> を入れてください。
@@ -969,7 +986,7 @@ code {
     return cleaned || "plip_button";
   }
 
-  function buildOutputHtml() {
+  function buildOutputHtml(isLinkMode = false) {
     const rawSvgs = getRawSvgs();
     if (!rawSvgs[0]) {
       throw new Error("状態1のSVGコードを入力してください");
@@ -994,7 +1011,9 @@ code {
     const serializedEffect =
       JSON.stringify(effect).replace(/</g, "\\u003c");
     const serializedThemeFormat =
-      JSON.stringify(themeFormat).replace(/</g, "\\u003c");
+      JSON.stringify(themeFormat).replace(/</g, "\u003c");
+    const serializedLinkMode =
+      JSON.stringify(Boolean(isLinkMode)).replace(/</g, "\u003c");
 
     const outputCss = `
 * { box-sizing: border-box; }
@@ -1008,13 +1027,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  padding: ${isLinkMode ? "0" : "32px"};
+  overflow: ${isLinkMode ? "hidden" : "visible"};
+  background: ${isLinkMode ? "transparent" : "#020617"};
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     "Yu Gothic UI", "Meiryo", sans-serif;
 }
 .plip-wrap {
   position: relative;
-  width: min(640px, calc(100vw - 32px));
+  width: ${isLinkMode ? "100%" : "min(640px, calc(100vw - 32px))"};
+  height: ${isLinkMode ? "100%" : "auto"};
   aspect-ratio: 1 / 1;
   user-select: none;
 }
@@ -1039,6 +1061,7 @@ body {
   height: 100%;
 }
 .plip-bubble {
+  display: ${isLinkMode ? "none" : "block"};
   position: absolute;
   top: calc(100% - 5px);
   left: 0;
@@ -1111,6 +1134,7 @@ body {
   100% { opacity: 1; }
 }
 #plip-toast {
+  display: ${isLinkMode ? "none" : "block"};
   position: fixed;
   top: 18px;
   right: 18px;
@@ -1140,6 +1164,17 @@ body {
   const TRANSITIONS = ${serializedTransitions};
   const EFFECT = ${serializedEffect};
   const THEME_FORMAT = ${serializedThemeFormat};
+  const LINK_MODE = ${serializedLinkMode};
+  const queryParams = new URLSearchParams(window.location.search);
+  const linkCardTitle = queryParams.get("title") || "作品";
+  const requestedMusicBase = queryParams.get("musicBase") || "./music/";
+
+  function musicPath(filename) {
+    const base = requestedMusicBase.endsWith("/")
+      ? requestedMusicBase
+      : requestedMusicBase + "/";
+    return base + filename;
+  }
 
   let currentState = 0;
   let managedAudio = null;
@@ -1323,6 +1358,15 @@ body {
 
       try {
         await audio.play();
+
+        if (LINK_MODE && currentState === 1) {
+          window.parent.postMessage({
+            type: "PLIP_TRACK_PLAYING",
+            title: encodeURIComponent(linkCardTitle),
+            trackUrl: audio.currentSrc || audio.src || source
+          }, "*");
+        }
+
         return true;
       } catch (_) {
         if (managedAudio === audio) {
@@ -1350,13 +1394,13 @@ body {
 
     if (state.musicMode === "ambient") {
       const chosen = randomChoice([
-        "./music/bgm.mp3",
-        "./music/bgm1.mp3"
+        musicPath("bgm.mp3"),
+        musicPath("bgm1.mp3")
       ]);
 
       const played = await playSourceWithFallback(
         chosen,
-        "./music/bgm.mp3",
+        musicPath("bgm.mp3"),
         { loop: true, sessionId }
       );
 
@@ -1368,11 +1412,11 @@ body {
     }
 
     const themeSources = [
-      "./music/song." + THEME_FORMAT,
-      "./music/song1." + THEME_FORMAT,
-      "./music/song2." + THEME_FORMAT,
-      "./music/song3." + THEME_FORMAT,
-      "./music/song4." + THEME_FORMAT
+      musicPath("song." + THEME_FORMAT),
+      musicPath("song1." + THEME_FORMAT),
+      musicPath("song2." + THEME_FORMAT),
+      musicPath("song3." + THEME_FORMAT),
+      musicPath("song4." + THEME_FORMAT)
     ];
 
     const playNextTheme = async () => {
@@ -1381,7 +1425,7 @@ body {
       const chosen = randomChoice(themeSources);
       const played = await playSourceWithFallback(
         chosen,
-        "./music/song." + THEME_FORMAT,
+        musicPath("song." + THEME_FORMAT),
         {
           loop: false,
           sessionId,
@@ -1426,6 +1470,14 @@ body {
     const transitionIndex = currentState;
     currentState = (currentState + 1) % STATES.length;
     applyState(true, transitionIndex);
+
+    if (LINK_MODE && window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: "PLIP_BUTTON_CLICK",
+        title: encodeURIComponent(linkCardTitle),
+        stateValue: currentState
+      }, "*");
+    }
   });
 
   window.addEventListener("message", event => {
@@ -1459,11 +1511,13 @@ body {
 </html>`;
   }
 
-  function downloadOutput() {
+  function downloadOutput(isLinkMode = false) {
     try {
-      const outputHtml = buildOutputHtml();
-      const filename =
-        sanitizeFilename($("#filename-input").value) + ".html";
+      const outputHtml = buildOutputHtml(isLinkMode);
+      const baseName = sanitizeFilename($("#filename-input").value);
+      const filename = isLinkMode
+        ? baseName + "_link.html"
+        : baseName + ".html";
 
       const blob = new Blob([outputHtml], {
         type: "text/html;charset=utf-8"
@@ -1478,7 +1532,9 @@ body {
       link.remove();
 
       setTimeout(() => URL.revokeObjectURL(url), 1000);
-      showToast("完成HTMLを保存しました");
+      showToast(isLinkMode
+        ? "LINK HP対応版HTMLを保存しました"
+        : "通常版HTMLを保存しました");
     } catch (error) {
       alert(error.message || "生成に失敗しました");
     }
@@ -1560,7 +1616,8 @@ body {
     });
   });
 
-  $("#generate-button").addEventListener("click", downloadOutput);
+  $("#generate-button").addEventListener("click", () => downloadOutput(false));
+  $("#generate-link-button").addEventListener("click", () => downloadOutput(true));
 
   setPreviewState(0, false);
 })();
