@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<!-- PLIP LINK HP Generator: blank edition / external LINK button reference supported -->
+<html><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 PLIP! Simple LINK Hub & Link Generator</title>
+    <title>💡 PLIP! Simple LINK Hub &amp; Link Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -68,7 +68,7 @@
     <div id="generator-control-bar" class="sticky top-0 z-[200] bg-slate-900 border-b-2 border-amber-500 p-3 flex flex-wrap items-center justify-between gap-4 shadow-2xl">
         <div class="flex items-center gap-2">
             <span class="bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded text-xs animate-pulse">SIMPLE GENERATOR MODE</span>
-            <p class="text-xs text-slate-300 font-medium">常に編集が有効な開発スタジオです。ドロップしたボタンは演出を壊さず自動最適化されます。</p>
+            <p class="text-xs text-slate-300 font-medium">常に編集が有効な開発スタジオです。LINK用ボタンHTMLを同じフォルダから参照してカードへ登録できます。</p>
         </div>
         <div class="flex items-center gap-2">
             <button onclick="exportHTML(true)" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-all shadow-md flex items-center gap-1.5">
@@ -89,12 +89,12 @@
                     <div class="w-12 h-12 sm:w-16 sm:h-16 shrink-0 select-none">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full">
                             <g shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
-                                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="12" y1="2" x2="12" y2="4.5" /><line x1="5.5" y1="4.5" x2="7.5" y2="6.5" /><line x1="3" y1="12" x2="5.5" y2="12" /><line x1="5.5" y1="19.5" x2="7.5" y2="17.5" /><line x1="19.5" y1="17.5" x2="17.5" y2="15.5" /><line x1="21" y1="12" x2="18.5" y2="12" /><line x1="19.5" y1="4.5" x2="17.5" y2="6.5" /></g>
-                                <path class="rainbow-bulb-svg" d="M12,3.5 C7.5,3.5 3.8,7.2 3.8,11.8 C3.8,14.7 5.3,16.2 6.5,17.5 C7.3,18.3 7.5,19.0 7.5,19.9 L16.5,19.9 C16.5,19.0 16.7,18.3 17.5,17.5 C18.7,16.2 20.2,14.7 20.2,11.8 C20.2,7.2 16.5,3.5 12,3.5 Z" fill="#94a3b8" />
-                                <path d="M8.5,13.9 L10.6,9.7 L13.4,9.7 L15.5,13.9" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 2px #ffffff);" />
-                                <path d="M7.5,19.9 H16.5 V22.3 C16.5,23.0 15.9,23.7 15.1,23.7 H8.9 C8.1,23.7 7.5,23.0 7.5,22.3 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5" />
-                                <line x1="7.9" y1="21.3" stroke="#334155" stroke-width="1.0" x2="16.1" y2="21.3" /><line x1="8.3" y1="22.7" stroke="#334155" stroke-width="1.0" x2="15.7" y2="22.7" />
-                                <polygon class="flashing-bolt-svg" points="23,1.4 12,12.4 17,12.4 14,22.2 25,9.6 20,9.6" fill="#fde047" />
+                                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55"><line x1="12" y1="2" x2="12" y2="4.5"></line><line x1="5.5" y1="4.5" x2="7.5" y2="6.5"></line><line x1="3" y1="12" x2="5.5" y2="12"></line><line x1="5.5" y1="19.5" x2="7.5" y2="17.5"></line><line x1="19.5" y1="17.5" x2="17.5" y2="15.5"></line><line x1="21" y1="12" x2="18.5" y2="12"></line><line x1="19.5" y1="4.5" x2="17.5" y2="6.5"></line></g>
+                                <path class="rainbow-bulb-svg" d="M12,3.5 C7.5,3.5 3.8,7.2 3.8,11.8 C3.8,14.7 5.3,16.2 6.5,17.5 C7.3,18.3 7.5,19.0 7.5,19.9 L16.5,19.9 C16.5,19.0 16.7,18.3 17.5,17.5 C18.7,16.2 20.2,14.7 20.2,11.8 C20.2,7.2 16.5,3.5 12,3.5 Z" fill="#94a3b8"></path>
+                                <path d="M8.5,13.9 L10.6,9.7 L13.4,9.7 L15.5,13.9" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter: drop-shadow(0 0 2px #ffffff);"></path>
+                                <path d="M7.5,19.9 H16.5 V22.3 C16.5,23.0 15.9,23.7 15.1,23.7 H8.9 C8.1,23.7 7.5,23.0 7.5,22.3 Z" fill="#94a3b8" stroke="#334155" stroke-width="0.5"></path>
+                                <line x1="7.9" y1="21.3" stroke="#334155" stroke-width="1.0" x2="16.1" y2="21.3"></line><line x1="8.3" y1="22.7" stroke="#334155" stroke-width="1.0" x2="15.7" y2="22.7"></line>
+                                <polygon class="flashing-bolt-svg" points="23,1.4 12,12.4 17,12.4 14,22.2 25,9.6 20,9.6" fill="#fde047"></polygon>
                             </g>
                         </svg>
                     </div>
@@ -160,7 +160,7 @@
             </div>
             <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500">
                 <p class="text-[11px] font-mono font-semibold">PLIP Hub Portal Collection 2026</p>
-                <p class="text-[10px] md:text-right font-light">© 2026 PLIP & Hiro-Seki-Tech. All rights reserved.</p>
+                <p class="text-[10px] md:text-right font-light">© 2026 PLIP &amp; Hiro-Seki-Tech. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -233,7 +233,7 @@
                         <span class="text-sm font-bold text-slate-200">起動ボタンを有効にする</span>
                         <span class="text-[10px] text-slate-500">OFFにすると、公開ページでも「準備中」と表示され、作品へ移動できません。</span>
                     </span>
-                    <input type="checkbox" id="modal-card-enabled" class="peer sr-only" checked>
+                    <input type="checkbox" id="modal-card-enabled" class="peer sr-only" checked="">
                     <span class="relative w-12 h-6 rounded-full bg-slate-700 peer-checked:bg-emerald-500 transition-colors shrink-0 after:content-[''] after:absolute after:top-1 after:left-1 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-6"></span>
                 </label>
             </div>
@@ -243,19 +243,48 @@
                 <textarea id="modal-card-desc" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm leading-relaxed focus:outline-none focus:border-amber-500"></textarea>
             </div>
 
-            <div class="flex flex-col gap-1">
-                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>シンボルボタンのHTML (ファイル選択・ドロップも可)</span>
-                    <span class="text-[10px] text-amber-500 font-normal">※iframeレスポンシブ適合システムにより240px枠線へパツパツに密着フィットします</span>
-                </label>
-                
-                <div id="modal-drop-zone" class="border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-xl p-4 text-center cursor-pointer bg-slate-950/40 transition-all flex flex-col items-center justify-center gap-1 group/drop my-1">
-                    <i class="fa-solid fa-cloud-arrow-up text-slate-500 group-hover/drop:text-amber-400 text-xl transition-colors"></i>
-                    <p class="text-xs text-slate-400 font-medium">SVGまたはHTMLファイルをドロップ、または<span class="text-amber-400 underline">ここをクリック</span>して選択</p>
-                    <input type="file" id="modal-file-input" accept=".svg,.html" class="hidden">
+            <div class="flex flex-col gap-3">
+                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">シンボルボタンの登録方式</label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <label class="flex items-start gap-3 bg-slate-950 border border-amber-500/40 rounded-xl px-4 py-3 cursor-pointer">
+                        <input type="radio" name="modal-button-mode" id="modal-button-mode-external" value="external" class="mt-1" checked onchange="updateButtonModeUI()">
+                        <span>
+                            <span class="block text-sm font-bold text-amber-300">LINK用ボタンを外部参照</span>
+                            <span class="block text-[10px] text-slate-500 mt-1">推奨。LINK HPと同じフォルダのHTMLをファイル名で読み込みます。</span>
+                        </span>
+                    </label>
+                    <label class="flex items-start gap-3 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 cursor-pointer">
+                        <input type="radio" name="modal-button-mode" id="modal-button-mode-embedded" value="embedded" class="mt-1" onchange="updateButtonModeUI()">
+                        <span>
+                            <span class="block text-sm font-bold text-slate-300">従来HTMLを埋め込む</span>
+                            <span class="block text-[10px] text-slate-500 mt-1">既存カードの編集・旧ボタン互換用です。</span>
+                        </span>
+                    </label>
                 </div>
 
-                <textarea id="modal-card-html" rows="6" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300 text-xs font-mono leading-normal focus:outline-none focus:border-amber-500"></textarea>
+                <div id="external-button-panel" class="flex flex-col gap-2">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">LINK用ボタンのファイル名</label>
+                    <input type="text" id="modal-card-button-file" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500" placeholder="例：cosmo_btn_link.html">
+                    <div id="modal-button-file-zone" class="border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-xl p-4 text-center cursor-pointer bg-slate-950/40 transition-all flex flex-col items-center justify-center gap-1 group/drop">
+                        <i class="fa-solid fa-file-circle-plus text-slate-500 group-hover/drop:text-amber-400 text-xl transition-colors"></i>
+                        <p class="text-xs text-slate-400 font-medium">LINK用ボタンHTMLをドロップ、または<span class="text-amber-400 underline">ここをクリック</span>してファイル名を取得</p>
+                        <input type="file" id="modal-button-file-input" accept=".html,.htm" class="hidden">
+                    </div>
+                    <p class="text-[10px] text-sky-300/80 leading-relaxed">公開時は、ここで指定したボタンHTMLをLINK HPのHTMLと同じフォルダへ置いてください。ボタン内の音楽は、作品URLの <code class="text-amber-300">music</code> フォルダを自動参照します。</p>
+                </div>
+
+                <div id="embedded-button-panel" class="hidden flex-col gap-1">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                        <span>従来方式：シンボルボタンのHTML</span>
+                        <span class="text-[10px] text-amber-500 font-normal">旧カード互換用</span>
+                    </label>
+                    <div id="modal-drop-zone" class="border-2 border-dashed border-slate-800 hover:border-amber-500/50 rounded-xl p-4 text-center cursor-pointer bg-slate-950/40 transition-all flex flex-col items-center justify-center gap-1 group/drop my-1">
+                        <i class="fa-solid fa-cloud-arrow-up text-slate-500 group-hover/drop:text-amber-400 text-xl transition-colors"></i>
+                        <p class="text-xs text-slate-400 font-medium">SVGまたはHTMLファイルをドロップ、または<span class="text-amber-400 underline">ここをクリック</span>して選択</p>
+                        <input type="file" id="modal-file-input" accept=".svg,.html" class="hidden">
+                    </div>
+                    <textarea id="modal-card-html" rows="6" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-300 text-xs font-mono leading-normal focus:outline-none focus:border-amber-500"></textarea>
+                </div>
             </div>
 
             <div class="flex justify-end gap-3 pt-3 border-t border-slate-800 mt-2">
@@ -434,6 +463,39 @@ function loadFromLocalStorage() {
             showToast(`🎤 【${cardTitle}】 主題歌再生中：${trackTitle}`);
         }
 
+        function escapeHtmlAttribute(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function normalizeButtonFilePath(value) {
+            let path = String(value || '').trim().replace(/\\/g, '/');
+            path = path.replace(/^\.\//, '');
+            return path;
+        }
+
+        function buildExternalButtonUrl(card) {
+            const buttonFile = normalizeButtonFilePath(card.buttonFile || '');
+            const musicBase = getPlipMusicBaseUrl(card.url || '');
+            const separator = buttonFile.includes('?') ? '&' : '?';
+            return `./${buttonFile}${separator}title=${encodeURIComponent(card.title || '作品')}&musicBase=${encodeURIComponent(musicBase)}`;
+        }
+
+        function buildButtonIframeHtml(card) {
+            const commonClass = 'w-full h-full border-0 bg-transparent overflow-hidden';
+            if (card.buttonFile) {
+                const src = escapeHtmlAttribute(buildExternalButtonUrl(card));
+                const title = escapeHtmlAttribute(`${card.title || '作品'} シンボルボタン`);
+                return `<iframe src="${src}" title="${title}" class="${commonClass}" scrolling="no" loading="lazy"></iframe>`;
+            }
+
+            const legacyHtml = String(card.htmlContent || '');
+            return `<iframe srcdoc="${escapeHtmlAttribute(legacyHtml)}" class="${commonClass}" scrolling="no"></iframe>`;
+        }
+
         function buildUI() {
             const tabsContainer = document.getElementById('category-tabs-container');
             const contentContainer = document.getElementById('main-content-container');
@@ -501,10 +563,11 @@ function loadFromLocalStorage() {
                         btnSlot.className = "flex flex-col items-center justify-center shrink-0 select-none";
                         const escapedTitleId = encodeURIComponent(card.title).replace(/%/g, "");
                         
+                        const buttonIframeHtml = buildButtonIframeHtml(card);
                         btnSlot.innerHTML = `
                         <div class="relative select-none w-[100px] h-[100px] sm:w-[240px] sm:h-[240px] aspect-square flex items-center justify-center overflow-hidden rounded-2xl border-2 border-slate-800" 
                              id="btn-frame-${escapedTitleId}">
-                             <iframe srcdoc="${card.htmlContent.replace(/"/g, '&quot;')}" class="w-full h-full border-0 bg-transparent overflow-hidden" scrolling="no"></iframe>
+                             ${buttonIframeHtml}
                         </div>`;
 
                         const currentRecord = plipCardStates.find(s => s.title === card.title) || { state: 0 };
@@ -600,7 +663,9 @@ function loadFromLocalStorage() {
                 document.getElementById('modal-card-url').value = '';
                 document.getElementById('modal-card-desc').value = '';
                 document.getElementById('modal-card-enabled').checked = true;
+                document.getElementById('modal-card-button-file').value = '';
                 document.getElementById('modal-card-html').value = '';
+                document.getElementById('modal-button-mode-external').checked = true;
             } else {
                 const cat = plipMasterData.find(c => c.id === catId);
                 const card = cat.cards[cardIdx];
@@ -608,11 +673,63 @@ function loadFromLocalStorage() {
                 document.getElementById('modal-card-url').value = card.url;
                 document.getElementById('modal-card-desc').value = card.desc;
                 document.getElementById('modal-card-enabled').checked = card.isLaunchEnabled !== false;
-                document.getElementById('modal-card-html').value = card.htmlContent;
+                document.getElementById('modal-card-button-file').value = card.buttonFile || '';
+                document.getElementById('modal-card-html').value = card.htmlContent || '';
+                document.getElementById(card.buttonFile ? 'modal-button-mode-external' : 'modal-button-mode-embedded').checked = true;
             }
-            
-            setTimeout(initModalDropZone, 50);
+
+            updateButtonModeUI();
+            setTimeout(() => {
+                initExternalButtonFileZone();
+                initModalDropZone();
+            }, 50);
             document.getElementById('card-modal').classList.remove('hidden');
+        }
+
+        function updateButtonModeUI() {
+            const isExternal = document.getElementById('modal-button-mode-external')?.checked !== false;
+            const externalPanel = document.getElementById('external-button-panel');
+            const embeddedPanel = document.getElementById('embedded-button-panel');
+            if (externalPanel) externalPanel.classList.toggle('hidden', !isExternal);
+            if (embeddedPanel) {
+                embeddedPanel.classList.toggle('hidden', isExternal);
+                embeddedPanel.classList.toggle('flex', !isExternal);
+            }
+        }
+
+        function initExternalButtonFileZone() {
+            const dropZone = document.getElementById('modal-button-file-zone');
+            const fileInput = document.getElementById('modal-button-file-input');
+            const fileNameInput = document.getElementById('modal-card-button-file');
+            if (!dropZone || !fileInput || !fileNameInput) return;
+
+            const applyFile = (file) => {
+                if (!file) return;
+                if (!/\.html?$/i.test(file.name)) {
+                    showToast('⚠️ LINK用のHTMLファイルを選んでください。');
+                    return;
+                }
+                fileNameInput.value = file.name;
+                showToast(`🔗 ${file.name} を参照ファイルとして指定しました。`);
+            };
+
+            dropZone.onclick = () => fileInput.click();
+            dropZone.ondragover = (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-amber-500', 'bg-amber-500/10');
+            };
+            dropZone.ondragleave = () => {
+                dropZone.classList.remove('border-amber-500', 'bg-amber-500/10');
+            };
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-amber-500', 'bg-amber-500/10');
+                applyFile(e.dataTransfer.files?.[0]);
+            };
+            fileInput.onchange = (e) => {
+                applyFile(e.target.files?.[0]);
+                e.target.value = '';
+            };
         }
 
         function initModalDropZone() {
@@ -675,7 +792,7 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
     let optimized = String(buttonHtml || '');
 
     // 共通：音楽URLをリンク先作品の music フォルダへ統一
-    // BGM.html は bgm.mp3 へ、bgm.mp3 / bgm1.mp3 は元のファイル名を維持して変換
+    // BGM.html・bgm.mp3・bgm1.mp3を、リンク先作品のmusicフォルダへ統一
     optimized = optimized.replace(
         /(['"])([^'"]*?\/music\/)?BGM\.html(['"])/gi,
         `$1${musicBaseUrl}bgm.mp3$3`
@@ -686,7 +803,7 @@ function optimizeButtonAudio(buttonHtml, musicBaseUrl) {
             `${quote}${musicBaseUrl}bgm${number || ''}.mp3${quote}`
     );
 
-    // 主題歌は新旧両対応：song.mp3～song4.mp3 / song.mp4～song4.mp4
+    // 主題歌は旧作mp4・新作mp3の両方をリンク先作品のmusicフォルダへ統一
     optimized = optimized.replace(
         /(['"])([^'"]*?\/music\/)?song(1|2|3|4)?\.(mp3|mp4)(['"])/gi,
         (match, quote, oldBase, number, extension, closingQuote) =>
@@ -953,46 +1070,58 @@ function saveCardData() {
     const catId = document.getElementById('modal-cat-id').value;
     const cardIdx = parseInt(document.getElementById('modal-card-index').value);
     const title = document.getElementById('modal-card-title').value.trim();
-    let url = document.getElementById('modal-card-url').value.trim();
+    const url = document.getElementById('modal-card-url').value.trim();
     const desc = document.getElementById('modal-card-desc').value.trim();
     const isLaunchEnabled = document.getElementById('modal-card-enabled').checked;
-    let rawHtml = document.getElementById('modal-card-html').value.trim();
+    const isExternal = document.getElementById('modal-button-mode-external').checked;
+    const buttonFile = normalizeButtonFilePath(document.getElementById('modal-card-button-file').value);
+    const rawHtml = document.getElementById('modal-card-html').value.trim();
 
     if (!title || !url) {
-        alert("タイトル and URLは必須項目です。");
+        alert("タイトルとURLは必須項目です。");
         return;
     }
-    // 💡 新旧ボタン共通：iframe内で枠へジャストフィットし、状態だけ親へ通知
-    const iframeBridgeScript = `
+
+    if (isExternal) {
+        if (!buttonFile) {
+            alert("LINK用ボタンのファイル名を入力してください。");
+            return;
+        }
+        if (!/\.html?(?:[?#].*)?$/i.test(buttonFile)) {
+            alert("ボタンファイル名は .html または .htm で指定してください。");
+            return;
+        }
+    } else if (!rawHtml) {
+        alert("従来方式では、シンボルボタンのHTMLを入力してください。");
+        return;
+    }
+
+    let finalIframeSrcdoc = '';
+
+    if (!isExternal) {
+        // 従来カード互換：ボタンHTMLを埋め込み、旧形式用の連携処理を注入
+        const iframeBridgeScript = `
         <script id="plip-bridge-injector">
             let bridgeState = 0;
-
-            // 実際に再生開始された主題歌のファイル名を親ページへ通知
             const originalMediaPlay = HTMLMediaElement.prototype.play;
             HTMLMediaElement.prototype.play = function(...args) {
                 const media = this;
                 const result = originalMediaPlay.apply(media, args);
-
                 setTimeout(() => {
                     if (bridgeState !== 1) return;
                     const trackUrl = media.currentSrc || media.src || '';
                     if (!trackUrl || /(?:^|\\/)bgm(?:1)?\\.mp3(?:$|[?#])/i.test(trackUrl)) return;
-
                     window.parent.postMessage({
                         type: 'PLIP_TRACK_PLAYING',
                         title: "${encodeURIComponent(title)}",
-                        trackUrl: trackUrl
+                        trackUrl
                     }, '*');
                 }, 80);
-
                 return result;
             };
 
             window.addEventListener('DOMContentLoaded', () => {
-                window.showToast = function(msg, isSuccess) {
-                    console.log("Inner toast muted:", msg);
-                };
-
+                window.showToast = function() {};
                 const styleNode = document.createElement('style');
                 styleNode.id = 'plip-iframe-fit-style';
                 styleNode.textContent =
@@ -1000,8 +1129,7 @@ function saveCardData() {
                     'body{display:flex!important;align-items:center!important;justify-content:center!important;}' +
                     '.plip-wrap,.symbol-button-wrapper,#jinsei-core-btn{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;aspect-ratio:1/1!important;margin:0!important;padding:0!important;position:relative!important;inset:auto!important;transform:none!important;}' +
                     '#plip-core-button,#jinsei-core-btn button,.symbol-button-wrapper button{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;}' +
-                    '#plip-toast,.plip-bubble,[class*="bubble"],[id*="bubble"]{display:none!important;}' +
-                    'body>div.relative{width:100%!important;height:100%!important;max-width:none!important;transform:none!important;position:relative!important;top:auto!important;left:auto!important;margin:0!important;}';
+                    '#plip-toast,.plip-bubble,[class*="bubble"],[id*="bubble"]{display:none!important;}';
                 document.head.appendChild(styleNode);
 
                 const coreWrapper = document.getElementById('plip-core-button') ||
@@ -1013,62 +1141,51 @@ function saveCardData() {
                 if (coreWrapper) {
                     coreWrapper.addEventListener('click', () => {
                         bridgeState = (bridgeState + 1) % 3;
-                        setTimeout(() => {
-                            window.parent.postMessage({
-                                type: 'PLIP_BUTTON_CLICK',
-                                title: "${encodeURIComponent(title)}",
-                                stateValue: bridgeState
-                            }, '*');
-                        }, 20);
+                        setTimeout(() => window.parent.postMessage({
+                            type: 'PLIP_BUTTON_CLICK',
+                            title: "${encodeURIComponent(title)}",
+                            stateValue: bridgeState
+                        }, '*'), 20);
                     });
                 }
             });
-        <\/script>
-    `;
+        <\/script>`;
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(rawHtml, 'text/html');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, 'text/html');
+        doc.querySelectorAll('#plip-bridge-injector').forEach(el => el.remove());
+        doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]').forEach(el => el.remove());
 
+        const musicBaseUrl = getPlipMusicBaseUrl(url);
+        let processedHtml = doc.documentElement.outerHTML;
+        processedHtml = optimizeButtonAudio(processedHtml, musicBaseUrl);
+        finalIframeSrcdoc = processedHtml + iframeBridgeScript;
+    }
 
+    const cat = plipMasterData.find(c => c.id === catId);
+    const cardObj = {
+        title,
+        url,
+        desc,
+        isLaunchEnabled,
+        buttonFile: isExternal ? buttonFile : '',
+        htmlContent: isExternal ? '' : finalIframeSrcdoc
+    };
 
+    if (cardIdx === -1) {
+        cat.cards.push(cardObj);
+    } else {
+        cat.cards[cardIdx] = cardObj;
+    }
 
-// 🧹 【クレンジング処理】自身が埋め込んだブリッジスクリプトのみを正確に狙い撃ちして消去（ボタン本来のコードは保護）
-    const oldInjectors = doc.querySelectorAll('#plip-bridge-injector');
-    oldInjectors.forEach(el => el.remove());
-
-    const bubbles = doc.querySelectorAll('.plip-bubble, [class*="bubble"], [id*="bubble"]');
-    bubbles.forEach(el => el.remove());
-
-    const musicBaseUrl = getPlipMusicBaseUrl(url);
-
-    let processedHtml = doc.documentElement.outerHTML;
-    processedHtml = optimizeButtonAudio(processedHtml, musicBaseUrl);
-
-    const finalIframeSrcdoc = processedHtml + iframeBridgeScript;
-			
-			
-
-            const cat = plipMasterData.find(c => c.id === catId);
-            const cardObj = {
-                title: title,
-                url: url,
-                desc: desc,
-                isLaunchEnabled: isLaunchEnabled,
-                htmlContent: finalIframeSrcdoc
-            };
-
-            if (cardIdx === -1) {
-                cat.cards.push(cardObj);
-            } else {
-                cat.cards[cardIdx] = cardObj;
-            }
-
-            initCardStates();
-            closeCardModal();
-            buildUI();
-            saveToLocalStorage(); // 💾 自動セーブ
-            showToast("💾 ボタンのリサイズ配置と通知同期処理を適用して完全保護保存しました！");
-        }
+    initCardStates();
+    closeCardModal();
+    buildUI();
+    saveToLocalStorage();
+    showToast(isExternal
+        ? `🔗 ${buttonFile} を外部参照するカードとして保存しました！`
+        : "💾 従来の埋め込み方式でカードを保存しました！");
+}
 
         function deleteCard(catIdx, cardIdx) {
             if (confirm("この作品カードを削除してもよろしいですか？")) {
@@ -1563,5 +1680,5 @@ async function runAudioTheme(escapedTitleId, stateValue) {
         });
 		
     </script>
-</body>
-</html>
+
+</body></html>
