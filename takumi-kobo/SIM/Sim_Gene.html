@@ -48,6 +48,93 @@
               <input type="text" id="cfg-title" value="💡生涯資産シミュレータ【尽生】" oninput="updatePreviewCanvas()" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
             </div>
 
+            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-xs font-bold text-slate-300">言語切替ボタン</div>
+                  <div class="text-[10px] text-slate-500 mt-1">同じ階層の日本語版／英語版HTMLへ移動します。</div>
+                </div>
+                <label class="inline-flex items-center gap-2 cursor-pointer flex-shrink-0">
+                  <input id="cfg-language-visible" type="checkbox" checked onchange="updatePreviewCanvas()" class="accent-indigo-500">
+                  <span class="text-[11px] font-bold text-slate-300">表示する</span>
+                </label>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-400 mb-1.5">現在の言語</label>
+                  <select id="cfg-current-language" onchange="updateLanguageSettingLabels(); updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                  </select>
+                </div>
+                <div>
+                  <label id="cfg-language-target-label" class="block text-[10px] font-bold text-slate-400 mb-1.5">英語版ファイル名</label>
+                  <input id="cfg-language-target" type="text" value="index_en.html" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
+                </div>
+              </div>
+
+              <label class="flex items-start gap-2 cursor-pointer bg-slate-950/70 border border-slate-800 rounded-lg px-3 py-2.5">
+                <input id="cfg-language-published" type="checkbox" onchange="updatePreviewCanvas()" class="accent-emerald-500 mt-0.5">
+                <span>
+                  <span id="cfg-language-published-label" class="block text-[11px] font-bold text-slate-300">英語版を公開済み</span>
+                  <span class="block text-[10px] text-slate-500 mt-0.5">未チェックの場合、切替先はグレーアウトして押せません。</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div>
+                <div class="text-xs font-bold text-slate-300">共通フッター</div>
+                <div class="text-[10px] text-slate-500 mt-1">出力ページの下部に、2行構成で表示します。</div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">1行目：権利者・AIクルー</label>
+                <input id="cfg-footer-credit" type="text" value="© 2026 PLIP &amp; Hiro-Seki-Tech ＆ AIクルー" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+                <div class="text-[10px] text-slate-500 mt-1">「AIクルー」の部分を作品ごとの担当名に書き換えられます。</div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">2行目：注意文</label>
+                <input id="cfg-footer-notice" type="text" value="無断転載及びハルシネーションはお断り申し上げます。" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">Version</label>
+                <input id="cfg-footer-version" type="text" value="" placeholder="例：1.00" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
+                <div class="text-[10px] text-slate-500 mt-1">更新日はHTMLを出力した日が自動で入ります。</div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div>
+                <div class="text-xs font-bold text-slate-300">「使い方？」モーダル</div>
+                <div class="text-[10px] text-slate-500 mt-1">出力シミュレータ右上の「使い方？」を押したときに表示する文章です。</div>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">モーダルの題名</label>
+                <input id="cfg-usage-title" type="text" value="操作のガイダンス" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">説明本文</label>
+                <textarea id="cfg-usage-body" rows="4" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500">左側の数値入力を操作すると、右側のグラフと表が連動して変化します。各タブにカーソルを合わせると簡単な説明が表示され、「？」ボタンを押すと詳しい説明が表示されます。</textarea>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-xs font-bold text-slate-300">シミュレータ内タブ設定</div>
+                  <div class="text-[10px] text-slate-500 mt-1">初期状態は3タブです。題名・説明を編集し、4つ目以降も追加できます。</div>
+                </div>
+                <button type="button" onclick="addSimulatorTab()" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold">
+                  ＋ タブ追加
+                </button>
+              </div>
+              <div id="sim-tab-settings" class="space-y-3"></div>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">ヘッダー帯カラー</label>
@@ -68,8 +155,29 @@
 
           <div id="gen-tab-2" class="gen-tab-content space-y-4 hidden">
             <div>
-              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">シンボルHTMLコード (<span class="text-indigo-400">コアバースト仕様</span>)</label>
-              <textarea id="cfg-symbol-html" rows="10" oninput="updatePreviewCanvas()" placeholder="<svg>...</svg>などを貼り付け" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:outline-none"></textarea>
+              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">
+                PLIPボタンHTMLファイル
+              </label>
+              <div id="symbol-drop-zone" class="border-2 border-dashed border-slate-700 rounded-xl p-5 text-center bg-slate-900/70 hover:border-indigo-500 transition-colors cursor-pointer">
+                <i class="fa-solid fa-file-arrow-down text-2xl text-indigo-400 mb-2"></i>
+                <p class="text-xs font-bold text-slate-300">ボタン.htmlをここへドラッグ＆ドロップ</p>
+                <p class="text-[10px] text-slate-500 mt-1">またはクリックしてHTMLファイルを選択</p>
+                <input id="symbol-file-input" type="file" accept=".html,.htm,text/html" class="hidden">
+              </div>
+              <div class="mt-3 flex items-center justify-between gap-3 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2">
+                <span id="symbol-file-status" class="text-[11px] text-slate-500 truncate">ボタンファイル未読込</span>
+                <button id="symbol-file-clear" type="button" class="hidden flex-shrink-0 px-2 py-1 text-[10px] font-bold rounded bg-rose-950 border border-rose-800 text-rose-300 hover:bg-rose-900">
+                  読込解除
+                </button>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-4">
+              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">
+                手動シンボルHTMLコード
+                <span class="text-[10px] font-normal text-slate-500">（ボタン未読込時に使用）</span>
+              </label>
+              <textarea id="cfg-symbol-html" rows="8" oninput="updatePreviewCanvas()" placeholder="<svg>...</svg>などを貼り付け" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:outline-none"></textarea>
             </div>
           </div>
 
@@ -82,8 +190,14 @@
                 <i class="fa-solid fa-copy mr-2"></i>コードをクリップボードにコピー
               </button>
               <button onclick="downloadGeneratedHTML()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
-                <i class="fa-solid fa-file-arrow-down mr-2"></i>HTMLファイルを保存 (.html)
+                <i class="fa-solid fa-rocket mr-2"></i>公開用HTMLを書き出し
               </button>
+              <button onclick="downloadEditableHTML()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
+                <i class="fa-solid fa-floppy-disk mr-2"></i>編集用HTMLを書き出し
+              </button>
+              <p class="text-[10px] text-slate-500 leading-relaxed">
+                編集用HTMLには現在の設定だけを1つの保存カプセルへ格納し、プレビューや古い保存データは除去してから書き出します。
+              </p>
             </div>
           </div>
 
@@ -123,6 +237,207 @@
     
     document.getElementById('cfg-symbol-html').value = defaultSymbol;
 
+    let importedButtonHtml = '';
+    let importedButtonFilename = '';
+
+
+    let simulatorTabs = [
+      {
+        title: '1. 基本設定',
+        tooltip: '基本的な数値パラメータを入力して、グラフへリアルタイムに反映します。',
+        heading: 'パラメータ基本データ',
+        help: '初期値と毎年の純増額を変更すると、右側の折れ線グラフと表が連動して更新されます。',
+        body: ''
+      },
+      {
+        title: '2. カスタム要素',
+        tooltip: '作品固有の追加機能や説明を配置するタブです。',
+        heading: 'カスタム拡張ブロック',
+        help: '作品ごとの追加スイッチや独自機能を配置するための自由な領域です。',
+        body: 'ここに作品ごとの独自機能や説明を追加します。'
+      },
+      {
+        title: '保存／呼出',
+        tooltip: '名前を付けたシミュレーション設定を保存・呼び出しします。',
+        heading: '3つのセーブスロット',
+        help: 'ブラウザ内にプランデータを保存し、あとから呼び出せます。',
+        body: ''
+      }
+    ];
+
+    function escapeInputValue(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderSimulatorTabSettings() {
+      const container = document.getElementById('sim-tab-settings');
+      container.innerHTML = simulatorTabs.map((tab, index) => {
+        const removable = index >= 3;
+        return `
+          <div class="border border-slate-700 rounded-xl p-3 bg-slate-950/70 space-y-2" data-tab-setting-index="${index}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-bold text-indigo-300">タブ ${index + 1}</span>
+              ${removable ? `<button type="button" onclick="removeSimulatorTab(${index})" class="px-2 py-1 rounded bg-rose-950 border border-rose-800 text-rose-300 text-[10px] font-bold">削除</button>` : '<span class="text-[10px] text-slate-600">基本タブ</span>'}
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブの題名</label>
+              <input type="text" value="${escapeInputValue(tab.title)}" oninput="updateSimulatorTab(${index}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 mb-1">カーソルを合わせたときの説明</label>
+              <textarea rows="2" oninput="updateSimulatorTab(${index}, 'tooltip', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.tooltip)}</textarea>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブ内の見出し</label>
+              <input type="text" value="${escapeInputValue(tab.heading)}" oninput="updateSimulatorTab(${index}, 'heading', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 mb-1">「？」ボタンの説明</label>
+              <textarea rows="2" oninput="updateSimulatorTab(${index}, 'help', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.help)}</textarea>
+            </div>
+            ${index === 0 || index === 2 ? '' : `
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブ内の本文</label>
+              <textarea rows="3" oninput="updateSimulatorTab(${index}, 'body', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.body)}</textarea>
+            </div>`}
+          </div>`;
+      }).join('');
+    }
+
+    function updateSimulatorTab(index, key, value) {
+      if (!simulatorTabs[index]) return;
+      simulatorTabs[index][key] = value;
+      updatePreviewCanvas();
+    }
+
+    function addSimulatorTab() {
+      const number = simulatorTabs.length + 1;
+      simulatorTabs.push({
+        title: `${number}. 新しいタブ`,
+        tooltip: 'このタブの内容を簡潔に説明します。',
+        heading: '新しい項目',
+        help: 'この項目の詳しい使い方を入力してください。',
+        body: 'ここに、このタブで表示したい説明や案内を入力してください。'
+      });
+      renderSimulatorTabSettings();
+      updatePreviewCanvas();
+    }
+
+    function removeSimulatorTab(index) {
+      if (index < 3 || !simulatorTabs[index]) return;
+      simulatorTabs.splice(index, 1);
+      renderSimulatorTabSettings();
+      updatePreviewCanvas();
+    }
+
+    function escapeHtmlAttribute(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function prepareButtonDocument(source) {
+      const extraStyle = `<style>
+html, body {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+body {
+  display: block !important;
+}
+.plip-wrap {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 0 !important;
+}
+#plip-toast {
+  display: none !important;
+}
+</style>
+<script>
+(function () {
+  function notifyNowPlaying(media) {
+    try {
+      const rawSrc = media.currentSrc || media.src || '';
+      if (!rawSrc) return;
+      parent.postMessage({ type: 'PLIP_NOW_PLAYING', src: rawSrc }, '*');
+    } catch (error) {
+      console.warn('PLIP曲名通知に失敗しました。', error);
+    }
+  }
+
+  const originalPlay = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () {
+    notifyNowPlaying(this);
+    return originalPlay.apply(this, arguments);
+  };
+
+  document.addEventListener('play', function (event) {
+    if (event.target instanceof HTMLMediaElement) notifyNowPlaying(event.target);
+  }, true);
+})();
+<\/script>`;
+
+      if (/<\/head>/i.test(source)) {
+        return source.replace(/<\/head>/i, extraStyle + '</head>');
+      }
+      return extraStyle + source;
+    }
+
+    function buildSymbolMarkup(manualSymbol) {
+      if (!importedButtonHtml) return manualSymbol;
+
+      const prepared = prepareButtonDocument(importedButtonHtml);
+      return `<iframe
+        class="plip-symbol-frame"
+        title="PLIPシンボルボタン"
+        sandbox="allow-scripts allow-same-origin"
+        srcdoc="${escapeHtmlAttribute(prepared)}"
+      ></iframe>`;
+    }
+
+    async function importSymbolButtonFile(file) {
+      if (!file) return;
+      if (!/\.html?$/i.test(file.name)) {
+        alert('HTML形式のボタンファイルを選んでください。');
+        return;
+      }
+
+      const source = await file.text();
+      if (!source.includes('plip-core-button') || !source.includes('plip-wrap')) {
+        alert('PLIPボタンビルダーで作った完成ボタンHTMLを選んでください。');
+        return;
+      }
+
+      importedButtonHtml = source;
+      importedButtonFilename = file.name;
+      document.getElementById('symbol-file-status').textContent = '読込済み：' + file.name;
+      document.getElementById('symbol-file-status').className = 'text-[11px] text-emerald-400 truncate';
+      document.getElementById('symbol-file-clear').classList.remove('hidden');
+      updatePreviewCanvas();
+    }
+
+    function clearImportedSymbolButton() {
+      importedButtonHtml = '';
+      importedButtonFilename = '';
+      document.getElementById('symbol-file-status').textContent = 'ボタンファイル未読込';
+      document.getElementById('symbol-file-status').className = 'text-[11px] text-slate-500 truncate';
+      document.getElementById('symbol-file-clear').classList.add('hidden');
+      updatePreviewCanvas();
+    }
+
     function switchGenTab(tabId) {
       document.querySelectorAll('.gen-tab-content').forEach(el => el.classList.add('hidden'));
       document.getElementById(tabId).classList.remove('hidden');
@@ -150,19 +465,135 @@
       }
     }
 
+    function updateLanguageSettingLabels() {
+      const currentLanguage = document.getElementById('cfg-current-language').value;
+      const targetLabel = document.getElementById('cfg-language-target-label');
+      const publishedLabel = document.getElementById('cfg-language-published-label');
+      if (currentLanguage === 'en') {
+        targetLabel.textContent = '日本語版ファイル名';
+        publishedLabel.textContent = '日本語版を公開済み';
+      } else {
+        targetLabel.textContent = '英語版ファイル名';
+        publishedLabel.textContent = '英語版を公開済み';
+      }
+    }
+
+    function escapeHtmlAttribute(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function escapeHtmlText(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function getLocalOutputDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function buildLanguageSwitcherMarkup(visible, currentLanguage, targetFile, published) {
+      if (!visible) return '';
+
+      const safeTarget = escapeHtmlAttribute((targetFile || '').trim() || (currentLanguage === 'ja' ? 'index_en.html' : 'index.html'));
+      const jaItem = currentLanguage === 'ja'
+        ? '<span class="language-current" lang="ja" aria-current="page">日本語</span>'
+        : (published
+          ? `<a class="language-link" href="${safeTarget}" lang="ja" title="日本語版を開く">日本語</a>`
+          : '<span class="language-disabled" lang="ja" aria-disabled="true" title="日本語版は未公開です">日本語</span>');
+      const enItem = currentLanguage === 'en'
+        ? '<span class="language-current" lang="en" aria-current="page">English</span>'
+        : (published
+          ? `<a class="language-link" href="${safeTarget}" lang="en" title="Open the English edition">English</a>`
+          : '<span class="language-disabled" lang="en" aria-disabled="true" title="English edition is not published yet">English</span>');
+
+      return `<div class="language-switcher" aria-label="言語切り替え">${jaItem}${enItem}</div>`;
+    }
+
     // 双方向リアルタイムCanvasレンダリングエンジン
     function updatePreviewCanvas() {
       const title = document.getElementById('cfg-title').value;
       const hColor = document.getElementById('cfg-header-color').value;
       const mColor = document.getElementById('cfg-main-color').value;
-      let symbol = document.getElementById('cfg-symbol-html').value || defaultSymbol;
+      const manualSymbol = document.getElementById('cfg-symbol-html').value || defaultSymbol;
+      const symbol = buildSymbolMarkup(manualSymbol);
+      const languageVisible = document.getElementById('cfg-language-visible').checked;
+      const currentLanguage = document.getElementById('cfg-current-language').value;
+      const languageTarget = document.getElementById('cfg-language-target').value;
+      const languagePublished = document.getElementById('cfg-language-published').checked;
+      const languageSwitcher = buildLanguageSwitcherMarkup(languageVisible, currentLanguage, languageTarget, languagePublished);
+      const footerCredit = escapeHtmlText(document.getElementById('cfg-footer-credit').value.trim());
+      const footerNotice = escapeHtmlText(document.getElementById('cfg-footer-notice').value.trim());
+      const footerVersion = escapeHtmlText(document.getElementById('cfg-footer-version').value.trim());
+      const outputDate = getLocalOutputDate();
+      const footerVersionText = footerVersion ? `Version ${footerVersion}　` : '';
+
+      const usageTitle = escapeHtmlText(document.getElementById('cfg-usage-title').value.trim() || '使い方');
+      const usageBody = escapeHtmlText(document.getElementById('cfg-usage-body').value.trim()).replace(/\n/g, '<br>');
+      const tabs = simulatorTabs.map(tab => ({
+        title: escapeHtmlText(tab.title.trim() || '名称未設定'),
+        tooltip: escapeHtmlAttribute(tab.tooltip.trim()),
+        heading: escapeHtmlText(tab.heading.trim() || '項目'),
+        help: escapeHtmlAttribute(tab.help.trim()),
+        body: escapeHtmlText(tab.body || '').replace(/\n/g, '<br>')
+      }));
+
+      const tabButtonsMarkup = tabs.map((tab, index) => `
+        <button id="tab-btn-${index + 1}" class="tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 ${index === 0 ? 'active-silver-tab' : 'text-slate-400 hover:text-white'}" data-tooltip="${tab.tooltip}">
+          ${tab.title}
+        </button>`).join('');
+
+      const basicPanelBody = `
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs sm:text-sm font-bold text-slate-300 tracking-wide mb-1.5">現在の保有資産 (万円)</label>
+            <input type="number" id="input-asset" value="800" class="sim-val-change w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm sm:text-base text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
+          </div>
+          <div>
+            <label class="block text-xs sm:text-sm font-bold text-slate-300 tracking-wide mb-1.5">毎年の積立純増 (万円)</label>
+            <input type="number" id="input-delta" value="150" class="sim-val-change w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm sm:text-base text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
+          </div>
+        </div>`;
+
+      const savePanelBody = `
+        <div class="space-y-3">
+          <input type="text" id="storage-name-input" placeholder="セーブデータ名 (例: 堅実プラン)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none">
+          <div class="space-y-2 text-sm">
+            ${[1,2,3].map((slot, idx) => `<div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg"><span id="slot-text-${slot}" class="text-slate-300 text-sm truncate max-w-[180px]">${['書一','書二','書三'][idx]}: [記録なし]</span><div class="flex space-x-1"><button onclick="saveSlot(${slot})" class="px-3 py-1.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-xs">記憶</button><button onclick="loadSlot(${slot})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-xs">展開</button></div></div>`).join('')}
+          </div>
+        </div>`;
+
+      const tabPanelsMarkup = tabs.map((tab, index) => {
+        const body = index === 0
+          ? basicPanelBody
+          : index === 2
+            ? savePanelBody
+            : `<p class="text-sm text-slate-300 leading-relaxed">${tab.body || 'このタブの内容は未入力です。'}</p>`;
+        return `
+      <div id="panel-box-${index + 1}" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl ${index === 0 ? '' : 'hidden'} space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+          <h3 class="text-base sm:text-lg font-bold text-slate-200">${tab.heading}</h3>
+          <button class="help-popover-trigger w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold flex items-center justify-center" data-popover="${tab.help}">？</button>
+        </div>
+        ${body}
+      </div>`;
+      }).join('');
 
       document.getElementById('cfg-header-val').innerText = hColor.toUpperCase();
       document.getElementById('cfg-main-val').innerText = mColor.toUpperCase();
 
       // 👑 自由カラーと『尽生・宝均』の最前面調停ロジックが組み込まれた完全なる出力用HTML構造
       const template = `<!DOCTYPE html>
-<html lang="ja">
+<html lang="${currentLanguage}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,6 +631,15 @@
 /* 他のUIの陰に絶対隠れない最前面調停レイヤー */
     .z-top-调停 { z-index: 100 !important; }
 
+    .plip-symbol-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      overflow: visible;
+      background: transparent;
+    }
+
     /* 💡吹き出し内部の極小電球を7色へ美しく循環させるグラデーション定義（挿入部分） */
     @keyframes plipRainbowText {
       0%   { color: #ff0055; text-shadow: 0 0 4px rgba(255, 0, 85, 0.3); }
@@ -214,6 +654,93 @@
     .plip-rainbow-text-bulb {
       animation: plipRainbowText 7s linear infinite;
     }
+
+    .language-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      min-width: 112px;
+      padding: 3px;
+      border: 1px solid #475569;
+      border-radius: 9px;
+      background: #0f172a;
+      box-shadow: 0 4px 10px rgba(0,0,0,.25);
+    }
+    .language-current,
+    .language-link,
+    .language-disabled {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 25px;
+      padding: 4px 5px;
+      border-radius: 6px;
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .language-current {
+      color: #0f172a;
+      background: #e2e8f0;
+      border: 1px solid #f8fafc;
+    }
+    .language-link {
+      color: #cbd5e1;
+      background: #111827;
+      border: 1px solid #475569;
+      text-decoration: none;
+      transition: background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .language-link:hover {
+      color: #fff;
+      background: #1e293b;
+      border-color: #a5b4fc;
+    }
+    .language-disabled {
+      color: #64748b;
+      background: #111827;
+      border: 1px solid #334155;
+      cursor: not-allowed;
+      opacity: .65;
+    }
+    @media (max-width: 640px) {
+      .language-switcher { min-width: 94px; }
+      .language-current, .language-link, .language-disabled { font-size: 9px; padding: 5px 3px; }
+    }
+
+    .plip-common-footer {
+      width: 100%;
+      padding: 7px 12px 8px;
+      border-top: 1px solid rgba(71, 85, 105, .65);
+      background: rgba(2, 6, 23, .78);
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.45;
+      text-align: center;
+    }
+    .plip-footer-line {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .plip-now-playing {
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+    @media (max-width: 640px) {
+      .plip-common-footer { font-size: 10px; padding: 6px 8px 7px; }
+    }
+
+    /* ===== SOL修正：尽生を基準にした読みやすい文字サイズ ===== */
+    body { font-size: 16px; line-height: 1.6; }
+    button, input, select, textarea { font-size: inherit; }
+    #sim-table-rows td { padding: 10px 12px; font-size: 14px; }
+    #usage-modal-box { max-width: 520px; }
+    @media (max-width: 640px) {
+      body { font-size: 15px; }
+      #sim-table-rows td { padding: 9px 10px; font-size: 13px; }
+    }
   </style>
 </head>
 <body style="background-color: ${mColor};" class="text-slate-100 min-h-screen font-sans flex flex-col antialiased selection:bg-indigo-500/30">
@@ -221,24 +748,25 @@
   <header style="background-color: ${hColor};" class="border-b border-slate-800/80 sticky top-0 z-40 shadow-xl backdrop-blur-md px-4 py-3 flex items-center justify-between gap-4">
     
     <div class="flex items-center space-x-3 min-w-0">
-      <div class="flex-shrink-0 flex items-center justify-center overflow-hidden" style="min-width: 64px; max-width: 96px; width: 9vw;">
+      <div class="flex-shrink-0 flex items-start justify-center overflow-visible" style="width: clamp(68px, 8vw, 88px); height: clamp(92px, 11vw, 118px);">
         ${symbol}
       </div>
-      <h1 class="text-sm sm:text-lg font-black tracking-tight text-white truncate max-w-[220px] sm:max-w-md">
+      <h1 class="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight max-w-[240px] sm:max-w-xl">
         ${title}
       </h1>
     </div>
 
 <div class="flex items-center space-x-2 flex-shrink-0">
       <!-- 👑 PLIPコアバースト付き テンプレート用リンクボタン（上書き部分） -->
-      <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links" target="_blank" rel="noopener noreferrer" class="bg-slate-900 border border-slate-700 text-[11px] font-bold text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 hover:text-white transition-all flex items-center gap-1.5 shadow no-underline">
+      <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links" target="_blank" rel="noopener noreferrer" class="bg-slate-900 border border-slate-700 text-xs sm:text-sm font-bold text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 hover:text-white transition-all flex items-center gap-1.5 shadow no-underline">
         <span class="fa-layers fa-fw relative w-3.5 h-3.5 inline-block">
           <i class="fa-solid fa-lightbulb plip-rainbow-text-bulb text-xs"></i>
           <i class="fa-solid fa-bolt text-yellow-300 text-[8px] absolute -top-1 -right-0.5 drop-shadow-[0_0_2px_rgba(253,224,71,0.6)]"></i>
         </span>
         <span>リンク</span>
       </a>
-      <button id="btn-open-usage-modal" class="bg-gradient-to-r from-slate-800 to-slate-700 border border-slate-600 text-[11px] font-bold text-slate-200 px-2.5 py-1.5 rounded-lg hover:from-slate-700 hover:to-slate-600 transition-all shadow-md">
+      ${languageSwitcher}
+      <button id="btn-open-usage-modal" class="bg-gradient-to-r from-slate-800 to-slate-700 border border-slate-600 text-xs sm:text-sm font-bold text-slate-200 px-2.5 py-1.5 rounded-lg hover:from-slate-700 hover:to-slate-600 transition-all shadow-md">
         使い方？
       </button>
     </div>
@@ -249,86 +777,19 @@
     
     <div class="xl:col-span-5 flex flex-col space-y-4">
       
-      <div class="p-1 rounded-xl silver-gradient-panel flex gap-1">
-        <button id="tab-btn-1" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab" data-tooltip="📊 基本的な数値パラメータを入力してグラフにリアルタイムで反映させます。">
-          1. 基本設定
-        </button>
-        <button id="tab-btn-2" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white" data-tooltip="✨ 固有の拡張ロジックやコピペ用カスタムパーツを挿入する空間です。">
-          2. カスタム要素
-        </button>
-        <button id="tab-btn-3" class="tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white" data-tooltip="💾 LocalStorageに名前付きでシミュレーション構成を3件までセーブ・ロードします。">
-          保存／呼出
-        </button>
+      <div class="p-1 rounded-xl silver-gradient-panel flex gap-1 overflow-x-auto">
+        ${tabButtonsMarkup}
       </div>
 
-      <div id="panel-box-1" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl space-y-4 shadow-xl">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <h3 class="text-xs font-bold text-slate-300">パラメータ基本データ</h3>
-          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="初期値と毎年の純増額を変更することで、右側の折れ線グラフが即座に同期反転計算されます。">？</button>
-        </div>
-        <div class="space-y-3">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">現在の保有資産 (万円)</label>
-            <input type="number" id="input-asset" value="800" class="sim-val-change w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">毎年の積立純増 (万円)</label>
-            <input type="number" id="input-delta" value="150" class="sim-val-change w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
-          </div>
-        </div>
-      </div>
-
-      <div id="panel-box-2" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl hidden space-y-3">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <h3 class="text-xs font-bold text-slate-300">カスタム拡張ブロック</h3>
-          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="量産時に個別の追加スイッチやフック変数群を埋め込むためのカスタム自由スロットです。">？</button>
-        </div>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          ここに複製先の各特化型シミュレータに合わせた独自のUIロジックを追加していきます。
-        </p>
-      </div>
-
-      <div id="panel-box-3" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl hidden space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <h3 class="text-xs font-bold text-slate-300">3宇宙伝承セーブスロット</h3>
-          <button class="help-popover-trigger w-4 h-4 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold flex items-center justify-center" data-popover="ブラウザのLocalStorageにプランデータを独立記憶。名義をつけて保存が可能です。">？</button>
-        </div>
-        <div class="space-y-3">
-          <input type="text" id="storage-name-input" placeholder="セーブデータ名 (例: 堅実プラン)" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none">
-          
-          <div class="space-y-2 text-xs">
-            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
-              <span id="slot-text-1" class="text-slate-400 truncate max-w-[160px]">書一: [記録なし]</span>
-              <div class="flex space-x-1">
-                <button onclick="saveSlot(1)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
-                <button onclick="loadSlot(1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
-              <span id="slot-text-2" class="text-slate-400 truncate max-w-[160px]">書二: [記録なし]</span>
-              <div class="flex space-x-1">
-                <button onclick="saveSlot(2)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
-                <button onclick="loadSlot(2)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg">
-              <span id="slot-text-3" class="text-slate-400 truncate max-w-[160px]">書三: [記録なし]</span>
-              <div class="flex space-x-1">
-                <button onclick="saveSlot(3)" class="px-2 py-0.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-[10px]">記憶</button>
-                <button onclick="loadSlot(3)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-[10px]">展開</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      ${tabPanelsMarkup}
 
     </div>
 
     <div class="xl:col-span-7 flex flex-col space-y-4">
       <div class="bg-slate-950/80 border border-slate-800 p-4 md:p-5 rounded-xl flex flex-col space-y-3 shadow-2xl">
         <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <span class="text-xs font-bold text-slate-400 tracking-wider"><i class="fa-solid fa-chart-line text-emerald-400 mr-2"></i>リアルタイム資産推移シミュレーション</span>
-          <span class="text-[10px] text-slate-500 font-mono">Chart.js Live Ready</span>
+          <span class="text-base sm:text-lg font-bold text-slate-200 tracking-wide"><i class="fa-solid fa-chart-line text-emerald-400 mr-2"></i>リアルタイム資産推移シミュレーション</span>
+          <span class="text-xs text-slate-400 font-mono">Chart.js Live Ready</span>
         </div>
         
         <div class="relative w-full h-[240px] sm:h-[280px] bg-slate-900/40 rounded-xl p-1 border border-slate-800/40">
@@ -336,11 +797,11 @@
         </div>
 
         <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[140px] overflow-y-auto">
-          <table class="w-full text-left border-collapse text-xs">
+          <table class="w-full text-left border-collapse text-sm">
             <thead>
               <tr class="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold sticky top-0">
-                <th class="p-2">時間年数</th>
-                <th class="p-2 text-right">予測アセット残高</th>
+                <th class="p-3">時間年数</th>
+                <th class="p-3 text-right">予測アセット残高</th>
               </tr>
             </thead>
             <tbody id="sim-table-rows" class="divide-y divide-slate-800/40 font-mono text-slate-300"></tbody>
@@ -351,24 +812,27 @@
 
   </main>
 
+  <footer class="plip-common-footer" aria-label="作品情報">
+    <div class="plip-footer-line">${footerCredit}　<span class="plip-now-playing">♪ Now Playing：<span id="plip-now-playing-name">停止中</span></span></div>
+    <div class="plip-footer-line">${footerNotice}　${footerVersionText}Updated ${outputDate}</div>
+  </footer>
+
   <div id="usage-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-top-调停">
     <div id="usage-modal-box" class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-5 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-        <h4 class="text-xs font-bold text-slate-200 flex items-center gap-1"><i class="fa-solid fa-circle-info text-indigo-400"></i>操作のガイダンス</h4>
+        <h4 class="text-lg font-bold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-circle-info text-indigo-400"></i>${usageTitle}</h4>
         <button onclick="closeModal()" class="text-slate-400 hover:text-white font-bold">&times;</button>
       </div>
-      <p class="text-[11px] text-slate-300 leading-relaxed">
-        左側の数値入力を操作すると、右側のグラフィック・テーブルデータが同期反転して駆動します。ツールチップやポップオーバー（？」）は、枠外をタップ・クリックすると調停ロジックにより自動でクローズします。
-      </p>
+      <p class="text-sm sm:text-base text-slate-200 leading-relaxed">${usageBody}</p>
     </div>
   </div>
 
-  <div id="global-tooltip" class="fixed bg-slate-800 text-slate-200 text-[10px] font-medium px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-2xl pointer-events-none hidden z-top-调停 max-w-[200px] transition-opacity opacity-0"></div>
+  <div id="global-tooltip" class="fixed bg-slate-800 text-slate-100 text-xs sm:text-sm font-medium px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-2xl pointer-events-none hidden z-top-调停 max-w-[200px] transition-opacity opacity-0"></div>
 
-  <div id="global-popover" class="fixed bg-indigo-950 border border-indigo-700 text-slate-200 text-xs px-3 py-2.5 rounded-xl shadow-2xl hidden z-top-调停 max-w-[240px]">
+  <div id="global-popover" class="fixed bg-indigo-950 border border-indigo-700 text-slate-100 text-sm px-3 py-2.5 rounded-xl shadow-2xl hidden z-top-调停 max-w-[240px]">
     <div class="flex items-start gap-1.5">
       <div class="text-indigo-400 text-xs"><i class="fa-solid fa-circle-nodes"></i></div>
-      <div id="popover-text" class="leading-relaxed text-[11px]"></div>
+      <div id="popover-text" class="leading-relaxed text-sm"></div>
     </div>
   </div>
 
@@ -445,16 +909,39 @@
     // ----------------------------------------------------
     // テンプレート側 タブ切替
     // ----------------------------------------------------
-    const tBtns = ['tab-btn-1', 'tab-btn-2', 'tab-btn-3'];
-    const tPanels = ['panel-box-1', 'panel-box-2', 'panel-box-3'];
+    const tBtns = Array.from(document.querySelectorAll('.tab-trigger'));
+    const tPanels = Array.from(document.querySelectorAll('.panel-content'));
 
-    tBtns.forEach((id, idx) => {
-      document.getElementById(id).addEventListener('click', () => {
-        tPanels.forEach(p => document.getElementById(p).classList.add('hidden'));
-        document.getElementById(tPanels[idx]).classList.remove('hidden');
-        tBtns.forEach(b => document.getElementById(b).className = "tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white");
-        document.getElementById(id).className = "tab-trigger flex-1 py-2 text-[11px] font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab";
+    tBtns.forEach((button, idx) => {
+      button.addEventListener('click', () => {
+        tPanels.forEach(panel => panel.classList.add('hidden'));
+        if (tPanels[idx]) tPanels[idx].classList.remove('hidden');
+        tBtns.forEach(btn => {
+          btn.className = "tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white";
+        });
+        button.className = "tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab";
       });
+    });
+
+    // ----------------------------------------------------
+    // PLIPシンボルボタンから現在再生中の曲名を受信
+    // ----------------------------------------------------
+    function extractTrackName(rawSrc) {
+      try {
+        const pathname = new URL(rawSrc, location.href).pathname;
+        const filename = decodeURIComponent(pathname.split('/').pop() || '');
+        return filename.replace(/\.[^.]+$/, '') || '再生中';
+      } catch (error) {
+        const cleanSrc = String(rawSrc || '').split('?')[0].split('#')[0];
+        const filename = cleanSrc.split('/').pop() || '';
+        return filename.replace(/\.[^.]+$/, '') || '再生中';
+      }
+    }
+
+    window.addEventListener('message', (event) => {
+      if (!event.data || event.data.type !== 'PLIP_NOW_PLAYING') return;
+      const nameEl = document.getElementById('plip-now-playing-name');
+      if (nameEl) nameEl.textContent = extractTrackName(event.data.src);
     });
 
     // ----------------------------------------------------
@@ -573,6 +1060,7 @@
     }
 
     function downloadGeneratedHTML() {
+      updatePreviewCanvas();
       const code = document.getElementById('code-output-area').value;
       const blob = new Blob([code], { type: 'text/html;charset=utf-8;' });
       const link = document.createElement('a');
@@ -582,8 +1070,179 @@
       link.click();
     }
 
+
+    // =========================================================================
+    // 💾 編集用HTML：現在の編集状態だけを保存し、書き出しのたびにクレンジング
+    // =========================================================================
+    function collectEditableState() {
+      const controls = {};
+      document.querySelectorAll('[id^="cfg-"]').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          controls[el.id] = { kind: 'checked', value: !!el.checked };
+        } else {
+          controls[el.id] = { kind: 'value', value: el.value };
+        }
+      });
+
+      return {
+        schemaVersion: 1,
+        controls,
+        simulatorTabs: JSON.parse(JSON.stringify(simulatorTabs)),
+        importedButtonHtml: importedButtonHtml || '',
+        importedButtonFilename: importedButtonFilename || ''
+      };
+    }
+
+    function encodeEditableState(state) {
+      return btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    }
+
+    function decodeEditableState(encoded) {
+      return JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    }
+
+    function restoreEditableState() {
+      const capsule = document.getElementById('sim-gene-edit-state');
+      if (!capsule || !capsule.textContent.trim()) return false;
+
+      try {
+        const state = decodeEditableState(capsule.textContent.trim());
+
+        if (Array.isArray(state.simulatorTabs) && state.simulatorTabs.length >= 3) {
+          simulatorTabs = state.simulatorTabs;
+        }
+
+        importedButtonHtml = typeof state.importedButtonHtml === 'string'
+          ? state.importedButtonHtml
+          : '';
+        importedButtonFilename = typeof state.importedButtonFilename === 'string'
+          ? state.importedButtonFilename
+          : '';
+
+        Object.entries(state.controls || {}).forEach(([id, saved]) => {
+          const el = document.getElementById(id);
+          if (!el || !saved) return;
+          if (saved.kind === 'checked') el.checked = !!saved.value;
+          else el.value = saved.value ?? '';
+        });
+
+        const status = document.getElementById('symbol-file-status');
+        const clearButton = document.getElementById('symbol-file-clear');
+        if (importedButtonHtml) {
+          status.textContent = '読込済み：' + (importedButtonFilename || '保存済みボタン.html');
+          status.className = 'text-[11px] text-emerald-400 truncate';
+          clearButton.classList.remove('hidden');
+        } else {
+          status.textContent = 'ボタンファイル未読込';
+          status.className = 'text-[11px] text-slate-500 truncate';
+          clearButton.classList.add('hidden');
+        }
+        return true;
+      } catch (error) {
+        console.error('編集状態の復元に失敗しました。', error);
+        return false;
+      }
+    }
+
+    function downloadEditableHTML() {
+      const state = collectEditableState();
+      const cleanDoc = document.implementation.createHTMLDocument(document.title);
+      cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+
+      // 1. 過去の保存カプセルを必ず全削除し、あとで最新の1個だけを作る
+      cleanDoc.querySelectorAll('#sim-gene-edit-state').forEach(el => el.remove());
+
+      // 2. Tailwindが実行中に注入した巨大な動的CSSを除去
+      cleanDoc.querySelectorAll('head style').forEach(style => {
+        const css = style.textContent || '';
+        if (css.includes('--tw-') || css.includes('tailwindcss') || css.includes('box-sizing:border-box')) {
+          style.remove();
+        }
+      });
+
+      // 3. 再起動時に再生成される動的画面は空に戻す
+      const tabSettings = cleanDoc.getElementById('sim-tab-settings');
+      if (tabSettings) tabSettings.innerHTML = '';
+
+      const previewFrame = cleanDoc.getElementById('canvas-iframe');
+      if (previewFrame) {
+        previewFrame.removeAttribute('src');
+        previewFrame.removeAttribute('srcdoc');
+      }
+
+      const codeArea = cleanDoc.getElementById('code-output-area');
+      if (codeArea) {
+        codeArea.textContent = '';
+        codeArea.value = '';
+      }
+
+      // 4. ファイル選択inputや一時的なドラッグ表示を初期状態へ戻す
+      cleanDoc.querySelectorAll('input[type="file"]').forEach(input => {
+        input.removeAttribute('value');
+      });
+      const cleanDropZone = cleanDoc.getElementById('symbol-drop-zone');
+      if (cleanDropZone) {
+        cleanDropZone.classList.remove('border-indigo-400', 'bg-indigo-950/40');
+      }
+
+      // 5. 最新状態だけをBase64化した単一カプセルとして埋め込む
+      const capsule = cleanDoc.createElement('script');
+      capsule.id = 'sim-gene-edit-state';
+      capsule.type = 'application/json';
+      capsule.textContent = encodeEditableState(state);
+      cleanDoc.body.appendChild(capsule);
+
+      const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
+      const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8;' });
+      const link = document.createElement('a');
+      const title = document.getElementById('cfg-title').value.replace(/[\/\\?%*:|"<>\s]/g, '_');
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = `Sim_Gene_edit_${title}.html`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    const symbolDropZone = document.getElementById('symbol-drop-zone');
+    const symbolFileInput = document.getElementById('symbol-file-input');
+
+    symbolDropZone.addEventListener('click', () => symbolFileInput.click());
+
+    symbolFileInput.addEventListener('change', event => {
+      importSymbolButtonFile(event.target.files[0]);
+      event.target.value = '';
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      symbolDropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        symbolDropZone.classList.add('border-indigo-400', 'bg-indigo-950/40');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      symbolDropZone.addEventListener(eventName, event => {
+        event.preventDefault();
+        symbolDropZone.classList.remove('border-indigo-400', 'bg-indigo-950/40');
+      });
+    });
+
+    symbolDropZone.addEventListener('drop', event => {
+      importSymbolButtonFile(event.dataTransfer.files[0]);
+    });
+
+    document.getElementById('symbol-file-clear').addEventListener('click', event => {
+      event.stopPropagation();
+      clearImportedSymbolButton();
+    });
+
     // 起動時自動レンダリング初期フック
     window.onload = function() {
+      restoreEditableState();
+      renderSimulatorTabSettings();
+      updateLanguageSettingLabels();
       updatePreviewCanvas();
     };
   </script>
