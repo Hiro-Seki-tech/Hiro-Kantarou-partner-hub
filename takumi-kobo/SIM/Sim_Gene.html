@@ -13,7 +13,7 @@
     <div class="flex items-center space-x-3">
       <div class="text-2xl text-slate-400"><i class="fa-solid fa-screwdriver-wrench"></i></div>
       <h1 class="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
-        シミュネータ <span class="text-sm font-medium text-slate-500">v1.2 [完全統合Canvas版]</span>
+        シミュネータ <span class="text-sm font-medium text-slate-500">v1.3 [軌跡ボタン標準装備]</span>
       </h1>
     </div>
     <div class="text-xs text-slate-500 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
@@ -104,6 +104,12 @@
                 <label class="block text-[10px] font-bold text-slate-400 mb-1.5">Version</label>
                 <input id="cfg-footer-version" type="text" value="" placeholder="例：1.00" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
                 <div class="text-[10px] text-slate-500 mt-1">更新日はHTMLを出力した日が自動で入ります。</div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">作品の軌跡</label>
+                <textarea id="cfg-trajectory-body" rows="7" oninput="updatePreviewCanvas()" placeholder="空欄の場合は、現在のVersionと出力日を使った最初の履歴を自動生成します。" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
+                <div class="text-[10px] text-slate-500 mt-1">ボタン名は「📜 シミュレータ名の軌跡」として自動生成されます。新しい履歴を上に入力してください。</div>
               </div>
             </div>
 
@@ -535,7 +541,13 @@ body {
       const footerNotice = escapeHtmlText(document.getElementById('cfg-footer-notice').value.trim());
       const footerVersion = escapeHtmlText(document.getElementById('cfg-footer-version').value.trim());
       const outputDate = getLocalOutputDate();
-      const footerVersionText = footerVersion ? `Version ${footerVersion}　` : '';
+      const outputDateDots = outputDate.replace(/-/g, '.');
+      const footerVersionValue = footerVersion || '1';
+      const footerVersionText = `Version ${footerVersionValue}`;
+      const trajectoryTitle = escapeHtmlText((title || 'この作品').trim()) + 'の軌跡';
+      const trajectoryRaw = document.getElementById('cfg-trajectory-body').value.trim();
+      const trajectoryDefault = `Version ${footerVersionValue}　${outputDateDots}\n・作品制作開始`;
+      const trajectoryBody = escapeHtmlText(trajectoryRaw || trajectoryDefault);
 
       const usageTitle = escapeHtmlText(document.getElementById('cfg-usage-title').value.trim() || '使い方');
       const usageBody = escapeHtmlText(document.getElementById('cfg-usage-body').value.trim()).replace(/\n/g, '<br>');
@@ -732,6 +744,47 @@ body {
       .plip-common-footer { font-size: 10px; padding: 6px 8px 7px; }
     }
 
+    .trajectory-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px 9px;
+      margin-top: 2px;
+    }
+    .trajectory-open-button {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #cbd5e1;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    .trajectory-open-button:hover { color: #fff; }
+    #trajectory-modal { z-index: 5000 !important; }
+    #trajectory-modal-box {
+      width: min(620px, 100%);
+      max-height: min(84vh, 760px);
+      overflow-y: auto;
+    }
+    .trajectory-history-content {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      color: #dbeafe;
+      font-size: 14px;
+      line-height: 1.8;
+      text-align: left;
+    }
+    @media (max-width: 640px) {
+      #trajectory-modal { padding: 12px; }
+      #trajectory-modal-box { max-height: 88vh; padding: 18px 15px; }
+      .trajectory-history-content { font-size: 13px; line-height: 1.7; }
+    }
+
     /* ===== SOL修正：尽生を基準にした読みやすい文字サイズ ===== */
     body { font-size: 16px; line-height: 1.6; }
     button, input, select, textarea { font-size: inherit; }
@@ -814,7 +867,11 @@ body {
 
   <footer class="plip-common-footer" aria-label="作品情報">
     <div class="plip-footer-line">${footerCredit}　<span class="plip-now-playing">♪ Now Playing：<span id="plip-now-playing-name">停止中</span></span></div>
-    <div class="plip-footer-line">${footerNotice}　${footerVersionText}Updated ${outputDate}</div>
+    <div class="plip-footer-line">${footerNotice}</div>
+    <div class="plip-footer-line trajectory-footer-row">
+      <span>${footerVersionText}</span><span aria-hidden="true">｜</span><span>${outputDateDots}</span><span aria-hidden="true">｜</span>
+      <button id="btn-open-trajectory-modal" class="trajectory-open-button" type="button" aria-haspopup="dialog" aria-controls="trajectory-modal">📜 ${trajectoryTitle}</button>
+    </div>
   </footer>
 
   <div id="usage-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-top-调停">
@@ -824,6 +881,16 @@ body {
         <button onclick="closeModal()" class="text-slate-400 hover:text-white font-bold">&times;</button>
       </div>
       <p class="text-sm sm:text-base text-slate-200 leading-relaxed">${usageBody}</p>
+    </div>
+  </div>
+
+  <div id="trajectory-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="trajectory-modal-title">
+    <div id="trajectory-modal-box" class="bg-slate-900 border border-slate-600 rounded-2xl p-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4 gap-3">
+        <h4 id="trajectory-modal-title" class="text-lg font-bold text-slate-100">📜 ${trajectoryTitle}</h4>
+        <button id="btn-close-trajectory-modal" type="button" class="w-9 h-9 rounded-full border border-slate-600 bg-slate-800 text-slate-300 hover:text-white hover:border-slate-400 text-xl font-bold flex items-center justify-center" aria-label="軌跡を閉じる">&times;</button>
+      </div>
+      <div class="trajectory-history-content">${trajectoryBody}</div>
     </div>
   </div>
 
@@ -845,6 +912,11 @@ body {
     const tipEl = document.getElementById('global-tooltip');
     const popEl = document.getElementById('global-popover');
     const popTxt = document.getElementById('popover-text');
+    const trajectoryModalEl = document.getElementById('trajectory-modal');
+    const trajectoryModalBox = document.getElementById('trajectory-modal-box');
+    const trajectoryOpenButton = document.getElementById('btn-open-trajectory-modal');
+    const trajectoryCloseButton = document.getElementById('btn-close-trajectory-modal');
+    let trajectoryPreviousFocus = null;
 
     document.getElementById('btn-open-usage-modal').addEventListener('click', (e) => {
       e.stopPropagation();
@@ -859,6 +931,34 @@ body {
 
     modalEl.addEventListener('click', (e) => {
       if(!modalBox.contains(e.target)) closeModal();
+    });
+
+    function openTrajectoryModal() {
+      trajectoryPreviousFocus = document.activeElement;
+      trajectoryModalEl.classList.remove('hidden');
+      trajectoryModalEl.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      trajectoryCloseButton.focus();
+    }
+
+    function closeTrajectoryModal() {
+      trajectoryModalEl.classList.add('hidden');
+      trajectoryModalEl.classList.remove('flex');
+      document.body.style.overflow = '';
+      if (trajectoryPreviousFocus && typeof trajectoryPreviousFocus.focus === 'function') {
+        trajectoryPreviousFocus.focus();
+      }
+    }
+
+    trajectoryOpenButton.addEventListener('click', openTrajectoryModal);
+    trajectoryCloseButton.addEventListener('click', closeTrajectoryModal);
+    trajectoryModalEl.addEventListener('click', (event) => {
+      if (!trajectoryModalBox.contains(event.target)) closeTrajectoryModal();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !trajectoryModalEl.classList.contains('hidden')) {
+        closeTrajectoryModal();
+      }
     });
 
     // ツールチップ最前面＆外側タップクローズ調停
