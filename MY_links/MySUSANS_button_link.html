@@ -252,11 +252,11 @@ body {
 
     stopMediaInDocument(document);
 
-    try {
-      if (window.parent && window.parent !== window) {
-        stopMediaInDocument(window.parent.document);
-      }
-    } catch (_) {}
+    // PLIP LINK外部ボタン:
+    // 親ページ内の他iframe停止は親LINK HP側が担当する。
+    // 子ボタン自身が parent.document を走査すると、
+    // GitHub Pagesの同一オリジン環境では自分自身にも
+    // PLIP_STOP_AUDIO が返ってきて再生直後に停止するため行わない。
   }
 
   function getAudioContext() {
