@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIPボタンビルダー v6</title>
+<title>PLIPボタンビルダー v6.1</title>
 <style>
 :root {
   color-scheme: dark;
@@ -462,10 +462,10 @@ code {
 <div class="builder">
   <header class="header">
     <div>
-      <h1>✨ PLIPボタンビルダー v6</h1>
+      <h1>✨ PLIPボタンビルダー v6.1</h1>
       <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
     </div>
-    <div class="version">Version 6.0 · 2026.07</div>
+    <div class="version">Version 6.1 · 2026.08</div>
   </header>
 
   <div class="layout">
@@ -1230,11 +1230,17 @@ body {
 
     stopMediaInDocument(document);
 
-    try {
-      if (window.parent && window.parent !== window) {
-        stopMediaInDocument(window.parent.document);
-      }
-    } catch (_) {}
+    // 通常版のみ：親ページ側のメディア停止も担当する。
+    // LINK HP対応版では、他のiframeを止める役目は親LINK HPに任せる。
+    // 子ボタンから parent.document を走査すると、GitHub Pagesなど
+    // 同一オリジン環境で自分自身にも PLIP_STOP_AUDIO が返る場合がある。
+    if (!LINK_MODE) {
+      try {
+        if (window.parent && window.parent !== window) {
+          stopMediaInDocument(window.parent.document);
+        }
+      } catch (_) {}
+    }
   }
 
   function getAudioContext() {
