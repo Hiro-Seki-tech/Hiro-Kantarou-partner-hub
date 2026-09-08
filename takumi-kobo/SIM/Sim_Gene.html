@@ -3,750 +3,424 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🛠️ シミュネータ（テンプレート・ジェネレータ）</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans">
+  <title>PLIP TEMPLATE</title>
 
-  <header class="bg-slate-950 border-b border-slate-800 px-6 py-4 flex items-center justify-between shadow-xl">
-    <div class="flex items-center space-x-3">
-      <div class="text-2xl text-slate-400"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-      <h1 class="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
-        シミュネータ <span class="text-sm font-medium text-slate-500">v1.4 [リンク形式PLIP吹き出し自動復元]</span>
-      </h1>
-    </div>
-    <div class="text-xs text-slate-500 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
-      Developer Studio for Hiro
-    </div>
-  </header>
+  <!--
+  ============================================================
+  PLIP 標準母型 v1.0
+  ------------------------------------------------------------
+  このHTMLは「作品を生成するジェネレータ」ではありません。
+  新しいPLIP作品を作るときに複製して使う、共通外装・共通動作の母型です。
 
-  <main class="max-w-[1800px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    
-    <section class="lg:col-span-5 flex flex-col space-y-4">
-      <div class="bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 p-0.5 rounded-2xl shadow-2xl border border-slate-700/50">
-        <div class="bg-slate-950 rounded-[14px] p-6">
-          <h2 class="text-lg font-bold text-slate-200 mb-4 flex items-center border-b border-slate-800 pb-2">
-            <i class="fa-solid fa-sliders text-indigo-400 mr-2"></i>設定インプット
-          </h2>
+  【重要：シンボルボタンについて】
+  ・既存のリンク参照式シンボルボタンHTMLは変更しません。
+  ・同じ階層の ./PLIP_symbol_button.html を iframe で参照します。
+  ・ボタンHTML内部にある非表示の .plip-bubble は触りません。
+  ・作品本体で見せる「PLIP !!」吹き出しは、この母型側が表示します。
+  ・LINK HP／ボタンジェネレータ側の仕様には干渉しません。
+  ============================================================
+  -->
 
-          <div class="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 mb-6">
-            <button onclick="switchGenTab('gen-tab-1')" id="btn-gen-tab-1" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 bg-gradient-to-r from-slate-700 to-slate-800 text-white shadow-md">
-              1. 基本設定
-            </button>
-            <button onclick="switchGenTab('gen-tab-2')" id="btn-gen-tab-2" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200">
-              2. シンボル入力
-            </button>
-            <button onclick="switchGenTab('gen-tab-3')" id="btn-gen-tab-3" class="py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200">
-              3. 出力・保存
-            </button>
-          </div>
-
-          <div id="gen-tab-1" class="gen-tab-content space-y-5">
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">シミュレータ名</label>
-              <input type="text" id="cfg-title" value="💡生涯資産シミュレータ【尽生】" oninput="updatePreviewCanvas()" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between gap-3">
-                <div>
-                  <div class="text-xs font-bold text-slate-300">言語切替ボタン</div>
-                  <div class="text-[10px] text-slate-500 mt-1">同じ階層の日本語版／英語版HTMLへ移動します。</div>
-                </div>
-                <label class="inline-flex items-center gap-2 cursor-pointer flex-shrink-0">
-                  <input id="cfg-language-visible" type="checkbox" checked onchange="updatePreviewCanvas()" class="accent-indigo-500">
-                  <span class="text-[11px] font-bold text-slate-300">表示する</span>
-                </label>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-400 mb-1.5">現在の言語</label>
-                  <select id="cfg-current-language" onchange="updateLanguageSettingLabels(); updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
-                    <option value="ja">日本語</option>
-                    <option value="en">English</option>
-                  </select>
-                </div>
-                <div>
-                  <label id="cfg-language-target-label" class="block text-[10px] font-bold text-slate-400 mb-1.5">英語版ファイル名</label>
-                  <input id="cfg-language-target" type="text" value="index_en.html" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
-                </div>
-              </div>
-
-              <label class="flex items-start gap-2 cursor-pointer bg-slate-950/70 border border-slate-800 rounded-lg px-3 py-2.5">
-                <input id="cfg-language-published" type="checkbox" onchange="updatePreviewCanvas()" class="accent-emerald-500 mt-0.5">
-                <span>
-                  <span id="cfg-language-published-label" class="block text-[11px] font-bold text-slate-300">英語版を公開済み</span>
-                  <span class="block text-[10px] text-slate-500 mt-0.5">未チェックの場合、切替先はグレーアウトして押せません。</span>
-                </span>
-              </label>
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div>
-                <div class="text-xs font-bold text-slate-300">共通フッター</div>
-                <div class="text-[10px] text-slate-500 mt-1">出力ページの下部に、2行構成で表示します。</div>
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">1行目：権利者・AIクルー</label>
-                <input id="cfg-footer-credit" type="text" value="© 2026 PLIP &amp; Hiro-Seki-Tech ＆ AIクルー" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
-                <div class="text-[10px] text-slate-500 mt-1">「AIクルー」の部分を作品ごとの担当名に書き換えられます。</div>
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">2行目：注意文</label>
-                <input id="cfg-footer-notice" type="text" value="無断転載及びハルシネーションはお断り申し上げます。" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">Version</label>
-                <input id="cfg-footer-version" type="text" value="" placeholder="例：1.00" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-indigo-500">
-                <div class="text-[10px] text-slate-500 mt-1">更新日はHTMLを出力した日が自動で入ります。</div>
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">作品の軌跡</label>
-                <textarea id="cfg-trajectory-body" rows="7" oninput="updatePreviewCanvas()" placeholder="空欄の場合は、現在のVersionと出力日を使った最初の履歴を自動生成します。" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
-                <div class="text-[10px] text-slate-500 mt-1">ボタン名は「📜 シミュレータ名の軌跡」として自動生成されます。新しい履歴を上に入力してください。</div>
-              </div>
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div>
-                <div class="text-xs font-bold text-slate-300">「使い方？」モーダル</div>
-                <div class="text-[10px] text-slate-500 mt-1">出力シミュレータ右上の「使い方？」を押したときに表示する文章です。</div>
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">モーダルの題名</label>
-                <input id="cfg-usage-title" type="text" value="操作のガイダンス" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 mb-1.5">説明本文</label>
-                <textarea id="cfg-usage-body" rows="4" oninput="updatePreviewCanvas()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 leading-relaxed focus:outline-none focus:border-indigo-500">左側の数値入力を操作すると、右側のグラフと表が連動して変化します。各タブにカーソルを合わせると簡単な説明が表示され、「？」ボタンを押すと詳しい説明が表示されます。</textarea>
-              </div>
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between gap-3">
-                <div>
-                  <div class="text-xs font-bold text-slate-300">シミュレータ内タブ設定</div>
-                  <div class="text-[10px] text-slate-500 mt-1">初期状態は3タブです。題名・説明を編集し、4つ目以降も追加できます。</div>
-                </div>
-                <button type="button" onclick="addSimulatorTab()" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold">
-                  ＋ タブ追加
-                </button>
-              </div>
-              <div id="sim-tab-settings" class="space-y-3"></div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">ヘッダー帯カラー</label>
-                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg p-2">
-                  <input type="color" id="cfg-header-color" value="#0f172a" oninput="updatePreviewCanvas()" class="w-8 h-8 rounded border border-slate-700 cursor-pointer bg-transparent">
-                  <span id="cfg-header-val" class="text-xs font-mono text-slate-400">#0F172A</span>
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">メイン背景カラー</label>
-                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-lg p-2">
-                  <input type="color" id="cfg-main-color" value="#020617" oninput="updatePreviewCanvas()" class="w-8 h-8 rounded border border-slate-700 cursor-pointer bg-transparent">
-                  <span id="cfg-main-val" class="text-xs font-mono text-slate-400">#020617</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="gen-tab-2" class="gen-tab-content space-y-4 hidden">
-            <div>
-              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">
-                PLIPボタンHTMLファイル
-              </label>
-              <div id="symbol-drop-zone" class="border-2 border-dashed border-slate-700 rounded-xl p-5 text-center bg-slate-900/70 hover:border-indigo-500 transition-colors cursor-pointer">
-                <i class="fa-solid fa-file-arrow-down text-2xl text-indigo-400 mb-2"></i>
-                <p class="text-xs font-bold text-slate-300">ボタン.htmlをここへドラッグ＆ドロップ</p>
-                <p class="text-[10px] text-slate-500 mt-1">またはクリックしてHTMLファイルを選択</p>
-                <input id="symbol-file-input" type="file" accept=".html,.htm,text/html" class="hidden">
-              </div>
-              <div class="mt-3 flex items-center justify-between gap-3 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2">
-                <span id="symbol-file-status" class="text-[11px] text-slate-500 truncate">ボタンファイル未読込</span>
-                <button id="symbol-file-clear" type="button" class="hidden flex-shrink-0 px-2 py-1 text-[10px] font-bold rounded bg-rose-950 border border-rose-800 text-rose-300 hover:bg-rose-900">
-                  読込解除
-                </button>
-              </div>
-            </div>
-
-            <div class="border-t border-slate-800 pt-4">
-              <label class="block text-xs font-bold text-slate-400 tracking-wider mb-2">
-                手動シンボルHTMLコード
-                <span class="text-[10px] font-normal text-slate-500">（ボタン未読込時に使用）</span>
-              </label>
-              <textarea id="cfg-symbol-html" rows="8" oninput="updatePreviewCanvas()" placeholder="<svg>...</svg>などを貼り付け" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:outline-none"></textarea>
-            </div>
-          </div>
-
-          <div id="gen-tab-3" class="gen-tab-content space-y-4 hidden">
-            <p class="text-xs text-slate-400 leading-relaxed">
-              設定した内容が右側のコードおよびキャンバスに100%リアルタイム適用されています。
-            </p>
-            <div class="grid grid-cols-1 gap-3">
-              <button onclick="copyGeneratedCode()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
-                <i class="fa-solid fa-copy mr-2"></i>コードをクリップボードにコピー
-              </button>
-              <button onclick="downloadGeneratedHTML()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
-                <i class="fa-solid fa-rocket mr-2"></i>公開用HTMLを書き出し
-              </button>
-              <button onclick="downloadEditableHTML()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center shadow-lg transition-colors">
-                <i class="fa-solid fa-floppy-disk mr-2"></i>編集用HTMLを書き出し
-              </button>
-              <p class="text-[10px] text-slate-500 leading-relaxed">
-                編集用HTMLには現在の設定だけを1つの保存カプセルへ格納し、プレビューや古い保存データは除去してから書き出します。
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="lg:col-span-7 flex flex-col space-y-3">
-      
-      <div class="flex items-center justify-between border-b border-slate-800 pb-1">
-        <div class="flex space-x-2">
-          <button onclick="switchViewMode('preview')" id="btn-view-preview" class="px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700">
-            <i class="fa-solid fa-desktop mr-1.5"></i>🖥️ HPプレビュー
-          </button>
-          <button onclick="switchViewMode('code')" id="btn-view-code" class="px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50">
-            <i class="fa-solid fa-code mr-1.5"></i>📄 生成HTMLコード
-          </button>
-        </div>
-        <span class="text-[10px] text-slate-500 font-mono">Live Sync Canvas System</span>
-      </div>
-
-      <div class="relative flex-1 min-h-[680px] bg-slate-950 border border-slate-800 rounded-b-2xl rounded-tr-2xl overflow-hidden flex flex-col shadow-inner">
-        <iframe id="canvas-iframe" class="w-full flex-1 border-none bg-slate-900"></iframe>
-
-        <textarea id="code-output-area" readonly class="w-full flex-1 bg-slate-950 text-slate-300 font-mono text-xs p-4 focus:outline-none resize-none overflow-y-auto leading-relaxed hidden"></textarea>
-      </div>
-    </section>
-
-  </main>
-
-  <script>
-    // コアバーストアイコンの初期設定（ライトバルブ＋右上ゴールドボルト＋レインボーグラデーション）
-    const defaultSymbol = `<div class="relative w-full h-full flex items-center justify-center text-slate-400">
-  <i class="fa-solid fa-lightbulb text-3xl" style="background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
-  <i class="fa-solid fa-bolt absolute top-1 right-2 text-yellow-300 text-xs animate-pulse"></i>
-</div>`;
-    
-    document.getElementById('cfg-symbol-html').value = defaultSymbol;
-
-    let importedButtonHtml = '';
-    let importedButtonFilename = '';
-
-
-    let simulatorTabs = [
-      {
-        title: '1. 基本設定',
-        tooltip: '基本的な数値パラメータを入力して、グラフへリアルタイムに反映します。',
-        heading: 'パラメータ基本データ',
-        help: '初期値と毎年の純増額を変更すると、右側の折れ線グラフと表が連動して更新されます。',
-        body: ''
-      },
-      {
-        title: '2. カスタム要素',
-        tooltip: '作品固有の追加機能や説明を配置するタブです。',
-        heading: 'カスタム拡張ブロック',
-        help: '作品ごとの追加スイッチや独自機能を配置するための自由な領域です。',
-        body: 'ここに作品ごとの独自機能や説明を追加します。'
-      },
-      {
-        title: '保存／呼出',
-        tooltip: '名前を付けたシミュレーション設定を保存・呼び出しします。',
-        heading: '3つのセーブスロット',
-        help: 'ブラウザ内にプランデータを保存し、あとから呼び出せます。',
-        body: ''
-      }
-    ];
-
-    function escapeInputValue(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function renderSimulatorTabSettings() {
-      const container = document.getElementById('sim-tab-settings');
-      container.innerHTML = simulatorTabs.map((tab, index) => {
-        const removable = index >= 3;
-        return `
-          <div class="border border-slate-700 rounded-xl p-3 bg-slate-950/70 space-y-2" data-tab-setting-index="${index}">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[11px] font-bold text-indigo-300">タブ ${index + 1}</span>
-              ${removable ? `<button type="button" onclick="removeSimulatorTab(${index})" class="px-2 py-1 rounded bg-rose-950 border border-rose-800 text-rose-300 text-[10px] font-bold">削除</button>` : '<span class="text-[10px] text-slate-600">基本タブ</span>'}
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブの題名</label>
-              <input type="text" value="${escapeInputValue(tab.title)}" oninput="updateSimulatorTab(${index}, 'title', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">カーソルを合わせたときの説明</label>
-              <textarea rows="2" oninput="updateSimulatorTab(${index}, 'tooltip', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.tooltip)}</textarea>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブ内の見出し</label>
-              <input type="text" value="${escapeInputValue(tab.heading)}" oninput="updateSimulatorTab(${index}, 'heading', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">「？」ボタンの説明</label>
-              <textarea rows="2" oninput="updateSimulatorTab(${index}, 'help', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.help)}</textarea>
-            </div>
-            ${index === 0 || index === 2 ? '' : `
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">タブ内の本文</label>
-              <textarea rows="3" oninput="updateSimulatorTab(${index}, 'body', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100">${escapeHtmlText(tab.body)}</textarea>
-            </div>`}
-          </div>`;
-      }).join('');
-    }
-
-    function updateSimulatorTab(index, key, value) {
-      if (!simulatorTabs[index]) return;
-      simulatorTabs[index][key] = value;
-      updatePreviewCanvas();
-    }
-
-    function addSimulatorTab() {
-      const number = simulatorTabs.length + 1;
-      simulatorTabs.push({
-        title: `${number}. 新しいタブ`,
-        tooltip: 'このタブの内容を簡潔に説明します。',
-        heading: '新しい項目',
-        help: 'この項目の詳しい使い方を入力してください。',
-        body: 'ここに、このタブで表示したい説明や案内を入力してください。'
-      });
-      renderSimulatorTabSettings();
-      updatePreviewCanvas();
-    }
-
-    function removeSimulatorTab(index) {
-      if (index < 3 || !simulatorTabs[index]) return;
-      simulatorTabs.splice(index, 1);
-      renderSimulatorTabSettings();
-      updatePreviewCanvas();
-    }
-
-    function escapeHtmlAttribute(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function prepareButtonDocument(source) {
-      const extraStyle = `<style>
-html, body {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  background: transparent !important;
-}
-body {
-  display: block !important;
-}
-.plip-wrap {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1 / 1 !important;
-  margin: 0 !important;
-}
-#plip-toast {
-  display: none !important;
-}
-/* リンク形式のPLIPボタンは単体HTMLでは吹き出しを隠すため、
-   シミュネータへ組み込んだ時だけPLIP吹き出しを復元する。 */
-.plip-bubble {
-  display: block !important;
-}
-</style>
-<script>
-(function () {
-  function notifyNowPlaying(media) {
-    try {
-      const rawSrc = media.currentSrc || media.src || '';
-      if (!rawSrc) return;
-      parent.postMessage({ type: 'PLIP_NOW_PLAYING', src: rawSrc }, '*');
-    } catch (error) {
-      console.warn('PLIP曲名通知に失敗しました。', error);
-    }
-  }
-
-  const originalPlay = HTMLMediaElement.prototype.play;
-  HTMLMediaElement.prototype.play = function () {
-    notifyNowPlaying(this);
-    return originalPlay.apply(this, arguments);
-  };
-
-  document.addEventListener('play', function (event) {
-    if (event.target instanceof HTMLMediaElement) notifyNowPlaying(event.target);
-  }, true);
-})();
-<\/script>`;
-
-      if (/<\/head>/i.test(source)) {
-        return source.replace(/<\/head>/i, extraStyle + '</head>');
-      }
-      return extraStyle + source;
-    }
-
-    function buildSymbolMarkup(manualSymbol) {
-      if (!importedButtonHtml) return manualSymbol;
-
-      const prepared = prepareButtonDocument(importedButtonHtml);
-      return `<iframe
-        class="plip-symbol-frame"
-        title="PLIPシンボルボタン"
-        sandbox="allow-scripts allow-same-origin"
-        srcdoc="${escapeHtmlAttribute(prepared)}"
-      ></iframe>`;
-    }
-
-    async function importSymbolButtonFile(file) {
-      if (!file) return;
-      if (!/\.html?$/i.test(file.name)) {
-        alert('HTML形式のボタンファイルを選んでください。');
-        return;
-      }
-
-      const source = await file.text();
-      if (!source.includes('plip-core-button') || !source.includes('plip-wrap')) {
-        alert('PLIPボタンビルダーで作った完成ボタンHTMLを選んでください。');
-        return;
-      }
-
-      importedButtonHtml = source;
-      importedButtonFilename = file.name;
-      document.getElementById('symbol-file-status').textContent = '読込済み：' + file.name;
-      document.getElementById('symbol-file-status').className = 'text-[11px] text-emerald-400 truncate';
-      document.getElementById('symbol-file-clear').classList.remove('hidden');
-      updatePreviewCanvas();
-    }
-
-    function clearImportedSymbolButton() {
-      importedButtonHtml = '';
-      importedButtonFilename = '';
-      document.getElementById('symbol-file-status').textContent = 'ボタンファイル未読込';
-      document.getElementById('symbol-file-status').className = 'text-[11px] text-slate-500 truncate';
-      document.getElementById('symbol-file-clear').classList.add('hidden');
-      updatePreviewCanvas();
-    }
-
-    function switchGenTab(tabId) {
-      document.querySelectorAll('.gen-tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tabId).classList.remove('hidden');
-      for(let i=1; i<=3; i++) {
-        document.getElementById(`btn-gen-tab-${i}`).className = (id => id === `btn-${tabId}` ? "py-2 text-xs font-bold rounded-lg transition-all duration-200 bg-gradient-to-r from-slate-700 to-slate-800 text-white shadow-md" : "py-2 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-slate-200")(`btn-${tabId}`);
-      }
-    }
-
-    function switchViewMode(mode) {
-      const iframe = document.getElementById('canvas-iframe');
-      const codeArea = document.getElementById('code-output-area');
-      const btnPreview = document.getElementById('btn-view-preview');
-      const btnCode = document.getElementById('btn-view-code');
-
-      if (mode === 'preview') {
-        iframe.classList.remove('hidden');
-        codeArea.classList.add('hidden');
-        btnPreview.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700";
-        btnCode.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50";
-      } else {
-        iframe.classList.add('hidden');
-        codeArea.classList.remove('hidden');
-        btnPreview.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg text-slate-400 hover:bg-slate-800/50";
-        btnCode.className = "px-4 py-1.5 text-xs font-bold rounded-t-lg bg-slate-800 text-indigo-400 border-t border-x border-slate-700";
-      }
-    }
-
-    function updateLanguageSettingLabels() {
-      const currentLanguage = document.getElementById('cfg-current-language').value;
-      const targetLabel = document.getElementById('cfg-language-target-label');
-      const publishedLabel = document.getElementById('cfg-language-published-label');
-      if (currentLanguage === 'en') {
-        targetLabel.textContent = '日本語版ファイル名';
-        publishedLabel.textContent = '日本語版を公開済み';
-      } else {
-        targetLabel.textContent = '英語版ファイル名';
-        publishedLabel.textContent = '英語版を公開済み';
-      }
-    }
-
-    function escapeHtmlAttribute(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function escapeHtmlText(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function getLocalOutputDate() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    function buildLanguageSwitcherMarkup(visible, currentLanguage, targetFile, published) {
-      if (!visible) return '';
-
-      const safeTarget = escapeHtmlAttribute((targetFile || '').trim() || (currentLanguage === 'ja' ? 'index_en.html' : 'index.html'));
-      const jaItem = currentLanguage === 'ja'
-        ? '<span class="language-current" lang="ja" aria-current="page">日本語</span>'
-        : (published
-          ? `<a class="language-link" href="${safeTarget}" lang="ja" title="日本語版を開く">日本語</a>`
-          : '<span class="language-disabled" lang="ja" aria-disabled="true" title="日本語版は未公開です">日本語</span>');
-      const enItem = currentLanguage === 'en'
-        ? '<span class="language-current" lang="en" aria-current="page">English</span>'
-        : (published
-          ? `<a class="language-link" href="${safeTarget}" lang="en" title="Open the English edition">English</a>`
-          : '<span class="language-disabled" lang="en" aria-disabled="true" title="English edition is not published yet">English</span>');
-
-      return `<div class="language-switcher" aria-label="言語切り替え">${jaItem}${enItem}</div>`;
-    }
-
-    // 双方向リアルタイムCanvasレンダリングエンジン
-    function updatePreviewCanvas() {
-      const title = document.getElementById('cfg-title').value;
-      const hColor = document.getElementById('cfg-header-color').value;
-      const mColor = document.getElementById('cfg-main-color').value;
-      const manualSymbol = document.getElementById('cfg-symbol-html').value || defaultSymbol;
-      const symbol = buildSymbolMarkup(manualSymbol);
-      const languageVisible = document.getElementById('cfg-language-visible').checked;
-      const currentLanguage = document.getElementById('cfg-current-language').value;
-      const languageTarget = document.getElementById('cfg-language-target').value;
-      const languagePublished = document.getElementById('cfg-language-published').checked;
-      const languageSwitcher = buildLanguageSwitcherMarkup(languageVisible, currentLanguage, languageTarget, languagePublished);
-      const footerCredit = escapeHtmlText(document.getElementById('cfg-footer-credit').value.trim());
-      const footerNotice = escapeHtmlText(document.getElementById('cfg-footer-notice').value.trim());
-      const footerVersion = escapeHtmlText(document.getElementById('cfg-footer-version').value.trim());
-      const outputDate = getLocalOutputDate();
-      const outputDateDots = outputDate.replace(/-/g, '.');
-      const footerVersionValue = footerVersion || '1';
-      const footerVersionText = `Version ${footerVersionValue}`;
-      const trajectoryTitle = escapeHtmlText((title || 'この作品').trim()) + 'の軌跡';
-      const trajectoryRaw = document.getElementById('cfg-trajectory-body').value.trim();
-      const trajectoryDefault = `Version ${footerVersionValue}　${outputDateDots}\n・作品制作開始`;
-      const trajectoryBody = escapeHtmlText(trajectoryRaw || trajectoryDefault);
-
-      const usageTitle = escapeHtmlText(document.getElementById('cfg-usage-title').value.trim() || '使い方');
-      const usageBody = escapeHtmlText(document.getElementById('cfg-usage-body').value.trim()).replace(/\n/g, '<br>');
-      const tabs = simulatorTabs.map(tab => ({
-        title: escapeHtmlText(tab.title.trim() || '名称未設定'),
-        tooltip: escapeHtmlAttribute(tab.tooltip.trim()),
-        heading: escapeHtmlText(tab.heading.trim() || '項目'),
-        help: escapeHtmlAttribute(tab.help.trim()),
-        body: escapeHtmlText(tab.body || '').replace(/\n/g, '<br>')
-      }));
-
-      const tabButtonsMarkup = tabs.map((tab, index) => `
-        <button id="tab-btn-${index + 1}" class="tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 ${index === 0 ? 'active-silver-tab' : 'text-slate-400 hover:text-white'}" data-tooltip="${tab.tooltip}">
-          ${tab.title}
-        </button>`).join('');
-
-      const basicPanelBody = `
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-300 tracking-wide mb-1.5">現在の保有資産 (万円)</label>
-            <input type="number" id="input-asset" value="800" class="sim-val-change w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm sm:text-base text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
-          </div>
-          <div>
-            <label class="block text-xs sm:text-sm font-bold text-slate-300 tracking-wide mb-1.5">毎年の積立純増 (万円)</label>
-            <input type="number" id="input-delta" value="150" class="sim-val-change w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm sm:text-base text-slate-100 focus:outline-none focus:border-slate-700 font-mono">
-          </div>
-        </div>`;
-
-      const savePanelBody = `
-        <div class="space-y-3">
-          <input type="text" id="storage-name-input" placeholder="セーブデータ名 (例: 堅実プラン)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none">
-          <div class="space-y-2 text-sm">
-            ${[1,2,3].map((slot, idx) => `<div class="flex items-center justify-between bg-slate-900/60 p-2 border border-slate-800 rounded-lg"><span id="slot-text-${slot}" class="text-slate-300 text-sm truncate max-w-[180px]">${['書一','書二','書三'][idx]}: [記録なし]</span><div class="flex space-x-1"><button onclick="saveSlot(${slot})" class="px-3 py-1.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 rounded text-indigo-300 font-bold text-xs">記憶</button><button onclick="loadSlot(${slot})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 text-xs">展開</button></div></div>`).join('')}
-          </div>
-        </div>`;
-
-      const tabPanelsMarkup = tabs.map((tab, index) => {
-        const body = index === 0
-          ? basicPanelBody
-          : index === 2
-            ? savePanelBody
-            : `<p class="text-sm text-slate-300 leading-relaxed">${tab.body || 'このタブの内容は未入力です。'}</p>`;
-        return `
-      <div id="panel-box-${index + 1}" class="panel-content bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl ${index === 0 ? '' : 'hidden'} space-y-4 shadow-xl">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <h3 class="text-base sm:text-lg font-bold text-slate-200">${tab.heading}</h3>
-          <button class="help-popover-trigger w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold flex items-center justify-center" data-popover="${tab.help}">？</button>
-        </div>
-        ${body}
-      </div>`;
-      }).join('');
-
-      document.getElementById('cfg-header-val').innerText = hColor.toUpperCase();
-      document.getElementById('cfg-main-val').innerText = mColor.toUpperCase();
-
-      // 👑 自由カラーと『尽生・宝均』の最前面調停ロジックが組み込まれた完全なる出力用HTML構造
-      const template = `<!DOCTYPE html>
-<html lang="${currentLanguage}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <script src="https://cdn.tailwindcss.com"><\/script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            premium: {
-              silver: {
-                50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 700: '#334155', 800: '#1e293b', 950: '#0f172a'
-              }
-            }
-          }
-        }
-      }
-    }
-  <\/script>
   <style>
-    /* 銀縁プレミアムシルバーパネル装飾 */
-    .silver-gradient-panel {
-      border: 2px solid rgba(226, 232, 240, 0.35);
-      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.5), 0 0 15px 1px rgba(226, 232, 240, 0.1);
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+    :root {
+      --plip-bg: #020617;
+      --plip-header: #0f172a;
+      --plip-panel: #0f172a;
+      --plip-panel-2: #111827;
+      --plip-border: #334155;
+      --plip-border-soft: #1e293b;
+      --plip-text: #f8fafc;
+      --plip-muted: #94a3b8;
+      --plip-muted-2: #64748b;
+      --plip-accent: #818cf8;
+      --plip-accent-strong: #6366f1;
+      --plip-danger: #fda4af;
+      --plip-radius: 16px;
     }
-    .active-silver-tab {
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%) !important;
-      color: #0f172a !important;
-      font-weight: 900 !important;
+
+    * { box-sizing: border-box; }
+
+    html { color-scheme: dark; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--plip-bg);
+      color: var(--plip-text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Yu Gothic UI", "Meiryo", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
     }
-/* 他のUIの陰に絶対隠れない最前面調停レイヤー */
-    .z-top-调停 { z-index: 100 !important; }
+
+    button, input, select, textarea { font: inherit; }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(129, 140, 248, .7);
+      outline-offset: 3px;
+    }
+
+    [hidden] { display: none !important; }
+
+    /* =========================================================
+       PLIP共通ヘッダー
+       ========================================================= */
+    .plip-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(51, 65, 85, .85);
+      background: rgba(15, 23, 42, .96);
+      box-shadow: 0 12px 28px rgba(0,0,0,.28);
+      backdrop-filter: blur(12px);
+    }
+
+    .plip-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .plip-symbol-area {
+      position: relative;
+      flex: 0 0 auto;
+      width: clamp(68px, 8vw, 88px);
+      height: clamp(92px, 11vw, 118px);
+      overflow: visible;
+    }
 
     .plip-symbol-frame {
       display: block;
       width: 100%;
-      height: 100%;
+      aspect-ratio: 1 / 1;
       border: 0;
-      overflow: visible;
       background: transparent;
+      border-radius: 18px;
     }
 
-    /* 💡吹き出し内部の極小電球を7色へ美しく循環させるグラデーション定義（挿入部分） */
-    @keyframes plipRainbowText {
-      0%   { color: #ff0055; text-shadow: 0 0 4px rgba(255, 0, 85, 0.3); }
-      14%  { color: #ff5500; text-shadow: 0 0 4px rgba(255, 85, 0, 0.3); }
-      28%  { color: #ffcc00; text-shadow: 0 0 4px rgba(255, 204, 0, 0.3); }
-      42%  { color: #00ff66; text-shadow: 0 0 4px rgba(0, 255, 102, 0.3); }
-      56%  { color: #00ccff; text-shadow: 0 0 4px rgba(0, 204, 255, 0.3); }
-      70%  { color: #3333ff; text-shadow: 0 0 4px rgba(51, 51, 255, 0.3); }
-      84%  { color: #9900ff; text-shadow: 0 0 4px rgba(153, 0, 255, 0.3); }
-      100% { color: #ff0055; text-shadow: 0 0 4px rgba(255, 0, 85, 0.3); }
+    /* ボタンHTMLには触れず、母型側だけで出すPLIP吹き出し */
+    .plip-template-bubble {
+      position: absolute;
+      left: 0;
+      top: calc(clamp(68px, 8vw, 88px) - 5px);
+      width: 100%;
+      z-index: 20;
+      pointer-events: none;
     }
-    .plip-rainbow-text-bulb {
-      animation: plipRainbowText 7s linear infinite;
+
+    .plip-template-bubble svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    @keyframes plipNobleFloatTemplate {
+      0%, 100% { transform: translate3d(0,0,0) rotate(.001deg); }
+      50% { transform: translate3d(0,2px,0) rotate(.001deg); }
+    }
+
+    @keyframes plipRainbowBulbTemplate {
+      0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+      14% { fill: #ff5500; }
+      28% { fill: #ffcc00; }
+      42% { fill: #00ff66; }
+      56% { fill: #00ccff; }
+      70% { fill: #3333ff; }
+      84% { fill: #9900ff; }
+      100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+    }
+
+    @keyframes plipBoltFlashTemplate {
+      0%, 100% { opacity: .85; filter: drop-shadow(0 0 1px #fde047); }
+      50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); }
+    }
+
+    .plip-template-bubble-float {
+      animation: plipNobleFloatTemplate 3s infinite ease-in-out;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .plip-template-bulb {
+      animation: plipRainbowBulbTemplate 7s linear infinite;
+    }
+
+    .plip-template-bolt {
+      animation: plipBoltFlashTemplate 1.5s infinite ease-in-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .plip-template-bubble-float,
+      .plip-template-bulb,
+      .plip-template-bolt {
+        animation: none;
+      }
+    }
+
+    .plip-title-wrap {
+      min-width: 0;
+    }
+
+    .plip-title {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(18px, 2.1vw, 28px);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: .01em;
+      overflow-wrap: anywhere;
+    }
+
+    .plip-subtitle {
+      margin: 3px 0 0;
+      color: var(--plip-muted);
+      font-size: 12px;
+    }
+
+    .plip-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .plip-action,
+    .language-current,
+    .language-link,
+    .language-disabled {
+      min-height: 40px;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .plip-action {
+      border: 1px solid var(--plip-border);
+      color: #e2e8f0;
+      background: #111827;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .plip-action:hover { background: #1e293b; color: #fff; }
+
+    .plip-link-icon {
+      display: inline-block;
+      margin-right: 4px;
     }
 
     .language-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      min-width: 112px;
-      padding: 3px;
-      border: 1px solid #475569;
-      border-radius: 9px;
-      background: #0f172a;
-      box-shadow: 0 4px 10px rgba(0,0,0,.25);
+      min-width: 126px;
+      border: 1px solid var(--plip-border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0b1220;
     }
-    .language-current,
-    .language-link,
-    .language-disabled {
+
+    .language-switcher > * {
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 25px;
-      padding: 4px 5px;
-      border-radius: 6px;
-      font-size: 11px;
-      line-height: 1;
-      font-weight: 800;
-      text-align: center;
-      white-space: nowrap;
+      text-decoration: none;
+      border-radius: 0;
+      min-height: 40px;
     }
+
     .language-current {
-      color: #0f172a;
-      background: #e2e8f0;
-      border: 1px solid #f8fafc;
+      color: #fff;
+      background: #334155;
     }
+
     .language-link {
       color: #cbd5e1;
       background: #111827;
-      border: 1px solid #475569;
-      text-decoration: none;
-      transition: background .18s ease, border-color .18s ease, color .18s ease;
-    }
-    .language-link:hover {
-      color: #fff;
-      background: #1e293b;
-      border-color: #a5b4fc;
-    }
-    .language-disabled {
-      color: #64748b;
-      background: #111827;
-      border: 1px solid #334155;
-      cursor: not-allowed;
-      opacity: .65;
-    }
-    @media (max-width: 640px) {
-      .language-switcher { min-width: 94px; }
-      .language-current, .language-link, .language-disabled { font-size: 9px; padding: 5px 3px; }
     }
 
+    .language-link:hover { color: #fff; background: #1e293b; }
+
+    .language-disabled {
+      color: #64748b;
+      background: #0f172a;
+      cursor: not-allowed;
+    }
+
+    /* =========================================================
+       PLIP共通：左N連 + 右メイン
+       ========================================================= */
+    .plip-main {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 22px;
+      flex: 1 0 auto;
+    }
+
+    .plip-left,
+    .plip-right {
+      min-width: 0;
+    }
+
+    .n-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 14px;
+      border: 1px solid #475569;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #475569, #1e293b 45%, #0f172a);
+    }
+
+    .n-tab {
+      min-height: 46px;
+      padding: 9px 8px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: #94a3b8;
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .n-tab:hover { color: #fff; background: rgba(51, 65, 85, .45); }
+
+    .n-tab[aria-selected="true"] {
+      color: #fff;
+      border-color: #64748b;
+      background: linear-gradient(135deg, #475569, #1e293b);
+      box-shadow: 0 6px 14px rgba(0,0,0,.28);
+    }
+
+    .panel,
+    .work-main-panel {
+      border: 1px solid var(--plip-border-soft);
+      border-radius: var(--plip-radius);
+      background: rgba(15, 23, 42, .86);
+      box-shadow: 0 14px 34px rgba(0,0,0,.2);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel h2,
+    .work-main-panel h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+
+    .panel p,
+    .work-main-panel p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .panel-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px dashed #475569;
+      border-radius: 12px;
+      color: #94a3b8;
+      background: rgba(2, 6, 23, .45);
+      font-size: 14px;
+    }
+
+    .tab-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .help-dot {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border: 1px solid #475569;
+      border-radius: 999px;
+      color: #cbd5e1;
+      background: #111827;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .help-dot:hover { background: #1e293b; color: #fff; }
+
+    .work-main-panel {
+      min-height: 430px;
+      padding: 22px;
+    }
+
+    .work-placeholder {
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 2px dashed #334155;
+      border-radius: 14px;
+      padding: 24px;
+      background: rgba(2, 6, 23, .42);
+    }
+
+    .work-placeholder strong {
+      display: block;
+      color: #e2e8f0;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .work-placeholder span {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       PLIP共通フッター
+       ========================================================= */
     .plip-common-footer {
       width: 100%;
-      padding: 7px 12px 8px;
+      padding: 8px 12px 10px;
       border-top: 1px solid rgba(71, 85, 105, .65);
-      background: rgba(2, 6, 23, .78);
+      background: rgba(2, 6, 23, .86);
       color: #94a3b8;
       font-size: 11px;
-      line-height: 1.45;
+      line-height: 1.5;
       text-align: center;
     }
+
     .plip-footer-line {
       min-width: 0;
       overflow-wrap: anywhere;
     }
+
     .plip-now-playing {
       color: #cbd5e1;
-      font-weight: 700;
-    }
-    @media (max-width: 640px) {
-      .plip-common-footer { font-size: 10px; padding: 6px 8px 7px; }
+      font-weight: 800;
     }
 
     .trajectory-footer-row {
@@ -757,6 +431,7 @@ body {
       gap: 5px 9px;
       margin-top: 2px;
     }
+
     .trajectory-open-button {
       appearance: none;
       border: 0;
@@ -769,587 +444,655 @@ body {
       text-underline-offset: 3px;
       cursor: pointer;
     }
+
     .trajectory-open-button:hover { color: #fff; }
-    #trajectory-modal { z-index: 5000 !important; }
-    #trajectory-modal-box {
+
+    /* =========================================================
+       PLIP共通モーダル
+       ========================================================= */
+    .plip-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(2, 6, 23, .78);
+      backdrop-filter: blur(8px);
+    }
+
+    .plip-modal-box {
       width: min(620px, 100%);
       max-height: min(84vh, 760px);
       overflow-y: auto;
+      border: 1px solid #475569;
+      border-radius: 18px;
+      padding: 22px;
+      background: #0f172a;
+      box-shadow: 0 24px 70px rgba(0,0,0,.55);
     }
-    .trajectory-history-content {
+
+    .plip-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .plip-modal-title {
+      margin: 0;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .plip-modal-close {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      color: #e2e8f0;
+      background: #111827;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .plip-modal-close:hover { background: #1e293b; }
+
+    .modal-copy {
+      color: #cbd5e1;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
+    }
+
+    .trajectory-history-content {
       color: #dbeafe;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
       font-size: 14px;
       line-height: 1.8;
       text-align: left;
     }
-    @media (max-width: 640px) {
-      #trajectory-modal { padding: 12px; }
-      #trajectory-modal-box { max-height: 88vh; padding: 18px 15px; }
-      .trajectory-history-content { font-size: 13px; line-height: 1.7; }
+
+    /* =========================================================
+       レスポンシブ
+       ========================================================= */
+    @media (max-width: 900px) {
+      .plip-header {
+        position: relative;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .plip-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .plip-main {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .work-main-panel {
+        min-height: 320px;
+      }
     }
 
-    /* ===== SOL修正：尽生を基準にした読みやすい文字サイズ ===== */
-    body { font-size: 16px; line-height: 1.6; }
-    button, input, select, textarea { font-size: inherit; }
-    #sim-table-rows td { padding: 10px 12px; font-size: 14px; }
-    #usage-modal-box { max-width: 520px; }
     @media (max-width: 640px) {
       body { font-size: 15px; }
-      #sim-table-rows td { padding: 9px 10px; font-size: 13px; }
+
+      .plip-header { padding: 10px 12px 12px; }
+
+      .plip-brand { align-items: flex-start; }
+
+      .plip-symbol-area {
+        width: 70px;
+        height: 95px;
+      }
+
+      .plip-template-bubble {
+        top: 65px;
+      }
+
+      .plip-title { font-size: 18px; }
+
+      .plip-subtitle { font-size: 11px; }
+
+      .plip-action,
+      .language-current,
+      .language-link,
+      .language-disabled {
+        min-height: 44px;
+        font-size: 12px;
+      }
+
+      .language-switcher { min-width: 118px; }
+
+      .plip-main {
+        padding: 12px;
+        gap: 14px;
+      }
+
+      .n-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .n-tab {
+        min-height: 48px;
+        text-align: left;
+        padding-left: 14px;
+      }
+
+      .panel,
+      .work-main-panel {
+        padding: 15px;
+      }
+
+      .plip-common-footer {
+        font-size: 10px;
+        padding: 7px 8px 9px;
+      }
+
+      .plip-modal { padding: 12px; }
+      .plip-modal-box { padding: 18px 15px; max-height: 88vh; }
     }
   </style>
 </head>
-<body style="background-color: ${mColor};" class="text-slate-100 min-h-screen font-sans flex flex-col antialiased selection:bg-indigo-500/30">
 
-  <header style="background-color: ${hColor};" class="border-b border-slate-800/80 sticky top-0 z-40 shadow-xl backdrop-blur-md px-4 py-3 flex items-center justify-between gap-4">
-    
-    <div class="flex items-center space-x-3 min-w-0">
-      <div class="flex-shrink-0 flex items-start justify-center overflow-visible" style="width: clamp(68px, 8vw, 88px); height: clamp(92px, 11vw, 118px);">
-        ${symbol}
+<body>
+  <!-- ========================================================
+       PLIP作品設定
+       新しい作品を作るときは、まずこのブロックの値を変更する。
+       ======================================================== -->
+  <script>
+    window.PLIP_CONFIG = {
+      workTitle: "PLIP TEMPLATE",
+      subtitle: "PLIP作品 共通母型",
+      symbolButtonFile: "./PLIP_symbol_button.html",
+      plipLinksUrl: "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links",
+
+      // 言語切替は作品に不要なら false。
+      languageSwitchVisible: true,
+      currentLanguage: "ja",
+      otherLanguagePublished: false,
+      otherLanguageFile: "./index_en.html",
+
+      footerCredit: "© 2026 PLIP & Hiro-Seki-Tech",
+      footerNotice: "無断転載及びハルシネーションはお断り申し上げます。",
+      version: "1.0",
+      updated: "2026.09.08",
+
+      usageTitle: "使い方",
+      usageText:
+        "このHTMLはPLIP作品を作るための共通母型です。\n" +
+        "左側のN連タブと、右側の作品固有領域へ作品ごとの機能を実装します。",
+
+      trajectoryTitle: "PLIP TEMPLATEの軌跡",
+      trajectoryText:
+        "Version 1.0　2026.09.08\n" +
+        "・シミュレータからPLIP共通外装・共通動作だけを抽出し、作品制作の標準母型を新設。\n" +
+        "・リンク参照式シンボルボタンを変更せず、同階層参照＋作品側PLIP吹き出し方式へ整理。"
+    };
+  </script>
+
+  <!-- ========================================================
+       PLIP共通ヘッダー
+       ======================================================== -->
+  <header class="plip-header">
+    <div class="plip-brand">
+      <div class="plip-symbol-area" aria-label="PLIPシンボル">
+        <!--
+        【固定仕様】
+        既存のリンク参照式ボタンHTMLを、そのまま iframe で参照する。
+        iframe 内部のCSS/JSは変更しない。
+        -->
+        <iframe
+          id="plip-symbol-frame"
+          class="plip-symbol-frame"
+          title="PLIPシンボルボタン"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+
+        <!--
+        LINK HPでは出さず、PLIP作品本体だけで表示する吹き出し。
+        デザインは既存リンク参照式ボタンのPLIP吹き出しを母型側へ移植。
+        -->
+        <div class="plip-template-bubble" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35">
+            <g class="plip-template-bubble-float" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+              <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z"
+                    fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85"
+                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))"></path>
+              <g transform="translate(6, 11) scale(0.85)">
+                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55">
+                  <line x1="8" y1="1" x2="8" y2="3"></line>
+                  <line x1="3" y1="3" x2="4.5" y2="4.5"></line>
+                  <line x1="1" y1="8" x2="3" y2="8"></line>
+                  <line x1="3" y1="13" x2="4.5" y2="11.5"></line>
+                  <line x1="13" y1="11.5" x2="11.5" y2="10"></line>
+                  <line x1="15" y1="8" x2="13" y2="8"></line>
+                  <line x1="13" y1="3" x2="11.5" y2="4.5"></line>
+                </g>
+                <path class="plip-template-bulb"
+                      d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z"
+                      fill="#94a3b8"></path>
+                <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5"
+                      fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+                      opacity="0.95" style="filter:drop-shadow(0 0 1px #fff)"></path>
+                <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z"
+                      fill="#94a3b8" stroke="#334155" stroke-width="0.5"></path>
+                <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z"
+                      fill="#475569"></path>
+                <line x1="5" y1="14.8" x2="11" y2="14.8" stroke="#334155" stroke-width="0.8"></line>
+                <line x1="5.3" y1="15.8" x2="10.7" y2="15.8" stroke="#334155" stroke-width="0.8"></line>
+                <polygon class="plip-template-bolt" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047"></polygon>
+              </g>
+              <text x="58" y="24" fill="#fbbf24"
+                    font-family="Arial,'Yu Gothic UI',Meiryo,sans-serif"
+                    font-size="11" font-weight="900" letter-spacing="0.03em"
+                    text-anchor="middle">PLIP !!</text>
+            </g>
+          </svg>
+        </div>
       </div>
-      <h1 class="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight max-w-[240px] sm:max-w-xl">
-        ${title}
-      </h1>
+
+      <div class="plip-title-wrap">
+        <h1 id="plip-work-title" class="plip-title">PLIP TEMPLATE</h1>
+        <p id="plip-subtitle" class="plip-subtitle">PLIP作品 共通母型</p>
+      </div>
     </div>
 
-<div class="flex items-center space-x-2 flex-shrink-0">
-      <!-- 👑 PLIPコアバースト付き テンプレート用リンクボタン（上書き部分） -->
-      <a href="https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links" target="_blank" rel="noopener noreferrer" class="bg-slate-900 border border-slate-700 text-xs sm:text-sm font-bold text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-slate-800 hover:text-white transition-all flex items-center gap-1.5 shadow no-underline">
-        <span class="fa-layers fa-fw relative w-3.5 h-3.5 inline-block">
-          <i class="fa-solid fa-lightbulb plip-rainbow-text-bulb text-xs"></i>
-          <i class="fa-solid fa-bolt text-yellow-300 text-[8px] absolute -top-1 -right-0.5 drop-shadow-[0_0_2px_rgba(253,224,71,0.6)]"></i>
-        </span>
-        <span>リンク</span>
+    <div class="plip-header-actions">
+      <a id="plip-links-anchor" class="plip-action" href="#" target="_blank" rel="noopener noreferrer">
+        <span class="plip-link-icon" aria-hidden="true">💡⚡</span>リンク
       </a>
-      ${languageSwitcher}
-      <button id="btn-open-usage-modal" class="bg-gradient-to-r from-slate-800 to-slate-700 border border-slate-600 text-xs sm:text-sm font-bold text-slate-200 px-2.5 py-1.5 rounded-lg hover:from-slate-700 hover:to-slate-600 transition-all shadow-md">
-        使い方？
-      </button>
+
+      <div id="language-switcher" class="language-switcher" aria-label="言語切り替え"></div>
+
+      <button id="open-usage" class="plip-action" type="button">使い方？</button>
     </div>
-	
   </header>
 
-  <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6 flex-grow">
-    
-    <div class="xl:col-span-5 flex flex-col space-y-4">
-      
-      <div class="p-1 rounded-xl silver-gradient-panel flex gap-1 overflow-x-auto">
-        ${tabButtonsMarkup}
+  <!-- ========================================================
+       PLIP共通レイアウト
+       左：N連タブ
+       右：作品固有メイン
+       ======================================================== -->
+  <main class="plip-main">
+    <section class="plip-left" aria-label="作品操作">
+      <div class="n-tabs" role="tablist" aria-label="PLIP N連タブ">
+        <button class="n-tab" type="button" id="tab-btn-1" role="tab"
+                aria-selected="true" aria-controls="tab-panel-1" data-tab="1">
+          1. タブ1
+        </button>
+        <button class="n-tab" type="button" id="tab-btn-2" role="tab"
+                aria-selected="false" aria-controls="tab-panel-2" data-tab="2">
+          2. タブ2
+        </button>
+        <button class="n-tab" type="button" id="tab-btn-3" role="tab"
+                aria-selected="false" aria-controls="tab-panel-3" data-tab="3">
+          3. タブ3
+        </button>
       </div>
 
-      ${tabPanelsMarkup}
+      <!-- =====================================================
+           作品固有領域A：左N連タブ内
+           新作品では、この3パネルの題名・説明・中身を置き換える。
+           共通タブ切替ロジックは下部JSに残す。
+           ===================================================== -->
 
-    </div>
-
-    <div class="xl:col-span-7 flex flex-col space-y-4">
-      <div class="bg-slate-950/80 border border-slate-800 p-4 md:p-5 rounded-xl flex flex-col space-y-3 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-          <span class="text-base sm:text-lg font-bold text-slate-200 tracking-wide"><i class="fa-solid fa-chart-line text-emerald-400 mr-2"></i>リアルタイム資産推移シミュレーション</span>
-          <span class="text-xs text-slate-400 font-mono">Chart.js Live Ready</span>
+      <section id="tab-panel-1" class="panel" role="tabpanel" aria-labelledby="tab-btn-1">
+        <div class="tab-heading-row">
+          <h2>タブ1</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ1の説明"
+                  data-help-text="ここにタブ1の詳しい説明を入れます。"
+                  aria-label="タブ1の詳しい説明">？</button>
         </div>
-        
-        <div class="relative w-full h-[240px] sm:h-[280px] bg-slate-900/40 rounded-xl p-1 border border-slate-800/40">
-          <canvas id="simChart"></canvas>
-        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">作品固有領域：ここから内容を作り込んでください。</div>
+      </section>
 
-        <div class="overflow-x-auto border border-slate-800 rounded-lg max-h-[140px] overflow-y-auto">
-          <table class="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr class="bg-slate-900 border-b border-slate-800 text-slate-400 font-bold sticky top-0">
-                <th class="p-3">時間年数</th>
-                <th class="p-3 text-right">予測アセット残高</th>
-              </tr>
-            </thead>
-            <tbody id="sim-table-rows" class="divide-y divide-slate-800/40 font-mono text-slate-300"></tbody>
-          </table>
+      <section id="tab-panel-2" class="panel" role="tabpanel" aria-labelledby="tab-btn-2" hidden>
+        <div class="tab-heading-row">
+          <h2>タブ2</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ2の説明"
+                  data-help-text="ここにタブ2の詳しい説明を入れます。"
+                  aria-label="タブ2の詳しい説明">？</button>
+        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">必要に応じてタブ数を増減できます。</div>
+      </section>
+
+      <section id="tab-panel-3" class="panel" role="tabpanel" aria-labelledby="tab-btn-3" hidden>
+        <div class="tab-heading-row">
+          <h2>タブ3</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ3の説明"
+                  data-help-text="ここにタブ3の詳しい説明を入れます。"
+                  aria-label="タブ3の詳しい説明">？</button>
+        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">保存機能などは、必要な作品だけここへ追加します。</div>
+      </section>
+    </section>
+
+    <section class="plip-right" aria-label="作品メイン表示">
+      <!-- =====================================================
+           作品固有領域B：右メイン
+           新作品のプレビュー、ゲーム、グラフ、小説本文などを入れる。
+           ===================================================== -->
+      <div class="work-main-panel">
+        <h2>作品メイン領域</h2>
+        <div class="work-placeholder">
+          <div>
+            <strong>ここに作品固有のメイン画面を実装</strong>
+            <span>例：NOPERAなら小説プレビュー／ゲームならゲーム画面／シミュレータなら結果表示</span>
+          </div>
         </div>
       </div>
-    </div>
-
+    </section>
   </main>
 
-  <footer class="plip-common-footer" aria-label="作品情報">
-    <div class="plip-footer-line">${footerCredit}　<span class="plip-now-playing">♪ Now Playing：<span id="plip-now-playing-name">停止中</span></span></div>
-    <div class="plip-footer-line">${footerNotice}</div>
-    <div class="plip-footer-line trajectory-footer-row">
-      <span>${footerVersionText}</span><span aria-hidden="true">｜</span><span>${outputDateDots}</span><span aria-hidden="true">｜</span>
-      <button id="btn-open-trajectory-modal" class="trajectory-open-button" type="button" aria-haspopup="dialog" aria-controls="trajectory-modal">📜 ${trajectoryTitle}</button>
+  <!-- ========================================================
+       PLIP共通フッター
+       ======================================================== -->
+  <footer class="plip-common-footer">
+    <div id="footer-credit" class="plip-footer-line"></div>
+    <div id="footer-now-playing" class="plip-footer-line plip-now-playing">Now Playing：—</div>
+    <div id="footer-notice" class="plip-footer-line"></div>
+    <div class="trajectory-footer-row">
+      <span id="footer-version"></span>
+      <span aria-hidden="true">／</span>
+      <span id="footer-updated"></span>
+      <span aria-hidden="true">／</span>
+      <button id="open-trajectory" class="trajectory-open-button" type="button">📜 作品の軌跡</button>
     </div>
   </footer>
 
-  <div id="usage-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-top-调停">
-    <div id="usage-modal-box" class="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-5 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-        <h4 class="text-lg font-bold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-circle-info text-indigo-400"></i>${usageTitle}</h4>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white font-bold">&times;</button>
+  <!-- ========================================================
+       PLIP共通モーダル：使い方
+       ======================================================== -->
+  <div id="usage-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="usage-title">
+      <div class="plip-modal-header">
+        <h2 id="usage-title" class="plip-modal-title">使い方</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="usage-modal" aria-label="閉じる">×</button>
       </div>
-      <p class="text-sm sm:text-base text-slate-200 leading-relaxed">${usageBody}</p>
-    </div>
+      <div id="usage-copy" class="modal-copy"></div>
+    </section>
   </div>
 
-  <div id="trajectory-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="trajectory-modal-title">
-    <div id="trajectory-modal-box" class="bg-slate-900 border border-slate-600 rounded-2xl p-5 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-4 gap-3">
-        <h4 id="trajectory-modal-title" class="text-lg font-bold text-slate-100">📜 ${trajectoryTitle}</h4>
-        <button id="btn-close-trajectory-modal" type="button" class="w-9 h-9 rounded-full border border-slate-600 bg-slate-800 text-slate-300 hover:text-white hover:border-slate-400 text-xl font-bold flex items-center justify-center" aria-label="軌跡を閉じる">&times;</button>
+  <!-- ========================================================
+       PLIP共通モーダル：各タブ「？」説明
+       ======================================================== -->
+  <div id="help-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <div class="plip-modal-header">
+        <h2 id="help-title" class="plip-modal-title">説明</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="help-modal" aria-label="閉じる">×</button>
       </div>
-      <div class="trajectory-history-content">${trajectoryBody}</div>
-    </div>
+      <div id="help-copy" class="modal-copy"></div>
+    </section>
   </div>
 
-  <div id="global-tooltip" class="fixed bg-slate-800 text-slate-100 text-xs sm:text-sm font-medium px-2.5 py-1.5 rounded-lg border border-slate-600 shadow-2xl pointer-events-none hidden z-top-调停 max-w-[200px] transition-opacity opacity-0"></div>
-
-  <div id="global-popover" class="fixed bg-indigo-950 border border-indigo-700 text-slate-100 text-sm px-3 py-2.5 rounded-xl shadow-2xl hidden z-top-调停 max-w-[240px]">
-    <div class="flex items-start gap-1.5">
-      <div class="text-indigo-400 text-xs"><i class="fa-solid fa-circle-nodes"></i></div>
-      <div id="popover-text" class="leading-relaxed text-sm"></div>
-    </div>
+  <!-- ========================================================
+       PLIP共通モーダル：作品の軌跡
+       ======================================================== -->
+  <div id="trajectory-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="trajectory-title">
+      <div class="plip-modal-header">
+        <h2 id="trajectory-title" class="plip-modal-title">作品の軌跡</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="trajectory-modal" aria-label="閉じる">×</button>
+      </div>
+      <div id="trajectory-copy" class="trajectory-history-content"></div>
+    </section>
   </div>
 
   <script>
-    // ----------------------------------------------------
-    // 【ルール4適用】モーダル、最前面ツールチップ、ポップオーバー調停
-    // ----------------------------------------------------
-    const modalEl = document.getElementById('usage-modal');
-    const modalBox = document.getElementById('usage-modal-box');
-    const tipEl = document.getElementById('global-tooltip');
-    const popEl = document.getElementById('global-popover');
-    const popTxt = document.getElementById('popover-text');
-    const trajectoryModalEl = document.getElementById('trajectory-modal');
-    const trajectoryModalBox = document.getElementById('trajectory-modal-box');
-    const trajectoryOpenButton = document.getElementById('btn-open-trajectory-modal');
-    const trajectoryCloseButton = document.getElementById('btn-close-trajectory-modal');
-    let trajectoryPreviousFocus = null;
+    (() => {
+      "use strict";
 
-    document.getElementById('btn-open-usage-modal').addEventListener('click', (e) => {
-      e.stopPropagation();
-      modalEl.classList.remove('hidden');
-      modalEl.classList.add('flex');
-    });
+      const config = window.PLIP_CONFIG;
+      const symbolFrame = document.getElementById("plip-symbol-frame");
 
-    function closeModal() {
-      modalEl.classList.add('hidden');
-      modalEl.classList.remove('flex');
-    }
+      // =======================================================
+      // PLIP共通初期設定
+      // =======================================================
+      document.title = config.workTitle;
+      document.getElementById("plip-work-title").textContent = config.workTitle;
+      document.getElementById("plip-subtitle").textContent = config.subtitle || "";
+      document.getElementById("plip-links-anchor").href = config.plipLinksUrl;
+      symbolFrame.src = config.symbolButtonFile;
 
-    modalEl.addEventListener('click', (e) => {
-      if(!modalBox.contains(e.target)) closeModal();
-    });
+      document.getElementById("footer-credit").textContent = config.footerCredit;
+      document.getElementById("footer-notice").textContent = config.footerNotice;
+      document.getElementById("footer-version").textContent = "Version " + config.version;
+      document.getElementById("footer-updated").textContent = "更新日 " + config.updated;
 
-    function openTrajectoryModal() {
-      trajectoryPreviousFocus = document.activeElement;
-      trajectoryModalEl.classList.remove('hidden');
-      trajectoryModalEl.classList.add('flex');
-      document.body.style.overflow = 'hidden';
-      trajectoryCloseButton.focus();
-    }
+      document.getElementById("usage-title").textContent = config.usageTitle;
+      document.getElementById("usage-copy").textContent = config.usageText;
 
-    function closeTrajectoryModal() {
-      trajectoryModalEl.classList.add('hidden');
-      trajectoryModalEl.classList.remove('flex');
-      document.body.style.overflow = '';
-      if (trajectoryPreviousFocus && typeof trajectoryPreviousFocus.focus === 'function') {
-        trajectoryPreviousFocus.focus();
-      }
-    }
+      document.getElementById("trajectory-title").textContent = config.trajectoryTitle;
+      document.getElementById("trajectory-copy").textContent = config.trajectoryText;
+      document.getElementById("open-trajectory").textContent = "📜 " + config.trajectoryTitle;
 
-    trajectoryOpenButton.addEventListener('click', openTrajectoryModal);
-    trajectoryCloseButton.addEventListener('click', closeTrajectoryModal);
-    trajectoryModalEl.addEventListener('click', (event) => {
-      if (!trajectoryModalBox.contains(event.target)) closeTrajectoryModal();
-    });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && !trajectoryModalEl.classList.contains('hidden')) {
-        closeTrajectoryModal();
-      }
-    });
+      // =======================================================
+      // PLIP共通：言語切替
+      // =======================================================
+      function renderLanguageSwitcher() {
+        const host = document.getElementById("language-switcher");
 
-    // ツールチップ最前面＆外側タップクローズ調停
-    document.querySelectorAll('.tab-trigger').forEach(btn => {
-      const showTip = () => {
-        tipEl.innerText = btn.getAttribute('data-tooltip');
-        tipEl.classList.remove('hidden');
-        tipEl.style.opacity = '1';
-        const r = btn.getBoundingClientRect();
-        tipEl.style.left = r.left + 'px';
-        tipEl.style.top = (r.bottom + window.scrollY + 6) + 'px';
-      };
-      const hideTip = () => {
-        tipEl.style.opacity = '0';
-        tipEl.classList.add('hidden');
-      };
-      btn.addEventListener('mouseenter', showTip);
-      btn.addEventListener('mouseleave', hideTip);
-      btn.addEventListener('touchstart', (e) => { e.stopPropagation(); showTip(); });
-    });
-
-    window.addEventListener('touchstart', () => {
-      tipEl.style.opacity = '0';
-      tipEl.classList.add('hidden');
-    });
-
-    // ポップオーバー（？」ヘルプ）調停
-    document.querySelectorAll('.help-popover-trigger').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        popTxt.innerText = btn.getAttribute('data-popover');
-        popEl.classList.remove('hidden');
-        const r = btn.getBoundingClientRect();
-        let left = r.left - 80;
-        if(left < 10) left = 10;
-        popEl.style.left = left + 'px';
-        popEl.style.top = (r.bottom + window.scrollY + 6) + 'px';
-      });
-    });
-
-    // 枠外タップ/クリックで閉じる
-    window.addEventListener('click', (e) => {
-      if(!popEl.classList.contains('hidden') && !popEl.contains(e.target)) {
-        popEl.classList.add('hidden');
-      }
-    });
-
-    // ----------------------------------------------------
-    // テンプレート側 タブ切替
-    // ----------------------------------------------------
-    const tBtns = Array.from(document.querySelectorAll('.tab-trigger'));
-    const tPanels = Array.from(document.querySelectorAll('.panel-content'));
-
-    tBtns.forEach((button, idx) => {
-      button.addEventListener('click', () => {
-        tPanels.forEach(panel => panel.classList.add('hidden'));
-        if (tPanels[idx]) tPanels[idx].classList.remove('hidden');
-        tBtns.forEach(btn => {
-          btn.className = "tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 text-slate-400 hover:text-white";
-        });
-        button.className = "tab-trigger flex-1 min-w-[110px] py-3 px-2 text-xs sm:text-sm font-bold rounded-lg transition-all duration-150 flex items-center justify-center gap-1 active-silver-tab";
-      });
-    });
-
-    // ----------------------------------------------------
-    // PLIPシンボルボタンから現在再生中の曲名を受信
-    // ----------------------------------------------------
-    function extractTrackName(rawSrc) {
-      try {
-        const pathname = new URL(rawSrc, location.href).pathname;
-        const filename = decodeURIComponent(pathname.split('/').pop() || '');
-        return filename.replace(/\.[^.]+$/, '') || '再生中';
-      } catch (error) {
-        const cleanSrc = String(rawSrc || '').split('?')[0].split('#')[0];
-        const filename = cleanSrc.split('/').pop() || '';
-        return filename.replace(/\.[^.]+$/, '') || '再生中';
-      }
-    }
-
-    window.addEventListener('message', (event) => {
-      if (!event.data || event.data.type !== 'PLIP_NOW_PLAYING') return;
-      const nameEl = document.getElementById('plip-now-playing-name');
-      if (nameEl) nameEl.textContent = extractTrackName(event.data.src);
-    });
-
-    // ----------------------------------------------------
-    // LocalStorage 連動プラン記憶ロジック
-    // ----------------------------------------------------
-    const sPrefix = 'TEMPLATE_PRODUCTION_SLOT_';
-
-    function renderSlotLabels() {
-      for(let i=1; i<=3; i++) {
-        const raw = localStorage.getItem(sPrefix + i);
-        const lbl = document.getElementById('slot-text-' + i);
-        if(raw) {
-          const d = JSON.parse(raw);
-          lbl.innerText = '書 ' + (i===1?'一':i===2?'二':'三') + ': ' + d.name;
-          lbl.className = "text-xs font-bold text-emerald-400 truncate max-w-[160px]";
-        } else {
-          lbl.innerText = '書 ' + (i===1?'一':i===2?'二':'三') + ': [記録なし]';
-          lbl.className = "text-xs text-slate-500 truncate max-w-[160px]";
+        if (!config.languageSwitchVisible) {
+          host.hidden = true;
+          return;
         }
+
+        host.hidden = false;
+
+        const currentJa = config.currentLanguage === "ja";
+        const ja = document.createElement(currentJa ? "span" : (config.otherLanguagePublished ? "a" : "span"));
+        const en = document.createElement(!currentJa ? "span" : (config.otherLanguagePublished ? "a" : "span"));
+
+        ja.textContent = "日本語";
+        en.textContent = "English";
+
+        if (currentJa) {
+          ja.className = "language-current";
+          ja.setAttribute("aria-current", "page");
+        } else if (config.otherLanguagePublished) {
+          ja.className = "language-link";
+          ja.href = config.otherLanguageFile;
+        } else {
+          ja.className = "language-disabled";
+          ja.setAttribute("aria-disabled", "true");
+          ja.title = "日本語版は未公開です";
+        }
+
+        if (!currentJa) {
+          en.className = "language-current";
+          en.setAttribute("aria-current", "page");
+        } else if (config.otherLanguagePublished) {
+          en.className = "language-link";
+          en.href = config.otherLanguageFile;
+        } else {
+          en.className = "language-disabled";
+          en.setAttribute("aria-disabled", "true");
+          en.title = "English edition is not published yet";
+        }
+
+        host.replaceChildren(ja, en);
       }
-    }
 
-    function saveSlot(slot) {
-      const n = document.getElementById('storage-name-input').value.trim() || 'テンプレート世界線';
-      const payload = {
-        name: n,
-        asset: document.getElementById('input-asset').value,
-        delta: document.getElementById('input-delta').value
-      };
-      localStorage.setItem(sPrefix + slot, JSON.stringify(payload));
-      document.getElementById('storage-name-input').value = '';
-      renderSlotLabels();
-    }
+      renderLanguageSwitcher();
 
-    function loadSlot(slot) {
-      const raw = localStorage.getItem(sPrefix + slot);
-      if(!raw) return alert('展開可能な記憶がありません。');
-      const d = JSON.parse(raw);
-      document.getElementById('input-asset').value = d.asset;
-      document.getElementById('input-delta').value = d.delta;
-      runCalcSimulation();
-    }
+      // =======================================================
+      // PLIP共通：N連タブ
+      // =======================================================
+      const tabButtons = [...document.querySelectorAll(".n-tab")];
+      const tabPanels = [...document.querySelectorAll('[role="tabpanel"]')];
 
-    // ----------------------------------------------------
-    // Chart.js ＆ データテーブル駆動サンプル
-    // ----------------------------------------------------
-    let cInstance = null;
+      function activateTab(button) {
+        const target = button.dataset.tab;
 
-    function runCalcSimulation() {
-      const asset = parseFloat(document.getElementById('input-asset').value) || 0;
-      const delta = parseFloat(document.getElementById('input-delta').value) || 0;
+        tabButtons.forEach(btn => {
+          const selected = btn === button;
+          btn.setAttribute("aria-selected", String(selected));
+          btn.tabIndex = selected ? 0 : -1;
+        });
 
-      const labels = ['初期'];
-      const data = [asset];
-      let rowsHtml = \`<tr class="hover:bg-slate-900/40"><td class="p-2">初期布陣</td><td class="p-2 text-right text-white font-bold">\${asset.toLocaleString()} 万円</td></tr>\`;
-
-      let current = asset;
-      for(let i=1; i<=5; i++) {
-        current += delta;
-        labels.push(i + '年後');
-        data.push(current);
-        rowsHtml += \`<tr class="hover:bg-slate-900/40"><td class="p-2 text-slate-400">\${i} 年目</td><td class="p-2 text-right text-emerald-400 font-bold">\text{\${current.toLocaleString()}} 万円</td></tr>\`;
+        tabPanels.forEach(panel => {
+          panel.hidden = panel.id !== "tab-panel-" + target;
+        });
       }
-      document.getElementById('sim-table-rows').innerHTML = rowsHtml;
 
-      if(cInstance) {
-        cInstance.data.labels = labels;
-        cInstance.data.datasets[0].data = data;
-        cInstance.update();
-      } else {
-        cInstance = new Chart(document.getElementById('simChart').getContext('2d'), {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              data: data, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.06)', borderWidth: 2, fill: true, tension: 0.15
-            }]
-          },
-          options: {
-            responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } },
-              y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } }
-            }
+      tabButtons.forEach((button, index) => {
+        button.addEventListener("click", () => activateTab(button));
+
+        button.addEventListener("keydown", event => {
+          if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+
+          event.preventDefault();
+
+          let nextIndex = index;
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextIndex = (index + 1) % tabButtons.length;
+          } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+            nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+          } else if (event.key === "Home") {
+            nextIndex = 0;
+          } else if (event.key === "End") {
+            nextIndex = tabButtons.length - 1;
           }
+
+          tabButtons[nextIndex].focus();
+          activateTab(tabButtons[nextIndex]);
         });
-      }
-    }
-
-    document.querySelectorAll('.sim-val-change').forEach(input => input.addEventListener('input', runCalcSimulation));
-
-    renderSlotLabels();
-    runCalcSimulation();
-  <\/script>
-</body>
-</html>`;
-
-      // ジェネレータ側のコードテキストエリアを更新
-      document.getElementById('code-output-area').value = template;
-      
-      // ジェネレータ側のプレビューiframeへHTMLをリアルタイム流し込み
-      const iframe = document.getElementById('canvas-iframe');
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-      doc.open();
-      doc.write(template);
-      doc.close();
-    }
-
-    // ジェネレータツール本体のコントロール制御
-    function copyGeneratedCode() {
-      const area = document.getElementById('code-output-area');
-      area.select();
-      navigator.clipboard.writeText(area.value);
-      alert('📋 テンプレートHTMLコードを完全にクリップボードへ格納しました！');
-    }
-
-    function downloadGeneratedHTML() {
-      updatePreviewCanvas();
-      const code = document.getElementById('code-output-area').value;
-      const blob = new Blob([code], { type: 'text/html;charset=utf-8;' });
-      const link = document.createElement('a');
-      const title = document.getElementById('cfg-title').value.replace(/[\/\\?%*:|"<>\s]/g, '_');
-      link.href = URL.createObjectURL(blob);
-      link.download = `simulator_${title}.html`;
-      link.click();
-    }
-
-
-    // =========================================================================
-    // 💾 編集用HTML：現在の編集状態だけを保存し、書き出しのたびにクレンジング
-    // =========================================================================
-    function collectEditableState() {
-      const controls = {};
-      document.querySelectorAll('[id^="cfg-"]').forEach(el => {
-        if (el.type === 'checkbox' || el.type === 'radio') {
-          controls[el.id] = { kind: 'checked', value: !!el.checked };
-        } else {
-          controls[el.id] = { kind: 'value', value: el.value };
-        }
       });
 
-      return {
-        schemaVersion: 1,
-        controls,
-        simulatorTabs: JSON.parse(JSON.stringify(simulatorTabs)),
-        importedButtonHtml: importedButtonHtml || '',
-        importedButtonFilename: importedButtonFilename || ''
-      };
-    }
+      // =======================================================
+      // PLIP共通：モーダル
+      // ・閉じるボタン
+      // ・外側クリック / タップ
+      // ・Escape
+      // ・開いている間の背景スクロール抑止
+      // =======================================================
+      let activeModal = null;
+      let returnFocusTo = null;
 
-    function encodeEditableState(state) {
-      return btoa(unescape(encodeURIComponent(JSON.stringify(state))));
-    }
+      function openModal(modal, source) {
+        if (!modal) return;
 
-    function decodeEditableState(encoded) {
-      return JSON.parse(decodeURIComponent(escape(atob(encoded))));
-    }
+        returnFocusTo = source || document.activeElement;
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        activeModal = modal;
 
-    function restoreEditableState() {
-      const capsule = document.getElementById('sim-gene-edit-state');
-      if (!capsule || !capsule.textContent.trim()) return false;
+        const closeButton = modal.querySelector(".plip-modal-close");
+        if (closeButton) closeButton.focus();
+      }
 
-      try {
-        const state = decodeEditableState(capsule.textContent.trim());
+      function closeModal(modal) {
+        if (!modal) return;
 
-        if (Array.isArray(state.simulatorTabs) && state.simulatorTabs.length >= 3) {
-          simulatorTabs = state.simulatorTabs;
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+
+        if (activeModal === modal) {
+          activeModal = null;
+          document.body.style.overflow = "";
         }
 
-        importedButtonHtml = typeof state.importedButtonHtml === 'string'
-          ? state.importedButtonHtml
-          : '';
-        importedButtonFilename = typeof state.importedButtonFilename === 'string'
-          ? state.importedButtonFilename
-          : '';
+        if (returnFocusTo && typeof returnFocusTo.focus === "function") {
+          returnFocusTo.focus();
+        }
+        returnFocusTo = null;
+      }
 
-        Object.entries(state.controls || {}).forEach(([id, saved]) => {
-          const el = document.getElementById(id);
-          if (!el || !saved) return;
-          if (saved.kind === 'checked') el.checked = !!saved.value;
-          else el.value = saved.value ?? '';
+      document.getElementById("open-usage").addEventListener("click", event => {
+        openModal(document.getElementById("usage-modal"), event.currentTarget);
+      });
+
+      document.getElementById("open-trajectory").addEventListener("click", event => {
+        openModal(document.getElementById("trajectory-modal"), event.currentTarget);
+      });
+
+      document.querySelectorAll(".help-dot").forEach(button => {
+        button.addEventListener("click", event => {
+          document.getElementById("help-title").textContent =
+            event.currentTarget.dataset.helpTitle || "説明";
+          document.getElementById("help-copy").textContent =
+            event.currentTarget.dataset.helpText || "";
+          openModal(document.getElementById("help-modal"), event.currentTarget);
         });
+      });
 
-        const status = document.getElementById('symbol-file-status');
-        const clearButton = document.getElementById('symbol-file-clear');
-        if (importedButtonHtml) {
-          status.textContent = '読込済み：' + (importedButtonFilename || '保存済みボタン.html');
-          status.className = 'text-[11px] text-emerald-400 truncate';
-          clearButton.classList.remove('hidden');
-        } else {
-          status.textContent = 'ボタンファイル未読込';
-          status.className = 'text-[11px] text-slate-500 truncate';
-          clearButton.classList.add('hidden');
-        }
-        return true;
-      } catch (error) {
-        console.error('編集状態の復元に失敗しました。', error);
-        return false;
-      }
-    }
+      document.querySelectorAll("[data-close-modal]").forEach(button => {
+        button.addEventListener("click", event => {
+          const modal = document.getElementById(event.currentTarget.dataset.closeModal);
+          closeModal(modal);
+        });
+      });
 
-    function downloadEditableHTML() {
-      const state = collectEditableState();
-      const cleanDoc = document.implementation.createHTMLDocument(document.title);
-      cleanDoc.documentElement.innerHTML = document.documentElement.outerHTML;
+      document.querySelectorAll(".plip-modal").forEach(modal => {
+        modal.addEventListener("pointerdown", event => {
+          if (event.target === modal) closeModal(modal);
+        });
+      });
 
-      // 1. 過去の保存カプセルを必ず全削除し、あとで最新の1個だけを作る
-      cleanDoc.querySelectorAll('#sim-gene-edit-state').forEach(el => el.remove());
-
-      // 2. Tailwindが実行中に注入した巨大な動的CSSを除去
-      cleanDoc.querySelectorAll('head style').forEach(style => {
-        const css = style.textContent || '';
-        if (css.includes('--tw-') || css.includes('tailwindcss') || css.includes('box-sizing:border-box')) {
-          style.remove();
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && activeModal) {
+          event.preventDefault();
+          closeModal(activeModal);
         }
       });
 
-      // 3. 再起動時に再生成される動的画面は空に戻す
-      const tabSettings = cleanDoc.getElementById('sim-tab-settings');
-      if (tabSettings) tabSettings.innerHTML = '';
+      // =======================================================
+      // PLIP共通：シンボルボタンからの Now Playing 通知
+      // 現行ボタンの仕様は変更せず、親側が受け取れる形式だけ拾う。
+      // =======================================================
+      const nowPlaying = document.getElementById("footer-now-playing");
 
-      const previewFrame = cleanDoc.getElementById('canvas-iframe');
-      if (previewFrame) {
-        previewFrame.removeAttribute('src');
-        previewFrame.removeAttribute('srcdoc');
+      function filenameFromUrl(value) {
+        try {
+          const url = new URL(value, window.location.href);
+          const name = decodeURIComponent(url.pathname.split("/").pop() || "");
+          return name || "再生中";
+        } catch (_) {
+          return "再生中";
+        }
       }
 
-      const codeArea = cleanDoc.getElementById('code-output-area');
-      if (codeArea) {
-        codeArea.textContent = '';
-        codeArea.value = '';
-      }
+      window.addEventListener("message", event => {
+        if (!event.data || typeof event.data !== "object") return;
 
-      // 4. ファイル選択inputや一時的なドラッグ表示を初期状態へ戻す
-      cleanDoc.querySelectorAll('input[type="file"]').forEach(input => {
-        input.removeAttribute('value');
+        if (event.data.type === "PLIP_TRACK_PLAYING") {
+          nowPlaying.textContent =
+            "Now Playing：" + filenameFromUrl(event.data.trackUrl || "");
+        }
+
+        if (event.data.type === "PLIP_NOW_PLAYING") {
+          nowPlaying.textContent =
+            "Now Playing：" + filenameFromUrl(event.data.src || "");
+        }
       });
-      const cleanDropZone = cleanDoc.getElementById('symbol-drop-zone');
-      if (cleanDropZone) {
-        cleanDropZone.classList.remove('border-indigo-400', 'bg-indigo-950/40');
-      }
 
-      // 5. 最新状態だけをBase64化した単一カプセルとして埋め込む
-      const capsule = cleanDoc.createElement('script');
-      capsule.id = 'sim-gene-edit-state';
-      capsule.type = 'application/json';
-      capsule.textContent = encodeEditableState(state);
-      cleanDoc.body.appendChild(capsule);
+      // =======================================================
+      // 作品固有JavaScript：ここから
+      // -------------------------------------------------------
+      // 新しいPLIP作品のロジックは、原則この下へ追加する。
+      // PLIP共通部のID・関数・イベントは理由なく変更しない。
+      // =======================================================
 
-      const finalHtml = '<!DOCTYPE html>\n' + cleanDoc.documentElement.outerHTML;
-      const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8;' });
-      const link = document.createElement('a');
-      const title = document.getElementById('cfg-title').value.replace(/[\/\\?%*:|"<>\s]/g, '_');
-      const url = URL.createObjectURL(blob);
-      link.href = url;
-      link.download = `Sim_Gene_edit_${title}.html`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
 
-    const symbolDropZone = document.getElementById('symbol-drop-zone');
-    const symbolFileInput = document.getElementById('symbol-file-input');
-
-    symbolDropZone.addEventListener('click', () => symbolFileInput.click());
-
-    symbolFileInput.addEventListener('change', event => {
-      importSymbolButtonFile(event.target.files[0]);
-      event.target.value = '';
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      symbolDropZone.addEventListener(eventName, event => {
-        event.preventDefault();
-        symbolDropZone.classList.add('border-indigo-400', 'bg-indigo-950/40');
-      });
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      symbolDropZone.addEventListener(eventName, event => {
-        event.preventDefault();
-        symbolDropZone.classList.remove('border-indigo-400', 'bg-indigo-950/40');
-      });
-    });
-
-    symbolDropZone.addEventListener('drop', event => {
-      importSymbolButtonFile(event.dataTransfer.files[0]);
-    });
-
-    document.getElementById('symbol-file-clear').addEventListener('click', event => {
-      event.stopPropagation();
-      clearImportedSymbolButton();
-    });
-
-    // 起動時自動レンダリング初期フック
-    window.onload = function() {
-      restoreEditableState();
-      renderSimulatorTabSettings();
-      updateLanguageSettingLabels();
-      updatePreviewCanvas();
-    };
+      // 作品固有JavaScript：ここまで
+    })();
   </script>
 </body>
 </html>
