@@ -1421,7 +1421,7 @@ body {
       try {
         await audio.play();
 
-        if (LINK_MODE && currentState === 1) {
+        if (LINK_MODE && sessionId === musicSessionId && (currentState === 0 || currentState === 1)) {
           window.parent.postMessage({
             type: "PLIP_TRACK_PLAYING",
             title: encodeURIComponent(linkCardTitle),
@@ -1450,6 +1450,13 @@ body {
     const sessionId = musicSessionId;
 
     if (state.musicMode === "silent") {
+      if (LINK_MODE && sessionId === musicSessionId) {
+        window.parent.postMessage({
+          type: "PLIP_TRACK_PLAYING",
+          title: encodeURIComponent(linkCardTitle),
+          trackUrl: "サウンドオフ"
+        }, "*");
+      }
       showToast("🔇 音楽をオフにしました");
       return;
     }
