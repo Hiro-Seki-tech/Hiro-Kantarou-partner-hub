@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIPボタンビルダー v6.1</title>
+<title>PLIPボタンビルダー v6.2</title>
 <style>
 :root {
   color-scheme: dark;
@@ -319,11 +319,18 @@ code {
   box-shadow: 0 0 28px rgba(255,215,0,.33), 0 20px 50px rgba(0,0,0,.45);
   touch-action: manipulation;
 }
-#preview-stage, #preview-stage > svg {
+#preview-stage, #preview-stage > svg, #preview-stage > img, #preview-stage > video {
   display: block;
   width: 100%;
   height: 100%;
 }
+#preview-stage > img, #preview-stage > video { object-fit: contain; }
+.media-file-info { margin-top: 8px; font-size: 11px; color: #93c5fd; overflow-wrap: anywhere; }
+.video-audio-setting { margin-top: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: rgba(2,6,23,.45); }
+.video-audio-setting label { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.video-audio-setting label + label { margin-top: 7px; }
+.video-audio-setting label[aria-disabled="true"] { opacity: .45; }
+
 .placeholder {
   display: flex;
   align-items: center;
@@ -462,10 +469,10 @@ code {
 <div class="builder">
   <header class="header">
     <div>
-      <h1>✨ PLIPボタンビルダー v6.1</h1>
-      <p>3段階SVG、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
+      <h1>✨ PLIPボタンビルダー v6.2</h1>
+      <p>3段階SVG・画像・動画、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
     </div>
-    <div class="version">Version 6.1 · 2026.08</div>
+    <div class="version">Version 6.2 · 2026.10</div>
   </header>
 
   <div class="layout">
@@ -473,8 +480,9 @@ code {
       <div class="card">
         <h2 class="card-title"><span style="color:var(--cyan)">⚙</span> 基本設定</h2>
 
-        <label class="field-label" for="filename-input">保存ファイル名</label>
-        <input id="filename-input" class="input" type="text" value="plip_button">
+        <label class="field-label" for="filename-input">作品タイトル</label>
+        <input id="filename-input" class="input" type="text" placeholder="例：NOPERA" autocomplete="off">
+        <div style="margin-top:6px;color:var(--muted);font-size:11px;line-height:1.6">通常版：タイトル_button.html ／ LINK HP対応版：タイトル_button_link.html</div>
 
         <div class="grid-two" style="margin-top:12px">
           <label>
@@ -509,7 +517,7 @@ code {
       </div>
 
       <div class="card">
-        <h2 class="card-title"><span style="color:var(--violet)">▣</span> 3段階SVG設定</h2>
+        <h2 class="card-title"><span style="color:var(--violet)">▣</span> 3段階シンボル素材設定</h2>
 
         <div class="tabs" role="tablist">
           <button type="button" class="tab active" data-editor-tab="0">状態1</button>
@@ -540,7 +548,9 @@ code {
         <code>bgm.mp3</code>、<code>bgm1.mp3</code> と、
         上で選んだ形式の <code>song.mp3～song4.mp3</code> または
         <code>song.mp4～song4.mp4</code> を入れてください。
-        抽選した曲を直接再生し、失敗した場合だけ同じ形式の標準ファイルへ切り替えます。
+        抽選した曲を直接再生し、失敗した場合だけ同じ形式の標準ファイルへ切り替えます。<br><br>
+         <strong style="color:#cbd5e1">シンボル素材：</strong>
+         JPG・PNG・MP4は生成HTML内に埋め込みます。大きい動画ほど生成HTMLも大きくなります。動画の音声は常にOFFです。
       </div>
     </section>
 
@@ -558,7 +568,7 @@ code {
         <button id="preview-button" type="button" aria-label="プレビューボタン">
           <span id="preview-stage">
             <span class="placeholder">
-              SVGコードを貼り付けるか、SVG／HTMLファイルをドロップしてください。<br>
+              SVGコードを貼り付けるか、SVG／HTML／JPG／PNG／MP4をドロップしてください。<br>
               このボタンを押すと状態が切り替わります。
             </span>
           </span>
@@ -608,7 +618,7 @@ code {
 
       <div class="preview-status">
         <span id="preview-status-label">現在：状態1</span>
-        <span>プレビューでは音楽を再生しません</span>
+        <span>プレビューでは音楽を再生しません（動画は無音）</span>
       </div>
     </section>
   </div>
@@ -635,6 +645,7 @@ code {
   let previewState = 0;
   let toastTimer = null;
   let previewAudioContext = null;
+  const mediaAssets = [null, null, null];
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -651,9 +662,9 @@ code {
 
   function buildStatePanel(index) {
     const descriptions = [
-      "最初に表示するSVG",
-      "1回押した後に表示するSVG",
-      "2回押した後に表示するSVG"
+      "最初に表示する素材",
+      "1回押した後に表示する素材",
+      "2回押した後に表示する素材"
     ];
     const placeholder = index === 0
       ? "<svg ...> ... </svg>"
@@ -664,14 +675,21 @@ code {
         <span class="field-label">${descriptions[index]}</span>
 
         <div class="drop-zone" data-drop-zone="${index}">
-          SVGまたはHTMLをここへドラッグ＆ドロップ<br>
+          SVG・HTML・JPG・PNG・MP4をここへドラッグ＆ドロップ<br>
           HTMLの場合は、最初に見つかったSVGを取り込みます。<br>
+           JPG・PNG・MP4は生成HTMLに内包されます。<br>
           <button class="file-button" type="button" data-file-button="${index}">ファイルを選ぶ</button>
           <input class="file-input" data-file-input="${index}" type="file"
-                 accept=".svg,.html,.htm,image/svg+xml,text/html">
+                 accept=".svg,.html,.htm,.jpg,.jpeg,.png,.mp4,image/svg+xml,text/html,image/jpeg,image/png,video/mp4">
         </div>
 
         <textarea id="svg-input-${index}" class="textarea" placeholder="${placeholder}"></textarea>
+        <div class="media-file-info" data-media-info="${index}">SVGコード入力または素材ファイルを選択してください</div>
+        <div class="video-audio-setting" data-video-audio="${index}" hidden>
+          <span class="field-label">動画の音声</span>
+          <label><input type="radio" checked name="video-audio-${index}" value="off"> OFF（標準：映像のみ）</label>
+          <label aria-disabled="true"><input type="radio" disabled name="video-audio-${index}" value="on"> ON（将来対応・選択不可）</label>
+        </div>
 
         <div class="color-row">
           <label>
@@ -776,6 +794,32 @@ code {
     return [raw[0], raw[1] || raw[0], raw[2] || raw[0]];
   }
 
+  function getMediaForState(index) {
+    const svg = $(`#svg-input-${index}`).value.trim();
+    if (mediaAssets[index]) return mediaAssets[index];
+    return svg ? { type: "svg", data: svg } : null;
+  }
+
+  function getResolvedMedia() {
+    const items = [0, 1, 2].map(getMediaForState);
+    return [items[0], items[1] || items[0], items[2] || items[0]];
+  }
+
+  function mediaMarkup(media) {
+    if (!media) return "";
+    if (media.type === "svg") return cleanAndOptimizeSvg(media.data);
+    if (media.type === "video") return `<video src="${media.data}" muted loop autoplay playsinline preload="metadata" data-plip-visual-video="true"></video>`;
+    return `<img src="${media.data}" alt="シンボル画像">`;
+  }
+
+  function updateMediaInfo(index) {
+    const asset = mediaAssets[index];
+    $(`[data-media-info="${index}"]`).textContent = asset
+      ? `${asset.name}（${asset.type === "video" ? "MP4" : "画像"}・${(asset.size / 1024 / 1024).toFixed(2)} MB）` 
+      : "SVGコード入力または素材ファイルを選択してください";
+    $(`[data-video-audio="${index}"]`).hidden = !(asset && asset.type === "video");
+  }
+
   function getColors() {
     return [0, 1, 2].map(index => {
       const value = $(`#color-text-${index}`).value.trim();
@@ -812,17 +856,20 @@ code {
   function setPreviewState(index, animate = true) {
     previewState = index;
 
-    const svg = cleanAndOptimizeSvg(getRawSvgs()[index]);
+    const media = getResolvedMedia()[index];
     const color = getColors()[index];
     const stage = $("#preview-stage");
     const button = $("#preview-button");
 
-    stage.innerHTML = svg || `
+    stage.querySelectorAll("video").forEach(video => video.pause());
+    stage.innerHTML = mediaMarkup(media) || `
       <span class="placeholder">
-        この状態のSVGは未入力です。<br>
-        状態1が入力済みなら、そのSVGを代わりに使用します。
+        この状態の素材は未入力です。<br>
+        状態1が入力済みなら、その素材を代わりに使用します。
       </span>
     `;
+    const previewVideo = stage.querySelector("video");
+    if (previewVideo) previewVideo.play().catch(() => {});
 
     button.style.borderColor = color;
     button.style.boxShadow =
@@ -852,18 +899,28 @@ code {
 
   async function importFile(index, file) {
     if (!file) return;
-
-    if (!/\.(svg|html?|htm)$/i.test(file.name)) {
-      showToast("SVGまたはHTMLファイルを選んでください");
+    const ext = file.name.split(".").pop().toLowerCase();
+    if (!["svg", "html", "htm", "jpg", "jpeg", "png", "mp4"].includes(ext)) {
+      showToast("SVG・HTML・JPG・PNG・MP4を選んでください");
       return;
     }
-
     try {
-      const text = await file.text();
-      const svg = extractFirstSvg(text);
-      if (!svg) throw new Error("SVGが見つかりません");
-
-      $(`#svg-input-${index}`).value = svg;
+      if (["jpg", "jpeg", "png", "mp4"].includes(ext)) {
+        const data = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("ファイルを読み込めません"));
+          reader.readAsDataURL(file);
+        });
+        mediaAssets[index] = { type: ext === "mp4" ? "video" : "image", data, name: file.name, size: file.size };
+        $(`#svg-input-${index}`).value = "";
+      } else {
+        const svg = extractFirstSvg(await file.text());
+        if (!svg) throw new Error("SVGが見つかりません");
+        mediaAssets[index] = null;
+        $(`#svg-input-${index}`).value = svg;
+      }
+      updateMediaInfo(index);
       setPreviewState(index, false);
       showToast(`${file.name} を状態${index + 1}へ読み込みました`);
     } catch (error) {
@@ -983,25 +1040,23 @@ code {
       .replace(/_+/g, "_")
       .replace(/^_+|_+$/g, "");
 
-    return cleaned || "plip_button";
+    return cleaned;
   }
 
   function buildOutputHtml(isLinkMode = false) {
-    const rawSvgs = getRawSvgs();
-    if (!rawSvgs[0]) {
-      throw new Error("状態1のSVGコードを入力してください");
+    const media = getResolvedMedia();
+    if (!media[0]) {
+      throw new Error("状態1の素材を登録してください");
     }
-
-    const svgs = rawSvgs.map(cleanAndOptimizeSvg);
     const colors = getColors();
     const transitions = getAllTransitionSettings();
     const effect = $("#effect-select").value;
     const themeFormat = $("#theme-format-select").value === "mp4" ? "mp4" : "mp3";
 
     const states = [
-      { svg: svgs[0], color: colors[0], musicMode: "ambient" },
-      { svg: svgs[1], color: colors[1], musicMode: "theme" },
-      { svg: svgs[2], color: colors[2], musicMode: "silent" }
+      { svg: media[0].type === "svg" ? cleanAndOptimizeSvg(media[0].data) : "", mediaType: media[0].type, mediaData: media[0].type === "svg" ? "" : media[0].data, color: colors[0], musicMode: "ambient" },
+      { svg: media[1].type === "svg" ? cleanAndOptimizeSvg(media[1].data) : "", mediaType: media[1].type, mediaData: media[1].type === "svg" ? "" : media[1].data, color: colors[1], musicMode: "theme" },
+      { svg: media[2].type === "svg" ? cleanAndOptimizeSvg(media[2].data) : "", mediaType: media[2].type, mediaData: media[2].type === "svg" ? "" : media[2].data, color: colors[2], musicMode: "silent" }
     ];
 
     const serializedStates =
@@ -1055,11 +1110,12 @@ body {
   transition: border-color .2s, box-shadow .2s;
   touch-action: manipulation;
 }
-#plip-stage, #plip-stage > svg {
+#plip-stage, #plip-stage > svg, #plip-stage > img, #plip-stage > video {
   display: block;
   width: 100%;
   height: 100%;
 }
+ #plip-stage > img, #plip-stage > video { object-fit: contain; }
 .plip-bubble {
   display: ${isLinkMode ? "none" : "block"};
   position: absolute;
@@ -1196,7 +1252,7 @@ body {
 
   function stopMediaInDocument(targetDocument) {
     try {
-      targetDocument.querySelectorAll("audio, video").forEach(media => {
+      targetDocument.querySelectorAll("audio, video:not([data-plip-visual-video])").forEach(media => {
         try {
           media.pause();
           media.currentTime = 0;
@@ -1454,10 +1510,33 @@ body {
     await playNextTheme();
   }
 
-  async function applyState(withSound = true, transitionIndex = 0) {
+   function renderVisual(state) {
+    stage.querySelectorAll("video").forEach(video => video.pause());
+    if (!state.mediaType || state.mediaType === "svg") {
+      stage.innerHTML = state.svg;
+    } else {
+      stage.replaceChildren();
+      const visual = document.createElement(state.mediaType === "video" ? "video" : "img");
+      visual.src = state.mediaData;
+      if (state.mediaType === "video") {
+       visual.muted = true;
+       visual.defaultMuted = true;
+       visual.loop = true;
+       visual.autoplay = true;
+       visual.playsInline = true;
+       visual.preload = "metadata";
+       visual.dataset.plipVisualVideo = "true";
+      } else {
+       visual.alt = "シンボル画像";
+      }
+      stage.appendChild(visual);
+    }
+   }
+
+   async function applyState(withSound = true, transitionIndex = 0) {
     const state = STATES[currentState];
 
-    stage.innerHTML = state.svg;
+    renderVisual(state);
     button.style.borderColor = state.color;
     button.style.boxShadow =
       "0 0 28px " + state.color +
@@ -1466,8 +1545,10 @@ body {
     runEffect();
 
     if (withSound) {
-      stopManagedMusic();
+       stopManagedMusic();
       playClickSound(TRANSITIONS[transitionIndex]);
+      const visualVideo = stage.querySelector("video[data-plip-visual-video]");
+      if (visualVideo) visualVideo.play().catch(() => {});
       await playMusicForState(state);
     }
   }
@@ -1488,7 +1569,8 @@ body {
 
   window.addEventListener("message", event => {
     if (event.data && event.data.type === "PLIP_STOP_AUDIO") {
-      stopManagedMusic();
+       stopManagedMusic();
+      stage.querySelectorAll("video[data-plip-visual-video]").forEach(video => video.pause());
     }
   });
 
@@ -1519,11 +1601,14 @@ body {
 
   function downloadOutput(isLinkMode = false) {
     try {
-      const outputHtml = buildOutputHtml(isLinkMode);
       const baseName = sanitizeFilename($("#filename-input").value);
+      if (!baseName) {
+        throw new Error("作品タイトルを入力してください");
+      }
+      const outputHtml = buildOutputHtml(isLinkMode);
       const filename = isLinkMode
-        ? baseName + "_link.html"
-        : baseName + ".html";
+        ? baseName + "_button_link.html"
+        : baseName + "_button.html";
 
       const blob = new Blob([outputHtml], {
         type: "text/html;charset=utf-8"
@@ -1566,6 +1651,8 @@ body {
 
   [0, 1, 2].forEach(index => {
     $(`#svg-input-${index}`).addEventListener("input", () => {
+      mediaAssets[index] = null;
+      updateMediaInfo(index);
       setPreviewState(previewState, false);
     });
 
