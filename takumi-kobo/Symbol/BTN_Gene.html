@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLIPボタンビルダー v6.4</title>
+<title>PLIPボタンビルダー v6.5</title>
 <style>
 :root {
   color-scheme: dark;
@@ -480,10 +480,10 @@ code {
 <div class="builder">
   <header class="header">
     <div>
-      <h1>✨ PLIPボタンビルダー v6.4</h1>
+      <h1>✨ PLIPボタンビルダー v6.5</h1>
       <p>3段階SVG・画像・動画、遷移ごとのクリック音、自由な枠色、押下演出、安定した音楽ループをまとめて設定し、完成HTMLを保存します。</p>
     </div>
-    <div class="version">Version 6.4 · 2026.10</div>
+    <div class="version">Version 6.5 · 2026.10</div>
   </header>
 
   <div class="layout">
@@ -527,6 +527,11 @@ code {
               </select>
             </label>
           </div>
+        </div>
+        <div style="margin-top:14px">
+          <label class="field-label" for="music-volume-input">BGM・主題歌の音量：<output id="music-volume-value" for="music-volume-input">35%</output></label>
+          <input id="music-volume-input" type="range" min="0" max="100" step="1" value="35" style="width:100%;accent-color:var(--amber)" aria-label="BGM・主題歌の音量">
+          <div style="color:var(--muted);font-size:11px;line-height:1.6">生成するボタンの音楽音量を設定します（初期値35%）。クリック音・読み上げ音声は対象外です。</div>
         </div>
       </div>
 
@@ -1165,6 +1170,7 @@ code {
     const transitions = getAllTransitionSettings();
     const effect = $("#effect-select").value;
     const themeFormat = $("#theme-format-select").value === "mp4" ? "mp4" : "mp3";
+    const musicVolume = Math.max(0, Math.min(100, Number($("#music-volume-input").value))) / 100;
 
     const states = [
       { svg: media[0].type === "svg" ? cleanAndOptimizeSvg(media[0].data) : "", mediaType: media[0].type, mediaData: media[0].type === "svg" ? "" : media[0].data, posterData: posters[0], color: colors[0], musicMode: "ambient" },
@@ -1182,6 +1188,7 @@ code {
       JSON.stringify(themeFormat).replace(/</g, "\u003c");
     const serializedLinkMode =
       JSON.stringify(Boolean(isLinkMode)).replace(/</g, "\u003c");
+    const serializedMusicVolume = JSON.stringify(musicVolume);
 
     const outputCss = `
 * { box-sizing: border-box; }
@@ -1345,6 +1352,7 @@ body {
   const EFFECT = ${serializedEffect};
   const THEME_FORMAT = ${serializedThemeFormat};
   const LINK_MODE = ${serializedLinkMode};
+  const MUSIC_VOLUME = ${serializedMusicVolume};
   const queryParams = new URLSearchParams(window.location.search);
   const linkCardTitle = queryParams.get("title") || "作品";
   const requestedMusicBase = queryParams.get("musicBase") || "./music/";
@@ -1523,7 +1531,7 @@ body {
     const audio = document.createElement("audio");
     audio.src = source;
     audio.loop = loop;
-    audio.volume = .35;
+    audio.volume = MUSIC_VOLUME;
     audio.preload = "auto";
     audio.dataset.plipManagedAudio = "true";
     audio.style.display = "none";
@@ -1889,6 +1897,10 @@ body {
     $(`[data-listen-button="${index}"]`).addEventListener("click", () => {
       previewClickSound(index);
     });
+  });
+
+  $("#music-volume-input").addEventListener("input", event => {
+    $("#music-volume-value").textContent = event.target.value + "%";
   });
 
   $("#generate-button").addEventListener("click", () => downloadOutput(false));
