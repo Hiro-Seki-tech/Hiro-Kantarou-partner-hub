@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLIP TEMPLATE</title>
+
+  <!--
+  ============================================================
+  PLIP 標準母型 v1.0
+  ------------------------------------------------------------
+  このHTMLは「作品を生成するジェネレータ」ではありません。
+  新しいPLIP作品を作るときに複製して使う、共通外装・共通動作の母型です。
+
+  【重要：シンボルボタンについて】
+  ・既存のリンク参照式シンボルボタンHTMLは変更しません。
+  ・同じ階層の ./PLIP_symbol_button.html を iframe で参照します。
+  ・ボタンHTML内部にある非表示の .plip-bubble は触りません。
+  ・作品本体で見せる「PLIP !!」吹き出しは、この母型側が表示します。
+  ・LINK HP／ボタンジェネレータ側の仕様には干渉しません。
+  ============================================================
+  -->
+
+  <style>
+    :root {
+      --plip-bg: #020617;
+      --plip-header: #0f172a;
+      --plip-panel: #0f172a;
+      --plip-panel-2: #111827;
+      --plip-border: #334155;
+      --plip-border-soft: #1e293b;
+      --plip-text: #f8fafc;
+      --plip-muted: #94a3b8;
+      --plip-muted-2: #64748b;
+      --plip-accent: #818cf8;
+      --plip-accent-strong: #6366f1;
+      --plip-danger: #fda4af;
+      --plip-radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { color-scheme: dark; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--plip-bg);
+      color: var(--plip-text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Yu Gothic UI", "Meiryo", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(129, 140, 248, .7);
+      outline-offset: 3px;
+    }
+
+    [hidden] { display: none !important; }
+
+    /* =========================================================
+       PLIP共通ヘッダー
+       ========================================================= */
+    .plip-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(51, 65, 85, .85);
+      background: rgba(15, 23, 42, .96);
+      box-shadow: 0 12px 28px rgba(0,0,0,.28);
+      backdrop-filter: blur(12px);
+    }
+
+    .plip-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .plip-symbol-area {
+      position: relative;
+      flex: 0 0 auto;
+      width: clamp(68px, 8vw, 88px);
+      height: clamp(92px, 11vw, 118px);
+      overflow: visible;
+    }
+
+    .plip-symbol-frame {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border: 0;
+      background: transparent;
+      border-radius: 18px;
+    }
+
+    /* ボタンHTMLには触れず、母型側だけで出すPLIP吹き出し */
+    .plip-template-bubble {
+      position: absolute;
+      left: 0;
+      top: calc(clamp(68px, 8vw, 88px) - 5px);
+      width: 100%;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .plip-template-bubble svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    @keyframes plipNobleFloatTemplate {
+      0%, 100% { transform: translate3d(0,0,0) rotate(.001deg); }
+      50% { transform: translate3d(0,2px,0) rotate(.001deg); }
+    }
+
+    @keyframes plipRainbowBulbTemplate {
+      0% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+      14% { fill: #ff5500; }
+      28% { fill: #ffcc00; }
+      42% { fill: #00ff66; }
+      56% { fill: #00ccff; }
+      70% { fill: #3333ff; }
+      84% { fill: #9900ff; }
+      100% { fill: #ff0055; filter: drop-shadow(0 0 3px rgba(255,0,85,.5)); }
+    }
+
+    @keyframes plipBoltFlashTemplate {
+      0%, 100% { opacity: .85; filter: drop-shadow(0 0 1px #fde047); }
+      50% { opacity: 1; filter: drop-shadow(0 0 5px #fde047); }
+    }
+
+    .plip-template-bubble-float {
+      animation: plipNobleFloatTemplate 3s infinite ease-in-out;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .plip-template-bulb {
+      animation: plipRainbowBulbTemplate 7s linear infinite;
+    }
+
+    .plip-template-bolt {
+      animation: plipBoltFlashTemplate 1.5s infinite ease-in-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .plip-template-bubble-float,
+      .plip-template-bulb,
+      .plip-template-bolt {
+        animation: none;
+      }
+    }
+
+    .plip-title-wrap {
+      min-width: 0;
+    }
+
+    .plip-title {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(18px, 2.1vw, 28px);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: .01em;
+      overflow-wrap: anywhere;
+    }
+
+    .plip-subtitle {
+      margin: 3px 0 0;
+      color: var(--plip-muted);
+      font-size: 12px;
+    }
+
+    .plip-header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .plip-action,
+    .language-current,
+    .language-link,
+    .language-disabled {
+      min-height: 40px;
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .plip-action {
+      border: 1px solid var(--plip-border);
+      color: #e2e8f0;
+      background: #111827;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .plip-action:hover { background: #1e293b; color: #fff; }
+
+    .plip-link-icon {
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .language-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-width: 126px;
+      border: 1px solid var(--plip-border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0b1220;
+    }
+
+    .language-switcher > * {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border-radius: 0;
+      min-height: 40px;
+    }
+
+    .language-current {
+      color: #fff;
+      background: #334155;
+    }
+
+    .language-link {
+      color: #cbd5e1;
+      background: #111827;
+    }
+
+    .language-link:hover { color: #fff; background: #1e293b; }
+
+    .language-disabled {
+      color: #64748b;
+      background: #0f172a;
+      cursor: not-allowed;
+    }
+
+    /* =========================================================
+       PLIP共通：左N連 + 右メイン
+       ========================================================= */
+    .plip-main {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 22px;
+      flex: 1 0 auto;
+    }
+
+    .plip-left,
+    .plip-right {
+      min-width: 0;
+    }
+
+    .n-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 14px;
+      border: 1px solid #475569;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #475569, #1e293b 45%, #0f172a);
+    }
+
+    .n-tab {
+      min-height: 46px;
+      padding: 9px 8px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: #94a3b8;
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .n-tab:hover { color: #fff; background: rgba(51, 65, 85, .45); }
+
+    .n-tab[aria-selected="true"] {
+      color: #fff;
+      border-color: #64748b;
+      background: linear-gradient(135deg, #475569, #1e293b);
+      box-shadow: 0 6px 14px rgba(0,0,0,.28);
+    }
+
+    .panel,
+    .work-main-panel {
+      border: 1px solid var(--plip-border-soft);
+      border-radius: var(--plip-radius);
+      background: rgba(15, 23, 42, .86);
+      box-shadow: 0 14px 34px rgba(0,0,0,.2);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel h2,
+    .work-main-panel h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+
+    .panel p,
+    .work-main-panel p {
+      margin: 0;
+      color: #cbd5e1;
+    }
+
+    .panel-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px dashed #475569;
+      border-radius: 12px;
+      color: #94a3b8;
+      background: rgba(2, 6, 23, .45);
+      font-size: 14px;
+    }
+
+    .tab-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .help-dot {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      border: 1px solid #475569;
+      border-radius: 999px;
+      color: #cbd5e1;
+      background: #111827;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .help-dot:hover { background: #1e293b; color: #fff; }
+
+    .work-main-panel {
+      min-height: 430px;
+      padding: 22px;
+    }
+
+    .work-placeholder {
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border: 2px dashed #334155;
+      border-radius: 14px;
+      padding: 24px;
+      background: rgba(2, 6, 23, .42);
+    }
+
+    .work-placeholder strong {
+      display: block;
+      color: #e2e8f0;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .work-placeholder span {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       PLIP共通フッター
+       ========================================================= */
+    .plip-common-footer {
+      width: 100%;
+      padding: 8px 12px 10px;
+      border-top: 1px solid rgba(71, 85, 105, .65);
+      background: rgba(2, 6, 23, .86);
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .plip-footer-line {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .plip-now-playing {
+      color: #cbd5e1;
+      font-weight: 800;
+    }
+
+    .trajectory-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px 9px;
+      margin-top: 2px;
+    }
+
+    .trajectory-open-button {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #cbd5e1;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .trajectory-open-button:hover { color: #fff; }
+
+    /* =========================================================
+       PLIP共通モーダル
+       ========================================================= */
+    .plip-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(2, 6, 23, .78);
+      backdrop-filter: blur(8px);
+    }
+
+    .plip-modal-box {
+      width: min(620px, 100%);
+      max-height: min(84vh, 760px);
+      overflow-y: auto;
+      border: 1px solid #475569;
+      border-radius: 18px;
+      padding: 22px;
+      background: #0f172a;
+      box-shadow: 0 24px 70px rgba(0,0,0,.55);
+    }
+
+    .plip-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .plip-modal-title {
+      margin: 0;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .plip-modal-close {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      color: #e2e8f0;
+      background: #111827;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .plip-modal-close:hover { background: #1e293b; }
+
+    .modal-copy {
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .trajectory-history-content {
+      color: #dbeafe;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+      line-height: 1.8;
+      text-align: left;
+    }
+    #plip-history-modal article + article { margin-top: 18px; }
+    #plip-history-modal h3 { margin: 0 0 4px; font-size: 15px; }
+    #plip-history-modal ul { margin: 0; padding-left: 1.5em; }
+
+    /* =========================================================
+       レスポンシブ
+       ========================================================= */
+    @media (max-width: 900px) {
+      .plip-header {
+        position: relative;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .plip-header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .plip-main {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .work-main-panel {
+        min-height: 320px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 15px; }
+
+      .plip-header { padding: 10px 12px 12px; }
+
+      .plip-brand { align-items: flex-start; }
+
+      .plip-symbol-area {
+        width: 70px;
+        height: 95px;
+      }
+
+      .plip-template-bubble {
+        top: 65px;
+      }
+
+      .plip-title { font-size: 18px; }
+
+      .plip-subtitle { font-size: 11px; }
+
+      .plip-action,
+      .language-current,
+      .language-link,
+      .language-disabled {
+        min-height: 44px;
+        font-size: 12px;
+      }
+
+      .language-switcher { min-width: 118px; }
+
+      .plip-main {
+        padding: 12px;
+        gap: 14px;
+      }
+
+      .n-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .n-tab {
+        min-height: 48px;
+        text-align: left;
+        padding-left: 14px;
+      }
+
+      .panel,
+      .work-main-panel {
+        padding: 15px;
+      }
+
+      .plip-common-footer {
+        font-size: 10px;
+        padding: 7px 8px 9px;
+      }
+
+      .plip-modal { padding: 12px; }
+      .plip-modal-box { padding: 18px 15px; max-height: 88vh; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ========================================================
+       PLIP作品設定
+       新しい作品を作るときは、まずこのブロックの値を変更する。
+       ======================================================== -->
+  <script>
+    window.PLIP_CONFIG = {
+      workTitle: "PLIP TEMPLATE",
+      subtitle: "PLIP作品 共通母型",
+      symbolButtonFile: "./PLIP_symbol_button.html",
+      plipLinksUrl: "https://hiro-seki-tech.github.io/Produce-your-Life-with-IP/links",
+
+      // 言語切替は作品に不要なら false。
+      languageSwitchVisible: true,
+      currentLanguage: "ja",
+      otherLanguagePublished: false,
+      otherLanguageFile: "./index_en.html",
+
+      footerCredit: "© 2026 PLIP & Hiro-Seki-Tech",
+      footerNotice: "無断転載及びハルシネーションはお断り申し上げます。",
+      version: "1.1",
+      updated: "2026.10.11",
+
+      usageTitle: "使い方",
+      usageText:
+        "このHTMLはPLIP作品を作るための共通母型です。\n" +
+        "左側のN連タブと、右側の作品固有領域へ作品ごとの機能を実装します。",
+
+      trajectoryTitle: "PLIP TEMPLATEの軌跡"
+      // 軌跡は下部 #plip-history-modal 内の article だけを編集する（表示とLINK HP取得で共用）。
+    };
+  </script>
+
+  <!-- ========================================================
+       PLIP共通ヘッダー
+       ======================================================== -->
+  <header class="plip-header">
+    <div class="plip-brand">
+      <div class="plip-symbol-area" aria-label="PLIPシンボル">
+        <!--
+        【固定仕様】
+        既存のリンク参照式ボタンHTMLを、そのまま iframe で参照する。
+        iframe 内部のCSS/JSは変更しない。
+        -->
+        <iframe
+          id="plip-symbol-frame"
+          class="plip-symbol-frame"
+          title="PLIPシンボルボタン"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+
+        <!--
+        LINK HPでは出さず、PLIP作品本体だけで表示する吹き出し。
+        デザインは既存リンク参照式ボタンのPLIP吹き出しを母型側へ移植。
+        -->
+        <div class="plip-template-bubble" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 35">
+            <g class="plip-template-bubble-float" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+              <path d="M 6 8 H 42 L 48 3 L 54 8 H 90 A 4 4 0 0 1 94 12 V 29 A 4 4 0 0 1 90 33 H 6 A 4 4 0 0 1 2 29 V 12 A 4 4 0 0 1 6 8 Z"
+                    fill="#151d30" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.85"
+                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.4))"></path>
+              <g transform="translate(6, 11) scale(0.85)">
+                <g stroke="#fbbf24" stroke-linecap="round" stroke-width="1.2" opacity="0.55">
+                  <line x1="8" y1="1" x2="8" y2="3"></line>
+                  <line x1="3" y1="3" x2="4.5" y2="4.5"></line>
+                  <line x1="1" y1="8" x2="3" y2="8"></line>
+                  <line x1="3" y1="13" x2="4.5" y2="11.5"></line>
+                  <line x1="13" y1="11.5" x2="11.5" y2="10"></line>
+                  <line x1="15" y1="8" x2="13" y2="8"></line>
+                  <line x1="13" y1="3" x2="11.5" y2="4.5"></line>
+                </g>
+                <path class="plip-template-bulb"
+                      d="M8,2 C4.7,2 2,4.7 2,8 C2,10.1 3.1,11.2 4,12.1 C4.6,12.7 4.7,13.2 4.7,13.8 L11.3,13.8 C11.3,13.2 11.4,12.7 12,12.1 C12.9,11.2 14,10.1 14,8 C14,4.7 11.3,2 8,2 Z"
+                      fill="#94a3b8"></path>
+                <path d="M5.5,9.5 L7,6.5 L9,6.5 L10.5,9.5"
+                      fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+                      opacity="0.95" style="filter:drop-shadow(0 0 1px #fff)"></path>
+                <path d="M4.7,13.8 H11.3 V15.5 C11.3,16 10.9,16.5 10.3,16.5 H5.7 C5.1,16.5 4.7,16 4.7,15.5 Z"
+                      fill="#94a3b8" stroke="#334155" stroke-width="0.5"></path>
+                <path d="M5.5,16.5 H10.5 V17.5 C10.5,18 10,18.5 9.5,18.5 H6.5 C6,18.5 5.5,18 5.5,17.5 Z"
+                      fill="#475569"></path>
+                <line x1="5" y1="14.8" x2="11" y2="14.8" stroke="#334155" stroke-width="0.8"></line>
+                <line x1="5.3" y1="15.8" x2="10.7" y2="15.8" stroke="#334155" stroke-width="0.8"></line>
+                <polygon class="plip-template-bolt" points="16,0.5 8,8.5 12,8.5 10,15.5 18,6.5 14,6.5" fill="#fde047"></polygon>
+              </g>
+              <text x="58" y="24" fill="#fbbf24"
+                    font-family="Arial,'Yu Gothic UI',Meiryo,sans-serif"
+                    font-size="11" font-weight="900" letter-spacing="0.03em"
+                    text-anchor="middle">PLIP !!</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="plip-title-wrap">
+        <h1 id="plip-work-title" class="plip-title">PLIP TEMPLATE</h1>
+        <p id="plip-subtitle" class="plip-subtitle">PLIP作品 共通母型</p>
+      </div>
+    </div>
+
+    <div class="plip-header-actions">
+      <a id="plip-links-anchor" class="plip-action" href="#" target="_blank" rel="noopener noreferrer">
+        <span class="plip-link-icon" aria-hidden="true">💡⚡</span>リンク
+      </a>
+
+      <div id="language-switcher" class="language-switcher" aria-label="言語切り替え"></div>
+
+      <button id="open-usage" class="plip-action" type="button">使い方？</button>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       PLIP共通レイアウト
+       左：N連タブ
+       右：作品固有メイン
+       ======================================================== -->
+  <main class="plip-main">
+    <section class="plip-left" aria-label="作品操作">
+      <div class="n-tabs" role="tablist" aria-label="PLIP N連タブ">
+        <button class="n-tab" type="button" id="tab-btn-1" role="tab"
+                aria-selected="true" aria-controls="tab-panel-1" data-tab="1">
+          1. タブ1
+        </button>
+        <button class="n-tab" type="button" id="tab-btn-2" role="tab"
+                aria-selected="false" aria-controls="tab-panel-2" data-tab="2">
+          2. タブ2
+        </button>
+        <button class="n-tab" type="button" id="tab-btn-3" role="tab"
+                aria-selected="false" aria-controls="tab-panel-3" data-tab="3">
+          3. タブ3
+        </button>
+      </div>
+
+      <!-- =====================================================
+           作品固有領域A：左N連タブ内
+           新作品では、この3パネルの題名・説明・中身を置き換える。
+           共通タブ切替ロジックは下部JSに残す。
+           ===================================================== -->
+
+      <section id="tab-panel-1" class="panel" role="tabpanel" aria-labelledby="tab-btn-1">
+        <div class="tab-heading-row">
+          <h2>タブ1</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ1の説明"
+                  data-help-text="ここにタブ1の詳しい説明を入れます。"
+                  aria-label="タブ1の詳しい説明">？</button>
+        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">作品固有領域：ここから内容を作り込んでください。</div>
+      </section>
+
+      <section id="tab-panel-2" class="panel" role="tabpanel" aria-labelledby="tab-btn-2" hidden>
+        <div class="tab-heading-row">
+          <h2>タブ2</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ2の説明"
+                  data-help-text="ここにタブ2の詳しい説明を入れます。"
+                  aria-label="タブ2の詳しい説明">？</button>
+        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">必要に応じてタブ数を増減できます。</div>
+      </section>
+
+      <section id="tab-panel-3" class="panel" role="tabpanel" aria-labelledby="tab-btn-3" hidden>
+        <div class="tab-heading-row">
+          <h2>タブ3</h2>
+          <button class="help-dot" type="button"
+                  data-help-title="タブ3の説明"
+                  data-help-text="ここにタブ3の詳しい説明を入れます。"
+                  aria-label="タブ3の詳しい説明">？</button>
+        </div>
+        <p>ここに作品固有の操作や設定を実装します。</p>
+        <div class="panel-note">保存機能などは、必要な作品だけここへ追加します。</div>
+      </section>
+    </section>
+
+    <section class="plip-right" aria-label="作品メイン表示">
+      <!-- =====================================================
+           作品固有領域B：右メイン
+           新作品のプレビュー、ゲーム、グラフ、小説本文などを入れる。
+           ===================================================== -->
+      <div class="work-main-panel">
+        <h2>作品メイン領域</h2>
+        <div class="work-placeholder">
+          <div>
+            <strong>ここに作品固有のメイン画面を実装</strong>
+            <span>例：NOPERAなら小説プレビュー／ゲームならゲーム画面／シミュレータなら結果表示</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================
+       PLIP共通フッター
+       ======================================================== -->
+  <footer class="plip-common-footer">
+    <div id="footer-credit" class="plip-footer-line"></div>
+    <div id="footer-now-playing" class="plip-footer-line plip-now-playing">Now Playing：—</div>
+    <div id="footer-notice" class="plip-footer-line"></div>
+    <div class="trajectory-footer-row">
+      <span id="footer-version"></span>
+      <span aria-hidden="true">／</span>
+      <span id="footer-updated"></span>
+      <span aria-hidden="true">／</span>
+      <button id="open-trajectory" class="trajectory-open-button" type="button">📜 作品の軌跡</button>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       PLIP共通モーダル：使い方
+       ======================================================== -->
+  <div id="usage-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="usage-title">
+      <div class="plip-modal-header">
+        <h2 id="usage-title" class="plip-modal-title">使い方</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="usage-modal" aria-label="閉じる">×</button>
+      </div>
+      <div id="usage-copy" class="modal-copy"></div>
+    </section>
+  </div>
+
+  <!-- ========================================================
+       PLIP共通モーダル：各タブ「？」説明
+       ======================================================== -->
+  <div id="help-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <div class="plip-modal-header">
+        <h2 id="help-title" class="plip-modal-title">説明</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="help-modal" aria-label="閉じる">×</button>
+      </div>
+      <div id="help-copy" class="modal-copy"></div>
+    </section>
+  </div>
+
+  <!-- ========================================================
+       PLIP共通モーダル：作品の軌跡
+       ======================================================== -->
+  <div id="trajectory-modal" class="plip-modal" hidden aria-hidden="true">
+    <section class="plip-modal-box" role="dialog" aria-modal="true" aria-labelledby="trajectory-title">
+      <div class="plip-modal-header">
+        <h2 id="trajectory-title" class="plip-modal-title">作品の軌跡</h2>
+        <button class="plip-modal-close" type="button" data-close-modal="trajectory-modal" aria-label="閉じる">×</button>
+      </div>
+      <div id="trajectory-copy" class="trajectory-history-content">
+        <!-- LINK HPはHTMLを直接取得するため、軌跡は静的HTMLに記録する。新しい履歴を上に追加。 -->
+        <div id="plip-history-modal">
+          <article>
+            <h3>Version 1.1　2026.10.11</h3>
+            <ul>
+              <li>軌跡をLINK HPから取得できる共通HTML形式へ対応。</li>
+              <li>作品内の軌跡表示とLINK HP用の履歴を一元化。</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Version 1.0　2026.09.08</h3>
+            <ul>
+              <li>シミュレータからPLIP共通外装・共通動作だけを抽出し、作品制作の標準母型を新設。</li>
+              <li>リンク参照式シンボルボタンを変更せず、同階層参照＋作品側PLIP吹き出し方式へ整理。</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const config = window.PLIP_CONFIG;
+      const symbolFrame = document.getElementById("plip-symbol-frame");
+
+      // =======================================================
+      // PLIP共通初期設定
+      // =======================================================
+      document.title = config.workTitle;
+      document.getElementById("plip-work-title").textContent = config.workTitle;
+      document.getElementById("plip-subtitle").textContent = config.subtitle || "";
+      document.getElementById("plip-links-anchor").href = config.plipLinksUrl;
+      symbolFrame.src = config.symbolButtonFile;
+
+      document.getElementById("footer-credit").textContent = config.footerCredit;
+      document.getElementById("footer-notice").textContent = config.footerNotice;
+      document.getElementById("footer-version").textContent = "Version " + config.version;
+      document.getElementById("footer-updated").textContent = "更新日 " + config.updated;
+
+      document.getElementById("usage-title").textContent = config.usageTitle;
+      document.getElementById("usage-copy").textContent = config.usageText;
+
+      document.getElementById("trajectory-title").textContent = config.trajectoryTitle;
+      // 軌跡はHTML内の #plip-history-modal をそのまま表示する（書き換えない）。
+      document.getElementById("open-trajectory").textContent = "📜 " + config.trajectoryTitle;
+
+      // =======================================================
+      // PLIP共通：言語切替
+      // =======================================================
+      function renderLanguageSwitcher() {
+        const host = document.getElementById("language-switcher");
+
+        if (!config.languageSwitchVisible) {
+          host.hidden = true;
+          return;
+        }
+
+        host.hidden = false;
+
+        const currentJa = config.currentLanguage === "ja";
+        const ja = document.createElement(currentJa ? "span" : (config.otherLanguagePublished ? "a" : "span"));
+        const en = document.createElement(!currentJa ? "span" : (config.otherLanguagePublished ? "a" : "span"));
+
+        ja.textContent = "日本語";
+        en.textContent = "English";
+
+        if (currentJa) {
+          ja.className = "language-current";
+          ja.setAttribute("aria-current", "page");
+        } else if (config.otherLanguagePublished) {
+          ja.className = "language-link";
+          ja.href = config.otherLanguageFile;
+        } else {
+          ja.className = "language-disabled";
+          ja.setAttribute("aria-disabled", "true");
+          ja.title = "日本語版は未公開です";
+        }
+
+        if (!currentJa) {
+          en.className = "language-current";
+          en.setAttribute("aria-current", "page");
+        } else if (config.otherLanguagePublished) {
+          en.className = "language-link";
+          en.href = config.otherLanguageFile;
+        } else {
+          en.className = "language-disabled";
+          en.setAttribute("aria-disabled", "true");
+          en.title = "English edition is not published yet";
+        }
+
+        host.replaceChildren(ja, en);
+      }
+
+      renderLanguageSwitcher();
+
+      // =======================================================
+      // PLIP共通：N連タブ
+      // =======================================================
+      const tabButtons = [...document.querySelectorAll(".n-tab")];
+      const tabPanels = [...document.querySelectorAll('[role="tabpanel"]')];
+
+      function activateTab(button) {
+        const target = button.dataset.tab;
+
+        tabButtons.forEach(btn => {
+          const selected = btn === button;
+          btn.setAttribute("aria-selected", String(selected));
+          btn.tabIndex = selected ? 0 : -1;
+        });
+
+        tabPanels.forEach(panel => {
+          panel.hidden = panel.id !== "tab-panel-" + target;
+        });
+      }
+
+      tabButtons.forEach((button, index) => {
+        button.addEventListener("click", () => activateTab(button));
+
+        button.addEventListener("keydown", event => {
+          if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+
+          event.preventDefault();
+
+          let nextIndex = index;
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextIndex = (index + 1) % tabButtons.length;
+          } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+            nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+          } else if (event.key === "Home") {
+            nextIndex = 0;
+          } else if (event.key === "End") {
+            nextIndex = tabButtons.length - 1;
+          }
+
+          tabButtons[nextIndex].focus();
+          activateTab(tabButtons[nextIndex]);
+        });
+      });
+
+      // =======================================================
+      // PLIP共通：モーダル
+      // ・閉じるボタン
+      // ・外側クリック / タップ
+      // ・Escape
+      // ・開いている間の背景スクロール抑止
+      // =======================================================
+      let activeModal = null;
+      let returnFocusTo = null;
+
+      function openModal(modal, source) {
+        if (!modal) return;
+
+        returnFocusTo = source || document.activeElement;
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        activeModal = modal;
+
+        const closeButton = modal.querySelector(".plip-modal-close");
+        if (closeButton) closeButton.focus();
+      }
+
+      function closeModal(modal) {
+        if (!modal) return;
+
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+
+        if (activeModal === modal) {
+          activeModal = null;
+          document.body.style.overflow = "";
+        }
+
+        if (returnFocusTo && typeof returnFocusTo.focus === "function") {
+          returnFocusTo.focus();
+        }
+        returnFocusTo = null;
+      }
+
+      document.getElementById("open-usage").addEventListener("click", event => {
+        openModal(document.getElementById("usage-modal"), event.currentTarget);
+      });
+
+      document.getElementById("open-trajectory").addEventListener("click", event => {
+        openModal(document.getElementById("trajectory-modal"), event.currentTarget);
+      });
+
+      document.querySelectorAll(".help-dot").forEach(button => {
+        button.addEventListener("click", event => {
+          document.getElementById("help-title").textContent =
+            event.currentTarget.dataset.helpTitle || "説明";
+          document.getElementById("help-copy").textContent =
+            event.currentTarget.dataset.helpText || "";
+          openModal(document.getElementById("help-modal"), event.currentTarget);
+        });
+      });
+
+      document.querySelectorAll("[data-close-modal]").forEach(button => {
+        button.addEventListener("click", event => {
+          const modal = document.getElementById(event.currentTarget.dataset.closeModal);
+          closeModal(modal);
+        });
+      });
+
+      document.querySelectorAll(".plip-modal").forEach(modal => {
+        modal.addEventListener("pointerdown", event => {
+          if (event.target === modal) closeModal(modal);
+        });
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && activeModal) {
+          event.preventDefault();
+          closeModal(activeModal);
+        }
+      });
+
+      // =======================================================
+      // PLIP共通：シンボルボタンからの Now Playing 通知
+      // 現行ボタンの仕様は変更せず、親側が受け取れる形式だけ拾う。
+      // =======================================================
+      const nowPlaying = document.getElementById("footer-now-playing");
+
+      function filenameFromUrl(value) {
+        try {
+          const url = new URL(value, window.location.href);
+          const name = decodeURIComponent(url.pathname.split("/").pop() || "");
+          return name || "再生中";
+        } catch (_) {
+          return "再生中";
+        }
+      }
+
+      window.addEventListener("message", event => {
+        if (!event.data || typeof event.data !== "object") return;
+
+        if (event.data.type === "PLIP_TRACK_PLAYING") {
+          nowPlaying.textContent =
+            "Now Playing：" + filenameFromUrl(event.data.trackUrl || "");
+        }
+
+        if (event.data.type === "PLIP_NOW_PLAYING") {
+          nowPlaying.textContent =
+            "Now Playing：" + filenameFromUrl(event.data.src || "");
+        }
+      });
+
+      // =======================================================
+      // 作品固有JavaScript：ここから
+      // -------------------------------------------------------
+      // 新しいPLIP作品のロジックは、原則この下へ追加する。
+      // PLIP共通部のID・関数・イベントは理由なく変更しない。
+      // =======================================================
+
+
+      // 作品固有JavaScript：ここまで
+    })();
+  </script>
+</body>
+</html>
